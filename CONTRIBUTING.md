@@ -2,6 +2,10 @@
 
 Welcome! This guide will help you get set up to contribute to this project.
 
+Use the [dbt onboarding handbook](https://dbt-onboarding.vercel.app/) to learn
+the project, then keep [Project conventions](PROJECT_CONVENTIONS.md) beside
+you while changing models.
+
 ## Before You Start
 
 Make sure you have these prerequisites installed and configured on your Windows machine:
@@ -138,7 +142,7 @@ Two scripts in the project root make development easier:
 | Script | Description |
 |--------|-------------|
 | `.\start_dbt.ps1` | Installs/updates dbt Fusion, configures git hooks, loads `.env`, syncs Python tooling (auto-runs on terminal open) |
-| `.\build_changed` | Builds only models changed on your branch |
+| `.\build_changed.ps1` | Builds only models changed on your branch |
 
 **build_changed flags:**
 - `-u` include upstream dependencies
@@ -146,7 +150,49 @@ Two scripts in the project root make development easier:
 - `-r` run only (skip tests)
 - `-t` test only (skip run)
 
-Example: `.\build_changed -u -d` builds changed models with all dependencies.
+Example: `.\build_changed.ps1 -u -d` builds changed models with upstream and
+downstream dependencies.
+
+## Model Change Workflow
+
+Before editing SQL:
+
+1. State the subject and grain. Add the population and time basis where the
+   model selects or derives them.
+2. Search model names, YAML and lineage for a contract you can reuse or extend.
+3. Check downstream impact with `dbt ls -s model_name+`.
+4. Confirm the model area. Raw may only be consumed through staging; after
+   staging, use whichever staging-or-later contract fits the work.
+
+Change the model SQL, properties and contract tests together. New non-raw models
+need a description and `config.meta.owner.name`. Every model needs a test of its
+stated grain using its key or key combination. This project does not use
+test-driven development. Beyond grain, add a permanent test only for a durable
+contract or an error likely to recur. Tests run on every build and consume
+Snowflake compute, so do not test implementation details or repeat upstream
+assertions.
+
+Validate in a tight loop:
+
+```powershell
+dbt compile -s model_name
+dbt build -s model_name
+# When the change can affect consumers:
+dbt build -s model_name+
+```
+
+`dbt show` executes SQL and returns its result. Use it sparingly through a coding
+agent, and only when the query is designed to return a high-level,
+non-identifying aggregate. Do not use it to preview model rows. When validation
+needs row-level inspection, give the user a ready-to-run Snowflake-native query
+for an approved human-controlled tool and ask only for the non-identifying
+aggregate or confirmation needed. Apply the same rule to ad hoc queries and
+failing-test SQL.
+
+Build downstream only where the change can affect consumers. If the full
+selection is too large, build direct children and state the limit in the pull
+request. For changed models across a branch, use `.\build_changed.ps1`; add `-d`
+to include downstream consumers.
 
 ## Setting Up Commit Signing
 
@@ -286,13 +332,31 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
    - Go to the repository on GitHub
    - Click "Pull requests" → "New pull request"
    - Select your branch
-   - Fill in the PR description
+   - Explain why the change exists. One clear sentence can be enough for a small
+     change; add changed behaviour, checks or review questions when they help
    - Reference any related issues (e.g., "Fixes #123")
 
+   This repository is public. Do not include credentials, patient- or
+   person-level data, identifying values, row-level output or screenshots of
+   real data. Suspected disclosure is a critical blocking finding. Use aggregate
+   or non-identifying validation evidence. High-level counts, rates,
+   distributions and validation totals are not person-level data when they
+   cannot identify an individual. A data-safety finding must be resolved before
+   merge even though CodeRabbit does not submit a formal request-changes review.
+
 3. **Wait for review:**
-   - Pre-commit hooks will automatically run
+   - Fast checks compile the project and check references, descriptions,
+     declared test coverage and ownership
+   - CodeRabbit reviews the change against the project conventions
    - Address any feedback from reviewers
-   - Once approved, the PR can be merged
+   - Once approved, select **Merge when ready**. The merge queue builds changed
+     models and runs their data tests in Snowflake development before merge
+
+Reviews focus on changed behaviour and its effect on the existing model
+contract. Pre-existing design debt is not a merge condition unless the change
+worsens it, depends on it, or cannot be safe without resolving it. Wider
+redesign may be recorded as `follow-up (non-blocking):` without expanding the
+scope of the pull request.
 
 ### Keeping Your Branch Up to Date
 
@@ -357,7 +421,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 
 **Python command not found:**
 - Use `py` instead of `python`
-- Or add Python to PATH (see README)
+- Or install Python 3.11 and select it in your terminal or editor
 
 **PowerShell won't run scripts:**
 - Run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
@@ -375,7 +439,7 @@ This repository commits `dbt_packages/` to ensure consistent package versions. W
 ## Next Steps
 
 Once you're set up, learn how dbt and this project work at
-**[dbt-onboarding.vercel.app](https://dbt-onboarding.vercel.app/)** — the canonical
+**[dbt-onboarding.vercel.app](https://dbt-onboarding.vercel.app/)** — the main
 source for dbt learning here. It covers the layers, naming conventions, building and
 testing models, materialisations, and the full branch-to-merge workflow.
 
