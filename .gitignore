@@ -73,8 +73,6 @@ snowflake_cache/
 .keyring/
 keyring.cfg
 
-# Local agent guidance
-AGENTS.md
-CLAUDE.md
+# Local agent state
 .claude/
 tmpclaude-*

@@ -73,7 +73,7 @@ reviews:
         history.
 
     # Project-wide dbt conventions
-    - path: "models/**/*.sql"
+    - path: "models/!(semantic)/**/*.sql"
       instructions: |
         This is a public NHS dbt project on Snowflake. Review the project
         contract, not generic SQL style:

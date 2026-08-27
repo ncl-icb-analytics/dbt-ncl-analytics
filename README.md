@@ -156,9 +156,10 @@ more costly.
 - Apply a filter that the model always uses before costly joins, windows and
   deduplication when it does not depend on their result. This avoids processing
   rows that will be discarded without changing ranks, totals or the population.
-  Select and aggregate to the required grain early, use `union all` when
-  duplicate removal is not part of the contract, and do not use `distinct` to
-  repair a join fan-out.
+  Where it preserves the model's grain, population and totals, select and
+  aggregate repeated child rows to the required grain before expensive work.
+  Use `union all` when duplicate removal is not part of the contract, and do
+  not use `distinct` to repair a join fan-out.
 - Consider clustering a large materialised model when several downstream
   consumers use the same selective filters or joins. The model pays for one
   output sort so those consumers can scan fewer partitions. OLIDS event inputs
