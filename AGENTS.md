@@ -4,26 +4,20 @@ Read `PROJECT_CONVENTIONS.md` before reviewing or changing models. Treat it as
 the repository contract for layers, model boundaries, naming, programme scope,
 SQL, seeds, testing, public data safety and review scope.
 
-Before editing, check the current branch, worktree status and existing diff.
-Preserve unrelated work. Do not work directly on `main`; use a focused
-`type/short-description` branch such as `docs/coderabbit-project-guidance`.
+Before implementing, search related models, macros, seeds and documentation.
+Prefer extending or composing an existing contract when it represents the same
+concept and grain; create a separate pipeline only for a distinct contract.
 
-Keep changes proportional to the request. Do not make contributors redesign
-unrelated inherited code. Record useful existing debt as a non-blocking
-follow-up unless the change worsens it, depends on it or cannot be safe without
-resolving it.
+Check the branch, worktree status and diff, and preserve unrelated work. Do not
+work on `main`. Use a `type/short-description` branch and Conventional Commits.
+Explain the reason and effect in plain-language commits and pull requests.
 
-Use Conventional Commits, for example
-`docs(coderabbit): align project review guidance`.
-
-Write commit messages and pull-request descriptions in plain language. Avoid
-unexplained jargon, abbreviations and internal shorthand. Explain why the
-change is needed, the decision it implements and its expected effect; do not
-merely list changed files or restate the diff. Keep a Conventional Commit
-subject brief, and use the commit body when the rationale is not clear from the
-subject. A pull request should make sense without access to the conversation
-that led to it.
+This is a public NHS repository. Never include credentials or real patient- or
+person-level data in code, seeds, tests, logs, examples, documentation, commits
+or pull requests. Use synthetic data or non-identifying aggregates, and do not
+repeat suspected sensitive values in comments. Make changes to populations,
+clinical definitions, code lists, thresholds or date rules explicit and
+validate their effect; never invent clinical meaning.
 
 Run the smallest validation that proves the change, then check affected
-downstream models. Never put credentials or real patient- or person-level data
-in this public repository, its commits or pull requests.
+downstream models.
