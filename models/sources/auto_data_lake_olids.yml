@@ -1060,6 +1060,10 @@ sources:
       data_type: TEXT
     - name: SK_PATIENT_ID
       data_type: NUMBER(38,0)
+    - name: PDS_TRACE_STATUS
+      data_type: TEXT
+    - name: SK_LINKAGE_STATUS
+      data_type: TEXT
     - name: TITLE
       data_type: TEXT
     - name: GENDER_SOURCE_CONCEPT_ID
