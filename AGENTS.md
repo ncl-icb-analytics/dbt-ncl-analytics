@@ -16,7 +16,11 @@ Use these instructions as project defaults, not as a substitute for judgement.
 The requested outcome and the model's established contract should guide the
 implementation. If a default does not fit, explain the trade-off rather than
 applying it mechanically. Public-data safety and the raw-to-staging boundary
-remain hard constraints.
+remain hard constraints. Make routine, reversible implementation choices
+yourself. Defer to the user when the intended outcome or clinical or business
+meaning is unclear, when the authority for a definition is uncertain, or when a
+decision would materially widen the scope, change an analyst-facing contract or
+be hard to reverse.
 
 Before writing SQL:
 
@@ -68,6 +72,9 @@ deleting the latest diff does not remove public history.
 Assume command output is visible to the agent provider. `dbt show` executes the
 model query and returns rows: use it in an agent session only for synthetic or
 non-identifying output, or when the tool has approved zero-data-retention
-controls for that data. Apply the same rule to ad hoc queries and failing-test
-SQL. Otherwise prefer builds, tests and non-identifying aggregate checks, and
-inspect row-level data in an approved human-controlled tool.
+controls for that data. If row-level inspection is needed and those conditions
+are not met, do not run it. Give the user a ready-to-run Snowflake-native query
+for an approved human-controlled tool, and ask only for the non-identifying
+aggregate or confirmation needed; do not ask them to paste row-level results
+into the agent session. Apply the same rule to ad hoc queries and failing-test
+SQL. Otherwise prefer builds, tests and non-identifying aggregate checks.
