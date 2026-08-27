@@ -5,6 +5,19 @@ This is a public NHS dbt project on Snowflake. Read
 [dbt onboarding handbook](https://dbt-onboarding.vercel.app/) explains the
 reasoning behind it.
 
+Start by understanding the intended outcome and the real constraint. Prefer the
+smallest coherent change that makes the correct behaviour easy to understand.
+Reuse settled code where it fits, but do not preserve complexity merely because
+it already exists or add models, macros, configuration or abstractions to make
+a solution look more engineered. Keep the work focused; simplify nearby code
+only when that is needed to make the requested change clear and safe.
+
+Use these instructions as project defaults, not as a substitute for judgement.
+The requested outcome and the model's established contract should guide the
+implementation. If a default does not fit, explain the trade-off rather than
+applying it mechanically. Public-data safety and the raw-to-staging boundary
+remain hard constraints.
+
 Before writing SQL:
 
 - State the subject and grain. Add population and time when the model selects or
