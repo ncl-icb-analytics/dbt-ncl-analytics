@@ -21,6 +21,19 @@ imagined future requirements. If a reusable domain design would materially
 widen the requested change, explain the opportunity and agree the boundary with
 the user before implementing it.
 
+Use familiar engineering shorthand deliberately:
+
+- Measure twice, cut once: inspect the relevant contracts, lineage and
+  consequences before editing.
+- YAGNI: do not build machinery for imagined needs. It does not mean reducing a
+  new domain to today's report.
+- KISS and simple design: prefer readable SQL and obvious model contracts over
+  clever abstractions.
+- DRY and the Rule of Three: centralise a stable shared business definition;
+  wait for an implementation pattern to prove itself before abstracting it.
+- Make it work, make it right, make it fast: establish the correct contract,
+  make the design clear, then tune a plausible or demonstrated cost.
+
 If the proposed direction is likely to produce wrong results, an unclear
 contract, a duplicate pipeline or avoidable cost and maintenance, say so before
 implementing it. Explain the concrete consequence and offer the smallest
