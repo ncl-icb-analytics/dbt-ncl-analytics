@@ -11,7 +11,6 @@ flags:
   require_generic_test_arguments_property: true
 on-run-start:
   - "{% if execute %}{{ log('🔗 DBT CONNECTION: Role=' ~ target.role ~ ', Warehouse=' ~ target.warehouse ~ ', Database=' ~ target.database ~ ', Schema=' ~ target.schema ~ ', Target=' ~ target.name, info=True) }}{% endif %}"
-  - "{% if flags.WHICH in ['run', 'build'] %}{{ ensure_governance_tags() }}{% endif %}"
   - "{% if flags.WHICH in ['run', 'build'] %}{{ create_row_count_log_table() }}{% endif %}"
 
 on-run-end:
@@ -174,9 +173,6 @@ models:
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
           +post-hook:
             - "{{ add_model_comment() }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'S251_EXEMPT', 'TRUE') }}"
             - "{{ log_row_count() }}"
 
     # Published layer - production-ready datasets for end users
@@ -205,9 +201,6 @@ models:
           # Schema names automatically derived from subdomain folder names via generate_schema_name macro
           +post-hook:
             - "{{ add_model_comment() }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_opt_out', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'DATA_CATEGORY', 'PRIMARY_CARE_SECONDARY_USE') }}"
-            - "{{ apply_snowflake_tag_if_tagged('secondary_use_s251_exempt', 'S251_EXEMPT', 'TRUE') }}"
             - "{{ log_row_count() }}"
 
   # Elementary observability configuration
