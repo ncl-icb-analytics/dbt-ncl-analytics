@@ -132,3 +132,89 @@ sources:
             quote: true
           - name: AuditKey
             quote: true
+
+  - name: ukhfd_data_dictionary
+    database: '"UKHFD"'
+    schema: '"Data_Dictionary"'
+    description: NHS Data Model and Dictionary terminology history held in UKHFD.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd_data_dictionary
+    tables:
+      - name: attendance_status
+        identifier: '"dim_Attendance_Status_SCD"'
+        description: Attendance status code definitions and their UKHFD history.
+        columns: &ukhfd_data_dictionary_columns
+          - name: Attr_Name
+            quote: true
+          - name: Valid_From
+            quote: true
+          - name: Valid_To
+            quote: true
+          - name: Main_Code_Text
+            quote: true
+          - name: Sub_Code1_Text
+            quote: true
+          - name: Sub_Code2_Text
+            quote: true
+          - name: Sub_Code3_Text
+            quote: true
+          - name: Major_Category
+            quote: true
+          - name: Category
+            quote: true
+          - name: Main_Description
+            quote: true
+          - name: Main_Description_60_Chars
+            quote: true
+          - name: Sub1_Description
+            quote: true
+          - name: Sub2_Description
+            quote: true
+          - name: Sub3_Description
+            quote: true
+          - name: Notes
+            quote: true
+          - name: In_Source_Table
+            quote: true
+          - name: Unique_Column
+            quote: true
+          - name: Import_Date
+            quote: true
+          - name: Created_Date
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+      - name: activity_location_type
+        identifier: '"dim_Activity_Location_Type_Code_SCD"'
+        description: Activity location type code definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: consultation_mechanism
+        identifier: '"dim_Consultation_Mechanism_SCD"'
+        description: Consultation mechanism code definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mhsds_source_of_referral
+        identifier: '"dim_Source_Of_Referral_For_Mental_Health_Services_Data_Set_SCD"'
+        description: MHSDS source-of-referral code definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mental_health_source_of_referral_legacy
+        identifier: '"dim_Source_Of_Referral_For_Mental_Health_SCD"'
+        description: Retired mental-health source-of-referral definitions used by older records.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mhsds_service_or_team_type
+        identifier: '"dim_Service_Or_Team_Type_For_Mental_Health_SCD"'
+        description: Mental-health service or team type definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_source_of_referral
+        identifier: '"dim_Source_Of_Referral_For_Community_SCD"'
+        description: Community source-of-referral definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_service_or_team_type
+        identifier: '"dim_Service_Or_Team_Type_Referred_To_For_Community_Care_SCD"'
+        description: Community service or team type definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
