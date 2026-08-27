@@ -15,7 +15,7 @@ not bury shared domain logic in a report-specific pipeline or copy every source
 column. If this would materially widen the request, explain the opportunity and
 agree the boundary with the user.
 
-Use familiar engineering shorthand deliberately:
+Use these principles when reasoning about every change:
 
 - Measure twice, cut once: inspect contracts, lineage and consequences first.
 - YAGNI: reject imagined machinery, not reusable domain modelling.
