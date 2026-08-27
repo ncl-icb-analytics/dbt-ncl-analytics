@@ -132,3 +132,39 @@ sources:
             quote: true
           - name: AuditKey
             quote: true
+
+  - name: ukhfd_pbr
+    database: '"UKHFD"'
+    schema: '"PbR_v2"'
+    description: NHS payment reference data collected by the UK Health Funding Dataset.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
+    tables:
+      - name: market_forces_factor_values
+        identifier: '"dim_MFF_Values"'
+        description: Provider Market Forces Factor values from NHS tariff and payment workbooks.
+        columns:
+          - name: Organisation_Code
+            quote: true
+          - name: Organisation_Name
+            quote: true
+          - name: MFF_Value
+            quote: true
+          - name: MFF_Value_Year_2
+            quote: true
+          - name: MFF_Value_Year_3
+            quote: true
+          - name: MFF_Value_Year_4
+            quote: true
+          - name: MFF_Value_Year_5
+            quote: true
+          - name: Notes
+            quote: true
+          - name: File_Name
+            quote: true
+          - name: Import_Date
+            quote: true
+          - name: Created_Date
+            quote: true
