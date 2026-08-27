@@ -1,24 +1,35 @@
-# Before you work in dbt-analytics
+# Working in dbt-analytics
 
-Read `PROJECT_CONVENTIONS.md` before reviewing or changing models. Follow it
-for model design, naming, programme scope, SQL, testing and public data safety.
+This is a public NHS dbt project on Snowflake. Read
+`PROJECT_CONVENTIONS.md` before model work; the
+[dbt onboarding handbook](https://dbt-onboarding.vercel.app/) explains the
+reasoning behind it.
 
-Search related models, macros, seeds and documentation before implementing.
-Prefer extending or composing an existing contract when it represents the same
-concept and grain; create a separate pipeline only for a distinct contract.
+Before writing SQL:
 
-Check the branch, worktree status and diff, and preserve unrelated work. Do not
-work on `main`. Use a `type/short-description` branch and Conventional Commits.
-Explain the reason and effect in plain language in commits and pull requests.
+- State the subject and grain. Add population and time when the model selects or
+  derives them.
+- Search model names, YAML and lineage. Start from the most settled useful model
+  and move upstream only when the required contract is missing.
+- Reuse, compose or extend an existing contract where it fits. Create a model or
+  seed only for a distinct, durable contract; do not invent a parallel pipeline.
+- Only staging may consume raw. Hand-written models use `ref()`.
+- Do not guess clinical meaning. Make population, code-list, threshold and date
+  rules visible, and ask when their authority or interpretation is unclear.
 
-This is a public NHS repository. Never include credentials or real patient- or
-person-level data in code, seeds, tests, logs, examples, documentation, commits
-or pull requests. Use synthetic data or non-identifying aggregates. Do not
-repeat suspected sensitive values in comments.
+Keep SQL, descriptions, stakeholder ownership and tests for one contract change
+together. Check downstream impact with `dbt ls -s model_name+`. Validate the
+smallest useful selection with `dbt compile`, `dbt show` and `dbt build`, then
+build affected downstream models when the contract can change their results.
 
-Do not invent clinical meaning. Make changes to populations, clinical
-definitions, code lists, thresholds or date rules explicit and validate their
-effect.
+Check the branch, worktree status and diff, and preserve unrelated work. Never
+work on `main`; use a `type/short-description` branch and Conventional Commits.
+Before pushing, read the diff. In the pull request, explain why the change is
+needed, what contract changed, what you checked and where review is needed.
 
-Run the smallest validation that proves the change, then check affected
-downstream models.
+Never include credentials or real patient- or person-level data in repository
+files or GitHub text. This includes seeds, test data, row-level query results,
+logs, error output, screenshots and examples containing real data. Use synthetic
+data; high-level aggregates are valid evidence when they cannot identify anyone.
+Do not repeat suspected sensitive values. Alert repository maintainers because
+deleting the latest diff does not remove public history.
