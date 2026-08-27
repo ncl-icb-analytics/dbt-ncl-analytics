@@ -70,7 +70,7 @@ The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a termi
 | Command | Description |
 |---------|-------------|
 | `dbt compile -s model_name` | Compile a model without running it |
-| `dbt show -s model_name --limit 20` | Execute the model query and preview rows; through a coding agent, use only for synthetic or non-identifying output or with approved zero-data-retention controls |
+| `dbt show -s model_name --limit 20` | Execute the model query and preview rows in an approved human-controlled tool; a coding agent may use it only for a high-level, non-identifying aggregate, never to preview model rows |
 | `dbt build -s model_name` | Build a model and run its tests |
 | `dbt build -s +model_name` | Build a model with upstream dependencies |
 | `dbt build -s model_name+` | Build a model and its downstream consumers |

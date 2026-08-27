@@ -51,7 +51,6 @@ reviews:
   path_filters:
     - "!target/**"
     - "!dbt_packages/**"
-    - "!logs/**"
 
   path_instructions:
     # Public repository data safety
@@ -59,7 +58,8 @@ reviews:
       instructions: |
         This is a public repository. Treat any change that appears to contain
         real patient- or person-level data, direct identifiers, or combinations
-        of values that could identify a person as a critical blocking finding.
+        of values that could identify a person as a critical finding that must
+        be resolved before merge.
         Check seeds, test data, examples, logs, exports, screenshots, comments,
         documentation and hardcoded SQL values. Column names and clearly
         synthetic examples are not patient data by themselves. High-level
@@ -391,8 +391,8 @@ reviews:
       instructions: |
         These are Snowflake Semantic Views, named sem_. Review facts, dimensions,
         metrics and joins against the contracts of their ref() inputs. The SQL is
-        semantic-view DDL and has static analysis disabled; do not apply ordinary
-        SELECT-model style rules.
+        semantic-view DDL; do not apply ordinary SELECT-model style rules or
+        treat their syntax alone as a defect.
 
     # Model properties
     - path: "models/**/*.y*ml"
@@ -411,10 +411,11 @@ reviews:
         - New non-raw models require config.meta.owner.name.
         - New or changed test blocks use data_tests. Do not ask an enhancement
           PR to migrate an untouched legacy tests block.
-        - Every new model must test its stated grain using its key or key
-          combination. For a changed inherited model without a grain test,
-          require one when the change affects its grain, key or join behaviour;
-          otherwise mention it as a non-blocking follow-up.
+        - Every new model, and every changed model with no test, must add a test
+          of its stated grain using its key or key combination. For a changed
+          inherited model that has other tests but no grain test, require one
+          when the change affects its grain, key or join behaviour; otherwise
+          mention it as a non-blocking follow-up.
         - This project does not use test-driven development. Beyond the grain
           test, request a permanent test only for a durable contract or an error
           likely to recur. Tests run on every build and consume Snowflake
@@ -464,7 +465,8 @@ reviews:
         A separate seed should have a distinct subject, grain, scope, stakeholder
         group or business reason to change.
         Any seed that appears to contain real patient- or person-level data is a
-        critical blocking finding under the repository-wide data-safety rule.
+        critical finding that must be resolved before merge under the
+        repository-wide data-safety rule.
 
     # Macros
     - path: "macros/**"

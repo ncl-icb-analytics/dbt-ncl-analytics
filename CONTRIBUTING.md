@@ -177,6 +177,7 @@ Validate in a tight loop:
 ```powershell
 dbt compile -s model_name
 dbt build -s model_name
+# When the change can affect consumers:
 dbt build -s model_name+
 ```
 
@@ -344,11 +345,12 @@ git commit -m "docs: update setup instructions in CONTRIBUTING"
    merge even though CodeRabbit does not submit a formal request-changes review.
 
 3. **Wait for review:**
-   - Automated checks compile the project and check references, descriptions,
-     tests and ownership
+   - Fast checks compile the project and check references, descriptions,
+     declared test coverage and ownership
    - CodeRabbit reviews the change against the project conventions
    - Address any feedback from reviewers
-   - Once approved, the PR can be merged
+   - Once approved, select **Merge when ready**. The merge queue builds changed
+     models and runs their data tests in Snowflake development before merge
 
 Reviews focus on changed behaviour and its effect on the existing model
 contract. Pre-existing design debt is not a merge condition unless the change

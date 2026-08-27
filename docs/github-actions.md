@@ -10,16 +10,15 @@ Every pull request receives fast feedback:
 | Workflow | What it does |
 |----------|--------------|
 | `auto-author-assign.yml` | Assigns the pull request author |
-| `dbt-code-quality.yml` | Checks hardcoded relations, raw/source use outside staging, model descriptions and test coverage |
+| `dbt-code-quality.yml` | Checks hardcoded relations, raw/source layer boundaries, model descriptions and test coverage |
 | `dbt-compile.yml` | Runs Fusion compile against development metadata |
 | `model-ownership.yml` | Comments when changed models lack ownership metadata |
 | `dbt-pr-validation.yml` | Reports that runtime validation will run in the merge queue |
 
-The staging-reference check is the minimum architecture check: raw models and
-`source()` calls must not appear outside staging. Project conventions are
-stricter: every changed staging model must replace any direct `source()` call it
-contains with `ref()` to the generated raw model. Unrelated legacy models remain
-outside the pull request.
+The staging-reference check enforces the raw boundary in changed models. Staging
+may use `ref()` to a generated raw model but not `source()`; every other
+hand-written layer may use neither. Unrelated legacy models remain outside the
+pull request.
 
 CodeRabbit also reviews draft and ready pull requests against
 `.coderabbit.yaml` and `PROJECT_CONVENTIONS.md`. It comments but does not

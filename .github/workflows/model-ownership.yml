@@ -79,7 +79,7 @@ jobs:
             const comments = newSuggestions.map(suggestion => ({
               path: suggestion.file,
               line: suggestion.line,
-              body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. Add the following after the description:\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
+              body: `### 📝 Missing model ownership\n\nThis model is missing owner metadata. The suggestion uses the PR author as a starting point. Apply it only when they are the business stakeholder accountable for the model's meaning and use; otherwise replace the name with that stakeholder or group.\n\n\`\`\`suggestion\n${suggestion.suggestion}\n\`\`\``
             }));
 
             // Submit all suggestions as a single review

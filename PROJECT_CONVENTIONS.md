@@ -288,7 +288,10 @@ use test-driven development. Every model must test its stated grain with its key
 or key combination. Beyond grain, add a permanent test only when it protects a
 durable contract or an error likely to recur. Tests run on every build and
 consume Snowflake compute, so do not test implementation details or repeat
-assertions already owned upstream.
+assertions already owned upstream. The Model Test Coverage CI check verifies
+that a changed model has a test; it cannot infer the model's grain. The test
+itself runs in local builds and the merge-queue development build. Authors and
+reviewers must still confirm that it covers the stated key or key combination.
 
 - Every model needs a description of its subject and what one row represents.
   State the time basis where it matters. When a model filters or derives a
