@@ -11,7 +11,12 @@ apply only to OLIDS. Breach days mark a sustained delay that needs attention.
 with olids as (
     select
         'DATA_LAKE.OLIDS' as source_schema,
-        max(consensus_activity_date)::date as content_date,
+        max(
+            case
+                when consensus_activity_date::date <= current_date()
+                    then consensus_activity_date
+            end
+        )::date as content_date,
         max(max_lds_transform_datetime)::timestamp_ntz as observed_at,
         'practice_consensus_date' as signal_type,
         'Latest activity date reported by the practice consensus' as signal_detail,
@@ -460,35 +465,50 @@ source_signals as (
 source_latest_dates as (
     select
         'DATA_LAKE.OLIDS' as source_schema,
-        max(max_activity_date)::date as latest_content_date
+        max(
+            case
+                when max_activity_date::date <= current_date()
+                    then max_activity_date
+            end
+        )::date as latest_content_date,
+        'latest_activity_date' as latest_signal_type,
+        'Latest valid activity date present across OLIDS freshness summary tables' as latest_signal_detail
     from {{ ref('raw_olids_freshness_summary') }}
 
     union all
 
     select
         'DATA_LAKE.PDS' as source_schema,
-        max(content_at)::date as latest_content_date
+        max(content_at)::date as latest_content_date,
+        'latest_core_business_effective_date' as latest_signal_type,
+        'Latest valid business-effective date across person, address, or registered-practice data' as latest_signal_detail
     from pds_core_dates
 
     union all
 
     select
         'DATA_LAKE.DEATHS' as source_schema,
-        max(latest_content_date) as latest_content_date
+        max(latest_content_date) as latest_content_date,
+        'latest_registration_date' as latest_signal_type,
+        'Latest valid registration date present in the source' as latest_signal_detail
     from deaths_latest_observation
 
     union all
 
     select
         'SDL' as source_schema,
-        max(content_date) as latest_content_date
+        max(content_date) as latest_content_date,
+        'latest_slam_feed_month' as latest_signal_type,
+        'Latest valid reporting month reached by any of the four SLAM feeds in SDL' as latest_signal_detail
     from slam_feed_latest
 
     union all
 
     select
         source_schema,
-        latest_receipt_date as latest_content_date
+        latest_receipt_date as latest_content_date,
+        'latest_record_received_date' as latest_signal_type,
+        'Latest valid receipt date present across provider records' as latest_signal_detail
     from sus_source_latest
 )
 
@@ -500,6 +520,10 @@ select
     source_signals.observed_at,
     source_signals.signal_type,
     source_signals.signal_detail,
+    source_signals.signal_type as consensus_signal_type,
+    source_signals.signal_detail as consensus_signal_detail,
+    coalesce(source_latest_dates.latest_signal_type, source_signals.signal_type) as latest_signal_type,
+    coalesce(source_latest_dates.latest_signal_detail, source_signals.signal_detail) as latest_signal_detail,
     source_signals.expected_days,
     source_signals.sla_days,
     source_signals.breach_after_days

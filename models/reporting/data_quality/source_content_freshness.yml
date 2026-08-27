@@ -43,17 +43,33 @@ models:
         data_tests:
           - not_null
       - name: consensus_content_date
-        description: Source-specific date representing normal breadth of coverage.
+        description: Date representing normal breadth of coverage for the source.
         data_tests:
           - not_null
       - name: observed_at
         description: When the source recorded or received the content signal.
       - name: signal_type
-        description: Rule used to derive content_date.
+        description: Compatibility alias for consensus_signal_type.
         data_tests:
           - not_null
       - name: signal_detail
-        description: User-facing explanation of the source-specific rule.
+        description: Compatibility alias for consensus_signal_detail.
+        data_tests:
+          - not_null
+      - name: consensus_signal_type
+        description: Rule used to derive consensus_content_date.
+        data_tests:
+          - not_null
+      - name: consensus_signal_detail
+        description: User-facing explanation of the consensus date derivation.
+        data_tests:
+          - not_null
+      - name: latest_signal_type
+        description: Rule used to derive latest_content_date.
+        data_tests:
+          - not_null
+      - name: latest_signal_detail
+        description: User-facing explanation of the latest date derivation.
         data_tests:
           - not_null
       - name: expected_days
@@ -128,7 +144,16 @@ models:
             expression: "content_date <= current_date()"
       - dbt_utils.expression_is_true:
           arguments:
+            expression: "latest_content_date <= current_date()"
+      - dbt_utils.expression_is_true:
+          arguments:
             expression: "content_date = consensus_content_date"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "signal_type = consensus_signal_type"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "signal_detail = consensus_signal_detail"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "latest_content_date >= consensus_content_date"
