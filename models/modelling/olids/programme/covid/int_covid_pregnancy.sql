@@ -162,4 +162,5 @@ final_eligible AS (
 )
 
 SELECT * FROM final_eligible
+WHERE campaign_id <> 'COVID Spring 2025'
 ORDER BY campaign_id, person_id

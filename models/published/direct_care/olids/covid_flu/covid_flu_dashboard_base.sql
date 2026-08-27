@@ -1,6 +1,7 @@
 {{
     config(
         materialized='table',
+        tags=['covid_flu'],
         cluster_by=['programme_type', 'campaign_id', 'practice_code', 'person_id']
     )
 }}
@@ -151,6 +152,7 @@ WITH uptake_with_demographics AS (
         u.is_eligible,
         u.campaign_category,
         u.risk_group,
+        u.subcohort,
         --u.eligibility_reason,
         --u.rule_type,
         

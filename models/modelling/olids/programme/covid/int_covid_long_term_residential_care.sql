@@ -4,7 +4,7 @@ COVID Long-term Residential Care Eligibility Rule
 Business Rule: Person is eligible if they are:
 1. Currently residing in long-term residential care (care home)
 2. Latest residence code is from LONGRES_COD cluster
-3. AND aged 65+ at campaign reference date (for care home specific eligibility)
+3. AND aged 18+ at campaign reference date (for care home specific eligibility)
 
 Hierarchical rule - latest residence status determines eligibility.
 This is a key eligibility group for COVID campaigns.
@@ -125,9 +125,9 @@ people_in_longterm_care_with_age AS (
     WHERE demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
         AND pltc.is_in_longterm_care = TRUE
-        -- Care home eligibility is 65+. Tested on birth date because Snowflake
+        -- Care home eligibility is 18+. Tested on birth date because Snowflake
         -- DATEDIFF('year', ...) subtracts calendar years rather than completed years.
-        AND demo.birth_date_approx <= DATEADD('year', -65, pltc.campaign_reference_date)
+        AND demo.birth_date_approx <= DATEADD('year', -18, pltc.campaign_reference_date)
 ),
 
 -- Step 7: Format for eligibility table
@@ -139,7 +139,7 @@ final_eligible AS (
         person_id,
         qualifying_event_date,
         campaign_reference_date AS reference_date,
-        'Resident in long-term residential care home (aged 65+)' AS description,
+        'Resident in long-term residential care home (aged 18+)' AS description,
         birth_date_approx,
         age_months_at_ref_date,
         age_years_at_ref_date,
