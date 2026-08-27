@@ -3,9 +3,8 @@ version: 2
 models:
   - name: source_content_freshness
     description: >
-      Source-derived content-currency signals shown by the application freshness
-      view. Includes expected cadence, contractual SLA where one exists, and
-      analyst-facing age and status fields.
+      Source content currency at one row per profiled logical source. Status is
+      based on the consensus date; the latest valid date is retained for context.
     config:
       meta:
         owner:
@@ -36,15 +35,15 @@ models:
                   - DATA_LAKE.TAT
                   - DATA_LAKE.TERMINOLOGY
       - name: content_date
-        description: Consensus content date used for freshness status.
+        description: Compatibility alias for consensus_content_date.
         data_tests:
           - not_null
       - name: latest_content_date
-        description: Latest valid content date present in the source.
+        description: Latest valid content date found in the source.
         data_tests:
           - not_null
       - name: consensus_content_date
-        description: Date representing the source's normal breadth of coverage.
+        description: Source-specific date representing normal breadth of coverage.
         data_tests:
           - not_null
       - name: observed_at

@@ -3,8 +3,8 @@ version: 2
 models:
   - name: stg_source_content_freshness
     description: >
-      Source-specific content-currency signals used by the reporting freshness
-      contract. Every row is derived from fields inside the source data.
+      Source-derived content-currency signals at one row per profiled logical
+      source. Each row exposes a consensus date and the latest valid date found.
     config:
       meta:
         owner:
@@ -16,14 +16,14 @@ models:
           - not_null
           - unique
       - name: content_date
-        description: Consensus content date used for freshness status.
+        description: Compatibility alias for consensus_content_date.
         data_tests:
           - not_null
       - name: latest_content_date
-        description: Latest valid content date present in the source.
+        description: Latest valid content date found in the source.
         data_tests:
           - not_null
       - name: consensus_content_date
-        description: Date representing the source's normal breadth of coverage.
+        description: Source-specific date representing normal breadth of coverage.
         data_tests:
           - not_null

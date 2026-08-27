@@ -373,22 +373,22 @@ pmct as (
         last_day(max(
             case
                 when try_to_date(
-                    left(split_part("PERIOD", '-', 2), 3) || ' ' || split_part("PERIOD", '-', 3),
+                    left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
                     'MON YYYY'
                 ) <= current_date()
                     then try_to_date(
-                        left(split_part("PERIOD", '-', 2), 3) || ' ' || split_part("PERIOD", '-', 3),
+                        left(split_part(period, '-', 2), 3) || ' ' || split_part(period, '-', 3),
                         'MON YYYY'
                     )
             end
         )) as content_date,
-        max("_INGESTED_AT")::timestamp_ntz as observed_at,
+        max(ingested_at)::timestamp_ntz as observed_at,
         'diagnostics_reporting_period' as signal_type,
         'Latest diagnostics reporting month in the current performance presentation feed' as signal_detail,
         30 as expected_days,
         null::number as sla_days,
         60 as breach_after_days
-    from {{ source('performance', 'DiagnosticsMonthlySourceAppendReviseProvComm') }}
+    from {{ ref('raw_performance_diagnosticsmonthlysourceappendreviseprovcomm') }}
 ),
 
 tat as (
@@ -458,6 +458,13 @@ source_signals as (
 ),
 
 source_latest_dates as (
+    select
+        'DATA_LAKE.OLIDS' as source_schema,
+        max(max_activity_date)::date as latest_content_date
+    from {{ ref('raw_olids_freshness_summary') }}
+
+    union all
+
     select
         'DATA_LAKE.PDS' as source_schema,
         max(content_at)::date as latest_content_date
