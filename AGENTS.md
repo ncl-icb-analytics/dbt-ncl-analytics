@@ -87,9 +87,22 @@ downstream models when the contract can change their results. Use `dbt show`
 only under the data-safety rules below.
 
 Check the branch, worktree status and diff, and preserve unrelated work. Never
-work on `main`; use a `type/short-description` branch and Conventional Commits.
-Before pushing, read the diff. In the pull request, explain why the change is
-needed, what contract changed, what you checked and where review is needed.
+work on `main`; use a `type/short-description` branch. Use Conventional Commit
+form for commits and the pull request title. Before pushing, read the diff. Open
+the pull request description with the problem and why it matters, then explain
+the solution, what you checked and where review is needed. Do not add agent,
+model or harness attribution to commits or pull requests.
+
+A draft pull request is fine while decisions, implementation or validation
+remain; CodeRabbit reviews drafts in this repository. Before requesting human
+review, check the branch against current `main` and surface any conflict. Do not
+rebase or force-push a shared branch without the user's approval.
+
+When asked to monitor a pull request, review checks and comments posted after
+the latest push. Verify each automated finding against the diff and source
+before acting. If asked to resolve feedback, fix genuine issues and answer an
+inaccurate finding with a brief reason; do not change code merely to satisfy a
+bot.
 
 Never include credentials or real patient- or person-level data in repository
 files or GitHub text. This includes seeds, test data, row-level query results,
