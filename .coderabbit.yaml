@@ -236,6 +236,14 @@ reviews:
           variant an unqualified name that appears project-wide.
         - Preserve unknown, false, not-applicable and missing-evidence states when
           the domain distinguishes them.
+        - In supported reporting, published or partner outputs, flag an opaque
+          category code or number when it is the only analyst-usable value and an
+          authoritative label is available. Prefer the source description or a
+          join to the shared reference model that owns it; retain the code when
+          useful for traceability, filtering or joins. A modelling block may stay
+          code-only when the downstream analyst-facing interface supplies the
+          label. Do not ask the author to invent a label or repeat a maintained
+          mapping in a local CASE expression.
         - Clinical definitions, thresholds, code lists and date rules owned by a
           model must be visible and checkable in its contract. When a model
           filters or derives a population, require its description to explain

@@ -16,6 +16,10 @@ Before writing SQL:
 - Only staging may consume raw. Hand-written models use `ref()`.
 - Do not guess clinical meaning. Make population, code-list, threshold and date
   rules visible, and ask when their authority or interpretation is unclear.
+- Make supported reporting and published models understandable without extra
+  analyst lookups. Pair categorical codes with authoritative labels from the
+  source or a shared reference model. A modelling block may remain code-only
+  when the downstream analyst-facing interface supplies the labels.
 
 Remember that project configuration is part of the model:
 

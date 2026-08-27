@@ -197,6 +197,13 @@ it.
   carrying metadata into the pivot can silently change the result's grain.
 - Keep unknown, false, not applicable and missing evidence distinct where the
   domain distinguishes them.
+- Analyst-facing reporting and published models should not expose an opaque
+  category code or number as the only usable value. Include its authoritative
+  label from the source when available; otherwise join to the shared reference
+  model that owns the description. Retain the code alongside the label when it
+  supports traceability, stable filtering or joins. A modelling block may remain
+  code-only when a downstream supported interface supplies the labels. Do not
+  invent labels or repeat maintained mappings in local `case` expressions.
 - Put organisation-wide definitions and terminology in shared models. Keep
   programme, audience and product rules or vocabulary in the folders or schemas
   that own them, with their scope visible in model names.

@@ -124,6 +124,9 @@ Published, partner and semantic models serve downstream consumers.
   consolidation or enrichment.
 - Prefer readable, straightforward SQL. Logic must not masquerade as data: keep
   rules in SQL and use seeds for lookup values and parameters.
+- At the analyst-facing reporting or published interface, pair opaque category
+  codes with authoritative labels from the source or a shared reference model.
+  A modelling block may stay code-only when that downstream interface adds them.
 - Give a business definition one owner when several models depend on it. Do not
   repeat maintained provider lists, code sets, thresholds or date rules. Keep a
   value that defines only one model's concept in that model rather than creating
