@@ -3,16 +3,15 @@ version: 2
 models:
   - name: source_content_freshness
     description: >
-      Source-derived content-currency signals shown by the application freshness
-      view. Includes expected cadence, contractual SLA where one exists, and
-      analyst-facing age and status fields.
+      Source content currency at one row per profiled logical source. Status is
+      based on the consensus date; the latest valid date is retained for context.
     config:
       meta:
         owner:
           name: Eddie Davison
     columns:
       - name: source_schema
-        description: DATA_LAKE source schema.
+        description: Logical source identifier shown in freshness reporting.
         data_tests:
           - not_null
           - unique
@@ -28,6 +27,7 @@ models:
                   - DATA_LAKE.EPD_PRIMARY_CARE
                   - DATA_LAKE.CSDS
                   - DATA_LAKE.MHSDS
+                  - SDL
                   - DATA_LAKE.WL
                   - DATA_LAKE.ERS
                   - DATA_LAKE.FACT_PATIENT
@@ -35,17 +35,41 @@ models:
                   - DATA_LAKE.TAT
                   - DATA_LAKE.TERMINOLOGY
       - name: content_date
-        description: Latest date represented by the source-specific content signal.
+        description: Compatibility alias for consensus_content_date.
+        data_tests:
+          - not_null
+      - name: latest_content_date
+        description: Latest valid content date found in the source.
+        data_tests:
+          - not_null
+      - name: consensus_content_date
+        description: Date representing normal breadth of coverage for the source.
         data_tests:
           - not_null
       - name: observed_at
         description: When the source recorded or received the content signal.
       - name: signal_type
-        description: Rule used to derive content_date.
+        description: Compatibility alias for consensus_signal_type.
         data_tests:
           - not_null
       - name: signal_detail
-        description: User-facing explanation of the source-specific rule.
+        description: Compatibility alias for consensus_signal_detail.
+        data_tests:
+          - not_null
+      - name: consensus_signal_type
+        description: Rule used to derive consensus_content_date.
+        data_tests:
+          - not_null
+      - name: consensus_signal_detail
+        description: User-facing explanation of the consensus date derivation.
+        data_tests:
+          - not_null
+      - name: latest_signal_type
+        description: Rule used to derive latest_content_date.
+        data_tests:
+          - not_null
+      - name: latest_signal_detail
+        description: User-facing explanation of the latest date derivation.
         data_tests:
           - not_null
       - name: expected_days
@@ -108,7 +132,7 @@ models:
     data_tests:
       - dbt_expectations.expect_table_row_count_to_equal:
           arguments:
-            value: 15
+            value: 16
       - dbt_utils.expression_is_true:
           arguments:
             expression: "expected_days > 0"
@@ -117,7 +141,22 @@ models:
             expression: "breach_after_days > coalesce(sla_days, expected_days)"
       - dbt_utils.expression_is_true:
           arguments:
-            expression: "content_date is null or content_date <= current_date()"
+            expression: "content_date <= current_date()"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "latest_content_date <= current_date()"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "content_date = consensus_content_date"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "signal_type = consensus_signal_type"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "signal_detail = consensus_signal_detail"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "latest_content_date >= consensus_content_date"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "sla_days is null or source_schema = 'DATA_LAKE.OLIDS'"
@@ -133,3 +172,16 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "source_schema = 'DATA_LAKE.FACT_PATIENT' or observed_at is not null"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              source_schema not in (
+                'DATA_LAKE.SUS_UNIFIED_APC',
+                'DATA_LAKE.SUS_UNIFIED_OP',
+                'DATA_LAKE.SUS_UNIFIED_ECDS'
+              ) or signal_type = 'provider_volume_consensus_receipt_date'
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: >-
+              source_schema != 'DATA_LAKE.DEATHS'
+              or signal_type = 'latest_batch_registration_p99'
