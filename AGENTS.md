@@ -14,6 +14,13 @@ code where it fits, but do not preserve complexity merely because it already
 exists. Keep the work focused; simplify nearby code only when that is needed to
 make the requested change clear and safe.
 
+If the proposed direction is likely to produce wrong results, an unclear
+contract, a duplicate pipeline or avoidable cost and maintenance, say so before
+implementing it. Explain the concrete consequence and offer the smallest
+realistic alternative. Do not turn design feedback into an unrequested
+redesign. When both approaches are safe and compatible with project rules, let
+the user decide and follow that decision.
+
 Use these instructions as project defaults, not as a substitute for judgement.
 The requested outcome and the model's established contract should guide the
 implementation. If a default does not fit, explain the trade-off rather than
@@ -35,6 +42,9 @@ Before writing SQL:
 - Only staging may consume raw. Hand-written models use `ref()`.
 - Do not guess clinical meaning. Make population, code-list, threshold and date
   rules visible, and ask when their authority or interpretation is unclear.
+- Use SQL comments to explain non-obvious business meaning, source quirks or why
+  a surprising choice is needed. Do not narrate obvious SQL. Update or remove a
+  comment when its logic changes.
 - Make supported reporting and published models understandable without extra
   analyst lookups. Pair categorical codes with authoritative labels from the
   source or a shared reference model. A modelling block may remain code-only
