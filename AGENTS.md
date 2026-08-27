@@ -53,11 +53,17 @@ Remember that project configuration is part of the model:
   other tools that read warehouse metadata. Describe grain, population, time,
   units, codes and null meaning where they affect interpretation.
 
-Keep SQL, descriptions, stakeholder ownership and tests for one contract change
-together. Check downstream impact with `dbt ls -s model_name+`. Validate the
-smallest useful selection with `dbt compile`, `dbt build` and, where its output
-is safe to expose, `dbt show`. Then build affected downstream models when the
-contract can change their results.
+Keep SQL, descriptions, stakeholder ownership and contract tests together. Test
+every model's stated grain with its key or key combination. This project does
+not use test-driven development. Beyond grain, add a permanent test only when it
+protects a durable contract or an error likely to recur. Tests run on every
+build and consume Snowflake compute, so do not test implementation details or
+repeat assertions already owned upstream.
+
+Check downstream impact with `dbt ls -s model_name+`. Validate the smallest
+useful selection with `dbt compile` and `dbt build`, then build affected
+downstream models when the contract can change their results. Use `dbt show`
+only under the data-safety rules below.
 
 Check the branch, worktree status and diff, and preserve unrelated work. Never
 work on `main`; use a `type/short-description` branch and Conventional Commits.

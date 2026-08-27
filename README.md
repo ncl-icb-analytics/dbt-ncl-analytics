@@ -141,9 +141,12 @@ Published, partner and semantic models serve downstream consumers.
   identifying values, row-level extracts or screenshots containing real data.
   High-level aggregate counts, rates and validation totals are not person-level
   data when they cannot identify an individual.
-- Treat SQL, descriptions, ownership and tests as one model change.
-- Test the key or key combination that enforces grain. Check that joins do not
-  multiply rows unless the model documents the new grain.
+- Treat SQL, descriptions, ownership and contract tests as one model change.
+- Test every model's grain using its key or key combination. Beyond grain, add
+  permanent tests only for durable contract assertions or errors likely to
+  recur; tests run on every build and consume Snowflake compute.
+- Check that joins do not multiply rows unless the model documents the new
+  grain.
 - Split confused responsibilities, not individual transformations or CTEs.
 - Use `ref()` in hand-written models; only generated raw models use `source()`.
 - Keep programme, geography, legacy, audience and product rules at the scope

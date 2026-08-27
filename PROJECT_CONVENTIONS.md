@@ -275,7 +275,12 @@ Keep those rules visible in readable SQL rather than adding syntax to the seed.
 
 ## YAML, documentation and tests
 
-Treat SQL, properties and tests as one change.
+Treat SQL, properties and contract tests as one change. This project does not
+use test-driven development. Every model must test its stated grain with its key
+or key combination. Beyond grain, add a permanent test only when it protects a
+durable contract or an error likely to recur. Tests run on every build and
+consume Snowflake compute, so do not test implementation details or repeat
+assertions already owned upstream.
 
 - Every model needs a description of its subject and what one row represents.
   State the time basis where it matters. When a model filters or derives a
@@ -292,8 +297,7 @@ Treat SQL, properties and tests as one change.
 - Document columns when units, code systems, dates, null
   meaning, derivation or relationships affect interpretation.
 - New and changed test blocks use `data_tests`. Do not require an enhancement to
-  migrate an untouched legacy `tests` block. Test the key or key combination
-  that enforces the grain.
+  migrate an untouched legacy `tests` block.
 - Focus tests on assumptions most likely to break when sources or rules change:
   grain, join uniqueness, population boundaries and membership of maintained
   lists. Prefer a relationship test to the model that owns a changing list over
@@ -312,19 +316,19 @@ when the change can affect consumers:
 
 ```powershell
 dbt compile -s my_model
-dbt show -s my_model --limit 20  # only when its output is safe for the tool
 dbt build -s my_model
 dbt ls -s my_model+
 dbt build -s my_model+
 ```
 
 Assume output from commands run by a coding agent is visible to its provider.
-`dbt show` executes the selected query and returns rows. Use it in an agent
-session only for synthetic or non-identifying output, or when the tool has
-approved zero-data-retention controls for that data. Apply the same rule to ad
-hoc queries and failing-test SQL. Otherwise prefer builds, tests and
-non-identifying aggregate checks, and inspect row-level data in an approved
-human-controlled tool.
+`dbt show` executes SQL and returns its result. Use it sparingly in an agent
+session, and only when the query is designed to return a high-level,
+non-identifying aggregate. Do not use it to preview model rows. When validation
+needs row-level inspection, give the user a ready-to-run Snowflake-native query
+for an approved human-controlled tool and ask only for the non-identifying
+aggregate or confirmation needed. Apply the same rule to ad hoc queries and
+failing-test SQL.
 
 Use `.\build_changed.ps1` to build models changed on the branch. Add `-d` when
 downstream models may be affected and `-u` when changed models need rebuilt

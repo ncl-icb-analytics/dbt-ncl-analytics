@@ -411,6 +411,15 @@ reviews:
         - New non-raw models require config.meta.owner.name.
         - New or changed test blocks use data_tests. Do not ask an enhancement
           PR to migrate an untouched legacy tests block.
+        - Every new model must test its stated grain using its key or key
+          combination. For a changed inherited model without a grain test,
+          require one when the change affects its grain, key or join behaviour;
+          otherwise mention it as a non-blocking follow-up.
+        - This project does not use test-driven development. Beyond the grain
+          test, request a permanent test only for a durable contract or an error
+          likely to recur. Tests run on every build and consume Snowflake
+          compute. Do not request tests of implementation details or duplicate
+          assertions already owned upstream.
         - Focus tests on assumptions most likely to break when sources or rules
           change: grain, join uniqueness, population boundaries and membership
           of maintained lists. Prefer a relationship test to the model that owns
@@ -421,7 +430,9 @@ reviews:
         - Column descriptions should explain units, code systems, selection
           rules, dates, null meaning, derivation or non-obvious relationships;
           do not require prose that merely repeats a column name.
-        - A semantic change must update SQL, descriptions and tests together.
+        - A semantic change must update the affected SQL, descriptions and
+          existing contract tests together. Ask for a new test only under the
+          rules above.
         - auto_ source YAML is generated and must not be edited by hand.
 
     # Source registry and declarations
@@ -485,7 +496,9 @@ reviews:
         Singular tests return rows that violate a named model contract. Check
         that the test uses ref(), lives at the scope that owns the promise, and
         returns identifying or explanatory columns rather than only a count.
-        Names and thresholds should make a production failure actionable.
+        Names and thresholds should make a production failure actionable. Flag
+        a test that repeats an upstream assertion or tests an implementation
+        detail without protecting a distinct contract.
 
 chat:
   allow_non_org_members: false

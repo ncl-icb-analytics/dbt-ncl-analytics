@@ -164,23 +164,29 @@ Before editing SQL:
 4. Confirm the model area. Raw may only be consumed through staging; after
    staging, use whichever staging-or-later contract fits the work.
 
-Change the model SQL, properties and tests together. New non-raw models need a
-description, `config.meta.owner.name`, and a test that protects their contract.
+Change the model SQL, properties and contract tests together. New non-raw models
+need a description and `config.meta.owner.name`. Every model needs a test of its
+stated grain using its key or key combination. This project does not use
+test-driven development. Beyond grain, add a permanent test only for a durable
+contract or an error likely to recur. Tests run on every build and consume
+Snowflake compute, so do not test implementation details or repeat upstream
+assertions.
 
 Validate in a tight loop:
 
 ```powershell
 dbt compile -s model_name
-dbt show -s model_name --limit 20  # only when its output is safe for the tool
 dbt build -s model_name
 dbt build -s model_name+
 ```
 
-`dbt show` executes the selected query and returns rows. Use it through a coding
-agent only for synthetic or non-identifying output, or when the tool has approved
-zero-data-retention controls for that data. Apply the same rule to ad hoc queries
-and failing-test SQL. Otherwise use builds, tests and non-identifying aggregate
-checks, and inspect row-level data in an approved human-controlled tool.
+`dbt show` executes SQL and returns its result. Use it sparingly through a coding
+agent, and only when the query is designed to return a high-level,
+non-identifying aggregate. Do not use it to preview model rows. When validation
+needs row-level inspection, give the user a ready-to-run Snowflake-native query
+for an approved human-controlled tool and ask only for the non-identifying
+aggregate or confirmation needed. Apply the same rule to ad hoc queries and
+failing-test SQL.
 
 Build downstream only where the change can affect consumers. If the full
 selection is too large, build direct children and state the limit in the pull
