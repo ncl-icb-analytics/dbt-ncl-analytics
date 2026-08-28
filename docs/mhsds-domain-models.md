@@ -1,8 +1,8 @@
 # MHSDS domain models
 
-These models expose MHSDS records at their submitted business grains. They
-support source analysis and provide inputs to cross-system event and clinical
-record models.
+The source facts and relationships expose MHSDS records at their submitted
+business grains. Derived models support analysis and provide inputs to
+cross-system event and clinical record models.
 
 Definitions follow the current
 [MHSDS v6 ETOS](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance).
