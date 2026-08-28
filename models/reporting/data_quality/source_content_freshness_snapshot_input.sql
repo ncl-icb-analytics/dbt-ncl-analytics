@@ -4,5 +4,5 @@
 
 select
     source_schema,
-    content_date
+    consensus_content_date as content_date
 from {{ ref('source_content_freshness') }}

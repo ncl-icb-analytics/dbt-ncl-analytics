@@ -95,6 +95,10 @@ models:
         data_type: varchar
         description: "Clinical acuity code of the encounter"
 
+      - name: acuity_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT UK preferred term for the clinical acuity code."
+
       - name: primary_diagnosis_code_snomed
         data_type: varchar
         description: "The first listed diagnosis SNOMED code, considered to be the most important / significant."
@@ -383,3 +387,49 @@ models:
       - name: general_practitioner_code
         data_type: varchar
         description: "Individual GP code; distinct from reg_practice_at_event, which identifies the GP practice."
+      - name: financial_year
+        data_type: varchar
+        description: "NHS financial year derived from start_date in YYYYYY format, for example 202526."
+      - name: financial_month
+        data_type: number
+        description: "NHS financial month derived from start_date, where April is 1 and March is 12."
+      - name: expected_treatment_at
+        data_type: timestamp_tz
+        description: "Expected treatment timestamp from the first source-sequenced expected-treatment record."
+      - name: is_national_tariff_excluded
+        data_type: boolean
+        description: "Whether the attendance was excluded from national tariff pricing."
+      - name: national_tariff
+        data_type: number
+        description: "National tariff amount before market-forces adjustment."
+      - name: national_tariff_final_price
+        data_type: number
+        description: "Final national-pricing amount; also exposed as cost for compatibility."
+      - name: mff_factor
+        data_type: number
+        description: "Market Forces Factor reported for the attendance."
+      - name: mff_adjustment
+        data_type: number
+        description: "Market Forces Factor monetary adjustment reported for the attendance."
+      - name: uec_activity_type_code
+        data_type: varchar
+        description: "Source ECDS activity type code for the urgent-care setting; distinct from pod and department_type."
+
+      - name: uec_activity_type_desc
+        data_type: varchar
+        description: "Current UKHFD description of the urgent and emergency care activity type code."
+
+      - name: uec_site_label
+        data_type: varchar
+        description: "Operational label for urgent treatment centres, walk-in centres and minor injuries units (for example UTC_NP), from organisation_uec_site joined on site, department type and arrival date. Null for emergency departments and sites not in the reference."
+      - name: disease_notification_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term for the disease-notification code."
+
+      - name: discharge_information_given_desc
+        data_type: varchar
+        description: "Human-readable SNOMED CT preferred term describing the discharge information given to the patient."
+
+      - name: general_practitioner_name
+        data_type: varchar
+        description: "Human-readable name for general_practitioner_code; remains null when the submitted code is absent from the governed GP reference."

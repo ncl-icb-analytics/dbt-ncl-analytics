@@ -15,10 +15,13 @@ with source_signals as (
 ages as (
     select
         *,
-        datediff(day, content_date, current_date()) as content_age_days,
-        dateadd(day, expected_days, content_date)::date as expected_by_date,
-        case when sla_days is not null then dateadd(day, sla_days, content_date)::date end as sla_by_date,
-        dateadd(day, breach_after_days, content_date)::date as breach_by_date
+        datediff(day, consensus_content_date, current_date()) as content_age_days,
+        dateadd(day, expected_days, consensus_content_date)::date as expected_by_date,
+        case
+            when sla_days is not null
+                then dateadd(day, sla_days, consensus_content_date)::date
+        end as sla_by_date,
+        dateadd(day, breach_after_days, consensus_content_date)::date as breach_by_date
     from source_signals
 ),
 

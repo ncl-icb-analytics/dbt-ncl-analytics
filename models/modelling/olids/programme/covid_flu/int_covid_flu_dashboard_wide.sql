@@ -1,6 +1,7 @@
 {{
     config(
         materialized='table',
+        tags=['covid_flu'],
         cluster_by=['programme_type', 'campaign_id', 'practice_code', 'person_id']
     )
 }}
@@ -39,15 +40,16 @@ Testing WIDE FORMAT for RISK GROUP using columns and flags.
 with subcohort as (
 select person_id,
 --Sub Cohort Clinical groups may change over time as new campaigns are added.
-    MAX(IFF(risk_group in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS has_asthma,
-    MAX(IFF(risk_group in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS has_asplenia,
-    MAX(IFF(risk_group = 'Chronic Heart Disease', 1, 0)) AS has_chd,
-    MAX(IFF(risk_group in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS has_ckd,
-    MAX(IFF(risk_group = 'Chronic Liver Disease', 1, 0)) AS has_cld,
-    MAX(IFF(risk_group = 'Chronic Neurological Disease', 1, 0)) AS has_cnd,
-    MAX(IFF(risk_group = 'Chronic Respiratory Disease', 1, 0)) AS has_crd,
-    MAX(IFF(risk_group in ('Diabetes','Gestational Diabetes'), 1, 0)) AS has_diabetes,
-    MAX(IFF(risk_group = 'Immunosuppression', 1, 0)) AS is_immunosuppressed
+    MAX(IFF(subcohort in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS has_asthma,
+    MAX(IFF(subcohort in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS has_asplenia,
+    MAX(IFF(subcohort = 'Chronic Heart Disease', 1, 0)) AS has_chd,
+    MAX(IFF(subcohort in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS has_ckd,
+    MAX(IFF(subcohort = 'Chronic Liver Disease', 1, 0)) AS has_cld,
+    MAX(IFF(subcohort = 'Chronic Neurological Disease', 1, 0)) AS has_cnd,
+    MAX(IFF(subcohort = 'Chronic Respiratory Disease', 1, 0)) AS has_crd,
+    MAX(IFF(subcohort in ('Diabetes','Gestational Diabetes'), 1, 0)) AS has_diabetes,
+    MAX(IFF(subcohort = 'Immunosuppression', 1, 0)) AS is_immunosuppressed,
+    MAX(IFF(subcohort = 'Learning Disability', 1, 0)) AS has_ld
 FROM {{ ref('fct_covid_flu_uptake') }} 
 --FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
 GROUP BY all

@@ -24,6 +24,7 @@ This gives a complete picture of vaccination patterns across the population.
 
 {{ config(
     materialized='table',
+    tags=['covid_flu'],
     cluster_by=['campaign_id', 'person_id', 'status_type']
 ) }}
 

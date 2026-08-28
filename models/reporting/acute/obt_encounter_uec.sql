@@ -17,8 +17,13 @@ select
     , site_name
     , pod
     , department_type
+    , uec_activity_type_code
+    , uec_activity_type_desc
+    , uec_site_label
     , start_date
     , start_time
+    , financial_year
+    , financial_month
     , end_date
     , end_time
     , duration
@@ -33,11 +38,13 @@ select
     , decided_to_admit_time_since_arrival
     , clinically_ready_to_proceed_at
     , clinically_ready_to_proceed_time_since_arrival
+    , expected_treatment_at
     , chief_complaint_code
     , chief_complaint_desc
     , chief_complaint_ecds_group1
     , is_injury_related
     , acuity
+    , acuity_desc
     , injury_intent_code
     , injury_intent_desc
     , injury_mechanism_code
@@ -47,6 +54,7 @@ select
     , injury_date
     , injury_time
     , disease_notification_code
+    , disease_notification_desc
     , primary_diagnosis_code_snomed
     , primary_diagnosis_desc_snomed
     , primary_diagnosis_code_icd10
@@ -78,6 +86,7 @@ select
     , discharge_follow_up_code
     , discharge_follow_up_desc
     , discharge_information_given_code
+    , discharge_information_given_desc
     , decided_to_admit_treatment_function_code
     , decided_to_admit_treatment_function_desc
     , receiving_site_id
@@ -90,6 +99,12 @@ select
     , core_hrg_chapter_desc
     , cost
     , applicable_costing_period
+    , is_national_tariff_excluded
+    , national_tariff
+    , national_tariff_final_price
+    , mff_factor
+    , mff_adjustment
+
     , residence_area_code_at_event
     , residence_area_name_at_event
     , assigned_commissioner_code_at_event
@@ -107,5 +122,6 @@ select
     , imd_at_event
     , reg_practice_at_event
     , general_practitioner_code
+    , general_practitioner_name
     , visit_occurrence_type
 from {{ ref('int_sus_uec_encounter') }}

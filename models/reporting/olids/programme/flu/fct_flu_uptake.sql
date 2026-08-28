@@ -20,6 +20,7 @@ August 2026 KH adjusted final output to distinct to avoid duplication.
 
 {{ config(
     materialized='table',
+    tags=['covid_flu'],
     cluster_by=['campaign_id', 'person_id']
 ) }}
 
@@ -30,6 +31,7 @@ WITH eligible_people AS (
         person_id,
         campaign_category,
         risk_group,
+        subcohort,
         eligibility_reason,
         rule_type,
         eligibility_priority
@@ -80,6 +82,7 @@ combined_data AS (
         END AS is_eligible,
         COALESCE(e.campaign_category, 'Not Eligible') AS campaign_category,
         COALESCE(e.risk_group, 'Vaccinated Despite Ineligibility') AS risk_group,
+        e.subcohort,
         e.eligibility_reason,
         e.rule_type,
         
@@ -123,6 +126,7 @@ final_uptake AS (
         cd.is_eligible,
         cd.campaign_category,
         cd.risk_group,
+        cd.subcohort,
         cd.eligibility_reason,
         cd.rule_type,
         
