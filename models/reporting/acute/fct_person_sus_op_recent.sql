@@ -79,10 +79,26 @@ SELECT
     , zeroifnull(op_spec_12mo) as op_spec_12mo
     , zeroifnull(op_prov_12mo) as op_prov_12mo
     , zeroifnull(d.op_num_spec_2_prov_12mo) as op_num_spec_2_prov_12mo
-from 
+
+    /* DNA propensity. Counts default to zero, rates stay null: a patient
+       with no DNA opportunity has no DNA rate, and reporting one as 0%
+       would be a different statement from having none. */
+    , zeroifnull(dna.op_dna_opportunities_12mo) as op_dna_opportunities_12mo
+    , zeroifnull(dna.op_dna_tot_12mo) as op_dna_tot_12mo
+    , dna.op_dna_rate_12mo
+    , dna.op_dna_rate_shrunk_12mo
+    , dna.op_dna_rate_shrunk_age_neutral_12mo
+    , dna.op_dna_rate_posterior_sd_12mo
+    , dna.op_dna_evidence_weight_12mo
+from
     op_encounter_summary as a
-left join 
-    potential_dup_provider as d 
+left join
+    potential_dup_provider as d
     on a.sk_patient_id = d.sk_patient_id
+-- One row per patient in int_person_sus_op_dna_rate (tested unique), so this
+-- join preserves the one-row-per-patient grain.
+left join
+    {{ ref('int_person_sus_op_dna_rate') }} as dna
+    on a.sk_patient_id = dna.sk_patient_id
 where a.sk_patient_id is not null and a.sk_patient_id != 1
 
