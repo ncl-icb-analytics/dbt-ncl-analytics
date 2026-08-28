@@ -1,3 +1,12 @@
+with organisations as (
+    select organisation_code, organisation_name
+    from {{ ref('stg_dictionary_dbo_organisation') }}
+    qualify row_number() over (
+        partition by upper(organisation_code)
+        order by coalesce(last_updated, first_created) desc
+    ) = 1
+)
+
 select
     r.uniq_serv_req_id as source_record_id
     , 'MHSDS' as source_dataset
@@ -9,14 +18,18 @@ select
     , r.referral_request_received_date
     , r.referral_request_received_time
     , case
-        when r.referral_request_received_time is not null
+        when r.referral_request_received_date is not null
+            and r.referral_request_received_time is not null
             then timestamp_ntz_from_parts(
                 r.referral_request_received_date
                 , r.referral_request_received_time
             )
     end as referral_received_at
-    , iff(r.referral_request_received_time is null, 'date', 'timestamp')
-        as referral_received_time_precision
+    , case
+        when r.referral_request_received_date is null then null
+        when r.referral_request_received_time is null then 'date'
+        else 'timestamp'
+    end as referral_received_time_precision
     , r.decision_to_treat_date
     , r.decision_to_treat_time
     , case
@@ -53,9 +66,12 @@ select
     , r.reason_oat as out_of_area_treatment_reason_code
     , r.org_id_prov as provider_organisation_code
     , r.org_id_comm as commissioner_organisation_code
+    , source_commissioner.organisation_name as commissioner_organisation_name
     , r.dm_icb_commissioner as derived_icb_commissioner_code
+    , derived_icb.organisation_name as derived_icb_commissioner_name
     , r.dm_sub_icb_commissioner as derived_sub_icb_commissioner_code
-    , r.dm_commissioner_derivation_reason
+    , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
+    , r.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , r.org_id_referring_org as referring_organisation_code
     , r.org_id_referring as referring_organisation_or_person_code
     , r.specialised_mh_service_code
@@ -88,3 +104,9 @@ left join {{ ref('stg_mhsds_service_or_team_details') }} as td
     and r.uniq_submission_id = td.uniq_submission_id
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on coalesce(r.serv_team_type, td.serv_team_type_mh) = tt.code
+left join organisations as source_commissioner
+    on upper(r.org_id_comm) = upper(source_commissioner.organisation_code)
+left join organisations as derived_icb
+    on upper(r.dm_icb_commissioner) = upper(derived_icb.organisation_code)
+left join organisations as derived_sub_icb
+    on upper(r.dm_sub_icb_commissioner) = upper(derived_sub_icb.organisation_code)

@@ -1,3 +1,12 @@
+with organisations as (
+    select organisation_code, organisation_name
+    from {{ ref('stg_dictionary_dbo_organisation') }}
+    qualify row_number() over (
+        partition by upper(organisation_code)
+        order by coalesce(last_updated, first_created) desc
+    ) = 1
+)
+
 select
     {{ dbt_utils.generate_surrogate_key([
         'c.uniq_serv_req_id',
@@ -14,10 +23,14 @@ select
     , c.care_cont_date as care_contact_date
     , c.care_cont_time as care_contact_time
     , case
-        when c.care_cont_time is not null
+        when c.care_cont_date is not null and c.care_cont_time is not null
             then timestamp_ntz_from_parts(c.care_cont_date, c.care_cont_time)
     end as care_contact_at
-    , iff(c.care_cont_time is null, 'date', 'timestamp') as care_contact_time_precision
+    , case
+        when c.care_cont_date is null then null
+        when c.care_cont_time is null then 'date'
+        else 'timestamp'
+    end as care_contact_time_precision
     , c.clin_cont_dur_of_care_cont as clinical_contact_duration_minutes
     , c.attend_status as attendance_status_code
     , ats.description as attendance_status_description
@@ -33,9 +46,12 @@ select
     , c.care_cont_patient_ther_mode as patient_therapy_mode_code
     , c.org_id_prov as provider_organisation_code
     , c.org_id_comm as commissioner_organisation_code
+    , source_commissioner.organisation_name as commissioner_organisation_name
     , c.dm_icb_commissioner as derived_icb_commissioner_code
+    , derived_icb.organisation_name as derived_icb_commissioner_name
     , c.dm_sub_icb_commissioner as derived_sub_icb_commissioner_code
-    , c.dm_commissioner_derivation_reason
+    , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
+    , c.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , c.site_id_of_treat as treatment_site_code
     , c.admin_cat_code as administrative_category_code
     , c.specialised_mh_service_code
@@ -85,3 +101,9 @@ left join {{ ref('activity_location_type') }} as alt
     on c.act_loc_type_code = alt.code
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on td.serv_team_type_mh = tt.code
+left join organisations as source_commissioner
+    on upper(c.org_id_comm) = upper(source_commissioner.organisation_code)
+left join organisations as derived_icb
+    on upper(c.dm_icb_commissioner) = upper(derived_icb.organisation_code)
+left join organisations as derived_sub_icb
+    on upper(c.dm_sub_icb_commissioner) = upper(derived_sub_icb.organisation_code)

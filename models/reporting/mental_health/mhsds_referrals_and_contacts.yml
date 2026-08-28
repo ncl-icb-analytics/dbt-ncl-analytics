@@ -4,8 +4,10 @@ models:
   - name: fct_mhsds_referral
     description: >-
       MHSDS referrals from active provider submissions. One row per unique
-      service request across all available reporting periods. Referral and
-      discharge timestamps are null when the source supplied only a date.
+      service request across all available reporting periods. The newest
+      reporting period is retained. Referral and discharge timestamps are null
+      when the source supplied only a date. Use fct_mhsds_referral_episodes for
+      the currency-scoped referral episode with aggregated activity.
     config: &owner
       meta:
         owner:
@@ -68,10 +70,26 @@ models:
         description: Supplied referral closure reason code.
       - name: provider_organisation_code
         description: Provider organisation code.
+      - name: commissioner_organisation_code
+        description: Commissioner organisation code submitted by the provider.
+      - name: commissioner_organisation_name
+        description: Latest organisation name for the submitted commissioner code.
+      - name: derived_icb_commissioner_code
+        description: ICB commissioner code derived by the source pipeline.
+      - name: derived_icb_commissioner_name
+        description: Latest organisation name for the derived ICB commissioner code.
+      - name: derived_sub_icb_commissioner_code
+        description: Sub-ICB commissioner code derived by the source pipeline.
+      - name: derived_sub_icb_commissioner_name
+        description: Latest organisation name for the derived sub-ICB commissioner code.
+      - name: commissioner_derivation_reason_code
+        description: Code explaining the source pipeline's commissioner derivation.
       - name: referring_organisation_code
         description: Referring organisation code where supplied.
       - name: primary_service_or_team_id
-        description: MHSDS-derived identifier for the primary service or team in v6.
+        description: >-
+          MHSDS-derived identifier for the primary service or team in v6; null
+          before v6. Use rel_mhsds_referral_service_team for teams across versions.
       - name: primary_service_or_team_type_code
         description: Primary service or team type code supplied in MHSDS v6.
       - name: primary_service_or_team_type_description
@@ -90,7 +108,8 @@ models:
       Services or teams recorded against MHSDS referrals. One row per referral,
       relationship role and MHSDS-derived team identifier. MHS101 supplies the
       primary team from v6; MHS102 supplies referred-to teams before v6 and
-      additional teams from v6.
+      additional teams from v6. Source rows are retained when the same team is
+      recorded in more than one role.
     config: *owner
     columns:
       - name: referral_service_team_id
@@ -116,6 +135,7 @@ models:
                 values: [primary, additional, referred_to]
       - name: service_or_team_id
         description: MHSDS-derived service or team identifier.
+        data_tests: [not_null]
       - name: service_or_team_local_id
         description: Provider-local service or team identifier.
       - name: service_or_team_type_code
@@ -139,7 +159,9 @@ models:
     description: >-
       MHSDS care contacts from active provider submissions. One row per unique
       service request and unique care contact across all available reporting
-      periods. The referral identifier is source-recorded, not inferred.
+      periods. The newest reporting period is retained. The referral identifier
+      is source-recorded, not inferred, and can refer to a service request absent
+      from the active referral fact.
     config: *owner
     columns:
       - name: source_record_id
@@ -186,12 +208,28 @@ models:
         description: Newest published description, including retired codes where available.
       - name: provider_organisation_code
         description: Provider organisation code.
+      - name: commissioner_organisation_code
+        description: Commissioner organisation code submitted by the provider.
+      - name: commissioner_organisation_name
+        description: Latest organisation name for the submitted commissioner code.
+      - name: derived_icb_commissioner_code
+        description: ICB commissioner code derived by the source pipeline.
+      - name: derived_icb_commissioner_name
+        description: Latest organisation name for the derived ICB commissioner code.
+      - name: derived_sub_icb_commissioner_code
+        description: Sub-ICB commissioner code derived by the source pipeline.
+      - name: derived_sub_icb_commissioner_name
+        description: Latest organisation name for the derived sub-ICB commissioner code.
+      - name: commissioner_derivation_reason_code
+        description: Code explaining the source pipeline's commissioner derivation.
       - name: treatment_site_code
         description: Treatment site code.
       - name: service_or_team_id
         description: MHSDS-derived identifier for the team delivering the contact.
       - name: service_or_team_type_code
-        description: Service or team type resolved through MHS902.
+        description: >-
+          Service or team type resolved through MHS902; null when the submitted
+          contact has no matching local team detail.
       - name: service_or_team_type_description
         description: Newest published description, including retired codes where available.
       - name: appointment_booked_date

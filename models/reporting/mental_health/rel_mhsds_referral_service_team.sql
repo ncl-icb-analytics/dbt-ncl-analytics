@@ -2,7 +2,29 @@ with latest_other_teams as (
     -- MHS102 is resubmitted over time; record_start_date is not a stable
     -- involvement identifier, so the logical relationship uses referral and team.
     select
-        s.*
+        s.mhs102_uniq_id
+        , s.uniq_serv_req_id
+        , s.org_id_prov
+        , s.care_prof_team_local_id
+        , s.other_care_prof_team_local_id
+        , s.uniq_care_prof_team_id
+        , s.uniq_other_care_prof_team_local_id
+        , s.serv_team_type_ref_to_mh
+        , s.service_type_name
+        , s.serv_team_int_age_group
+        , s.refer_rejection_date
+        , s.refer_rejection_time
+        , s.refer_reject_reason
+        , s.refer_closure_date
+        , s.refer_closure_time
+        , s.refer_clos_reason
+        , s.record_start_date
+        , s.record_end_date
+        , s.uniq_submission_id
+        , s.reporting_period_end_date
+        , s.dmic_dataset
+        , s.effective_from
+        , s.dmic_date_added
         , coalesce(
             s.uniq_other_care_prof_team_local_id
             , s.uniq_care_prof_team_id
@@ -10,6 +32,12 @@ with latest_other_teams as (
             , s.care_prof_team_local_id
         ) as service_or_team_id
     from {{ ref('stg_mhsds_other_service_or_team_type') }} as s
+    where coalesce(
+        s.uniq_other_care_prof_team_local_id
+        , s.uniq_care_prof_team_id
+        , s.other_care_prof_team_local_id
+        , s.care_prof_team_local_id
+    ) is not null
     qualify row_number() over (
         partition by
             s.uniq_serv_req_id
@@ -20,8 +48,8 @@ with latest_other_teams as (
                 , s.care_prof_team_local_id
             )
         order by
-            s.effective_from desc
-            , s.reporting_period_end_date desc
+            s.reporting_period_end_date desc
+            , s.effective_from desc
             , s.mhs102_uniq_id desc
     ) = 1
 )

@@ -3,7 +3,7 @@ models:
   - name: int_mhsds_carecontact_encounters
     description: >-
       MHSDS care contacts prepared for the existing cross-system monthly
-      activity model. One row per submitted MHS201 contact.
+      activity model. One row per deduplicated service request and care contact.
     config:
       meta:
         owner:

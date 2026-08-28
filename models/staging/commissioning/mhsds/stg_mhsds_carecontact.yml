@@ -4,8 +4,9 @@ models:
   - name: stg_mhsds_carecontact
     description: >-
       MHSDS care contacts from active provider submissions. One row per unique
-      service request and unique care contact. The newest effective record is
-      retained, then the newest reporting period and submitted record resolve ties.
+      service request and unique care contact. The newest reporting period is
+      retained; source-effective and submitted record identifiers resolve ties
+      within that period.
     config:
       meta:
         owner:
@@ -36,6 +37,8 @@ models:
         description: Attendance status code.
       - name: clin_cont_dur_of_care_cont
         description: Direct clinical contact duration in minutes.
+      - name: cons_type
+        description: Consultation type code.
       - name: cons_mechanism_mh
         description: Consultation mechanism code.
       - name: act_loc_type_code
@@ -46,8 +49,16 @@ models:
         description: Treatment site code.
       - name: org_id_prov
         description: Provider organisation code.
+      - name: org_id_comm
+        description: Commissioner organisation code submitted by the provider.
       - name: dm_icb_commissioner
-        description: Derived ICB commissioner code.
+        description: ICB commissioner code derived by the source pipeline.
+      - name: dm_sub_icb_commissioner
+        description: Sub-ICB commissioner code derived by the source pipeline.
+      - name: dm_commissioner_derivation_reason
+        description: Code explaining the source pipeline's commissioner derivation.
+      - name: age_care_cont_date
+        description: Age at the care contact date.
       - name: uniq_submission_id
         description: MHSDS submission identifier.
         data_tests: [not_null]

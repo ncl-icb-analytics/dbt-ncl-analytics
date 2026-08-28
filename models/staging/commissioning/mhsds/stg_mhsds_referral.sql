@@ -1,15 +1,60 @@
 {{ config(materialized='table', tags=['mhsds']) }}
 
 with active_referrals as (
-    select r.*
+    select
+        r.uniq_serv_req_id
+        , r.mhs101_uniq_id
+        , r.service_request_id
+        , r.person_id
+        , r.org_id_prov
+        , r.org_id_comm
+        , r.org_id_referring_org
+        , r.org_id_referring
+        , r.specialised_mh_service_code
+        , r.referral_request_received_date
+        , r.referral_request_received_time
+        , r.decision_to_treat_date
+        , r.decision_to_treat_time
+        , r.refer_rejection_date
+        , r.refer_rejection_time
+        , r.refer_reject_reason
+        , r.serv_disch_date
+        , r.serv_disch_time
+        , r.refer_clos_reason
+        , r.disch_letter_iss_date
+        , r.source_of_referral_mh
+        , r.referring_care_professional_type
+        , r.referring_care_professional_staff_group
+        , r.clin_resp_priority_type
+        , r.prim_reason_referral_mh
+        , r.reason_oat
+        , r.care_prof_team_local_id
+        , r.uniq_care_prof_team_local_id
+        , r.serv_team_type
+        , r.serv_team_int_age_group
+        , r.service_type_name
+        , r.age_serv_refer_rec_date
+        , r.age_serv_refer_disch_date
+        , r.record_start_date
+        , r.record_end_date
+        , r.dm_icb_commissioner
+        , r.dm_sub_icb_commissioner
+        , r.dm_commissioner_derivation_reason
+        , r.uniq_submission_id
+        , r.uniq_month_id
+        , r.reporting_period_start_date
+        , r.reporting_period_end_date
+        , r.dmic_dataset
+        , r.effective_from
+        , r.dmic_date_added
     from {{ ref('raw_mhsds_mhs101referral') }} as r
     inner join {{ ref('stg_mhsds_activesubmission') }} as a
         on r.uniq_submission_id = a.uniq_submission_id
     qualify row_number() over (
         partition by r.uniq_serv_req_id
         order by
-            r.effective_from desc
-            , r.reporting_period_end_date desc
+            r.reporting_period_end_date desc
+            , r.effective_from desc
             , r.uniq_submission_id desc
             , r.mhs101_uniq_id desc
     ) = 1
