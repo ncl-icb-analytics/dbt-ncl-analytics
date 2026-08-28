@@ -208,7 +208,7 @@ clipped_scores as (
 
 reweighted_scores as (
     select *,
-     ( 1 * clipped_score_clinical_complexity + 1 * clipped_score_clinical_frailty + 1 * clipped_score_medicines_management + 1 * clipped_score_emergency_use + 1 * clipped_score_wider_care_engagement + 1 * clipped_score_asc_indicators) / 6 as raw_score_frailty
+     ( 1 * clipped_score_clinical_complexity + 2 * clipped_score_clinical_frailty + 1 * clipped_score_medicines_management + 1 * clipped_score_emergency_use + 1 * clipped_score_wider_care_engagement + 1 * clipped_score_asc_indicators) / 7 as raw_score_frailty
     from clipped_scores
 )
 -- score_frailty is a within-neighbourhood percentile rank of raw_score_frailty, not an
@@ -217,5 +217,6 @@ reweighted_scores as (
 -- mean of six clipped z-scores is bunched near its midpoint and never approaches its
 -- theoretical -3/+3 bounds. Tied raw scores receive the same percentile.
 select *,
-    round(percent_rank() over (partition by neighbourhood_code order by raw_score_frailty) * 100, 1) as score_frailty
+    round((raw_score_frailty + 3) / 6.0 * 100, 1) as score_frailty,
+    round(percent_rank() over (partition by neighbourhood_code order by raw_score_frailty) * 100, 1) as score_frailty_percentile
 from reweighted_scores
