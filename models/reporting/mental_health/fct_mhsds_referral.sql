@@ -109,13 +109,21 @@ select
     , r.source_of_referral_mh as source_of_referral_code
     , sr.description as source_of_referral_description
     , r.clin_resp_priority_type as clinical_response_priority_code
+    , clinical_priority.description as clinical_response_priority_description
     , r.prim_reason_referral_mh as primary_reason_for_referral_code
+    , referral_reason.description as primary_reason_for_referral_description
     , r.referring_care_professional_type as referring_care_professional_type_code
+    , referrer_type.description as referring_care_professional_type_description
     , r.referring_care_professional_staff_group as referring_care_professional_staff_group_code
+    , referrer_staff_group.description as referring_care_professional_staff_group_description
     , r.refer_reject_reason as rejection_reason_code
+    , rejection_reason.description as rejection_reason_description
     , r.refer_clos_reason as closure_reason_code
+    , closure_reason.description as closure_reason_description
     , r.reason_oat as out_of_area_treatment_reason_code
+    , out_of_area_reason.description as out_of_area_treatment_reason_description
     , r.org_id_prov as provider_organisation_code
+    , provider.organisation_name as provider_organisation_name
     , r.org_id_comm as commissioner_organisation_code
     , source_commissioner.organisation_name as commissioner_organisation_name
     , r.dm_icb_commissioner as derived_icb_commissioner_code
@@ -124,6 +132,7 @@ select
     , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
     , r.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , r.org_id_referring_org as referring_organisation_code
+    , referring_organisation.organisation_name as referring_organisation_name
     , r.org_id_referring as referring_organisation_or_person_code
     , r.nhs_serv_agree_line_id as nhs_service_agreement_line_id
     , r.nhs_serv_agree_line_num as nhs_service_agreement_line_number
@@ -135,6 +144,8 @@ select
     , coalesce(r.service_type_name, td.service_type_name) as source_service_or_team_type_name
     , coalesce(r.serv_team_int_age_group, td.serv_team_int_age_group)
         as primary_service_or_team_intended_age_group_code
+    , intended_age_group.description
+        as primary_service_or_team_intended_age_group_description
     , r.age_serv_refer_rec_date as age_at_referral
     , r.age_serv_refer_disch_date as age_at_discharge
     , r.disch_letter_iss_date as discharge_letter_issued_date
@@ -157,8 +168,36 @@ left join {{ ref('stg_mhsds_service_or_team_details') }} as td
     and r.uniq_submission_id = td.uniq_submission_id
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on coalesce(r.serv_team_type, td.serv_team_type_mh) = tt.code
+left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_group
+    on upper(trim(coalesce(r.serv_team_int_age_group, td.serv_team_int_age_group)))
+        = intended_age_group.code
+left join {{ ref('mhsds_referral_terminology') }} as clinical_priority
+    on upper(trim(r.clin_resp_priority_type)) = clinical_priority.code
+    and clinical_priority.terminology_name = 'clinical_response_priority'
+left join {{ ref('mhsds_referral_terminology') }} as referral_reason
+    on upper(trim(r.prim_reason_referral_mh)) = referral_reason.code
+    and referral_reason.terminology_name = 'primary_reason_for_referral'
+left join {{ ref('mhsds_referral_terminology') }} as referrer_type
+    on upper(trim(r.referring_care_professional_type)) = referrer_type.code
+    and referrer_type.terminology_name = 'referring_care_professional_type'
+left join {{ ref('mhsds_referral_terminology') }} as referrer_staff_group
+    on upper(trim(r.referring_care_professional_staff_group)) = referrer_staff_group.code
+    and referrer_staff_group.terminology_name = 'referring_care_professional_staff_group'
+left join {{ ref('mhsds_referral_terminology') }} as rejection_reason
+    on upper(trim(r.refer_reject_reason)) = rejection_reason.code
+    and rejection_reason.terminology_name = 'rejection_reason'
+left join {{ ref('mhsds_referral_terminology') }} as closure_reason
+    on upper(trim(r.refer_clos_reason)) = closure_reason.code
+    and closure_reason.terminology_name = 'closure_reason'
+left join {{ ref('mhsds_referral_terminology') }} as out_of_area_reason
+    on upper(trim(r.reason_oat)) = out_of_area_reason.code
+    and out_of_area_reason.terminology_name = 'out_of_area_referral_reason'
 left join organisations as source_commissioner
     on upper(r.org_id_comm) = upper(source_commissioner.organisation_code)
+left join organisations as provider
+    on upper(r.org_id_prov) = upper(provider.organisation_code)
+left join organisations as referring_organisation
+    on upper(r.org_id_referring_org) = upper(referring_organisation.organisation_code)
 left join organisations as derived_icb
     on upper(r.dm_icb_commissioner) = upper(derived_icb.organisation_code)
 left join organisations as derived_sub_icb

@@ -36,17 +36,25 @@ select
     , c.attend_status as attendance_status_code
     , ats.description as attendance_status_description
     , c.cons_type as consultation_type_code
+    , consultation_type.description as consultation_type_description
     , c.cons_mechanism_mh as consultation_mechanism_code
     , cm.description as consultation_mechanism_description
     , c.cons_medium_used as consultation_medium_used_code
+    , consultation_medium.description as consultation_medium_used_description
     , c.act_loc_type_code as activity_location_type_code
     , alt.description as activity_location_type_description
     , c.care_cont_subj as care_contact_subject_code
+    , contact_subject.description as care_contact_subject_description
     , c.planned_care_cont_indicator as planned_care_contact_indicator
+    , planned_contact.description as planned_care_contact_description
     , c.place_of_safety_ind as place_of_safety_indicator
+    , place_of_safety.description as place_of_safety_description
     , c.group_therapy_ind as group_therapy_indicator
+    , group_therapy.description as group_therapy_description
     , c.care_cont_patient_ther_mode as patient_therapy_mode_code
+    , therapy_mode.description as patient_therapy_mode_description
     , c.org_id_prov as provider_organisation_code
+    , provider.organisation_name as provider_organisation_name
     , c.org_id_comm as commissioner_organisation_code
     , source_commissioner.organisation_name as commissioner_organisation_name
     , c.dm_icb_commissioner as derived_icb_commissioner_code
@@ -55,7 +63,9 @@ select
     , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
     , c.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , c.site_id_of_treat as treatment_site_code
+    , treatment_site.organisation_name as treatment_site_name
     , c.admin_cat_code as administrative_category_code
+    , administrative_category.description as administrative_category_description
     , c.specialised_mh_service_code
     , coalesce(
         c.uniq_other_care_prof_team_local_id
@@ -69,21 +79,29 @@ select
     , tt.description as service_or_team_type_description
     , td.service_type_name as source_service_or_team_type_name
     , td.serv_team_int_age_group as service_or_team_intended_age_group_code
+    , intended_age_group.description as service_or_team_intended_age_group_description
     , c.earliest_reason_offer_date as earliest_reasonable_offer_date
     , c.earliest_clin_app_date as earliest_clinically_appropriate_date
     , c.rep_appt_offer_date as appointment_offer_date
     , c.rep_appt_book_date as appointment_booked_date
     , c.care_cont_cancel_date as care_contact_cancelled_date
     , c.care_cont_cancel_reas as care_contact_cancellation_reason_code
+    , cancellation_reason.description as care_contact_cancellation_reason_description
     , c.language_code_treat as treatment_language_code
     , c.interpreter_present_ind as interpreter_present_indicator
+    , interpreter_present.description as interpreter_present_description
     , c.com_peri_mh_part_assess_offer_ind
         as community_perinatal_partner_assessment_offer_indicator
+    , perinatal_offer.description
+        as community_perinatal_partner_assessment_offer_description
     , c.reasonable_adjustment_made as reasonable_adjustment_made_code
+    , reasonable_adjustment.description as reasonable_adjustment_made_description
     , c.reason_patient_no_imca as reason_patient_does_not_have_imca_code
+    , no_imca.description as reason_patient_does_not_have_imca_description
     , c.reason_patient_no_imha as reason_patient_does_not_have_imha_code
+    , no_imha.description as reason_patient_does_not_have_imha_description
     , c.age_care_cont_date as age_at_care_contact
-    , c.cont_loc_distance_home as distance_from_home
+    , c.cont_loc_distance_home as distance_from_home_km
     , c.time_refer_and_care_contact as minutes_from_referral_to_care_contact
     , c.uniq_submission_id
     , c.uniq_month_id
@@ -107,8 +125,56 @@ left join {{ ref('activity_location_type') }} as alt
     on c.act_loc_type_code = alt.code
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on td.serv_team_type_mh = tt.code
+left join {{ ref('mhsds_care_contact_terminology') }} as consultation_type
+    on upper(trim(c.cons_type)) = consultation_type.code
+    and consultation_type.terminology_name = 'consultation_type'
+left join {{ ref('mhsds_care_contact_terminology') }} as consultation_medium
+    on upper(trim(c.cons_medium_used)) = consultation_medium.code
+    and consultation_medium.terminology_name = 'consultation_medium_used'
+left join {{ ref('mhsds_care_contact_terminology') }} as contact_subject
+    on upper(trim(c.care_cont_subj)) = contact_subject.code
+    and contact_subject.terminology_name = 'care_contact_subject'
+left join {{ ref('mhsds_care_contact_terminology') }} as planned_contact
+    on upper(trim(c.planned_care_cont_indicator)) = planned_contact.code
+    and planned_contact.terminology_name = 'planned_care_contact_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as place_of_safety
+    on upper(trim(c.place_of_safety_ind)) = place_of_safety.code
+    and place_of_safety.terminology_name = 'place_of_safety_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as group_therapy
+    on upper(trim(c.group_therapy_ind)) = group_therapy.code
+    and group_therapy.terminology_name = 'group_therapy_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as therapy_mode
+    on upper(trim(c.care_cont_patient_ther_mode)) = therapy_mode.code
+    and therapy_mode.terminology_name = 'patient_therapy_mode'
+left join {{ ref('mhsds_care_contact_terminology') }} as administrative_category
+    on upper(trim(c.admin_cat_code)) = administrative_category.code
+    and administrative_category.terminology_name = 'administrative_category'
+left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_group
+    on upper(trim(td.serv_team_int_age_group)) = intended_age_group.code
+left join {{ ref('mhsds_care_contact_terminology') }} as cancellation_reason
+    on upper(trim(c.care_cont_cancel_reas)) = cancellation_reason.code
+    and cancellation_reason.terminology_name = 'care_contact_cancellation_reason'
+left join {{ ref('mhsds_care_contact_terminology') }} as interpreter_present
+    on upper(trim(c.interpreter_present_ind)) = interpreter_present.code
+    and interpreter_present.terminology_name = 'interpreter_present_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as perinatal_offer
+    on upper(trim(c.com_peri_mh_part_assess_offer_ind)) = perinatal_offer.code
+    and perinatal_offer.terminology_name = 'perinatal_partner_assessment_offer_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as reasonable_adjustment
+    on upper(trim(c.reasonable_adjustment_made)) = reasonable_adjustment.code
+    and reasonable_adjustment.terminology_name = 'reasonable_adjustment_made_indicator'
+left join {{ ref('mhsds_care_contact_terminology') }} as no_imca
+    on upper(trim(c.reason_patient_no_imca)) = no_imca.code
+    and no_imca.terminology_name = 'reason_patient_no_imca'
+left join {{ ref('mhsds_care_contact_terminology') }} as no_imha
+    on upper(trim(c.reason_patient_no_imha)) = no_imha.code
+    and no_imha.terminology_name = 'reason_patient_no_imha'
 left join organisations as source_commissioner
     on upper(c.org_id_comm) = upper(source_commissioner.organisation_code)
+left join organisations as provider
+    on upper(c.org_id_prov) = upper(provider.organisation_code)
+left join organisations as treatment_site
+    on upper(trim(c.site_id_of_treat)) = upper(trim(treatment_site.organisation_code))
 left join organisations as derived_icb
     on upper(c.dm_icb_commissioner) = upper(derived_icb.organisation_code)
 left join organisations as derived_sub_icb

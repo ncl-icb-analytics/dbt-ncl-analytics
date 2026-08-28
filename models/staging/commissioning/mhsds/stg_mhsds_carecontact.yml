@@ -61,6 +61,18 @@ models:
         description: Code explaining the source pipeline's commissioner derivation.
       - name: age_care_cont_date
         description: Age at the care contact date.
+      - name: cont_loc_distance_home
+        description: Source-derived straight-line distance in kilometres from home to the contact location.
+      - name: earliest_reason_offer_date
+        description: Earliest reasonable appointment offer date; source dates before 1901 are null.
+      - name: earliest_clin_app_date
+        description: Earliest clinically appropriate appointment date; source dates before 1901 are null.
+      - name: rep_appt_offer_date
+        description: Representative appointment offer date; source dates before 1901 are null.
+      - name: rep_appt_book_date
+        description: Representative appointment booking date; source dates before 1901 are null.
+      - name: care_cont_cancel_date
+        description: Care contact cancellation date; source dates before 1901 are null.
       - name: com_peri_mh_part_assess_offer_ind
         description: Community perinatal partner assessment offer indicator.
       - name: reason_patient_no_imca

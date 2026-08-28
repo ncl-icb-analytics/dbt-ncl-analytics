@@ -22,11 +22,11 @@ models:
       - name: person_id
         description: MHSDS person identifier.
       - name: referral_request_received_date
-        description: Date the provider received the referral request.
+        description: Date the provider received the referral request; source dates before 1901 are null.
       - name: referral_request_received_time
         description: Recorded time the provider received the referral request.
       - name: decision_to_treat_date
-        description: Recorded decision-to-treat date.
+        description: Recorded decision-to-treat date; source dates before 1901 are null.
       - name: decision_to_treat_time
         description: Recorded decision-to-treat time.
       - name: disch_plan_creation_date
@@ -49,6 +49,8 @@ models:
         description: Recorded service discharge time.
       - name: refer_clos_reason
         description: Referral closure reason code.
+      - name: disch_letter_iss_date
+        description: Discharge letter issue date; source dates before 1901 are null.
       - name: source_of_referral_mh
         description: Source-of-referral code.
       - name: prim_reason_referral_mh

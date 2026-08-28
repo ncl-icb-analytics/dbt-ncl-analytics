@@ -27,30 +27,52 @@ models:
         description: Pseudonymised patient identifier.
       - name: provider_organisation_code
         description: Provider organisation code.
+      - name: provider_organisation_name
+        description: Current organisation name for the provider code.
       - name: derived_icb_commissioner_code
         description: ICB commissioner code derived in the source feed.
+      - name: derived_icb_commissioner_name
+        description: Current organisation name for the derived ICB commissioner code.
       - name: referral_request_received_date
-        description: Date the referral request was received.
-        data_tests:
-          - not_null
+        description: >
+          Date the referral request was received; null when the source contains
+          an Excel-epoch sentinel date.
       - name: age_at_referral
         description: Age on the referral request received date.
       - name: is_cyp_at_referral
         description: Whether age at referral is under 18.
       - name: source_of_referral_code
         description: Source of referral code.
+      - name: source_of_referral_description
+        description: Published description for the source of referral.
       - name: referring_care_professional_type_code
         description: Type of referring care professional.
+      - name: referring_care_professional_type_description
+        description: Published description for the referring care professional type.
+      - name: referring_care_professional_staff_group_code
+        description: Staff group of the referring care professional.
+      - name: referring_care_professional_staff_group_description
+        description: Published description for the referring care professional staff group.
       - name: clinical_response_priority_code
         description: Clinical response priority code.
+      - name: clinical_response_priority_description
+        description: Published description for the clinical response priority.
       - name: primary_reason_for_referral_code
         description: Primary mental health referral reason code.
+      - name: primary_reason_for_referral_description
+        description: Published description for the primary referral reason.
       - name: referral_reason_category
         description: Currency population category from the referral reason.
       - name: service_or_team_type_code
         description: Referred-to mental health service or team type code.
+      - name: service_or_team_type_description
+        description: Published description for the service or team type.
       - name: source_service_or_team_type_name
         description: Service or team type name supplied by the provider.
+      - name: service_or_team_intended_age_group_code
+        description: Intended patient age group recorded for the service or team.
+      - name: service_or_team_intended_age_group_description
+        description: Published description for the intended age group.
       - name: team_type_category
         description: Currency population category from the service or team type.
       - name: setting_group
@@ -85,12 +107,16 @@ models:
         description: Referral rejection date.
       - name: rejection_reason_code
         description: Referral rejection reason code.
+      - name: rejection_reason_description
+        description: Published description for the referral rejection reason.
       - name: is_rejected
         description: Whether the referral is rejected.
       - name: referral_discharge_date
         description: Referral discharge date.
       - name: closure_reason_code
         description: Referral closure reason code.
+      - name: closure_reason_description
+        description: Published description for the referral closure reason.
       - name: referral_status
         description: 'Referral status: rejected, closed, or open.'
         data_tests:

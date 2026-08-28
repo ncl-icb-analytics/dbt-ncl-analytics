@@ -13,9 +13,18 @@ with active_referrals as (
         , r.nhs_serv_agree_line_id
         , r.nhs_serv_agree_line_num
         , r.specialised_mh_service_code
-        , r.referral_request_received_date::date as referral_request_received_date
+        -- 1899/1900 values are source missing-date sentinels from Excel epochs.
+        , iff(
+            r.referral_request_received_date::date < '1901-01-01'::date
+            , null
+            , r.referral_request_received_date::date
+        ) as referral_request_received_date
         , r.referral_request_received_time::time as referral_request_received_time
-        , r.decision_to_treat_date::date as decision_to_treat_date
+        , iff(
+            r.decision_to_treat_date::date < '1901-01-01'::date
+            , null
+            , r.decision_to_treat_date::date
+        ) as decision_to_treat_date
         , r.decision_to_treat_time::time as decision_to_treat_time
         , r.disch_plan_creation_date::date as disch_plan_creation_date
         , r.disch_plan_creation_time::time as disch_plan_creation_time
@@ -27,7 +36,11 @@ with active_referrals as (
         , r.serv_disch_date::date as serv_disch_date
         , r.serv_disch_time::time as serv_disch_time
         , r.refer_clos_reason
-        , r.disch_letter_iss_date::date as disch_letter_iss_date
+        , iff(
+            r.disch_letter_iss_date::date < '1901-01-01'::date
+            , null
+            , r.disch_letter_iss_date::date
+        ) as disch_letter_iss_date
         , r.source_of_referral_mh
         , r.referring_care_professional_type
         , r.referring_care_professional_staff_group

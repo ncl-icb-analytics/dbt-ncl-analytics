@@ -34,12 +34,33 @@ with active_contacts as (
         , c.com_peri_mh_part_assess_offer_ind
         , c.planned_care_cont_indicator
         , c.care_cont_patient_ther_mode
-        , c.earliest_reason_offer_date::date as earliest_reason_offer_date
-        , c.earliest_clin_app_date::date as earliest_clin_app_date
-        , c.care_cont_cancel_date::date as care_cont_cancel_date
+        -- 1899/1900 values are source missing-date sentinels from Excel epochs.
+        , iff(
+            c.earliest_reason_offer_date::date < '1901-01-01'::date
+            , null
+            , c.earliest_reason_offer_date::date
+        ) as earliest_reason_offer_date
+        , iff(
+            c.earliest_clin_app_date::date < '1901-01-01'::date
+            , null
+            , c.earliest_clin_app_date::date
+        ) as earliest_clin_app_date
+        , iff(
+            c.care_cont_cancel_date::date < '1901-01-01'::date
+            , null
+            , c.care_cont_cancel_date::date
+        ) as care_cont_cancel_date
         , c.care_cont_cancel_reas
-        , c.rep_appt_offer_date::date as rep_appt_offer_date
-        , c.rep_appt_book_date::date as rep_appt_book_date
+        , iff(
+            c.rep_appt_offer_date::date < '1901-01-01'::date
+            , null
+            , c.rep_appt_offer_date::date
+        ) as rep_appt_offer_date
+        , iff(
+            c.rep_appt_book_date::date < '1901-01-01'::date
+            , null
+            , c.rep_appt_book_date::date
+        ) as rep_appt_book_date
         , c.reasonable_adjustment_made
         , c.reason_patient_no_imca
         , c.reason_patient_no_imha

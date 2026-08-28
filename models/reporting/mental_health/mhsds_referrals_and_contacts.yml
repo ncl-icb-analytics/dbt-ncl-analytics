@@ -6,8 +6,9 @@ models:
       MHSDS service or team referrals from active provider submissions. One row
       per unique service request across the available history. The newest
       reporting period is retained. Date fields remain populated when the
-      source does not supply a time. Use fct_mhsds_referral_episodes for the
-      currency-scoped referral summary.
+      source does not supply a time. Source missing-date sentinels before 1901
+      are null. Use fct_mhsds_referral_episodes for the currency-scoped referral
+      summary.
     config: &owner
       meta:
         owner:
@@ -100,36 +101,60 @@ models:
         description: Published description for the source-of-referral code, including retired codes.
       - name: clinical_response_priority_code
         description: Submitted clinical response priority code.
+      - name: clinical_response_priority_description
+        description: Published description for the clinical response priority.
       - name: primary_reason_for_referral_code
         description: Submitted primary presenting condition or symptom code.
+      - name: primary_reason_for_referral_description
+        description: Published description for the primary referral reason, including retired codes.
       - name: referring_care_professional_type_code
         description: Type of care professional who made the referral, where applicable.
+      - name: referring_care_professional_type_description
+        description: Published description for the referring care professional type.
       - name: referring_care_professional_staff_group_code
         description: Staff group of the referring care professional.
+      - name: referring_care_professional_staff_group_description
+        description: Published description for the referring care professional staff group.
       - name: rejection_reason_code
         description: Submitted referral rejection reason code.
+      - name: rejection_reason_description
+        description: Published description for the referral rejection reason.
       - name: closure_reason_code
         description: Submitted referral closure reason code.
+      - name: closure_reason_description
+        description: Published description for the referral closure reason.
       - name: out_of_area_treatment_reason_code
         description: Reason for an out-of-area adult acute mental health referral.
+      - name: out_of_area_treatment_reason_description
+        description: Published description for the out-of-area referral reason.
       - name: provider_organisation_code
         description: Organisation code of the provider submitting the referral.
+      - name: provider_organisation_name
+        description: Current organisation name for the provider code.
       - name: commissioner_organisation_code
-        description: Commissioner organisation code submitted by the provider.
+        description: >-
+          Commissioner organisation code submitted by the provider. This can be
+          an ICB, sub-ICB, commissioning hub, provider or other organisation.
       - name: commissioner_organisation_name
         description: Current organisation name for the submitted commissioner code.
       - name: derived_icb_commissioner_code
-        description: ICB commissioner code derived by the source pipeline.
+        description: >-
+          English ICB commissioner assigned by the source pipeline; null when
+          the submitted commissioner cannot be assigned to an ICB.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
       - name: derived_sub_icb_commissioner_code
-        description: Sub-ICB commissioner code derived by the source pipeline.
+        description: >-
+          Sub-ICB commissioner assigned by the source pipeline; null for
+          ICB-only assignments and commissioners outside the mapping.
       - name: derived_sub_icb_commissioner_name
         description: Current organisation name for the derived sub-ICB commissioner code.
       - name: commissioner_derivation_reason_code
-        description: Source-pipeline code explaining commissioner derivation.
+        description: Source-pipeline flag showing which commissioner assignment stages succeeded.
       - name: referring_organisation_code
         description: Organisation code from which the referral was made.
+      - name: referring_organisation_name
+        description: Current organisation name for the referring organisation code.
       - name: referring_organisation_or_person_code
         description: Submitted code for the referring organisation or person.
       - name: nhs_service_agreement_line_id
@@ -152,6 +177,8 @@ models:
         description: Service or team name supplied by the provider.
       - name: primary_service_or_team_intended_age_group_code
         description: Intended patient age group recorded for the primary service or team.
+      - name: primary_service_or_team_intended_age_group_description
+        description: Published description for the primary service or team's intended age group.
       - name: age_at_referral
         description: Age in years at the referral request received date.
       - name: age_at_discharge
@@ -278,6 +305,7 @@ models:
       The newest reporting period is retained. The referral identifier is
       source-recorded and can point to a referral absent from the active
       referral fact. Cancelled contacts remain present at their scheduled date.
+      Source missing-date sentinels before 1901 are null.
     config: *owner
     columns:
       - name: source_record_id
@@ -320,46 +348,72 @@ models:
         description: Published description for the attendance status, including retired codes.
       - name: consultation_type_code
         description: Submitted consultation type code.
+      - name: consultation_type_description
+        description: Published description for the consultation type, including retired codes.
       - name: consultation_mechanism_code
         description: Submitted consultation mechanism code.
       - name: consultation_mechanism_description
         description: Published description for the consultation mechanism, including retired codes.
       - name: consultation_medium_used_code
         description: Historical consultation medium code retained for older MHSDS versions.
+      - name: consultation_medium_used_description
+        description: Published description for the consultation medium where UKHFD contains the code.
       - name: activity_location_type_code
         description: Submitted activity location type code.
       - name: activity_location_type_description
         description: Published description for the activity location, including retired codes.
       - name: care_contact_subject_code
         description: Submitted code for the subject discussed during the contact.
+      - name: care_contact_subject_description
+        description: Published description for the care contact subject, including retired codes.
       - name: planned_care_contact_indicator
         description: Submitted indicator that the contact was planned.
+      - name: planned_care_contact_description
+        description: Published description for the planned care contact indicator.
       - name: place_of_safety_indicator
         description: Submitted indicator that the contact occurred at a place of safety.
+      - name: place_of_safety_description
+        description: Published description for the place of safety indicator.
       - name: group_therapy_indicator
         description: Submitted indicator that the contact formed part of group therapy.
+      - name: group_therapy_description
+        description: Published description for the group therapy indicator.
       - name: patient_therapy_mode_code
         description: Submitted code for whether therapy involved an individual, family or group.
+      - name: patient_therapy_mode_description
+        description: Published description for the patient therapy mode, including retired codes.
       - name: provider_organisation_code
         description: Organisation code of the provider submitting the contact.
+      - name: provider_organisation_name
+        description: Current organisation name for the provider code.
       - name: commissioner_organisation_code
-        description: Commissioner organisation code submitted for the contact.
+        description: >-
+          Commissioner organisation code submitted for the contact. This can be
+          an ICB, sub-ICB, commissioning hub, provider or other organisation.
       - name: commissioner_organisation_name
         description: Current organisation name for the submitted commissioner code.
       - name: derived_icb_commissioner_code
-        description: ICB commissioner code derived by the source pipeline.
+        description: >-
+          English ICB commissioner assigned by the source pipeline; null when
+          the submitted commissioner cannot be assigned to an ICB.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
       - name: derived_sub_icb_commissioner_code
-        description: Sub-ICB commissioner code derived by the source pipeline.
+        description: >-
+          Sub-ICB commissioner assigned by the source pipeline; null for
+          ICB-only assignments and commissioners outside the mapping.
       - name: derived_sub_icb_commissioner_name
         description: Current organisation name for the derived sub-ICB commissioner code.
       - name: commissioner_derivation_reason_code
-        description: Source-pipeline code explaining commissioner derivation.
+        description: Source-pipeline flag showing which commissioner assignment stages succeeded.
       - name: treatment_site_code
         description: Organisation site code where the contact took place.
+      - name: treatment_site_name
+        description: Current organisation name for the treatment site code.
       - name: administrative_category_code
         description: Patient administrative category recorded for the contact.
+      - name: administrative_category_description
+        description: Published description for the administrative category, including retired codes.
       - name: specialised_mh_service_code
         description: Specialised mental health service category code.
       - name: service_or_team_id
@@ -374,34 +428,48 @@ models:
         description: Service or team name supplied by the provider.
       - name: service_or_team_intended_age_group_code
         description: Intended patient age group recorded for the service or team.
+      - name: service_or_team_intended_age_group_description
+        description: Published description for the service or team's intended age group.
       - name: earliest_reasonable_offer_date
-        description: Earliest date offered that the patient considered reasonable.
+        description: Earliest date offered that the patient considered reasonable; source sentinels are null.
       - name: earliest_clinically_appropriate_date
-        description: Earliest date considered clinically suitable for the appointment.
+        description: Earliest date considered clinically suitable for the appointment; source sentinels are null.
       - name: appointment_offer_date
-        description: Date the reported appointment was offered.
+        description: Date the reported appointment was offered; source sentinels are null.
       - name: appointment_booked_date
-        description: Date the reported appointment was booked.
+        description: Date the reported appointment was booked; source sentinels are null.
       - name: care_contact_cancelled_date
-        description: Date the contact was cancelled.
+        description: Date the contact was cancelled; source sentinels are null.
       - name: care_contact_cancellation_reason_code
         description: Submitted care contact cancellation reason code.
+      - name: care_contact_cancellation_reason_description
+        description: Published description for the cancellation reason, including retired codes.
       - name: treatment_language_code
         description: Language used for treatment during the contact.
       - name: interpreter_present_indicator
         description: Submitted code for whether an interpreter was present.
+      - name: interpreter_present_description
+        description: Published description for the interpreter-present indicator.
       - name: community_perinatal_partner_assessment_offer_indicator
         description: Submitted indicator that a partner assessment was offered by a community perinatal service.
+      - name: community_perinatal_partner_assessment_offer_description
+        description: Published description for the partner-assessment offer indicator.
       - name: reasonable_adjustment_made_code
         description: Submitted indicator that a reasonable adjustment was made.
+      - name: reasonable_adjustment_made_description
+        description: Published description for the reasonable-adjustment indicator.
       - name: reason_patient_does_not_have_imca_code
         description: Reason no Independent Mental Capacity Advocate was recorded.
+      - name: reason_patient_does_not_have_imca_description
+        description: Published description for the reason no IMCA was recorded.
       - name: reason_patient_does_not_have_imha_code
         description: Reason no Independent Mental Health Advocate was recorded.
+      - name: reason_patient_does_not_have_imha_description
+        description: Published description for the reason no IMHA was recorded.
       - name: age_at_care_contact
         description: Age in years at the care contact date.
-      - name: distance_from_home
-        description: Distance from home to the contact location; the source does not state a unit.
+      - name: distance_from_home_km
+        description: Source-derived straight-line distance in kilometres from home to the contact location.
       - name: minutes_from_referral_to_care_contact
         description: Source-derived minutes between referral receipt and care contact.
       - name: uniq_submission_id

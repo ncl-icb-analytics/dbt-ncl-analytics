@@ -43,17 +43,28 @@ select
     , r.person_id
     , r.sk_patient_id
     , r.provider_organisation_code
+    , r.provider_organisation_name
     , r.derived_icb_commissioner_code
+    , r.derived_icb_commissioner_name
     , r.referral_request_received_date
     , r.age_at_referral
     , coalesce(r.age_at_referral < 18, false) as is_cyp_at_referral
     , r.source_of_referral_code
+    , r.source_of_referral_description
     , r.referring_care_professional_type_code
+    , r.referring_care_professional_type_description
+    , r.referring_care_professional_staff_group_code
+    , r.referring_care_professional_staff_group_description
     , r.clinical_response_priority_code
+    , r.clinical_response_priority_description
     , r.primary_reason_for_referral_code
+    , r.primary_reason_for_referral_description
     , rr.population_category as referral_reason_category
     , st.serv_team_type_ref_to_mh as service_or_team_type_code
+    , service_or_team_type.description as service_or_team_type_description
     , st.service_type_name as source_service_or_team_type_name
+    , st.serv_team_int_age_group as service_or_team_intended_age_group_code
+    , intended_age_group.description as service_or_team_intended_age_group_description
     , tt.population_category as team_type_category
     , tt.setting_group
     , tt.setting_name
@@ -90,15 +101,21 @@ select
     , coalesce(s.has_inpatient_spell, false) as has_inpatient_spell
     , r.referral_rejection_date
     , r.rejection_reason_code
+    , r.rejection_reason_description
     , r.referral_status = 'rejected' as is_rejected
     , r.referral_discharge_date
     , r.closure_reason_code
+    , r.closure_reason_description
     , r.referral_status
 from {{ ref('fct_mhsds_referral') }} as r
 left join {{ ref('nhse_mh_currency_referral_reasons_2627') }} as rr
     on r.primary_reason_for_referral_code = rr.prim_reason_referral_mh
 left join {{ ref('stg_mhsds_servicetype') }} as st
     on r.uniq_serv_req_id = st.uniq_serv_req_id
+left join {{ ref('mhsds_service_or_team_type') }} as service_or_team_type
+    on st.serv_team_type_ref_to_mh = service_or_team_type.code
+left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_group
+    on upper(trim(st.serv_team_int_age_group)) = intended_age_group.code
 left join {{ ref('nhse_mh_currency_team_types_2627') }} as tt
     on st.serv_team_type_ref_to_mh = tt.serv_team_type
 left join contact_aggregates as c

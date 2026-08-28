@@ -24,6 +24,13 @@ Dates, times and timestamps have separate meanings:
   the field remains sortable.
 - `*_time_precision` states `date` or `timestamp`. Use it when recorded time
   precision affects an analysis.
+- Source dates before 1901 are Excel-epoch missing-value sentinels and are
+  exposed as null.
+
+`mhsds_referral_terminology` and `mhsds_care_contact_terminology` supply current
+UKHFD descriptions for submitted codes. Their `_history` models retain
+definition revisions. Descriptions remain null when a submitted code is absent
+from UKHFD; this is most common for historical consultation-medium codes.
 
 ## Published interfaces
 
