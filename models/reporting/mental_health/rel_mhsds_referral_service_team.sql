@@ -1,0 +1,130 @@
+with latest_other_teams as (
+    -- MHS102 is resubmitted over time; record_start_date is not a stable
+    -- involvement identifier, so the logical relationship uses referral and team.
+    select
+        s.*
+        , coalesce(
+            s.uniq_other_care_prof_team_local_id
+            , s.uniq_care_prof_team_id
+            , s.other_care_prof_team_local_id
+            , s.care_prof_team_local_id
+        ) as service_or_team_id
+    from {{ ref('stg_mhsds_other_service_or_team_type') }} as s
+    qualify row_number() over (
+        partition by
+            s.uniq_serv_req_id
+            , coalesce(
+                s.uniq_other_care_prof_team_local_id
+                , s.uniq_care_prof_team_id
+                , s.other_care_prof_team_local_id
+                , s.care_prof_team_local_id
+            )
+        order by
+            s.effective_from desc
+            , s.reporting_period_end_date desc
+            , s.mhs102_uniq_id desc
+    ) = 1
+)
+
+, primary_teams as (
+    select
+        {{ dbt_utils.generate_surrogate_key([
+            "r.uniq_serv_req_id",
+            "'primary'",
+            "coalesce(r.uniq_care_prof_team_local_id, r.care_prof_team_local_id, r.serv_team_type)"
+        ]) }} as referral_service_team_id
+        , r.uniq_serv_req_id
+        , r.mhs101_uniq_id as source_record_id
+        , 'MHS101' as source_record_type
+        , 'primary' as service_or_team_relationship_type
+        , r.care_prof_team_local_id as service_or_team_local_id
+        , r.uniq_care_prof_team_local_id as service_or_team_id
+        , coalesce(r.serv_team_type, td.serv_team_type_mh) as service_or_team_type_code
+        , coalesce(r.service_type_name, td.service_type_name) as source_service_or_team_type_name
+        , coalesce(r.serv_team_int_age_group, td.serv_team_int_age_group)
+            as service_or_team_intended_age_group_code
+        , r.org_id_prov as provider_organisation_code
+        , r.record_start_date
+        , r.record_end_date
+        , r.refer_rejection_date
+        , r.refer_rejection_time
+        , r.refer_reject_reason as rejection_reason_code
+        , r.serv_disch_date as closure_date
+        , r.serv_disch_time as closure_time
+        , r.refer_clos_reason as closure_reason_code
+        , r.uniq_submission_id
+        , r.reporting_period_end_date
+        , r.dmic_dataset as mhsds_version
+        , r.effective_from as source_effective_from_at
+        , r.dmic_date_added as source_loaded_at
+    from {{ ref('stg_mhsds_referral') }} as r
+    left join {{ ref('stg_mhsds_service_or_team_details') }} as td
+        on r.care_prof_team_local_id = td.care_prof_team_local_id
+        and r.uniq_submission_id = td.uniq_submission_id
+    where r.dmic_dataset = 'V6'
+        and coalesce(
+            r.uniq_care_prof_team_local_id
+            , r.care_prof_team_local_id
+            , r.serv_team_type
+        ) is not null
+)
+
+, other_teams as (
+    select
+        {{ dbt_utils.generate_surrogate_key([
+            "s.uniq_serv_req_id",
+            "iff(s.dmic_dataset = 'V6', 'additional', 'referred_to')",
+            "s.service_or_team_id"
+        ]) }} as referral_service_team_id
+        , s.uniq_serv_req_id
+        , s.mhs102_uniq_id as source_record_id
+        , 'MHS102' as source_record_type
+        , iff(s.dmic_dataset = 'V6', 'additional', 'referred_to')
+            as service_or_team_relationship_type
+        , coalesce(s.other_care_prof_team_local_id, s.care_prof_team_local_id)
+            as service_or_team_local_id
+        , s.service_or_team_id
+        , coalesce(s.serv_team_type_ref_to_mh, td.serv_team_type_mh)
+            as service_or_team_type_code
+        , coalesce(s.service_type_name, td.service_type_name)
+            as source_service_or_team_type_name
+        , coalesce(s.serv_team_int_age_group, td.serv_team_int_age_group)
+            as service_or_team_intended_age_group_code
+        , s.org_id_prov as provider_organisation_code
+        , s.record_start_date
+        , s.record_end_date
+        , s.refer_rejection_date
+        , s.refer_rejection_time
+        , s.refer_reject_reason as rejection_reason_code
+        , s.refer_closure_date as closure_date
+        , s.refer_closure_time as closure_time
+        , s.refer_clos_reason as closure_reason_code
+        , s.uniq_submission_id
+        , s.reporting_period_end_date
+        , s.dmic_dataset as mhsds_version
+        , s.effective_from as source_effective_from_at
+        , s.dmic_date_added as source_loaded_at
+    from latest_other_teams as s
+    left join {{ ref('stg_mhsds_service_or_team_details') }} as td
+        on coalesce(s.other_care_prof_team_local_id, s.care_prof_team_local_id)
+            = td.care_prof_team_local_id
+        and s.uniq_submission_id = td.uniq_submission_id
+)
+
+, relationships as (
+    select * from primary_teams
+    union all
+    select * from other_teams
+)
+
+select
+    r.*
+    , tt.description as service_or_team_type_description
+    , case
+        when r.refer_rejection_date is not null then 'rejected'
+        when r.closure_date is not null then 'closed'
+        else 'open'
+    end as service_or_team_relationship_status
+from relationships as r
+left join {{ ref('mhsds_service_or_team_type') }} as tt
+    on r.service_or_team_type_code = tt.code

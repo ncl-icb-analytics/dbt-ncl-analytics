@@ -1,0 +1,206 @@
+version: 2
+
+models:
+  - name: fct_mhsds_referral
+    description: >-
+      MHSDS referrals from active provider submissions. One row per unique
+      service request across all available reporting periods. Referral and
+      discharge timestamps are null when the source supplied only a date.
+    config: &owner
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: source_record_id
+        description: Stable join key for this referral; the MHSDS unique service request identifier.
+        data_tests: [not_null, unique]
+      - name: source_dataset
+        description: Source data set; always MHSDS.
+      - name: uniq_serv_req_id
+        description: MHSDS unique service request identifier.
+      - name: mhs101_uniq_id
+        description: Submitted MHS101 record selected for the referral.
+      - name: service_request_id
+        description: Provider-local service request identifier.
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: sk_patient_id
+        description: Pseudonymised cross-system patient key; null where bridging is unavailable.
+      - name: referral_request_received_date
+        description: Date the provider received the referral request.
+      - name: referral_request_received_time
+        description: Recorded referral-received time.
+      - name: referral_received_at
+        description: Referral-received timestamp; null when only a date was supplied.
+      - name: referral_received_time_precision
+        description: Whether the referral was supplied with date or timestamp precision.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [date, timestamp]
+      - name: decision_to_treat_date
+        description: Recorded decision-to-treat date.
+      - name: decision_to_treat_time
+        description: Recorded decision-to-treat time.
+      - name: decision_to_treat_at
+        description: Decision-to-treat timestamp; null where a date or time is absent.
+      - name: refer_rejection_date
+        description: Recorded referral rejection date.
+      - name: referral_discharge_date
+        description: Recorded service discharge date.
+      - name: referral_status
+        description: Rejected, closed or open based on recorded rejection and discharge dates.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [rejected, closed, open]
+      - name: source_of_referral_code
+        description: Supplied source-of-referral code.
+      - name: source_of_referral_description
+        description: Newest published description, including retired codes where available.
+      - name: clinical_response_priority_code
+        description: Supplied clinical response priority code.
+      - name: primary_reason_for_referral_code
+        description: Supplied primary reason for referral code.
+      - name: rejection_reason_code
+        description: Supplied referral rejection reason code.
+      - name: closure_reason_code
+        description: Supplied referral closure reason code.
+      - name: provider_organisation_code
+        description: Provider organisation code.
+      - name: referring_organisation_code
+        description: Referring organisation code where supplied.
+      - name: primary_service_or_team_id
+        description: MHSDS-derived identifier for the primary service or team in v6.
+      - name: primary_service_or_team_type_code
+        description: Primary service or team type code supplied in MHSDS v6.
+      - name: primary_service_or_team_type_description
+        description: Newest published description, including retired codes where available.
+      - name: source_service_or_team_type_name
+        description: Service or team name supplied by the provider.
+      - name: reporting_period_end_date
+        description: End date of the selected source submission period.
+      - name: mhsds_version
+        description: MHSDS version assigned by the source pipeline.
+      - name: source_loaded_at
+        description: Timestamp when the source pipeline loaded the selected record.
+
+  - name: rel_mhsds_referral_service_team
+    description: >-
+      Services or teams recorded against MHSDS referrals. One row per referral,
+      relationship role and MHSDS-derived team identifier. MHS101 supplies the
+      primary team from v6; MHS102 supplies referred-to teams before v6 and
+      additional teams from v6.
+    config: *owner
+    columns:
+      - name: referral_service_team_id
+        description: Stable key for the referral-to-service-or-team relationship.
+        data_tests: [not_null, unique]
+      - name: uniq_serv_req_id
+        description: MHSDS unique service request identifier.
+        data_tests: [not_null]
+      - name: source_record_id
+        description: Submitted MHS101 or latest MHS102 record supporting the relationship.
+        data_tests: [not_null]
+      - name: source_record_type
+        description: MHS101 for a primary team or MHS102 for another team.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [MHS101, MHS102]
+      - name: service_or_team_relationship_type
+        description: Primary, additional in v6, or referred-to before v6.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [primary, additional, referred_to]
+      - name: service_or_team_id
+        description: MHSDS-derived service or team identifier.
+      - name: service_or_team_local_id
+        description: Provider-local service or team identifier.
+      - name: service_or_team_type_code
+        description: Supplied or MHS902-resolved service or team type code.
+      - name: service_or_team_type_description
+        description: Newest published description, including retired codes where available.
+      - name: source_service_or_team_type_name
+        description: Service or team name supplied by the provider.
+      - name: service_or_team_relationship_status
+        description: Rejected, closed or open based on recorded relationship dates.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [rejected, closed, open]
+      - name: reporting_period_end_date
+        description: End date of the selected source submission period.
+      - name: mhsds_version
+        description: MHSDS version assigned by the source pipeline.
+
+  - name: fct_mhsds_care_contact
+    description: >-
+      MHSDS care contacts from active provider submissions. One row per unique
+      service request and unique care contact across all available reporting
+      periods. The referral identifier is source-recorded, not inferred.
+    config: *owner
+    columns:
+      - name: source_record_id
+        description: Stable join key generated from the service request and care contact identifiers.
+        data_tests: [not_null, unique]
+      - name: source_dataset
+        description: Source data set; always MHSDS.
+      - name: uniq_care_cont_id
+        description: MHSDS unique care contact identifier within a referral.
+      - name: care_contact_id
+        description: Provider-local care contact identifier.
+      - name: referral_source_record_id
+        description: Source-recorded MHSDS unique service request identifier.
+        data_tests: [not_null]
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: sk_patient_id
+        description: Pseudonymised cross-system patient key; null where bridging is unavailable.
+      - name: care_contact_date
+        description: Date the contact took place or, for a cancelled contact, was scheduled.
+      - name: care_contact_time
+        description: Recorded contact time.
+      - name: care_contact_at
+        description: Care contact timestamp; null when only a date was supplied.
+      - name: care_contact_time_precision
+        description: Whether the contact was supplied with date or timestamp precision.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [date, timestamp]
+      - name: clinical_contact_duration_minutes
+        description: Direct clinical contact duration in minutes.
+      - name: attendance_status_code
+        description: Supplied attendance status code.
+      - name: attendance_status_description
+        description: Newest published description, including retired codes where available.
+      - name: consultation_mechanism_code
+        description: Supplied consultation mechanism code.
+      - name: consultation_mechanism_description
+        description: Newest published description, including retired codes where available.
+      - name: activity_location_type_code
+        description: Supplied activity location type code.
+      - name: activity_location_type_description
+        description: Newest published description, including retired codes where available.
+      - name: provider_organisation_code
+        description: Provider organisation code.
+      - name: treatment_site_code
+        description: Treatment site code.
+      - name: service_or_team_id
+        description: MHSDS-derived identifier for the team delivering the contact.
+      - name: service_or_team_type_code
+        description: Service or team type resolved through MHS902.
+      - name: service_or_team_type_description
+        description: Newest published description, including retired codes where available.
+      - name: appointment_booked_date
+        description: Date the reported appointment was booked where supplied.
+      - name: care_contact_cancelled_date
+        description: Recorded cancellation date where the contact did not take place.
+      - name: reporting_period_end_date
+        description: End date of the selected source submission period.
+      - name: mhsds_version
+        description: MHSDS version assigned by the source pipeline.
+      - name: source_loaded_at
+        description: Timestamp when the source pipeline loaded the selected record.
