@@ -7,8 +7,7 @@ within 2 reporting periods of the latest — the strongest available evidence
 of continuing occupancy. Orphaned undischarged spells (stopped being
 submitted) are excluded.
 
-One person can hold more than one open spell (transfers, provider data
-overlaps); the grain is the spell, not the person.
+Upstream occupancy rules retain at most one current spell per person.
 */
 
 select
@@ -16,15 +15,15 @@ select
     , c.uniq_serv_req_id
     , c.person_id
     , c.sk_patient_id
-    , c.org_id_prov
-    , org.organisation_name as provider_name
-    , c.start_date_hosp_prov_spell as admission_date
+    , c.org_id_prov as provider_organisation_code
+    , org.organisation_name as provider_organisation_name
+    , c.start_date_hosp_prov_spell as hospital_provider_spell_start_date
     , datediff(day, c.start_date_hosp_prov_spell, current_date) as days_in_bed
     , datediff(month, c.start_date_hosp_prov_spell, current_date) as months_in_bed
-    , c.last_submission_period_end
+    , c.last_submission_period_end as last_submission_period_end_date
     , c.age_hosp_start_date as age_at_admission
     , c.is_cyp
-    , c.mh_admitted_patient_class
+    , c.mh_admitted_patient_class as mental_health_admitted_patient_class_code
     , c.setting_code
     , c.setting_name
     , c.icd10_3

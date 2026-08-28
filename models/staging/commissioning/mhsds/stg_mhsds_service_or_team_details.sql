@@ -11,8 +11,8 @@ select
     , t.serv_team_int_age_group
     , t.uniq_submission_id
     , t.uniq_month_id
-    , t.reporting_period_start_date
-    , t.reporting_period_end_date
+    , t.reporting_period_start_date::date as reporting_period_start_date
+    , t.reporting_period_end_date::date as reporting_period_end_date
     , t.dmic_dataset
     , t.effective_from
     , t.dmic_date_added

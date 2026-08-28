@@ -18,9 +18,10 @@ select
     , r.referral_request_received_date
     , r.referral_request_received_time
     , case
-        when r.referral_request_received_date is not null
-            and r.referral_request_received_time is not null
-            then timestamp_ntz_from_parts(
+        when r.referral_request_received_date is null then null
+        when r.referral_request_received_time is null
+            then r.referral_request_received_date::timestamp_ntz
+        else timestamp_ntz_from_parts(
                 r.referral_request_received_date
                 , r.referral_request_received_time
             )
@@ -33,23 +34,73 @@ select
     , r.decision_to_treat_date
     , r.decision_to_treat_time
     , case
-        when r.decision_to_treat_date is not null
-            and r.decision_to_treat_time is not null
-            then timestamp_ntz_from_parts(r.decision_to_treat_date, r.decision_to_treat_time)
+        when r.decision_to_treat_date is null then null
+        when r.decision_to_treat_time is null
+            then r.decision_to_treat_date::timestamp_ntz
+        else timestamp_ntz_from_parts(r.decision_to_treat_date, r.decision_to_treat_time)
     end as decision_to_treat_at
-    , r.refer_rejection_date
-    , r.refer_rejection_time
     , case
-        when r.refer_rejection_date is not null
-            and r.refer_rejection_time is not null
-            then timestamp_ntz_from_parts(r.refer_rejection_date, r.refer_rejection_time)
+        when r.decision_to_treat_date is null then null
+        when r.decision_to_treat_time is null then 'date'
+        else 'timestamp'
+    end as decision_to_treat_time_precision
+    , r.disch_plan_creation_date as discharge_plan_created_date
+    , r.disch_plan_creation_time as discharge_plan_created_time
+    , case
+        when r.disch_plan_creation_date is null then null
+        when r.disch_plan_creation_time is null
+            then r.disch_plan_creation_date::timestamp_ntz
+        else timestamp_ntz_from_parts(
+                r.disch_plan_creation_date
+                , r.disch_plan_creation_time
+            )
+    end as discharge_plan_created_at
+    , case
+        when r.disch_plan_creation_date is null then null
+        when r.disch_plan_creation_time is null then 'date'
+        else 'timestamp'
+    end as discharge_plan_created_time_precision
+    , r.disch_plan_last_updated_date as discharge_plan_last_updated_date
+    , r.disch_plan_last_updated_time as discharge_plan_last_updated_time
+    , case
+        when r.disch_plan_last_updated_date is null then null
+        when r.disch_plan_last_updated_time is null
+            then r.disch_plan_last_updated_date::timestamp_ntz
+        else timestamp_ntz_from_parts(
+                r.disch_plan_last_updated_date
+                , r.disch_plan_last_updated_time
+            )
+    end as discharge_plan_last_updated_at
+    , case
+        when r.disch_plan_last_updated_date is null then null
+        when r.disch_plan_last_updated_time is null then 'date'
+        else 'timestamp'
+    end as discharge_plan_last_updated_time_precision
+    , r.refer_rejection_date as referral_rejection_date
+    , r.refer_rejection_time as referral_rejection_time
+    , case
+        when r.refer_rejection_date is null then null
+        when r.refer_rejection_time is null
+            then r.refer_rejection_date::timestamp_ntz
+        else timestamp_ntz_from_parts(r.refer_rejection_date, r.refer_rejection_time)
     end as referral_rejected_at
+    , case
+        when r.refer_rejection_date is null then null
+        when r.refer_rejection_time is null then 'date'
+        else 'timestamp'
+    end as referral_rejected_time_precision
     , r.serv_disch_date as referral_discharge_date
     , r.serv_disch_time as referral_discharge_time
     , case
-        when r.serv_disch_date is not null and r.serv_disch_time is not null
-            then timestamp_ntz_from_parts(r.serv_disch_date, r.serv_disch_time)
+        when r.serv_disch_date is null then null
+        when r.serv_disch_time is null then r.serv_disch_date::timestamp_ntz
+        else timestamp_ntz_from_parts(r.serv_disch_date, r.serv_disch_time)
     end as referral_discharged_at
+    , case
+        when r.serv_disch_date is null then null
+        when r.serv_disch_time is null then 'date'
+        else 'timestamp'
+    end as referral_discharged_time_precision
     , case
         when r.refer_rejection_date is not null then 'rejected'
         when r.serv_disch_date is not null then 'closed'
@@ -59,8 +110,8 @@ select
     , sr.description as source_of_referral_description
     , r.clin_resp_priority_type as clinical_response_priority_code
     , r.prim_reason_referral_mh as primary_reason_for_referral_code
-    , r.referring_care_professional_type
-    , r.referring_care_professional_staff_group
+    , r.referring_care_professional_type as referring_care_professional_type_code
+    , r.referring_care_professional_staff_group as referring_care_professional_staff_group_code
     , r.refer_reject_reason as rejection_reason_code
     , r.refer_clos_reason as closure_reason_code
     , r.reason_oat as out_of_area_treatment_reason_code
@@ -74,6 +125,8 @@ select
     , r.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , r.org_id_referring_org as referring_organisation_code
     , r.org_id_referring as referring_organisation_or_person_code
+    , r.nhs_serv_agree_line_id as nhs_service_agreement_line_id
+    , r.nhs_serv_agree_line_num as nhs_service_agreement_line_number
     , r.specialised_mh_service_code
     , r.care_prof_team_local_id as primary_service_or_team_local_id
     , r.uniq_care_prof_team_local_id as primary_service_or_team_id

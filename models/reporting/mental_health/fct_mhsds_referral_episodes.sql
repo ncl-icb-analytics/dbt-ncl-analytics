@@ -1,22 +1,22 @@
 with contact_aggregates as (
     select
-        uniq_serv_req_id
+        referral_source_record_id
         , count(*) as n_contacts
         , count_if(
-            lpad(attend_status, 2, '0') in ('05', '06')
-            or attend_status is null
+            lpad(attendance_status_code, 2, '0') in ('05', '06')
+            or attendance_status_code is null
         ) as n_attended_contacts
-        , count_if(lpad(attend_status, 2, '0') in ('03', '07')) as n_dna_contacts
-        , count_if(lpad(attend_status, 2, '0') in ('02', '04')) as n_cancelled_contacts
-        , min(care_cont_date) as first_contact_date
+        , count_if(lpad(attendance_status_code, 2, '0') in ('03', '07')) as n_dna_contacts
+        , count_if(lpad(attendance_status_code, 2, '0') in ('02', '04')) as n_cancelled_contacts
+        , min(care_contact_date) as first_contact_date
         , min(iff(
-            lpad(attend_status, 2, '0') in ('05', '06')
-            or attend_status is null
-            , care_cont_date
+            lpad(attendance_status_code, 2, '0') in ('05', '06')
+            or attendance_status_code is null
+            , care_contact_date
             , null
         )) as first_attended_contact_date
-    from {{ ref('stg_mhsds_carecontact') }}
-    group by uniq_serv_req_id
+    from {{ ref('fct_mhsds_care_contact') }}
+    group by referral_source_record_id
 )
 
 , indirect_activity_aggregates as (
@@ -37,21 +37,23 @@ with contact_aggregates as (
 )
 
 select
-    r.uniq_serv_req_id
+    r.source_record_id
+    , r.source_dataset
+    , r.uniq_serv_req_id
     , r.person_id
-    , b.sk_patient_id
-    , r.org_id_prov
-    , r.dm_icb_commissioner
+    , r.sk_patient_id
+    , r.provider_organisation_code
+    , r.derived_icb_commissioner_code
     , r.referral_request_received_date
-    , r.age_serv_refer_rec_date
-    , coalesce(r.age_serv_refer_rec_date < 18, false) as is_cyp_at_referral
-    , r.source_of_referral_mh
-    , r.referring_care_professional_type
-    , r.clin_resp_priority_type
-    , r.prim_reason_referral_mh
+    , r.age_at_referral
+    , coalesce(r.age_at_referral < 18, false) as is_cyp_at_referral
+    , r.source_of_referral_code
+    , r.referring_care_professional_type_code
+    , r.clinical_response_priority_code
+    , r.primary_reason_for_referral_code
     , rr.population_category as referral_reason_category
-    , st.serv_team_type_ref_to_mh
-    , st.service_type_name as team_type_name
+    , st.serv_team_type_ref_to_mh as service_or_team_type_code
+    , st.service_type_name as source_service_or_team_type_name
     , tt.population_category as team_type_category
     , tt.setting_group
     , tt.setting_name
@@ -60,7 +62,7 @@ select
         coalesce(tt.is_crisis_referral, false)
         or (
             coalesce(tt.crisis_requires_urgent_priority, false)
-            and r.clin_resp_priority_type in ('1', '2', '4')
+            and r.clinical_response_priority_code in ('1', '2', '4')
         )
         , false
     ) as is_crisis_referral
@@ -86,27 +88,21 @@ select
     , coalesce(i.n_indirect_activities, 0) as n_indirect_activities
     , coalesce(s.n_spells, 0) as n_spells
     , coalesce(s.has_inpatient_spell, false) as has_inpatient_spell
-    , r.refer_rejection_date
-    , r.refer_reject_reason
-    , r.refer_rejection_date is not null as is_rejected
-    , r.serv_disch_date
-    , r.refer_clos_reason
-    , case
-        when r.refer_rejection_date is not null then 'rejected'
-        when r.serv_disch_date is not null then 'closed'
-        else 'open'
-    end as episode_status
-from {{ ref('stg_mhsds_referral') }} as r
-left join {{ ref('stg_mhsds_bridging') }} as b
-    on r.person_id = b.person_id
+    , r.referral_rejection_date
+    , r.rejection_reason_code
+    , r.referral_status = 'rejected' as is_rejected
+    , r.referral_discharge_date
+    , r.closure_reason_code
+    , r.referral_status
+from {{ ref('fct_mhsds_referral') }} as r
 left join {{ ref('nhse_mh_currency_referral_reasons_2627') }} as rr
-    on r.prim_reason_referral_mh = rr.prim_reason_referral_mh
+    on r.primary_reason_for_referral_code = rr.prim_reason_referral_mh
 left join {{ ref('stg_mhsds_servicetype') }} as st
     on r.uniq_serv_req_id = st.uniq_serv_req_id
 left join {{ ref('nhse_mh_currency_team_types_2627') }} as tt
     on st.serv_team_type_ref_to_mh = tt.serv_team_type
 left join contact_aggregates as c
-    on r.uniq_serv_req_id = c.uniq_serv_req_id
+    on r.source_record_id = c.referral_source_record_id
 left join indirect_activity_aggregates as i
     on r.uniq_serv_req_id = i.uniq_serv_req_id
 left join spell_aggregates as s

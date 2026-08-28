@@ -34,12 +34,12 @@ select
     , p.uniq_serv_req_id
     , p.sk_patient_id
     , p.person_id
-    , p.org_id_prov
-    , p.dm_icb_commissioner
+    , p.org_id_prov as provider_organisation_code
+    , p.dm_icb_commissioner as derived_icb_commissioner_code
     , p.commissioner_icb_code
-    , p.care_cont_date
+    , p.care_cont_date as care_contact_date
     , fy.fiscal_year_start
-    , p.attend_status
+    , p.attend_status as attendance_status_code
     -- lpad guards against zero-padded codes ('05'/'06') appearing in a
     -- future feed; nulls costed per national guidance
     , lpad(p.attend_status, 2, '0') in ('05', '06') or p.attend_status is null as is_costed_attendance

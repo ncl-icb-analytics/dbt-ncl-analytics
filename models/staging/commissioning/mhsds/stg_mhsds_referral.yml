@@ -29,6 +29,14 @@ models:
         description: Recorded decision-to-treat date.
       - name: decision_to_treat_time
         description: Recorded decision-to-treat time.
+      - name: disch_plan_creation_date
+        description: Recorded discharge plan creation date.
+      - name: disch_plan_creation_time
+        description: Recorded discharge plan creation time.
+      - name: disch_plan_last_updated_date
+        description: Recorded discharge plan update date.
+      - name: disch_plan_last_updated_time
+        description: Recorded discharge plan update time.
       - name: refer_rejection_date
         description: Recorded referral rejection date.
       - name: refer_rejection_time
@@ -55,6 +63,10 @@ models:
         description: Referring organisation code.
       - name: org_id_referring
         description: Referring organisation or person code.
+      - name: nhs_serv_agree_line_id
+        description: NHS service agreement line identifier.
+      - name: nhs_serv_agree_line_num
+        description: NHS service agreement line number.
       - name: referring_care_professional_type
         description: Referring care professional type where applicable.
       - name: care_prof_team_local_id

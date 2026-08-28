@@ -146,8 +146,36 @@ with latest_other_teams as (
 )
 
 select
-    r.*
+    r.* exclude (refer_rejection_date, refer_rejection_time, closure_date, closure_time)
+    , r.refer_rejection_date as referral_rejection_date
+    , r.refer_rejection_time as referral_rejection_time
+    , r.closure_date as referral_closure_date
+    , r.closure_time as referral_closure_time
     , tt.description as service_or_team_type_description
+    , case
+        when r.refer_rejection_date is null then null
+        when r.refer_rejection_time is null
+            then r.refer_rejection_date::timestamp_ntz
+        else timestamp_ntz_from_parts(
+            r.refer_rejection_date
+            , r.refer_rejection_time
+        )
+    end as referral_rejected_at
+    , case
+        when r.refer_rejection_date is null then null
+        when r.refer_rejection_time is null then 'date'
+        else 'timestamp'
+    end as referral_rejected_time_precision
+    , case
+        when r.closure_date is null then null
+        when r.closure_time is null then r.closure_date::timestamp_ntz
+        else timestamp_ntz_from_parts(r.closure_date, r.closure_time)
+    end as referral_closed_at
+    , case
+        when r.closure_date is null then null
+        when r.closure_time is null then 'date'
+        else 'timestamp'
+    end as referral_closed_time_precision
     , case
         when r.refer_rejection_date is not null then 'rejected'
         when r.closure_date is not null then 'closed'

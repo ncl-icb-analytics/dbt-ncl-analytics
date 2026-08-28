@@ -23,6 +23,14 @@ models:
         description: Provider-local additional service or team identifier in MHSDS v6.
       - name: serv_team_type_ref_to_mh
         description: Submitted service or team type code.
+      - name: refer_rejection_date
+        description: Recorded service or team referral rejection date.
+      - name: refer_rejection_time
+        description: Recorded service or team referral rejection time.
+      - name: refer_closure_date
+        description: Recorded service or team referral closure date.
+      - name: refer_closure_time
+        description: Recorded service or team referral closure time.
       - name: uniq_submission_id
         description: MHSDS submission identifier.
         data_tests: [not_null]

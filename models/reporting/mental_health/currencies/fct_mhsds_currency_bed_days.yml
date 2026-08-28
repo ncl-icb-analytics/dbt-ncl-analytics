@@ -26,10 +26,14 @@ models:
         description: Pseudonymised patient identifier.
       - name: person_id
         description: MHSDS person identifier.
-      - name: org_id_prov
+      - name: provider_organisation_code
         description: Provider organisation code.
         data_tests:
           - not_null
+      - name: derived_icb_commissioner_code
+        description: ICB commissioner code derived in the source feed.
+      - name: commissioner_icb_code
+        description: Commissioner ICB code resolved for currency reporting.
       - name: currency_group
         description: Currency population group.
         data_tests:
@@ -38,12 +42,12 @@ models:
         description: Inpatient currency code.
         data_tests:
           - not_null
-      - name: spell_start_date
-        description: Spell admission date.
+      - name: hospital_provider_spell_start_date
+        description: Hospital provider spell start date.
         data_tests:
           - not_null
-      - name: spell_end_date
-        description: Derived spell end date; null while the spell is open.
+      - name: hospital_provider_spell_end_date
+        description: Derived hospital provider spell end date; null while open.
       - name: bed_days_from_date
         description: First night counted in this row's bed_days.
         data_tests:
@@ -81,8 +85,8 @@ models:
         description: Price multiplied by bed days, MFF, and GDP deflator ratio.
         data_tests:
           - not_null
-      - name: end_date_source
-        description: Source of the spell end date.
+      - name: hospital_provider_spell_end_date_source
+        description: Source of the hospital provider spell end date.
       - name: is_cyp
         description: Whether age at admission is under 18.
       - name: winning_tier

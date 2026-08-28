@@ -23,8 +23,9 @@ select
     , c.care_cont_date as care_contact_date
     , c.care_cont_time as care_contact_time
     , case
-        when c.care_cont_date is not null and c.care_cont_time is not null
-            then timestamp_ntz_from_parts(c.care_cont_date, c.care_cont_time)
+        when c.care_cont_date is null then null
+        when c.care_cont_time is null then c.care_cont_date::timestamp_ntz
+        else timestamp_ntz_from_parts(c.care_cont_date, c.care_cont_time)
     end as care_contact_at
     , case
         when c.care_cont_date is null then null
@@ -37,6 +38,7 @@ select
     , c.cons_type as consultation_type_code
     , c.cons_mechanism_mh as consultation_mechanism_code
     , cm.description as consultation_mechanism_description
+    , c.cons_medium_used as consultation_medium_used_code
     , c.act_loc_type_code as activity_location_type_code
     , alt.description as activity_location_type_description
     , c.care_cont_subj as care_contact_subject_code
@@ -75,7 +77,11 @@ select
     , c.care_cont_cancel_reas as care_contact_cancellation_reason_code
     , c.language_code_treat as treatment_language_code
     , c.interpreter_present_ind as interpreter_present_indicator
+    , c.com_peri_mh_part_assess_offer_ind
+        as community_perinatal_partner_assessment_offer_indicator
     , c.reasonable_adjustment_made as reasonable_adjustment_made_code
+    , c.reason_patient_no_imca as reason_patient_does_not_have_imca_code
+    , c.reason_patient_no_imha as reason_patient_does_not_have_imha_code
     , c.age_care_cont_date as age_at_care_contact
     , c.cont_loc_distance_home as distance_from_home
     , c.time_refer_and_care_contact as minutes_from_referral_to_care_contact

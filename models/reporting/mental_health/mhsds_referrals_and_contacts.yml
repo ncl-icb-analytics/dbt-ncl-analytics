@@ -3,25 +3,25 @@ version: 2
 models:
   - name: fct_mhsds_referral
     description: >-
-      MHSDS referrals from active provider submissions. One row per unique
-      service request across all available reporting periods. The newest
-      reporting period is retained. Referral and discharge timestamps are null
-      when the source supplied only a date. Use fct_mhsds_referral_episodes for
-      the currency-scoped referral episode with aggregated activity.
+      MHSDS service or team referrals from active provider submissions. One row
+      per unique service request across the available history. The newest
+      reporting period is retained. Date fields remain populated when the
+      source does not supply a time. Use fct_mhsds_referral_episodes for the
+      currency-scoped referral summary.
     config: &owner
       meta:
         owner:
           name: Eddie Davison
     columns:
       - name: source_record_id
-        description: Stable join key for this referral; the MHSDS unique service request identifier.
+        description: Stable referral join key; the MHSDS unique service request identifier.
         data_tests: [not_null, unique]
       - name: source_dataset
         description: Source data set; always MHSDS.
       - name: uniq_serv_req_id
         description: MHSDS unique service request identifier.
       - name: mhs101_uniq_id
-        description: Submitted MHS101 record selected for the referral.
+        description: Submitted MHS101 row selected for the referral.
       - name: service_request_id
         description: Provider-local service request identifier.
       - name: person_id
@@ -31,87 +31,158 @@ models:
       - name: referral_request_received_date
         description: Date the provider received the referral request.
       - name: referral_request_received_time
-        description: Recorded referral-received time.
+        description: Time the provider received the referral request; mainly supplied for urgent and emergency referrals.
       - name: referral_received_at
-        description: Referral-received timestamp; null when only a date was supplied.
+        description: Referral-received timestamp; date-only records use midnight.
       - name: referral_received_time_precision
-        description: Whether the referral was supplied with date or timestamp precision.
+        description: Precision of the referral-received value retained by the model.
         data_tests:
           - accepted_values:
               arguments:
                 values: [date, timestamp]
       - name: decision_to_treat_date
-        description: Recorded decision-to-treat date.
+        description: Date treatment need was first identified for mental health home treatment.
       - name: decision_to_treat_time
-        description: Recorded decision-to-treat time.
+        description: Time treatment need was first identified for mental health home treatment.
       - name: decision_to_treat_at
-        description: Decision-to-treat timestamp; null where a date or time is absent.
-      - name: refer_rejection_date
-        description: Recorded referral rejection date.
+        description: Decision-to-treat timestamp; date-only records use midnight.
+      - name: decision_to_treat_time_precision
+        description: Whether decision-to-treat has date or timestamp precision.
+        data_tests: &time_precision_test
+          - accepted_values:
+              arguments:
+                values: [date, timestamp]
+      - name: discharge_plan_created_date
+        description: Date the referral discharge plan was created.
+      - name: discharge_plan_created_time
+        description: Time the referral discharge plan was created.
+      - name: discharge_plan_created_at
+        description: Discharge-plan creation timestamp; date-only records use midnight.
+      - name: discharge_plan_created_time_precision
+        description: Whether discharge-plan creation has date or timestamp precision.
+        data_tests: *time_precision_test
+      - name: discharge_plan_last_updated_date
+        description: Date the referral discharge plan was last updated.
+      - name: discharge_plan_last_updated_time
+        description: Time the referral discharge plan was last updated.
+      - name: discharge_plan_last_updated_at
+        description: Discharge-plan update timestamp; date-only records use midnight.
+      - name: discharge_plan_last_updated_time_precision
+        description: Whether discharge-plan update has date or timestamp precision.
+        data_tests: *time_precision_test
+      - name: referral_rejection_date
+        description: Date the referral request was rejected.
+      - name: referral_rejection_time
+        description: Time the referral request was rejected.
+      - name: referral_rejected_at
+        description: Referral-rejection timestamp; date-only records use midnight.
+      - name: referral_rejected_time_precision
+        description: Whether referral rejection has date or timestamp precision.
+        data_tests: *time_precision_test
       - name: referral_discharge_date
-        description: Recorded service discharge date.
+        description: Date the patient was discharged after all teams under the referral finished care.
+      - name: referral_discharge_time
+        description: Time the patient was discharged from the referral.
+      - name: referral_discharged_at
+        description: Referral discharge timestamp; date-only records use midnight.
+      - name: referral_discharged_time_precision
+        description: Whether referral discharge has date or timestamp precision.
+        data_tests: *time_precision_test
       - name: referral_status
-        description: Rejected, closed or open based on recorded rejection and discharge dates.
+        description: Rejected, closed or open from recorded rejection and discharge dates.
         data_tests:
           - accepted_values:
               arguments:
                 values: [rejected, closed, open]
       - name: source_of_referral_code
-        description: Supplied source-of-referral code.
+        description: Submitted source-of-referral code.
       - name: source_of_referral_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the source-of-referral code, including retired codes.
       - name: clinical_response_priority_code
-        description: Supplied clinical response priority code.
+        description: Submitted clinical response priority code.
       - name: primary_reason_for_referral_code
-        description: Supplied primary reason for referral code.
+        description: Submitted primary presenting condition or symptom code.
+      - name: referring_care_professional_type_code
+        description: Type of care professional who made the referral, where applicable.
+      - name: referring_care_professional_staff_group_code
+        description: Staff group of the referring care professional.
       - name: rejection_reason_code
-        description: Supplied referral rejection reason code.
+        description: Submitted referral rejection reason code.
       - name: closure_reason_code
-        description: Supplied referral closure reason code.
+        description: Submitted referral closure reason code.
+      - name: out_of_area_treatment_reason_code
+        description: Reason for an out-of-area adult acute mental health referral.
       - name: provider_organisation_code
-        description: Provider organisation code.
+        description: Organisation code of the provider submitting the referral.
       - name: commissioner_organisation_code
         description: Commissioner organisation code submitted by the provider.
       - name: commissioner_organisation_name
-        description: >-
-          Latest organisation name for the submitted commissioner code; null
-          when the code has no dictionary entry.
+        description: Current organisation name for the submitted commissioner code.
       - name: derived_icb_commissioner_code
         description: ICB commissioner code derived by the source pipeline.
       - name: derived_icb_commissioner_name
-        description: Latest organisation name for the derived ICB commissioner code.
+        description: Current organisation name for the derived ICB commissioner code.
       - name: derived_sub_icb_commissioner_code
         description: Sub-ICB commissioner code derived by the source pipeline.
       - name: derived_sub_icb_commissioner_name
-        description: Latest organisation name for the derived sub-ICB commissioner code.
+        description: Current organisation name for the derived sub-ICB commissioner code.
       - name: commissioner_derivation_reason_code
-        description: Code explaining the source pipeline's commissioner derivation.
+        description: Source-pipeline code explaining commissioner derivation.
       - name: referring_organisation_code
-        description: Referring organisation code where supplied.
+        description: Organisation code from which the referral was made.
+      - name: referring_organisation_or_person_code
+        description: Submitted code for the referring organisation or person.
+      - name: nhs_service_agreement_line_id
+        description: Identifier for the NHS service agreement line under which care is supplied.
+      - name: nhs_service_agreement_line_number
+        description: Line number within the NHS service agreement.
+      - name: specialised_mh_service_code
+        description: Specialised mental health service category code.
+      - name: primary_service_or_team_local_id
+        description: Provider-local primary service or team identifier.
       - name: primary_service_or_team_id
         description: >-
-          MHSDS-derived identifier for the primary service or team in v6; null
-          before v6. Use rel_mhsds_referral_service_team for teams across versions.
+          MHSDS-derived primary service or team identifier in v6; null before
+          v6. Use rel_mhsds_referral_service_team across versions.
       - name: primary_service_or_team_type_code
-        description: Primary service or team type code supplied in MHSDS v6 or resolved through MHS902.
+        description: Primary service or team type supplied in MHS101 or resolved through MHS902.
       - name: primary_service_or_team_type_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the service or team type, including retired codes.
       - name: source_service_or_team_type_name
         description: Service or team name supplied by the provider.
+      - name: primary_service_or_team_intended_age_group_code
+        description: Intended patient age group recorded for the primary service or team.
+      - name: age_at_referral
+        description: Age in years at the referral request received date.
+      - name: age_at_discharge
+        description: Age in years at the referral discharge date.
+      - name: discharge_letter_issued_date
+        description: Date the discharge letter was issued.
+      - name: record_start_date
+        description: Date the referral row first flowed in MHSDS.
+      - name: record_end_date
+        description: Date the referral row ceased to be valid in MHSDS.
+      - name: uniq_submission_id
+        description: Submission containing the selected MHS101 row.
+      - name: uniq_month_id
+        description: MHSDS reporting month number, where April 1900 is month 1.
+      - name: reporting_period_start_date
+        description: Start date of the selected submission period.
       - name: reporting_period_end_date
-        description: End date of the selected source submission period.
+        description: End date of the selected submission period.
       - name: mhsds_version
         description: MHSDS version assigned by the source pipeline.
+      - name: source_effective_from_at
+        description: Timestamp when the selected source file was received by the submission portal.
       - name: source_loaded_at
-        description: Timestamp when the source pipeline loaded the selected record.
+        description: Timestamp when the source pipeline loaded the selected row.
 
   - name: rel_mhsds_referral_service_team
     description: >-
       Services or teams recorded against MHSDS referrals. One row per referral,
-      relationship role and MHSDS-derived team identifier. MHS101 supplies the
-      primary team from v6; MHS102 supplies referred-to teams before v6 and
-      additional teams from v6. Source rows are retained when the same team is
-      recorded in more than one role.
+      relationship role and service or team identifier. MHS101 supplies the
+      primary team from v6. MHS102 supplies referred-to teams before v6 and
+      additional teams from v6. The same team can appear in more than one role.
     config: *owner
     data_tests:
       - dbt_utils.unique_combination_of_columns:
@@ -128,7 +199,7 @@ models:
         description: MHSDS unique service request identifier.
         data_tests: [not_null]
       - name: source_record_id
-        description: Submitted MHS101 or latest MHS102 record supporting the relationship.
+        description: Selected MHS101 or MHS102 row supporting the relationship.
         data_tests: [not_null]
       - name: source_record_type
         description: MHS101 for a primary team or MHS102 for another team.
@@ -142,42 +213,80 @@ models:
           - accepted_values:
               arguments:
                 values: [primary, additional, referred_to]
-      - name: service_or_team_id
-        description: MHSDS-derived service or team identifier, or provider-local identifier where unavailable.
-        data_tests: [not_null]
       - name: service_or_team_local_id
         description: Provider-local service or team identifier.
+      - name: service_or_team_id
+        description: MHSDS-derived team identifier, falling back to the provider-local identifier.
+        data_tests: [not_null]
       - name: service_or_team_type_code
-        description: Supplied or MHS902-resolved service or team type code.
-      - name: service_or_team_type_description
-        description: Newest published description, including retired codes where available.
+        description: Submitted or MHS902-resolved service or team type code.
       - name: source_service_or_team_type_name
         description: Service or team name supplied by the provider.
+      - name: service_or_team_intended_age_group_code
+        description: Intended patient age group recorded for the service or team.
+      - name: provider_organisation_code
+        description: Organisation code of the provider submitting the relationship.
+      - name: record_start_date
+        description: Date the source relationship row first flowed.
+      - name: record_end_date
+        description: Date the source relationship row ceased to be valid.
+      - name: referral_rejection_date
+        description: Date the team referral was rejected.
+      - name: referral_rejection_time
+        description: Time the team referral was rejected.
+      - name: rejection_reason_code
+        description: Submitted team referral rejection reason code.
+      - name: referral_closure_date
+        description: Date the team referral was closed.
+      - name: referral_closure_time
+        description: Time the team referral was closed.
+      - name: closure_reason_code
+        description: Submitted team referral closure reason code.
+      - name: uniq_submission_id
+        description: Submission containing the selected source row.
+      - name: reporting_period_end_date
+        description: End date of the selected submission period.
+      - name: mhsds_version
+        description: MHSDS version assigned by the source pipeline.
+      - name: source_effective_from_at
+        description: Timestamp when the selected source file was received by the submission portal.
+      - name: source_loaded_at
+        description: Timestamp when the source pipeline loaded the selected row.
+      - name: service_or_team_type_description
+        description: Published description for the service or team type, including retired codes.
+      - name: referral_rejected_at
+        description: Team referral rejection timestamp; date-only records use midnight.
+      - name: referral_rejected_time_precision
+        description: Whether team referral rejection has date or timestamp precision.
+        data_tests: *time_precision_test
+      - name: referral_closed_at
+        description: Team referral closure timestamp; date-only records use midnight.
+      - name: referral_closed_time_precision
+        description: Whether team referral closure has date or timestamp precision.
+        data_tests: *time_precision_test
       - name: service_or_team_relationship_status
-        description: Rejected, closed or open based on recorded relationship dates.
+        description: Rejected, closed or open from the relationship dates.
         data_tests:
           - accepted_values:
               arguments:
                 values: [rejected, closed, open]
-      - name: reporting_period_end_date
-        description: End date of the selected source submission period.
-      - name: mhsds_version
-        description: MHSDS version assigned by the source pipeline.
 
   - name: fct_mhsds_care_contact
     description: >-
-      MHSDS care contacts from active provider submissions. One row per unique
-      service request and unique care contact across all available reporting
-      periods. The newest reporting period is retained. The referral identifier
-      is source-recorded, not inferred, and can refer to a service request absent
-      from the active referral fact.
+      MHSDS contacts with a patient from active provider submissions. One row
+      per unique service request and care contact across the available history.
+      The newest reporting period is retained. The referral identifier is
+      source-recorded and can point to a referral absent from the active
+      referral fact. Cancelled contacts remain present at their scheduled date.
     config: *owner
     columns:
       - name: source_record_id
-        description: Stable join key generated from the service request and care contact identifiers.
+        description: Stable key generated from the service request and care contact identifiers.
         data_tests: [not_null, unique]
       - name: source_dataset
         description: Source data set; always MHSDS.
+      - name: mhs201_uniq_id
+        description: Submitted MHS201 row selected for the care contact.
       - name: uniq_care_cont_id
         description: MHSDS unique care contact identifier within a referral.
       - name: care_contact_id
@@ -185,71 +294,127 @@ models:
       - name: referral_source_record_id
         description: Source-recorded MHSDS unique service request identifier.
         data_tests: [not_null]
+      - name: service_request_id
+        description: Provider-local service request identifier.
       - name: person_id
         description: MHSDS person identifier.
       - name: sk_patient_id
         description: Pseudonymised cross-system patient key; null where bridging is unavailable.
       - name: care_contact_date
-        description: Date the contact took place or, for a cancelled contact, was scheduled.
+        description: Date the contact took place or, for a cancellation, was scheduled.
       - name: care_contact_time
-        description: Recorded contact time.
+        description: Time the contact began.
       - name: care_contact_at
-        description: Care contact timestamp; null when only a date was supplied.
+        description: Care contact timestamp; date-only records use midnight.
       - name: care_contact_time_precision
-        description: Whether the contact was supplied with date or timestamp precision.
+        description: Precision of the care-contact value retained by the model.
         data_tests:
           - accepted_values:
               arguments:
                 values: [date, timestamp]
       - name: clinical_contact_duration_minutes
-        description: Direct clinical contact duration in minutes.
+        description: Direct clinical contact duration in minutes, excluding administration and travel.
       - name: attendance_status_code
-        description: Supplied attendance status code.
+        description: Submitted attendance status code.
       - name: attendance_status_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the attendance status, including retired codes.
+      - name: consultation_type_code
+        description: Submitted consultation type code.
       - name: consultation_mechanism_code
-        description: Supplied consultation mechanism code.
+        description: Submitted consultation mechanism code.
       - name: consultation_mechanism_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the consultation mechanism, including retired codes.
+      - name: consultation_medium_used_code
+        description: Historical consultation medium code retained for older MHSDS versions.
       - name: activity_location_type_code
-        description: Supplied activity location type code.
+        description: Submitted activity location type code.
       - name: activity_location_type_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the activity location, including retired codes.
+      - name: care_contact_subject_code
+        description: Submitted code for the subject discussed during the contact.
+      - name: planned_care_contact_indicator
+        description: Submitted indicator that the contact was planned.
+      - name: place_of_safety_indicator
+        description: Submitted indicator that the contact occurred at a place of safety.
+      - name: group_therapy_indicator
+        description: Submitted indicator that the contact formed part of group therapy.
+      - name: patient_therapy_mode_code
+        description: Submitted code for whether therapy involved an individual, family or group.
       - name: provider_organisation_code
-        description: Provider organisation code.
+        description: Organisation code of the provider submitting the contact.
       - name: commissioner_organisation_code
-        description: Commissioner organisation code submitted by the provider.
+        description: Commissioner organisation code submitted for the contact.
       - name: commissioner_organisation_name
-        description: >-
-          Latest organisation name for the submitted commissioner code; null
-          when the code has no dictionary entry.
+        description: Current organisation name for the submitted commissioner code.
       - name: derived_icb_commissioner_code
         description: ICB commissioner code derived by the source pipeline.
       - name: derived_icb_commissioner_name
-        description: Latest organisation name for the derived ICB commissioner code.
+        description: Current organisation name for the derived ICB commissioner code.
       - name: derived_sub_icb_commissioner_code
         description: Sub-ICB commissioner code derived by the source pipeline.
       - name: derived_sub_icb_commissioner_name
-        description: Latest organisation name for the derived sub-ICB commissioner code.
+        description: Current organisation name for the derived sub-ICB commissioner code.
       - name: commissioner_derivation_reason_code
-        description: Code explaining the source pipeline's commissioner derivation.
+        description: Source-pipeline code explaining commissioner derivation.
       - name: treatment_site_code
-        description: Treatment site code.
+        description: Organisation site code where the contact took place.
+      - name: administrative_category_code
+        description: Patient administrative category recorded for the contact.
+      - name: specialised_mh_service_code
+        description: Specialised mental health service category code.
       - name: service_or_team_id
         description: MHSDS-derived identifier for the team delivering the contact.
+      - name: service_or_team_local_id
+        description: Provider-local identifier for the team delivering the contact.
       - name: service_or_team_type_code
-        description: >-
-          Service or team type resolved through MHS902; null when the submitted
-          contact has no matching local team detail.
+        description: MHS902 service or team type; null when no matching team detail is submitted.
       - name: service_or_team_type_description
-        description: Newest published description, including retired codes where available.
+        description: Published description for the service or team type, including retired codes.
+      - name: source_service_or_team_type_name
+        description: Service or team name supplied by the provider.
+      - name: service_or_team_intended_age_group_code
+        description: Intended patient age group recorded for the service or team.
+      - name: earliest_reasonable_offer_date
+        description: Earliest date offered that the patient considered reasonable.
+      - name: earliest_clinically_appropriate_date
+        description: Earliest date considered clinically suitable for the appointment.
+      - name: appointment_offer_date
+        description: Date the reported appointment was offered.
       - name: appointment_booked_date
-        description: Date the reported appointment was booked where supplied.
+        description: Date the reported appointment was booked.
       - name: care_contact_cancelled_date
-        description: Recorded cancellation date where the contact did not take place.
+        description: Date the contact was cancelled.
+      - name: care_contact_cancellation_reason_code
+        description: Submitted care contact cancellation reason code.
+      - name: treatment_language_code
+        description: Language used for treatment during the contact.
+      - name: interpreter_present_indicator
+        description: Submitted code for whether an interpreter was present.
+      - name: community_perinatal_partner_assessment_offer_indicator
+        description: Submitted indicator that a partner assessment was offered by a community perinatal service.
+      - name: reasonable_adjustment_made_code
+        description: Submitted indicator that a reasonable adjustment was made.
+      - name: reason_patient_does_not_have_imca_code
+        description: Reason no Independent Mental Capacity Advocate was recorded.
+      - name: reason_patient_does_not_have_imha_code
+        description: Reason no Independent Mental Health Advocate was recorded.
+      - name: age_at_care_contact
+        description: Age in years at the care contact date.
+      - name: distance_from_home
+        description: Distance from home to the contact location; the source does not state a unit.
+      - name: minutes_from_referral_to_care_contact
+        description: Source-derived minutes between referral receipt and care contact.
+      - name: uniq_submission_id
+        description: Submission containing the selected MHS201 row.
+      - name: uniq_month_id
+        description: MHSDS reporting month number, where April 1900 is month 1.
+      - name: reporting_period_start_date
+        description: Start date of the selected submission period.
       - name: reporting_period_end_date
-        description: End date of the selected source submission period.
+        description: End date of the selected submission period.
       - name: mhsds_version
         description: MHSDS version assigned by the source pipeline.
+      - name: source_effective_from_at
+        description: Timestamp when the selected source file was received by the submission portal.
       - name: source_loaded_at
-        description: Timestamp when the source pipeline loaded the selected record.
+        description: Timestamp when the source pipeline loaded the selected row.

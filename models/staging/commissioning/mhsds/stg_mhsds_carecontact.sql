@@ -8,8 +8,8 @@ with active_contacts as (
         , c.care_contact_id
         , c.service_request_id
         , c.person_id
-        , c.care_cont_date
-        , c.care_cont_time
+        , c.care_cont_date::date as care_cont_date
+        , c.care_cont_time::time as care_cont_time
         , c.org_id_prov
         , c.org_id_comm
         , c.attend_status
@@ -31,15 +31,18 @@ with active_contacts as (
         , c.group_therapy_ind
         , c.language_code_treat
         , c.interpreter_present_ind
+        , c.com_peri_mh_part_assess_offer_ind
         , c.planned_care_cont_indicator
         , c.care_cont_patient_ther_mode
-        , c.earliest_reason_offer_date
-        , c.earliest_clin_app_date
-        , c.care_cont_cancel_date
+        , c.earliest_reason_offer_date::date as earliest_reason_offer_date
+        , c.earliest_clin_app_date::date as earliest_clin_app_date
+        , c.care_cont_cancel_date::date as care_cont_cancel_date
         , c.care_cont_cancel_reas
-        , c.rep_appt_offer_date
-        , c.rep_appt_book_date
+        , c.rep_appt_offer_date::date as rep_appt_offer_date
+        , c.rep_appt_book_date::date as rep_appt_book_date
         , c.reasonable_adjustment_made
+        , c.reason_patient_no_imca
+        , c.reason_patient_no_imha
         , c.age_care_cont_date
         , c.cont_loc_distance_home
         , c.time_refer_and_care_contact
@@ -48,8 +51,8 @@ with active_contacts as (
         , c.dm_commissioner_derivation_reason
         , c.uniq_submission_id
         , c.uniq_month_id
-        , c.reporting_period_start_date
-        , c.reporting_period_end_date
+        , c.reporting_period_start_date::date as reporting_period_start_date
+        , c.reporting_period_end_date::date as reporting_period_end_date
         , c.dmic_dataset
         , c.effective_from
         , c.dmic_date_added
@@ -96,6 +99,7 @@ select
     , group_therapy_ind
     , language_code_treat
     , interpreter_present_ind
+    , com_peri_mh_part_assess_offer_ind
     , planned_care_cont_indicator
     , care_cont_patient_ther_mode
     , earliest_reason_offer_date
@@ -105,6 +109,8 @@ select
     , rep_appt_offer_date
     , rep_appt_book_date
     , reasonable_adjustment_made
+    , reason_patient_no_imca
+    , reason_patient_no_imha
     , age_care_cont_date
     , cont_loc_distance_home
     , time_refer_and_care_contact

@@ -41,6 +41,8 @@ models:
         description: Consultation type code.
       - name: cons_mechanism_mh
         description: Consultation mechanism code.
+      - name: cons_medium_used
+        description: Historical consultation medium code.
       - name: act_loc_type_code
         description: Activity location type code.
       - name: care_prof_team_local_id
@@ -59,6 +61,12 @@ models:
         description: Code explaining the source pipeline's commissioner derivation.
       - name: age_care_cont_date
         description: Age at the care contact date.
+      - name: com_peri_mh_part_assess_offer_ind
+        description: Community perinatal partner assessment offer indicator.
+      - name: reason_patient_no_imca
+        description: Reason code for no Independent Mental Capacity Advocate.
+      - name: reason_patient_no_imha
+        description: Reason code for no Independent Mental Health Advocate.
       - name: uniq_submission_id
         description: MHSDS submission identifier.
         data_tests: [not_null]

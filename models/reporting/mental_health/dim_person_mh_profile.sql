@@ -2,13 +2,13 @@
 -- behind the run date. Contact windows therefore have the same lag.
 with population as (
     select person_id
-    from {{ ref('stg_mhsds_referral') }}
+    from {{ ref('fct_mhsds_referral') }}
     where person_id is not null
 
     union
 
     select person_id
-    from {{ ref('stg_mhsds_carecontact') }}
+    from {{ ref('fct_mhsds_care_contact') }}
     where person_id is not null
 
     union
@@ -22,10 +22,10 @@ with population as (
     select
         person_id
         , count(*) as n_referrals_ever
-        , count_if(episode_status = 'open') as n_open_referrals
+        , count_if(referral_status = 'open') as n_open_referrals
         , min(referral_request_received_date) as first_referral_date
         , max(referral_request_received_date) as latest_referral_date
-    from {{ ref('fct_mhsds_referral_episodes') }}
+    from {{ ref('fct_mhsds_referral') }}
     where person_id is not null
     group by person_id
 )
@@ -33,19 +33,19 @@ with population as (
 , contact_aggregates as (
     select
         person_id
-        , max(care_cont_date) as latest_contact_date
-        , count_if(care_cont_date >= dateadd(month, -12, current_date)) > 0
+        , max(care_contact_date) as latest_contact_date
+        , count_if(care_contact_date >= dateadd(month, -12, current_date)) > 0
             as has_contact_last_12m
-        , count_if(care_cont_date >= dateadd(day, -90, current_date)) > 0
+        , count_if(care_contact_date >= dateadd(day, -90, current_date)) > 0
             as has_contact_last_90d
         , count_if(
-            care_cont_date >= dateadd(month, -12, current_date)
+            care_contact_date >= dateadd(month, -12, current_date)
             and (
-                lpad(attend_status, 2, '0') in ('05', '06')
-                or attend_status is null
+                lpad(attendance_status_code, 2, '0') in ('05', '06')
+                or attendance_status_code is null
             )
         ) as n_attended_contacts_12m
-    from {{ ref('stg_mhsds_carecontact') }}
+    from {{ ref('fct_mhsds_care_contact') }}
     where person_id is not null
     group by person_id
 )
@@ -54,15 +54,15 @@ with population as (
     select
         c.person_id
         , count_if(
-            c.care_cont_date >= dateadd(month, -12, current_date)
+            c.care_contact_date >= dateadd(month, -12, current_date)
             and (
-                lpad(c.attend_status, 2, '0') in ('05', '06')
-                or c.attend_status is null
+                lpad(c.attendance_status_code, 2, '0') in ('05', '06')
+                or c.attendance_status_code is null
             )
         ) > 0 as has_crisis_contact_12m
-    from {{ ref('stg_mhsds_carecontact') }} as c
+    from {{ ref('fct_mhsds_care_contact') }} as c
     inner join {{ ref('fct_mhsds_referral_episodes') }} as r
-        on c.uniq_serv_req_id = r.uniq_serv_req_id
+        on c.referral_source_record_id = r.source_record_id
     where c.person_id is not null
         and r.is_crisis_referral
     group by c.person_id
@@ -97,7 +97,7 @@ with population as (
         , g.population_category as diagnosis_category
         , d.coded_diag_timestamp as latest_diagnosis_date
     from {{ ref('stg_mhsds_primdiag') }} as d
-    inner join {{ ref('fct_mhsds_referral_episodes') }} as r
+    inner join {{ ref('fct_mhsds_referral') }} as r
         on d.uniq_serv_req_id = r.uniq_serv_req_id
     left join {{ ref('nhse_mh_currency_icd10_groups_2627') }} as g
         on d.icd10_3 between g.icd10_range_start and g.icd10_range_end
