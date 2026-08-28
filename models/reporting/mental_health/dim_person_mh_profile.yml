@@ -6,7 +6,7 @@ models:
       MHSDS mental health profile for people with a referral, care contact, or
       occupancy-ruled inpatient spell. Grain: one row per person_id. Current
       state reflects the active MHSDS feed, which runs about six weeks behind
-      the run date.
+      the run date. Referral and contact measures use the published MHSDS facts.
     config:
       meta:
         owner:
@@ -35,6 +35,8 @@ models:
         description: Whether a contact is recorded in the last 90 days.
       - name: n_attended_contacts_12m
         description: Number of attended care contacts in the last 12 months.
+      - name: n_contacts_with_missing_attendance_status_12m
+        description: Number of contacts without an attendance status in the last 12 months.
       - name: has_crisis_contact_12m
         description: Whether an attended crisis-referral contact is recorded in the last 12 months.
       - name: is_current_inpatient
@@ -49,6 +51,8 @@ models:
         description: Whether the person has an occupancy-ruled inpatient spell.
       - name: icd10_3
         description: Latest three-character ICD-10 diagnosis code.
+      - name: icd10_3_description
+        description: Published description for the latest ICD-10 code.
       - name: diagnosis_category
         description: Currency population category for the latest diagnosis.
       - name: latest_diagnosis_date
@@ -59,9 +63,13 @@ models:
         description: Latest formal Mental Health Act legal-status start date.
       - name: is_currently_detained
         description: Whether a formal legal-status period is current in the feed.
-      - name: cpp_status_code
-        description: >
-          Latest child protection plan status code, uninterpreted - the MHSDS
-          code semantics are unverified against the TOS.
+      - name: child_protection_plan_status_code
+        description: Latest submitted child protection plan status code.
+      - name: child_protection_plan_status_description
+        description: Published description for the child protection plan status.
+      - name: looked_after_child_indicator_code
+        description: Latest submitted looked-after-child indicator code.
+      - name: looked_after_child_indicator_description
+        description: Published description for the looked-after-child indicator.
       - name: is_looked_after_child
-        description: Whether the latest patient indicators record looked-after status.
+        description: Whether the latest indicator is yes; null for unknown or missing.

@@ -128,3 +128,127 @@ models:
           arguments:
             combination_of_columns: [code, source_effective_from_at]
     columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_mhsds_care_contact_code_lookup
+    description: >-
+      UKHFD definitions for MHSDS care-contact code sets. One row per
+      code set, code and UKHFD definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - code_set_name
+              - source_code_set_name
+              - code
+              - source_effective_from_at
+    columns:
+      - name: code_set_name
+        description: Code-set name used to distinguish codes with the same value.
+        data_tests: [not_null]
+      - name: source_code_set_name
+        description: NHS Data Model and Dictionary attribute name.
+        data_tests: [not_null]
+      - name: code
+        description: National code, upper-cased and trimmed.
+        data_tests: [not_null]
+      - name: description
+        description: Published code description.
+      - name: source_effective_from_at
+        description: Timestamp from which the UKHFD definition revision applies.
+
+  - name: stg_ukhfd_data_dictionary_mhsds_referral_code_lookup
+    description: >-
+      UKHFD definitions for MHSDS referral code sets. One row per code set,
+      code and UKHFD definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - code_set_name
+              - source_code_set_name
+              - code
+              - source_effective_from_at
+    columns:
+      - name: code_set_name
+        description: Code-set name used to distinguish codes with the same value.
+        data_tests: [not_null]
+      - name: source_code_set_name
+        description: NHS Data Model and Dictionary attribute name.
+        data_tests: [not_null]
+      - name: code
+        description: National code, upper-cased and trimmed.
+        data_tests: [not_null]
+      - name: description
+        description: Published code description.
+      - name: source_effective_from_at
+        description: Timestamp from which the UKHFD definition revision applies.
+
+  - name: stg_ukhfd_data_dictionary_mhsds_service_or_team_intended_age_group
+    description: >-
+      UKHFD mental health service or team intended-age definitions. One row per
+      code and UKHFD definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_language_code
+    description: UKHFD NHS language extensions. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_child_protection_plan_indicator
+    description: UKHFD child protection plan indicators. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_looked_after_child_indicator
+    description: UKHFD looked-after-child indicators. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_mental_health_admitted_patient_classification_type
+    description: UKHFD mental health admitted patient classification types. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
