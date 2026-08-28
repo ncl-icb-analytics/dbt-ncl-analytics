@@ -99,16 +99,10 @@ encoding_features as (
         on il.person_id =pc.person_id
     left join {{ref('dim_person_status_summary')}} ps
         on il.person_id =ps.person_id
-    left join {{ref('fct_person_ltc_lcs_risk_summary')}} lcs
-        on il.person_id =lcs.person_id
     left join {{ ref('fct_person_sus_uec_recent') }} aea
         on il.sk_patient_id =aea.sk_patient_id
     left join {{ ref('fct_person_sus_apc_recent') }} apca
         on il.sk_patient_id =apca.sk_patient_id
-    left join {{ ref('fct_person_bp_control') }} bp
-        on il.person_id =bp.person_id
-    left join {{ ref('dim_person_ccms') }} ccms
-        on il.person_id =ccms.person_id
     left join {{ ref('fct_person_efi2') }} efi
         on il.person_id =efi.person_id
     left join {{ ref('fct_person_frailty_register') }} fr
@@ -217,6 +211,11 @@ reweighted_scores as (
      ( 1 * clipped_score_clinical_complexity + 1 * clipped_score_clinical_frailty + 1 * clipped_score_medicines_management + 1 * clipped_score_emergency_use + 1 * clipped_score_wider_care_engagement + 1 * clipped_score_asc_indicators) / 6 as raw_score_frailty
     from clipped_scores
 )
+-- score_frailty is a within-neighbourhood percentile rank of raw_score_frailty, not an
+-- absolute frailty measure. Ranking within neighbourhood keeps the scale consistent with
+-- the neighbourhood z-scoring above and gives a uniform 0-100 spread; the equally-weighted
+-- mean of six clipped z-scores is bunched near its midpoint and never approaches its
+-- theoretical -3/+3 bounds. Tied raw scores receive the same percentile.
 select *,
-    round((raw_score_frailty + 3) / 6.0 * 100, 1) as score_frailty
+    round(percent_rank() over (partition by neighbourhood_code order by raw_score_frailty) * 100, 1) as score_frailty
 from reweighted_scores
