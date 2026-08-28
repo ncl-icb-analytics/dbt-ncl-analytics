@@ -73,7 +73,9 @@ models:
       - name: commissioner_organisation_code
         description: Commissioner organisation code submitted by the provider.
       - name: commissioner_organisation_name
-        description: Latest organisation name for the submitted commissioner code.
+        description: >-
+          Latest organisation name for the submitted commissioner code; null
+          when the code has no dictionary entry.
       - name: derived_icb_commissioner_code
         description: ICB commissioner code derived by the source pipeline.
       - name: derived_icb_commissioner_name
@@ -91,7 +93,7 @@ models:
           MHSDS-derived identifier for the primary service or team in v6; null
           before v6. Use rel_mhsds_referral_service_team for teams across versions.
       - name: primary_service_or_team_type_code
-        description: Primary service or team type code supplied in MHSDS v6.
+        description: Primary service or team type code supplied in MHSDS v6 or resolved through MHS902.
       - name: primary_service_or_team_type_description
         description: Newest published description, including retired codes where available.
       - name: source_service_or_team_type_name
@@ -111,6 +113,13 @@ models:
       additional teams from v6. Source rows are retained when the same team is
       recorded in more than one role.
     config: *owner
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - uniq_serv_req_id
+              - service_or_team_relationship_type
+              - service_or_team_id
     columns:
       - name: referral_service_team_id
         description: Stable key for the referral-to-service-or-team relationship.
@@ -134,7 +143,7 @@ models:
               arguments:
                 values: [primary, additional, referred_to]
       - name: service_or_team_id
-        description: MHSDS-derived service or team identifier.
+        description: MHSDS-derived service or team identifier, or provider-local identifier where unavailable.
         data_tests: [not_null]
       - name: service_or_team_local_id
         description: Provider-local service or team identifier.
@@ -211,7 +220,9 @@ models:
       - name: commissioner_organisation_code
         description: Commissioner organisation code submitted by the provider.
       - name: commissioner_organisation_name
-        description: Latest organisation name for the submitted commissioner code.
+        description: >-
+          Latest organisation name for the submitted commissioner code; null
+          when the code has no dictionary entry.
       - name: derived_icb_commissioner_code
         description: ICB commissioner code derived by the source pipeline.
       - name: derived_icb_commissioner_name

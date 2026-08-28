@@ -59,14 +59,15 @@ with latest_other_teams as (
         {{ dbt_utils.generate_surrogate_key([
             "r.uniq_serv_req_id",
             "'primary'",
-            "coalesce(r.uniq_care_prof_team_local_id, r.care_prof_team_local_id, r.serv_team_type)"
+            "coalesce(r.uniq_care_prof_team_local_id, r.care_prof_team_local_id)"
         ]) }} as referral_service_team_id
         , r.uniq_serv_req_id
         , r.mhs101_uniq_id as source_record_id
         , 'MHS101' as source_record_type
         , 'primary' as service_or_team_relationship_type
         , r.care_prof_team_local_id as service_or_team_local_id
-        , r.uniq_care_prof_team_local_id as service_or_team_id
+        , coalesce(r.uniq_care_prof_team_local_id, r.care_prof_team_local_id)
+            as service_or_team_id
         , coalesce(r.serv_team_type, td.serv_team_type_mh) as service_or_team_type_code
         , coalesce(r.service_type_name, td.service_type_name) as source_service_or_team_type_name
         , coalesce(r.serv_team_int_age_group, td.serv_team_int_age_group)
@@ -93,7 +94,6 @@ with latest_other_teams as (
         and coalesce(
             r.uniq_care_prof_team_local_id
             , r.care_prof_team_local_id
-            , r.serv_team_type
         ) is not null
 )
 
