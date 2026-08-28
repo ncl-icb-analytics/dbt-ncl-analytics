@@ -11,14 +11,12 @@ current GLP-1 prescribing (int_glp1_medications_all) and demographic / practice
 context, so practices can identify patients eligible for tirzepatide and see
 whether they are already on a GLP-1 (and for which likely indication).
 
-Grain: one row per currently-registered, living, eligible person
-(is_eligible_any = TRUE in the population model).
+Grain: one row per currently-registered, living OBES2 member.
 */
 
 WITH eligible AS (
     SELECT *
     FROM {{ ref('int_tirzepatide_eligible_population') }}
-    WHERE is_eligible_any = TRUE
 ),
 
 -- Collapse order-level GLP-1 prescribing to one row per person
@@ -96,23 +94,26 @@ SELECT
     elig.is_eligible_cohort_1,
     elig.is_eligible_cohort_2,
     CASE
-        WHEN elig.is_eligible_cohort_1 THEN 'Cohort 1 (BMI >= 40)'
-        WHEN elig.is_eligible_cohort_2 THEN 'Cohort 2 (BMI 35-39.9)'
+        WHEN elig.is_eligible_cohort_1
+            THEN 'Cohort 1 (BMI >= 40/37.5)'
+        WHEN elig.is_eligible_cohort_2
+            THEN 'Cohort 2 (BMI 35-39.9/32.5-37.4)'
     END AS cohort,
 
     -- BMI
     elig.latest_bmi_value,
     elig.latest_bmi_date,
+    elig.latest_bmi_source_cluster_id,
+    elig.latest_bmi_is_bmi_35_code,
     elig.bmi_category,
-    elig.requires_lower_bmi_thresholds,
-    elig.cardiometabolic_risk_ethnicity_group,
+    elig.has_lower_bmi_threshold_ethnicity,
 
     -- Qualifying comorbidities
-    elig.has_hypertension,
+    elig.has_unresolved_hypertension,
     elig.has_dyslipidaemia,
     elig.has_obstructive_sleep_apnoea,
-    elig.has_cardiovascular_disease,
-    elig.has_type2_diabetes,
+    elig.has_ascvd,
+    elig.has_unresolved_type2_diabetes,
     elig.qualifying_comorbidity_count,
 
     -- GLP-1 prescribing status
