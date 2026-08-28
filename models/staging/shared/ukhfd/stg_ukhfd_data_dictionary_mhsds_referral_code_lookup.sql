@@ -1,3 +1,4 @@
+{# Historical type fields contain legacy staff-group codes. #}
 {% set code_sets = [
     ('clinical_response_priority', 'raw_ukhfd_data_dictionary_mhsds_clinical_response_priority'),
     ('primary_reason_for_referral', 'raw_ukhfd_data_dictionary_mhsds_reason_for_referral'),
@@ -10,13 +11,13 @@
     ('out_of_area_referral_reason', 'raw_ukhfd_data_dictionary_mhsds_out_of_area_referral_reason')
 ] %}
 
-{% for terminology_name, raw_model_name in code_sets %}
+{% for code_set_name, raw_model_name in code_sets %}
 select
-    '{{ terminology_name }}' as terminology_name,
-    terminology.*
+    '{{ code_set_name }}' as code_set_name,
+    definitions.*
 from (
     {{ select_ukhfd_data_dictionary_code_set(raw_model_name) }}
-) as terminology
+) as definitions
 {% if not loop.last %}
 union all
 {% endif %}

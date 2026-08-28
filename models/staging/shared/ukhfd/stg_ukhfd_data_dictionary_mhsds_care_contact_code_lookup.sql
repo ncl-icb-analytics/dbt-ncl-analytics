@@ -15,13 +15,13 @@
     ('reasonable_adjustment_made_indicator', 'raw_ukhfd_data_dictionary_mhsds_reasonable_adjustment_made_indicator')
 ] %}
 
-{% for terminology_name, raw_model_name in code_sets %}
+{% for code_set_name, raw_model_name in code_sets %}
 select
-    '{{ terminology_name }}' as terminology_name,
-    terminology.*
+    '{{ code_set_name }}' as code_set_name,
+    definitions.*
 from (
     {{ select_ukhfd_data_dictionary_code_set(raw_model_name) }}
-) as terminology
+) as definitions
 {% if not loop.last %}
 union all
 {% endif %}

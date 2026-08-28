@@ -44,7 +44,7 @@ models:
       - name: commissioner_icb_name
         description: Current organisation name for the currency commissioner code.
       - name: is_wnl_commissioner
-        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
+        description: TRUE for a recognised current or predecessor WNL commissioner; otherwise FALSE.
       - name: care_contact_date
         description: Care contact date.
       - name: fiscal_year_start

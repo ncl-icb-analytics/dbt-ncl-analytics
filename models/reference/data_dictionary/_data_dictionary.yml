@@ -162,7 +162,9 @@ models:
     columns: *default_columns
 
   - name: language_history
-    description: ISO 639-1 language and NHS communication-method definition revisions from UKHFD.
+    description: >-
+      ISO 639-1 language and NHS communication-method definition revisions
+      from UKHFD. One row per source code set, code and UKHFD revision.
     config: *owner
     data_tests: *history_grain_test
     columns: *history_columns
@@ -175,7 +177,9 @@ models:
     columns: *default_columns
 
   - name: mental_health_admitted_patient_classification_type_history
-    description: Mental health admitted patient classification type revisions from UKHFD.
+    description: >-
+      Mental health admitted patient classification type revisions from UKHFD.
+      One row per source code set, code and UKHFD revision.
     config: *owner
     data_tests: *history_grain_test
     columns: *history_columns

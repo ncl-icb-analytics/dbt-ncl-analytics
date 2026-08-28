@@ -2,7 +2,9 @@ version: 2
 
 models:
   - name: int_mhsds_organisation
-    description: Current organisation names and ICB role used by MHSDS reporting models.
+    description: >-
+      Current organisation names and ICB roles used by MHSDS reporting models.
+      One row per normalised organisation code, selected from the newest source record.
     config:
       meta:
         owner:

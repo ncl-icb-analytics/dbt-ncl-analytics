@@ -15,7 +15,7 @@ select
     , effective_from as source_effective_from_at
     , effective_to as source_effective_to_at
 from {{ ref('raw_ukhfd_other_iso_language_codes') }}
-where iso_639_1_code is not null
+where nullif(trim(iso_639_1_code), '') is not null
 qualify row_number() over (
     partition by upper(trim(iso_639_1_code)), effective_from
     order by iso_639_2_code

@@ -1,5 +1,5 @@
 select
-    terminology_name as code_set_name,
+    code_set_name,
     source_code_set_name,
     code,
     description,
@@ -15,4 +15,4 @@ select
     is_latest_definition,
     source_effective_from_at,
     source_effective_to_at
-from {{ ref('stg_ukhfd_data_dictionary_mhsds_referral_terminology') }}
+from {{ ref('stg_ukhfd_data_dictionary_mhsds_referral_code_lookup') }}
