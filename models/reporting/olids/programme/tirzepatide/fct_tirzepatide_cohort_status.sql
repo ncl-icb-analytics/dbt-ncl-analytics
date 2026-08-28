@@ -97,7 +97,7 @@ SELECT
         WHEN elig.is_eligible_cohort_1
             THEN 'Cohort 1 (BMI >= 40/37.5)'
         WHEN elig.is_eligible_cohort_2
-            THEN 'Cohort 2 (BMI 35-39.9/32.5-37.4)'
+            THEN 'Cohort 2 (BMI 35-<40/32.5-<37.5)'
     END AS cohort,
 
     -- BMI

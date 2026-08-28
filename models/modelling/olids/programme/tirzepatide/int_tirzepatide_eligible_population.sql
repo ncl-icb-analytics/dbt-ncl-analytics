@@ -11,7 +11,16 @@ The most recent qualifying OBES2 BMI evidence assigns the rollout cohort.
 */
 
 WITH obesity2 AS (
-    SELECT *
+    SELECT
+        person_id,
+        age,
+        has_lower_bmi_threshold_ethnicity,
+        has_unresolved_hypertension,
+        has_dyslipidaemia,
+        has_obstructive_sleep_apnoea,
+        has_ascvd,
+        has_unresolved_type2_diabetes,
+        comorbidity_count
     FROM {{ ref('fct_person_obesity2_register') }}
 ),
 

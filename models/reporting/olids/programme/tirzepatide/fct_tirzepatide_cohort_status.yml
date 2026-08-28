@@ -58,7 +58,7 @@ models:
       - name: cohort
         description: 'Cohort label (Cohort 1 or Cohort 2)'
       - name: latest_bmi_value
-        description: 'Latest valid BMI measurement'
+        description: 'Numeric value from the most recent qualifying OBES2 BMI evidence, when supplied'
       - name: latest_bmi_date
         description: 'Date of the most recent qualifying OBES2 BMI evidence in the preceding 12 months'
       - name: latest_bmi_source_cluster_id
