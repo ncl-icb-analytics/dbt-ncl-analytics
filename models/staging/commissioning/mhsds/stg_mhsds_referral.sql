@@ -26,6 +26,8 @@ select
     , refer_rejection_date
     , refer_reject_reason
     , refer_clos_reason
+    , serv_disch_date
+    , age_serv_refer_rec_date
     --adding additional fields to help categorise referrals.
     , care_prof_team_local_id
     , source_of_referral_mh
@@ -33,4 +35,4 @@ select
     , clin_resp_priority_type
     , dm_icb_commissioner
     , uniq_submission_id
-from deduplicated 
+from deduplicated

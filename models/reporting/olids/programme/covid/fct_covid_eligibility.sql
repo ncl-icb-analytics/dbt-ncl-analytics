@@ -24,6 +24,10 @@ Usage:
 - Specific campaign analysis: Filter by campaign_id in downstream models
 - For vaccination tracking, use fct_covid_status instead
 - This replaces all the old complex macro-based models
+
+August 2026
+KH fixed mistake in reporting for Spring 2025. There are only 3 eligible groups.
+
 */
 
 {{ config(
@@ -216,5 +220,11 @@ final_eligibility AS (
     FROM all_eligibility
 )
 
-SELECT * FROM final_eligibility
+SELECT distinct * FROM final_eligibility
+WHERE campaign_id <> 'COVID Spring 2025' or
+ risk_group  IN (
+'Age 75+',
+'Immunosuppression',
+'Long-term Residential Care'
+)
 ORDER BY person_id, eligibility_priority, campaign_category

@@ -29,4 +29,5 @@ select
     , cons_type 
     , cons_mechanism_mh
     , act_loc_type_code
+    , age_care_cont_date
 from deduplicated

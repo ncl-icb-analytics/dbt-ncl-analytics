@@ -76,10 +76,12 @@ The VS Code workspace runs `.\start_dbt.ps1` automatically when you open a termi
 models/
 ├── raw/           # 1:1 views of source data
 ├── staging/       # Cleaned and standardised
+├── reference/     # Derived reference datasets
 ├── modelling/     # Business logic and transformations
-│   ├── commissioning/
+│   ├── acute/
+│   ├── community/
 │   ├── olids/
-│   └── shared/
+│   └── population/
 ├── reporting/     # Analytics-ready datasets
 └── published/     # External reports and dashboards
 ```
@@ -130,8 +132,10 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 | `models/raw/` | `DEV__STAGING.DBT_RAW` | `STAGING.DBT_RAW` |
 | `models/staging/commissioning/csds/` | `DEV__STAGING.CSDS` | `STAGING.CSDS` |
 | `models/staging/olids/` | `DEV__STAGING.OLIDS` | `STAGING.OLIDS` |
+| `models/reference/organisation/` | `DEV__REFERENCE.ORGANISATION` | `REFERENCE.ORGANISATION` |
+| `models/modelling/acute/` | `DEV__MODELLING.ACUTE` | `MODELLING.ACUTE` |
 | `models/modelling/olids/diagnoses/` | `DEV__MODELLING.OLIDS_DIAGNOSES` | `MODELLING.OLIDS_DIAGNOSES` |
-| `models/modelling/commissioning/` | `DEV__MODELLING.COMMISSIONING_MODELLING` | `MODELLING.COMMISSIONING_MODELLING` |
+| `models/reporting/population/` | `DEV__REPORTING.POPULATION` | `REPORTING.POPULATION` |
 | `models/reporting/olids/indicators/` | `DEV__REPORTING.OLIDS_INDICATORS` | `REPORTING.OLIDS_INDICATORS` |
 | `models/published/direct_care/olids/` | `DEV__PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` | `PUBLISHED_REPORTING__DIRECT_CARE.OLIDS_*` |
 

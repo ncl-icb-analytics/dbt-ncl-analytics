@@ -6,11 +6,6 @@ models:
         owner:
           name: EddieDavison92
     columns:
-      - name: id
-        description: Primary key - unique identifier for this UPRN match
-        tests:
-          - unique
-          - not_null
       - name: lds_registrar_event_id
         description: Registrar event identifier
       - name: masked_uprn

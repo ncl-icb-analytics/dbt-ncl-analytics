@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_mhsds_patientindicators
+    description: >
+      MHSDS patient indicators, including child-protection and looked-after
+      status. Grain: one row per mhs005_uniq_id.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    columns:
+      - name: mhs005_uniq_id
+        description: Unique patient-indicator record identifier.
+        data_tests:
+          - unique
+          - not_null
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: cpp
+        description: Child protection plan indicator.
+      - name: lac_status
+        description: Looked-after child status.
+      - name: lac_legal_status
+        description: Looked-after child legal status.
+      - name: org_id_prov
+        description: Provider organisation code.
+      - name: reporting_period_end_date
+        description: MHSDS reporting period end date.

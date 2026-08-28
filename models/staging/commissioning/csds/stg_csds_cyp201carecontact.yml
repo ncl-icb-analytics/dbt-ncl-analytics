@@ -1,6 +1,10 @@
 models:
   - name: stg_csds_cyp201carecontact
-    description: CSDS CYP care contacts (deduplicated)
+    description: >
+      CSDS CYP care contacts. Grain: one row per
+      unique_service_request_identifier and unique_care_contact_identifier.
+      Population: CYP201 care contact records. Time semantics: the latest
+      submitted record per contact is retained.
     config:
       meta:
         owner:
@@ -31,3 +35,13 @@ models:
         description: Code for type of location where activity took place
       - name: attendance_status
         description: Attendance status (attended, DNA, etc.)
+      - name: clinical_contact_duration_of_care_contact
+        description: Duration of the care contact.
+      - name: org_id_prov
+        description: Provider organisation code.
+      - name: care_contact_time
+        description: Time of care contact.
+      - name: dm_icb_commissioner
+        description: Derived ICB commissioner code.
+      - name: dm_sub_icb_commissioner
+        description: Derived sub-ICB commissioner code.

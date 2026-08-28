@@ -33,7 +33,7 @@ models:
       pssru_unit_costs_2024 and uk_cost_indices seed descriptions.
 
       All reporting models (fct_gp_* and sem_olids_appointments) build
-      from int_appointment_gp_clean_recent rather than this model
+      from int_appointment_gp_clinical_recent rather than this model
       directly. The recent view restricts to the last 60 months of
       data to match OLIDS retention. Use this unfiltered model only
       for ad-hoc analyses that need pre-5-year history (with the
@@ -46,6 +46,14 @@ models:
       - dbt_utils.at_least_one:
           arguments:
             column_name: appointment_id
+      # is_attended derives from appointment_status_code = '5' (57.8M of 62M
+      # rows); a code-set change would silently zero attendance
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 10000000
+            row_condition: "is_attended"
+          config:
+            severity: error
     columns:
       - name: appointment_id
         description: Unique appointment identifier from OLIDS
@@ -271,9 +279,9 @@ models:
       - name: publisher_organisation_code
         description: Practice ODS code (e.g. E85012)
 
-  - name: int_appointment_gp_clean_recent
+  - name: int_appointment_gp_clinical_recent
     description: |
-      Recent-window view over int_appointment_gp_clean. Same grain
+      Recent-window view over int_appointment_gp_clinical. Same grain
       (one row per appointment), same columns, restricted to the
       rolling last 60 months of data anchored to MAX(start_date).
 
@@ -287,7 +295,7 @@ models:
 
       All reporting models in models/reporting/olids/gp_access/ and
       models/reporting/olids/gp_costs/ build from this view rather
-      than the unfiltered int_appointment_gp_clean. The semantic view
+      than the unfiltered int_appointment_gp_clinical. The semantic view
       sem_olids_appointments also references this view.
 
       Materialised as a view (zero storage cost) — Snowflake pushes
@@ -302,7 +310,7 @@ models:
             column_name: appointment_id
     columns:
       - name: appointment_id
-        description: Unique appointment identifier from OLIDS (same grain as int_appointment_gp_clean).
+        description: Unique appointment identifier from OLIDS (same grain as int_appointment_gp_clinical).
         data_tests:
           - not_null
           - unique

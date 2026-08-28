@@ -210,15 +210,15 @@ Use the `int_` prefix for intermediate models:
 int_{domain}_{description}.sql
 ```
 
-For example: `int_comm_dialysis.sql`, `int_organisation_borough_mapping.sql`.
+For example: `int_activity_dialysis.sql`, `int_organisation_borough_mapping.sql`.
 
 ### Example
 
 ```sql
--- int_comm_dialysis.sql
+-- int_activity_dialysis.sql
 with specialty_filters as (
     select visit_occurrence_id
-    from {{ ref('int_commissioning_observations') }}
+    from {{ ref('int_observations') }}
     where
         (observation_vocabulary = 'HRG'
             and observation_concept_code in ('LA08E', 'LE01A', 'LE01B', 'LE02A', 'LE02B'))
@@ -272,7 +272,7 @@ select
     end) as encounters_3mo,
     count(distinct visit_occurrence_id) as encounters_12mo,
     sum(duration) as total_los_12mo
-from {{ ref('int_sus_ip_encounters') }}
+from {{ ref('int_sus_apc_encounters') }}
 where start_date between dateadd(month, -12, current_date()) and current_date()
 group by sk_patient_id
 ```
@@ -349,8 +349,8 @@ Tag these models `secondary_use_s251_exempt` instead of `secondary_use_opt_out`.
 |-------|---------|---------|
 | Raw | `raw_{source}_{table}.sql` | `raw_dictionary_dbo_dates.sql` |
 | Staging | `stg_{source}_{table}.sql` | `stg_dictionary_dbo_dates.sql` |
-| Modelling | `int_{description}.sql` | `int_comm_dialysis.sql` |
-| Reporting | `dim_` or `fct_{description}.sql` | `dim_practice.sql`, `fct_person_sus_ip_recent.sql` |
+| Modelling | `int_{description}.sql` | `int_activity_dialysis.sql` |
+| Reporting | `dim_` or `fct_{description}.sql` | `dim_practice.sql`, `fct_person_sus_apc_recent.sql` |
 | Published | `{description}.sql` | `population_health_needs_base.sql` |
 
 ### Column Names

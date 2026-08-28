@@ -114,11 +114,13 @@ select
     rs.overall_risk_group,
     rs.overall_risk_rank,
     rs.in_any_risk_group,
+    rs.number_of_ltc_lcs_conditions,
 
     -- ============================================================
     -- MOC: pathway identity
     -- ============================================================
     rs.moc_pathway,
+    rs.moc_risk_category,
 
     -- ============================================================
     -- MOC: activity flags + dates (last 12 months), in pathway order
@@ -139,14 +141,45 @@ select
     rs.moc_declined_date,
     rs.moc_re_engaged_after_decline,
     rs.moc_any_activity_12m,
+    rs.moc_any_activity_fy,
+
+    -- ============================================================
+    -- MOC: named progression stages (12m and current FY to date)
+    -- ============================================================
+    rs.moc_check_test_completed_12m,
+    rs.moc_check_test_date_12m,
+    rs.moc_check_test_completed_fy,
+    rs.moc_check_test_date_fy,
+    rs.moc_remote_desktop_review_completed_12m,
+    rs.moc_remote_desktop_review_date_12m,
+    rs.moc_remote_desktop_review_completed_fy,
+    rs.moc_remote_desktop_review_date_fy,
+    rs.moc_mdt_review_completed_12m,
+    rs.moc_mdt_review_date_12m,
+    rs.moc_mdt_review_completed_fy,
+    rs.moc_mdt_review_date_fy,
+    rs.moc_careplan_sharing_completed_12m,
+    rs.moc_careplan_sharing_date_12m,
+    rs.moc_careplan_sharing_completed_fy,
+    rs.moc_careplan_sharing_date_fy,
+    rs.moc_discussion_completed_12m,
+    rs.moc_discussion_date_12m,
+    rs.moc_discussion_completed_fy,
+    rs.moc_discussion_date_fy,
+    rs.moc_followup_completed_12m,
+    rs.moc_followup_date_12m,
+    rs.moc_followup_completed_fy,
+    rs.moc_followup_date_fy,
 
     -- ============================================================
     -- MOC: progression summary
     -- ============================================================
     rs.moc_stage_completed,
     rs.moc_stage_completed_label,
+    rs.moc_stage_completed_code,
     rs.moc_pathway_status,
     rs.moc_next_action,
+    rs.moc_next_action_code,
     rs.moc_cycle_complete,
 
     -- ============================================================

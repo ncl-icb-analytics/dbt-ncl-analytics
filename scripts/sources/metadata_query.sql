@@ -83,7 +83,7 @@ WITH schema_metadata AS (
   
   UNION ALL
   
-    -- sus_ae: SUS emergency care attendances and activity
+    -- sus_ecds: SUS emergency care attendances and activity
   SELECT 
     'DATA_LAKE' as database_name,
     'SUS_UNIFIED_ECDS' as schema_name,
@@ -185,6 +185,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'SOCIAL_CARE'
+  
+  UNION ALL
+  
+    -- reference_trud_terminology: SNOMED CT cross-map and terminology reference data. Sourced by NHS TRUD.
+  SELECT 
+    'DATA_LAKE' as database_name,
+    'TERMINOLOGY' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'TERMINOLOGY'
   
   UNION ALL
   
@@ -428,6 +443,36 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- reference_primary_care: Curated primary care organisation reference - practices, PCNs, neighbourhoods and memberships
+  SELECT 
+    'REFERENCE' as database_name,
+    'PRIMARY_CARE' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "REFERENCE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'PRIMARY_CARE'
+  
+  UNION ALL
+  
+    -- reference_geo: Curated geography lookups - LSOA to neighbourhood, ward, MSOA and ICB hierarchies
+  SELECT 
+    'REFERENCE' as database_name,
+    'GEO' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "REFERENCE".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'GEO'
+  
+  UNION ALL
+  
     -- local_provider_flows: Providers submissions from PID environment via MESH
   SELECT 
     'DATA_LAKE' as database_name,
@@ -533,6 +578,21 @@ WITH schema_metadata AS (
   
   UNION ALL
   
+    -- pod_group_manager: POD Group Manager app - governed POD group mappings
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'POD_GROUP_MANAGER' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'POD_GROUP_MANAGER'
+  
+  UNION ALL
+  
     -- myria: Project Myria (BEVC) canonical inputs - enrolled and propensity-matched patients
   SELECT 
     'DATA_LAKE__NCL' as database_name,
@@ -545,6 +605,21 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'MYRIA'
+  
+  UNION ALL
+  
+    -- nhs_payments_gp: NHS Payments to General Practice - annual practice-level registered and Carr-Hill weighted list sizes
+  SELECT 
+    'DATA_LAKE__NCL' as database_name,
+    'NHS_PAYMENTS_GP' as schema_name,
+    table_name,
+    column_name,
+    data_type,
+    numeric_precision,
+    numeric_scale,
+    ordinal_position
+  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
+  WHERE table_schema = 'NHS_PAYMENTS_GP'
   
   UNION ALL
   
@@ -575,21 +650,6 @@ WITH schema_metadata AS (
     ordinal_position
   FROM "PUBLISHED_REPORTING__DIRECT_CARE".INFORMATION_SCHEMA.COLUMNS
   WHERE table_schema = 'C_LTCS'
-  
-  UNION ALL
-  
-    -- aic: parallel pipeline for AIC
-  SELECT 
-    'DATA_LAKE__NCL' as database_name,
-    'AIC_DEV' as schema_name,
-    table_name,
-    column_name,
-    data_type,
-    numeric_precision,
-    numeric_scale,
-    ordinal_position
-  FROM "DATA_LAKE__NCL".INFORMATION_SCHEMA.COLUMNS
-  WHERE table_schema = 'AIC_DEV'
   
   UNION ALL
   

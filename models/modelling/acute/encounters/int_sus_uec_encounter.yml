@@ -1,0 +1,223 @@
+
+models:
+  - name: int_sus_uec_encounter
+    description: "Event history for emergency encounters from SUS data. More information: https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/emergency-care-data-set-ecds/ecds-guidance"
+    config:
+      meta:
+        owner:
+          name: Emily Baldwin
+    columns:
+      - name: visit_occurrence_id
+        data_type: number
+        description: "Primary key for the encounter within SUS"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: sk_patient_id
+        data_type: varchar
+        description: "Common commissioning patient identifier"
+
+      - name: source
+        data_type: varchar
+        description: "Commissioning data source"
+
+      - name: local_patient_identifier
+        data_type: varchar
+        description: "Trust-provided patient id."
+
+      - name: organisation_id
+        data_type: varchar
+        description: "Organisation ID (type 41) of the provider, if invalid code trimmed to 3 characters"
+
+      - name: organisation_name
+        data_type: varchar
+        description: "Provider organisation name"
+
+      - name: site_id
+        data_type: varchar
+        description: "Site identifier"
+
+      - name: site_name
+        data_type: varchar
+        description: "Site name"
+
+      - name: pod
+        data_type: varchar
+        description: "Point of delivery category of the provider e.g. A&E, SDEC etc."
+
+      - name: department_type
+        data_type: varchar
+        description: "Point of delivery code of the provider e.g. A&E, SDEC etc."
+
+      - name: start_date
+        data_type: date
+        description: "Date of arrival at urgent care department"
+
+      - name: start_time
+        data_type: time
+        description: "Time of arrival at urgent care department"
+
+      - name: end_date
+        data_type: date
+        description: "Date of departure at urgent care department"
+
+      - name: end_time
+        data_type: time
+        description: "Time of departure at urgent care department"
+
+      - name: duration
+        data_type: number
+        description: "Time to urgent care department discharge from arrival, in minutes"
+
+      - name: chief_complaint_code
+        data_type: varchar
+        description: "Chief complaint code of patient for the encounter"
+
+      - name: chief_complaint_desc
+        data_type: varchar
+        description: "Chief complaint SNOMED description of patient for the encounter"
+
+      - name: chief_complaint_ecds_group1
+        data_type: varchar
+        description: "Chief complaint ECDS group 1 description of patient for the encounter"
+
+      - name: is_injury_related
+        data_type: boolean
+        description: "Flag for an injury related encounter"
+
+      - name: acuity
+        data_type: varchar
+        description: "Clinical acuity code of the encounter"
+
+      - name: primary_diagnosis_code_snomed
+        data_type: varchar
+        description: "The first listed diagnosis SNOMED code, considered to be the most important / significant."
+
+      - name: primary_diagnosis_desc_snomed
+        data_type: varchar
+        description: "The first listed diagnosis SNOMED description, considered to be the most important / significant."
+
+      - name: primary_diagnosis_code_icd10
+        data_type: varchar
+        description: "The first listed diagnosis ICD-10 code, considered to be the most important / significant."
+
+      - name: primary_diagnosis_desc_icd10
+        data_type: varchar
+        description: "The first listed diagnosis ICD-10 description, considered to be the most important / significant."
+
+      - name: primary_diagnosis_desc_ecds_group1
+        data_type: varchar
+        description: "The first listed diagnosis ECDS group 1 description, considered to be the most important / significant."
+
+      - name: primary_treatment
+        data_type: varchar
+        description: "First treatment SNOMED code recorded in encounter"
+
+      - name: primary_treatment_desc_snomed
+        data_type: varchar
+        description: "First treatment SNOMED description recorded in encounter"
+
+      - name: primary_treatment_desc_ecds_group1
+        data_type: varchar
+        description: "First treatment ECDS group 1 description recorded in encounter"
+
+      - name: primary_investigation
+        data_type: varchar
+        description: "First investigation SNOMED code recorded in encounter"
+
+      - name: primary_investigation_desc_snomed
+        data_type: varchar
+        description: "First investigation SNOMED description recorded in encounter"
+
+      - name: primary_investigation_desc_ecds_group1
+        data_type: varchar
+        description: "First investigation ECDS group 1 description recorded in encounter"
+
+      - name: arrival_mode_code
+        data_type: varchar
+        description: "Arrival mode SNOMED code"
+
+      - name: arrival_mode_desc
+        data_type: varchar
+        description: "Arrival mode SNOMED description"
+
+      - name: discharge_destination_code
+        data_type: varchar
+        description: "Discharge destination SNOMED code"
+
+      - name: discharge_destination_desc
+        data_type: varchar
+        description: "Discharge destination SNOMED description"
+
+      - name: main_specialty_code
+        data_type: varchar
+        description: "Allocated specialty code for the attendance: 180, emergency medicine"
+
+      - name: main_specialty_name
+        data_type: varchar
+        description: "Allocated specialty name for the attendance: Emergency Medicine"
+
+      - name: hrg_code
+        data_type: varchar
+        description: "Health resource group code associated with the encounter"
+
+      - name: core_hrg_desc
+        data_type: varchar
+        description: "HRG description associated with the encounter"
+
+      - name: core_hrg_chapter
+        data_type: varchar
+        description: "HRG chapter key associated with the encounter"
+
+      - name: core_hrg_chapter_desc
+        data_type: varchar
+        description: "HRG chapter description associated with the encounter"
+
+      - name: cost
+        data_type: number
+        description: "SUS listed cost associated with the encounter"
+
+      - name: age_at_event
+        data_type: number
+        description: "Patient age at arrival"
+
+      - name: gender_at_event
+        data_type: varchar
+        description: "The gender of a person as specified by the person or inferred by observation."
+
+      - name: gender_desc_at_event
+        data_type: varchar
+        description: "Patient gender description at time of event"
+
+      - name: ethnicity_at_event
+        data_type: varchar
+        description: "The ethnicity of a person, as specified by the person."
+
+      - name: ethnicity_desc_at_event
+        data_type: varchar
+        description: "Patient ethnicity description at time of event"
+
+      - name: postcode_district_at_event
+        data_type: varchar
+        description: "Patient postcode district at time of event"
+
+      - name: lsoa_11_at_event
+        data_type: varchar
+        description: "Patient LSOA 2011 at time of event"
+
+      - name: lad_at_event
+        data_type: varchar
+        description: "Patient local authority district at time of event"
+
+      - name: imd_at_event
+        data_type: varchar
+        description: "Patient index of multiple deprivation decile at time of event"
+
+      - name: reg_practice_at_event
+        data_type: varchar
+        description: "Patient registered GP practice at time of event"
+
+      - name: visit_occurrence_type
+        data_type: varchar
+        description: "Type of visit occurrence"

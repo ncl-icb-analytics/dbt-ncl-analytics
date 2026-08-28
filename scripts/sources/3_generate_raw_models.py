@@ -233,8 +233,18 @@ def main():
         source_ref_name = source_name
         original_source_name = source_name  # For mapping lookup
 
-        # Get raw prefix and domain from mappings using original source name
-        if original_source_name in mappings:
+        # Get raw prefix and domain. A source's own `meta` block wins, so
+        # manual-only sources (models/sources/manual_*.yml) can set their raw
+        # routing in place without needing a source_mappings.yml entry - which
+        # would pull them into metadata extraction and have
+        # sync_manual_source_types() rewrite (and reformat) their YAML.
+        # dbt-fusion rejects a bare `meta:` on a source, so it is nested under
+        # `config:`; the bare form is still read as a fallback.
+        source_meta = (source.get('config') or {}).get('meta') or source.get('meta') or {}
+        if source_meta.get('domain') or source_meta.get('raw_prefix'):
+            prefix = source_meta.get('raw_prefix', f'raw_{original_source_name}')
+            domain = source_meta.get('domain', 'commissioning')
+        elif original_source_name in mappings:
             mapping = mappings[original_source_name]
             prefix = mapping.get('raw_prefix', f'raw_{original_source_name}')
             domain = mapping.get('domain', 'commissioning')  # Default to commissioning if not specified
@@ -286,9 +296,16 @@ def main():
             else:
                 fq_table = f"{db_name}.{table_identifier}"
 
-            # Build description including source references
-            table_desc = table.get('description', '')
-            source_desc = source.get('description', '')
+            # Build description including source references.
+            # The description is interpolated into a double-quoted Jinja string,
+            # so author-supplied text must have its double quotes escaped and its
+            # newlines folded - a `"` or a YAML block scalar's trailing newline
+            # would otherwise terminate the string and break `dbt parse`.
+            def _clean_desc(text):
+                return " ".join(str(text or '').split()).replace('"', '\\"')
+
+            table_desc = _clean_desc(table.get('description', ''))
+            source_desc = _clean_desc(source.get('description', ''))
 
             if table_desc:
                 desc_parts = [f"Raw layer: {table_desc}."]

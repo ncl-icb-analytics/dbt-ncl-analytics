@@ -3514,6 +3514,133 @@ sources:
       data_type: TIMESTAMP_NTZ
     - name: REASON
       data_type: TEXT
+  - name: MH
+    identifier: '"MH"'
+    columns:
+    - name: META_SK_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_FILE_ID
+      data_type: NUMBER(38,0)
+    - name: META_ROW_ID
+      data_type: NUMBER(38,0)
+    - name: META_BATCH_ID
+      data_type: NUMBER(38,0)
+    - name: META_PARTITION_DATE
+      data_type: TIMESTAMP_NTZ
+    - name: META_PROVIDER_CODE
+      data_type: TEXT
+    - name: META_RECIPIENT_CODE
+      data_type: TEXT
+    - name: META_VERSION_ID
+      data_type: TEXT
+    - name: ACTIVITY_MONTH
+      data_type: TEXT
+    - name: ADMITTED_FLAG
+      data_type: TEXT
+    - name: AGE_FLAG
+      data_type: TEXT
+    - name: ARRIVAL_DATE
+      data_type: TEXT
+    - name: ATTENDANCE_DISPOSAL_DESC
+      data_type: TEXT
+    - name: ATTENDED_OR_DID_NOT_ATTEND_CODE
+      data_type: TEXT
+    - name: BREACHES
+      data_type: TEXT
+    - name: CAMHS_FLAG
+      data_type: TEXT
+    - name: CARE_CONTACT_DATE
+      data_type: TEXT
+    - name: CARE_CONTACT_IDENTIFIER
+      data_type: TEXT
+    - name: CARE_CONTACT_REFERRAL_ID
+      data_type: TEXT
+    - name: CCG
+      data_type: TEXT
+    - name: CCG_CODE
+      data_type: TEXT
+    - name: CCG_DESCRIPTION
+      data_type: TEXT
+    - name: CCG_GROUPS
+      data_type: TEXT
+    - name: CONSULTATION_MECHANISM_MENTAL_HEALTH_CODE
+      data_type: TEXT
+    - name: DIAGNOSIS1_DESCRIPTION
+      data_type: TEXT
+    - name: DIAGNOSIS2_DESCRIPTION
+      data_type: TEXT
+    - name: DIAGNOSIS3_DESCRIPTION
+      data_type: TEXT
+    - name: DIAGNOSIS4_DESCRIPTION
+      data_type: TEXT
+    - name: DLP_BASELINE_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_COMMISSIONER_CODE
+      data_type: TEXT
+    - name: DLP_FINANCIAL_MONTH
+      data_type: TEXT
+    - name: DLP_FINANCIAL_YEAR
+      data_type: TEXT
+    - name: DLP_FLEXOR_FREEZE
+      data_type: TEXT
+    - name: DV_LSOA
+      data_type: TEXT
+    - name: DV_PARTIAL_POST_CODE
+      data_type: TEXT
+    - name: DV_RECIPIENT_CODE
+      data_type: TEXT
+    - name: DV_YEAROF_BIRTH
+      data_type: TEXT
+    - name: ETHNIC_CATEGORY
+      data_type: TEXT
+    - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: GENDER_IDENTITY_CODE
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION
+      data_type: TEXT
+    - name: GENERAL_MEDICAL_PRACTICE_CODE_PATIENT_REGISTRATION_AT_POINT_OF_CONTACT
+      data_type: TEXT
+    - name: HOSPITAL_BED_TYPE_MENTAL_HEALTH_MENTAL_HEALTH_ADMITTED_PATIENT_CLASSIFICATION
+      data_type: TEXT
+    - name: HOSPITAL_PROVIDER_SPELL_IDENTIFIER
+      data_type: TEXT
+    - name: HOSPITAL_SITE
+      data_type: TEXT
+    - name: LOCAL_PATIENT_IDENTIFIER
+      data_type: TEXT
+    - name: MRN
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORGANISATION_IDENTIFIER_CODE_OF_PROVIDER
+      data_type: TEXT
+    - name: PRESENTING_COMPLAINT
+      data_type: TEXT
+    - name: REFERRAL_REQUEST_RECEIVED_DATE
+      data_type: TEXT
+    - name: SERVICE_GROUP
+      data_type: TEXT
+    - name: SERVICE_OR_TEAM_TYPE
+      data_type: TEXT
+    - name: SERVICE_REQUEST_IDENTIFER_REFERRAL_ID
+      data_type: TEXT
+    - name: SK_PATIENT_ID_NHS_NUMBER
+      data_type: TEXT
+    - name: TEAM_CODE
+      data_type: TEXT
+    - name: TEAM_NAME
+      data_type: TEXT
+    - name: TOTAL_OCCUPIED_BED_DAYS_EXCLUDING_LEAVE
+      data_type: TEXT
+    - name: WARD_CODE
+      data_type: TEXT
+    - name: WARD_END_DATE
+      data_type: TEXT
+    - name: WARD_NAME
+      data_type: TEXT
+    - name: WARD_START_DATE
+      data_type: TEXT
   - name: REF
     identifier: '"REF"'
     columns:
@@ -3611,6 +3738,8 @@ sources:
       data_type: TEXT
     - name: APPOINTMENT_DATE
       data_type: TEXT
+    - name: APPOINTMENT_OR_TRIAGE
+      data_type: TEXT
     - name: APPOINTMENT_TYPE_CODE_2
       data_type: TEXT
     - name: ASSESSMENT_SCORECARD_TEAM
@@ -3626,6 +3755,8 @@ sources:
     - name: BOOKED_VIA_ERS
       data_type: TEXT
     - name: BREACH_DATE
+      data_type: TEXT
+    - name: CAMHS_FLAG
       data_type: TEXT
     - name: CARE_SPELL_ID
       data_type: TEXT
@@ -3643,6 +3774,8 @@ sources:
       data_type: TEXT
     - name: CCG_SOURCE
       data_type: TEXT
+    - name: CHOOSE_AND_BOOK
+      data_type: TEXT
     - name: CHOOSE_BOOK_FLAG
       data_type: TEXT
     - name: CLINIC_CODE
@@ -3654,6 +3787,8 @@ sources:
     - name: CLINIC_NAME
       data_type: TEXT
     - name: CLINIC_TYPE
+      data_type: TEXT
+    - name: CLINICAL_RESPONSE_PRIORITY_TYPE
       data_type: TEXT
     - name: CLOCK_END_DATE
       data_type: TEXT
@@ -3679,6 +3814,10 @@ sources:
       data_type: TEXT
     - name: COMMISSIONER_REF_NO
       data_type: TEXT
+    - name: COMMMISSIONER_CODE
+      data_type: TEXT
+    - name: CONSULTANT_CODE_LOCAL
+      data_type: TEXT
     - name: CONSULTANT_COMMENTS
       data_type: TEXT
     - name: CONSULTANT_LOCAL_DESC
@@ -3691,6 +3830,12 @@ sources:
       data_type: TEXT
     - name: CONTRACT_TYPE
       data_type: TEXT
+    - name: CURRENT_GP_CODE
+      data_type: TEXT
+    - name: CURRENT_GP_NAME
+      data_type: TEXT
+    - name: CURRENT_PRACTICE_NAME
+      data_type: TEXT
     - name: CY
       data_type: TEXT
     - name: DATA_SET
@@ -3699,11 +3844,17 @@ sources:
       data_type: TEXT
     - name: DATASET
       data_type: TEXT
+    - name: DATE_DISCHARGE
+      data_type: TEXT
+    - name: DATE_LETTER_RECEIVED
+      data_type: TEXT
     - name: DATE_OF_FIRST_RESPONSE
       data_type: TEXT
     - name: DATE_OF_REFERRAL
       data_type: TEXT
     - name: DATE_OF_SECOND_FACE_TO_FACE
+      data_type: TEXT
+    - name: DATE_REFERRAL
       data_type: TEXT
     - name: DATE_VALUE
       data_type: TEXT
@@ -3713,11 +3864,17 @@ sources:
       data_type: TEXT
     - name: DESCRIPTION
       data_type: TEXT
+    - name: DISCHARGE_DATE
+      data_type: TEXT
     - name: DISCHARGE_DATE_FROM_TEAM
       data_type: TEXT
     - name: DISCHARGE_DESTINATION
       data_type: TEXT
+    - name: DISCHARGE_REASON
+      data_type: TEXT
     - name: DISCHARGE_SPEC_CODE
+      data_type: TEXT
+    - name: DISCHARGE_SPEC_CODE_LOCAL
       data_type: TEXT
     - name: DISCHARGEDATETIME
       data_type: TEXT
@@ -3743,15 +3900,23 @@ sources:
       data_type: TEXT
     - name: E_RS_REFERRAL_Y_N
       data_type: TEXT
+    - name: EMPLOYMENT_STATUS
+      data_type: TEXT
     - name: EPISODE_UNIQUE_ID
       data_type: TEXT
     - name: ETHNIC_CAT_CODE
       data_type: TEXT
     - name: ETHNIC_CATEGORY
       data_type: TEXT
+    - name: ETHNICTY
+      data_type: TEXT
     - name: EXTERNAL_REF_ID
       data_type: TEXT
     - name: EXTRACT_DATE
+      data_type: TEXT
+    - name: EXTRACT_END_DATE
+      data_type: TEXT
+    - name: EXTRACT_START_DATE
       data_type: TEXT
     - name: FIN_YEAR
       data_type: TEXT
@@ -3784,6 +3949,8 @@ sources:
     - name: FY_Q
       data_type: TEXT
     - name: G_A_SPECIALTY_FLAG_MAR
+      data_type: TEXT
+    - name: GENDER_IDENTITY_CODE
       data_type: TEXT
     - name: GENERAL_MEDICAL_PRACTICE_CODE
       data_type: TEXT
@@ -3819,6 +3986,12 @@ sources:
       data_type: TEXT
     - name: ICB
       data_type: TEXT
+    - name: ID_PATIENT
+      data_type: TEXT
+    - name: ID_REFERRAL
+      data_type: TEXT
+    - name: IDREFERRALIN
+      data_type: TEXT
     - name: INPUT_DATE
       data_type: TEXT
     - name: IS_EREFERRAL
@@ -3832,6 +4005,8 @@ sources:
     - name: LOCAL_PATIENT_ID
       data_type: TEXT
     - name: LOCAL_PATIENT_IDENTIFIER_EXTENDED
+      data_type: TEXT
+    - name: LOCAL_PATIENT_NUMBER
       data_type: TEXT
     - name: LOCAL_REFERRAL_ID
       data_type: TEXT
@@ -3856,6 +4031,10 @@ sources:
     - name: MAR_CATEGORY
       data_type: TEXT
     - name: MAR_FLAG
+      data_type: TEXT
+    - name: MARITAL_STATUS
+      data_type: TEXT
+    - name: METHOD_OF_REFERRAL
       data_type: TEXT
     - name: MH_PROVIDER_CODE
       data_type: TEXT
@@ -3885,13 +4064,19 @@ sources:
       data_type: TEXT
     - name: NATIONAL_DESCRIPTION
       data_type: TEXT
+    - name: NON_PID_EMAIL_1
+      data_type: TEXT
     - name: NR_REFERRALS
       data_type: TEXT
     - name: NUMBER1ST_CONTACTS
       data_type: TEXT
     - name: NUMBER_FU_CONTACTS_ED
       data_type: TEXT
+    - name: NUMBER_FU_CONTACTS_OP
+      data_type: TEXT
     - name: NUMBER_FU_CONTACTS_OTHER
+      data_type: TEXT
+    - name: NUMBER_FU_CONTACTS_UCC
       data_type: TEXT
     - name: NUMBER_FU_CONTACTS_WARD
       data_type: TEXT
@@ -3899,9 +4084,17 @@ sources:
       data_type: TEXT
     - name: ODS_CODE
       data_type: TEXT
+    - name: ONWARD_REFERRAL_DATE
+      data_type: TEXT
+    - name: ONWARD_REFERRAL_PROVIDER_CODE
+      data_type: TEXT
     - name: OPCS_CODE
       data_type: TEXT
     - name: ORG_CODE_CCG_OF_RESIDENCE
+      data_type: TEXT
+    - name: ORG_CODE_OF_COMMISSIONER
+      data_type: TEXT
+    - name: ORG_CODE_OF_PROVIDER
       data_type: TEXT
     - name: ORG_ID_GP
       data_type: TEXT
@@ -3914,6 +4107,8 @@ sources:
     - name: ORGANISATION_IDENTIFIER_REFERRING
       data_type: TEXT
     - name: ORGANISATION_NAME
+      data_type: TEXT
+    - name: ORIGINAL_REFERRAL_DATE
       data_type: TEXT
     - name: OTHER_REFERRAL_G_A
       data_type: TEXT
@@ -3928,6 +4123,8 @@ sources:
     - name: PATIENT_AGE_AT_REFERRAL
       data_type: TEXT
     - name: PATIENT_CATEGORY
+      data_type: TEXT
+    - name: PATIENT_COUNT
       data_type: TEXT
     - name: PATIENT_MEDICAL_RECORD_NUMBER
       data_type: TEXT
@@ -3951,6 +4148,10 @@ sources:
       data_type: TEXT
     - name: PRESENT_OUTCOME
       data_type: TEXT
+    - name: PRIMARY_DIAGNOSIS_DESCRIPTION
+      data_type: TEXT
+    - name: PRIMARY_REASON_FOR_REFERRAL
+      data_type: TEXT
     - name: PRIMARY_REFERRAL_REASON
       data_type: TEXT
     - name: PRIORITY
@@ -3963,9 +4164,15 @@ sources:
       data_type: TEXT
     - name: PROVIDER_NAME
       data_type: TEXT
+    - name: PROVIDER_REFERRING
+      data_type: TEXT
     - name: PROVIDER_SITE
       data_type: TEXT
+    - name: REASON_FOR_REFERRAL
+      data_type: TEXT
     - name: REASON_FOR_REFERRAL_CODE
+      data_type: TEXT
+    - name: REASON_FOR_REFERRAL_TO_COMMUNITY_CARE
       data_type: TEXT
     - name: REF_MONTH
       data_type: TEXT
@@ -3985,15 +4192,21 @@ sources:
       data_type: TEXT
     - name: REF_TYPE
       data_type: TEXT
+    - name: REF_YEAR
+      data_type: TEXT
     - name: REFERRAL_ACCEPTANCE_STATUS
       data_type: TEXT
     - name: REFERRAL_BOOKING_TYPE
       data_type: TEXT
     - name: REFERRAL_CARE_PROFESSIONAL_CODE
       data_type: TEXT
+    - name: REFERRAL_CLOSURE_REASON
+      data_type: TEXT
     - name: REFERRAL_CLOSURE_REASON_CODE
       data_type: TEXT
     - name: REFERRAL_DATE
+      data_type: TEXT
+    - name: REFERRAL_DATE_TIME
       data_type: TEXT
     - name: REFERRAL_ID
       data_type: TEXT
@@ -4007,6 +4220,12 @@ sources:
       data_type: TEXT
     - name: REFERRAL_MONTH
       data_type: TEXT
+    - name: REFERRAL_NUMBER
+      data_type: TEXT
+    - name: REFERRAL_OUTCOME
+      data_type: TEXT
+    - name: REFERRAL_OUTCOME_DESC
+      data_type: TEXT
     - name: REFERRAL_PRIORITY
       data_type: TEXT
     - name: REFERRAL_PRIORITY_MET
@@ -4016,6 +4235,8 @@ sources:
     - name: REFERRAL_REASON
       data_type: TEXT
     - name: REFERRAL_REASON_CODE
+      data_type: TEXT
+    - name: REFERRAL_REASON_DESC
       data_type: TEXT
     - name: REFERRAL_REASON_DESCRIPTION
       data_type: TEXT
@@ -4037,6 +4258,10 @@ sources:
       data_type: TEXT
     - name: REFERRAL_SOURCE
       data_type: TEXT
+    - name: REFERRAL_SOURCE_DESC
+      data_type: TEXT
+    - name: REFERRAL_SOURCE_DESCIPTION
+      data_type: TEXT
     - name: REFERRAL_SOURCE_LOCAL
       data_type: TEXT
     - name: REFERRAL_SPECIALITY
@@ -4055,6 +4280,8 @@ sources:
       data_type: TEXT
     - name: REFERRAL_TYPE_SSDESC
       data_type: TEXT
+    - name: REFERRAL_URGENCY_DESC
+      data_type: TEXT
     - name: REFERRALPRIORITY
       data_type: TEXT
     - name: REFERRALREASONCODE
@@ -4066,6 +4293,8 @@ sources:
     - name: REFERRED_TO_DESCRIPTION_2
       data_type: TEXT
     - name: REFERRED_TO_SPECIALITY
+      data_type: TEXT
+    - name: REFERRED_TO_SPECIALTY
       data_type: TEXT
     - name: REFERRER
       data_type: TEXT
@@ -4093,7 +4322,11 @@ sources:
       data_type: TEXT
     - name: REFERRING_GP_PRACTICE_NAME
       data_type: TEXT
+    - name: REFERRING_GP_PRACTICECODE
+      data_type: TEXT
     - name: REFERRING_GPCCG_CODE
+      data_type: TEXT
+    - name: REFERRING_GPCODE
       data_type: TEXT
     - name: REFERRING_ORG_CODE
       data_type: TEXT
@@ -4113,9 +4346,13 @@ sources:
       data_type: TEXT
     - name: REGION
       data_type: TEXT
+    - name: REGISTERED_CCG
+      data_type: TEXT
     - name: REGISTERED_GP
       data_type: TEXT
     - name: REGISTERED_GP_CODE
+      data_type: TEXT
+    - name: REGISTERED_GP_GMS
       data_type: TEXT
     - name: REGISTERED_GP_PRAC
       data_type: TEXT
@@ -4127,9 +4364,15 @@ sources:
       data_type: TEXT
     - name: REGISTERED_GPCCG_NAME
       data_type: TEXT
+    - name: REGISTERED_PRACTICE_ID
+      data_type: TEXT
+    - name: REJECTED_REASON
+      data_type: TEXT
     - name: REJECTED_Y_N
       data_type: TEXT
     - name: REJECTION_REASON
+      data_type: TEXT
+    - name: RESPONSIBLE_CCG
       data_type: TEXT
     - name: RESPONSIBLE_COMMISSIONER_CODE_2
       data_type: TEXT
@@ -4165,13 +4408,29 @@ sources:
       data_type: TEXT
     - name: SERVICE_DESCRIPTION
       data_type: TEXT
+    - name: SERVICE_DISCHARGE_DATE
+      data_type: TEXT
     - name: SERVICE_GROUP
+      data_type: TEXT
+    - name: SERVICE_LINE_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_OFFERED
+      data_type: TEXT
+    - name: SERVICE_OR_TEAM_TYPE
       data_type: TEXT
     - name: SERVICE_POD
       data_type: TEXT
     - name: SERVICE_PROVIDER
       data_type: TEXT
     - name: SERVICE_REFERENCE_COST_DESCRIPTION
+      data_type: TEXT
+    - name: SERVICE_REFERRAED_INTO
+      data_type: TEXT
+    - name: SERVICE_REFERRED_INTO
+      data_type: TEXT
+    - name: SERVICE_REFERRED_TO
+      data_type: TEXT
+    - name: SERVICE_REPORT_IDENTIFIER
       data_type: TEXT
     - name: SERVICE_REPORTING_LINE
       data_type: TEXT
@@ -4180,6 +4439,8 @@ sources:
     - name: SERVICE_REQUEST_IDENTIFIER
       data_type: TEXT
     - name: SERVICE_TYPE
+      data_type: TEXT
+    - name: SERVICE_TYPE_REQUESTED
       data_type: TEXT
     - name: SERVICE_TYPE_REQUESTED_CODE
       data_type: TEXT
@@ -4200,6 +4461,8 @@ sources:
     - name: SOURCE_OF_REFERRAL_CODE
       data_type: TEXT
     - name: SOURCE_OF_REFERRAL_DESCRIPTION
+      data_type: TEXT
+    - name: SOURCE_OF_REFERRAL_FOR_COMMUNITY
       data_type: TEXT
     - name: SOURCE_OF_REFERRAL_FOR_OUT_PATIENTS
       data_type: TEXT
@@ -4233,6 +4496,10 @@ sources:
       data_type: TEXT
     - name: SYMPTOMS
       data_type: TEXT
+    - name: TEAM_CODE
+      data_type: TEXT
+    - name: TEAM_NAME
+      data_type: TEXT
     - name: TEAM_REFERRED_TO_CODE
       data_type: TEXT
     - name: TEAM_REFERRED_TO_DESC
@@ -4255,11 +4522,17 @@ sources:
       data_type: TEXT
     - name: UBRN
       data_type: TEXT
+    - name: UBRN_PATHWAY
+      data_type: TEXT
     - name: UBRN_STATUS
       data_type: TEXT
     - name: UNIQUE_BOOKING_REFERENCE_NUMBER
       data_type: TEXT
     - name: UNIQUE_BOOKING_REFERENCE_NUMBER_CONVERTED_PATIENT_PATHWAY_IDENTIFIER
+      data_type: TEXT
+    - name: UNIT
+      data_type: TEXT
+    - name: URGENCY
       data_type: TEXT
     - name: URGENCY_CODE
       data_type: TEXT
