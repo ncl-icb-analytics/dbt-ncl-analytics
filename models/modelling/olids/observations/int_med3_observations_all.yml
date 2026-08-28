@@ -3,9 +3,8 @@ models:
     description: >
       All coded issued MED3 certification statuses from the clinical record. MED3 certificates
       are medical evidence that can enable an individual to access health-related benefits or 
-      evidence eligibility for Statutory Sick Pay (SSP). These are statuses of MED3 forms rather
-      than diagnoses, so this model lives in the observations folder
-      and produces one row per coded certification status (not per person).
+      evidence eligibility for Statutory Sick Pay (SSP). This model
+      produces one row per coded certification status (not per person).
 
       Cluster: MED3_CERTIFICATE
     config:
