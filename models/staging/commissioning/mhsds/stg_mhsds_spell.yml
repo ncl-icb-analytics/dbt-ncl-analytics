@@ -1,35 +1,36 @@
 models:
   - name: stg_mhsds_spell
-    description: 'Mental Health Services Data Set (MHSDS) spells'
+    description: >
+      One row per MHSDS hospital provider spell from the newest active submission
+      in which it appears. Attributes and the referral link are the most recently
+      submitted version; superseded versions are not retained.
     config:
       meta:
         owner:
           name: Jessica Roberts
     columns:
       - name: uniq_hosp_prov_spell_num
-        description: A unique identifier for each Hospital Provider Spell for a Health Care Provider
+        description: Unique hospital provider spell identifier within the provider.
         data_tests:
           - not_null
           - unique
 
       - name: dm_icb_commissioner
-        description: The ICB (Integrated Care Board) that commissioned the spell.
+        description: ICB commissioner derived in the source feed.
 
       - name: reporting_period_end_date
         description: >
-          End date of the last reporting period in which this spell appeared in an
-          active submission. MHSDS providers must resubmit every active spell each
-          monthly period, so a spell whose reporting_period_end_date is historic and
-          has no discharge date is orphaned rather than genuinely open.
+          End of the newest active submission period containing the spell. A
+          historic value with no discharge date can indicate a spell that stopped
+          being submitted without a recorded discharge.
         data_tests:
           - not_null
 
       - name: uniq_serv_req_id
-        description: Unique service request identifier linked to the spell.
+        description: Service request identifier recorded for the spell in its newest submission.
 
       - name: age_hosp_start_date
-        description: MHSDS-derived age at admission.
-
+        description: Age at admission derived in the MHSDS feed.
 
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
