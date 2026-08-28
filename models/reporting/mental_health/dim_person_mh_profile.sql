@@ -23,8 +23,8 @@ with population as (
         person_id
         , count(*) as n_referrals_ever
         , count_if(referral_status = 'open') as n_open_referrals
-        , min(referral_request_received_date) as first_referral_date
-        , max(referral_request_received_date) as latest_referral_date
+        , min(referral_received_date) as first_referral_date
+        , max(referral_received_date) as latest_referral_date
     from {{ ref('fct_mhsds_referral') }}
     where person_id is not null
     group by person_id
@@ -40,11 +40,12 @@ with population as (
             as has_contact_last_90d
         , count_if(
             care_contact_date >= dateadd(month, -12, current_date)
-            and (
-                lpad(attendance_status_code, 2, '0') in ('05', '06')
-                or attendance_status_code is null
-            )
+            and lpad(attendance_status_code, 2, '0') in ('05', '06')
         ) as n_attended_contacts_12m
+        , count_if(
+            care_contact_date >= dateadd(month, -12, current_date)
+            and attendance_status_code is null
+        ) as n_contacts_with_missing_attendance_status_12m
     from {{ ref('fct_mhsds_care_contact') }}
     where person_id is not null
     group by person_id
@@ -55,10 +56,7 @@ with population as (
         c.person_id
         , count_if(
             c.care_contact_date >= dateadd(month, -12, current_date)
-            and (
-                lpad(c.attendance_status_code, 2, '0') in ('05', '06')
-                or c.attendance_status_code is null
-            )
+            and lpad(c.attendance_status_code, 2, '0') in ('05', '06')
         ) > 0 as has_crisis_contact_12m
     from {{ ref('fct_mhsds_care_contact') }} as c
     inner join {{ ref('fct_mhsds_referral_episodes') }} as r
@@ -94,6 +92,7 @@ with population as (
     select
         r.person_id
         , d.icd10_3
+        , icd.description as icd10_3_description
         , g.population_category as diagnosis_category
         , d.coded_diag_timestamp as latest_diagnosis_date
     from {{ ref('stg_mhsds_primdiag') }} as d
@@ -101,6 +100,8 @@ with population as (
         on d.uniq_serv_req_id = r.uniq_serv_req_id
     left join {{ ref('nhse_mh_currency_icd10_groups_2627') }} as g
         on d.icd10_3 between g.icd10_range_start and g.icd10_range_end
+    left join {{ ref('stg_dictionary_dbo_diagnosis') }} as icd
+        on upper(trim(d.icd10_3)) = icd.code
     qualify row_number() over (
         partition by r.person_id
         order by d.coded_diag_timestamp desc, d.icd10_3
@@ -150,13 +151,10 @@ with population as (
 )
 
 , safeguarding_aggregates as (
-    -- CPP code semantics are unverified against the MHSDS TOS ('1' covers
-    -- ~40% of rows, implausible for active plans) - the raw code is exposed
-    -- rather than a guessed boolean
     select
         person_id
-        , upper(cpp) as cpp_status_code
-        , upper(lac_status) = 'Y' as is_looked_after_child
+        , upper(cpp) as child_protection_plan_status_code
+        , upper(lac_status) as looked_after_child_indicator_code
     from latest_patient_indicators
 )
 
@@ -171,6 +169,8 @@ select
     , coalesce(c.has_contact_last_12m, false) as has_contact_last_12m
     , coalesce(c.has_contact_last_90d, false) as has_contact_last_90d
     , coalesce(c.n_attended_contacts_12m, 0) as n_attended_contacts_12m
+    , coalesce(c.n_contacts_with_missing_attendance_status_12m, 0)
+        as n_contacts_with_missing_attendance_status_12m
     , coalesce(cc.has_crisis_contact_12m, false) as has_crisis_contact_12m
     , coalesce(ci.is_current_inpatient, false) as is_current_inpatient
     , s.latest_admission_date
@@ -178,13 +178,20 @@ select
     , coalesce(s.n_spells_ever, 0) as n_spells_ever
     , coalesce(s.ever_inpatient, false) as ever_inpatient
     , d.icd10_3
+    , d.icd10_3_description
     , d.diagnosis_category
     , d.latest_diagnosis_date
     , coalesce(m.ever_detained, false) as ever_detained
     , m.latest_detention_start_date
     , coalesce(m.is_currently_detained, false) as is_currently_detained
-    , g.cpp_status_code
-    , coalesce(g.is_looked_after_child, false) as is_looked_after_child
+    , g.child_protection_plan_status_code
+    , cpp.description as child_protection_plan_status_description
+    , g.looked_after_child_indicator_code
+    , lac.description as looked_after_child_indicator_description
+    , case g.looked_after_child_indicator_code
+        when 'Y' then true
+        when 'N' then false
+    end as is_looked_after_child
 from population as p
 left join {{ ref('stg_mhsds_bridging') }} as b
     on p.person_id = b.person_id
@@ -204,3 +211,9 @@ left join mha_aggregates as m
     on p.person_id = m.person_id
 left join safeguarding_aggregates as g
     on p.person_id = g.person_id
+left join {{ ref('mhsds_profile_terminology') }} as cpp
+    on g.child_protection_plan_status_code = cpp.code
+    and cpp.terminology_name = 'child_protection_plan_status'
+left join {{ ref('mhsds_profile_terminology') }} as lac
+    on g.looked_after_child_indicator_code = lac.code
+    and lac.terminology_name = 'looked_after_child_indicator'

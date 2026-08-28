@@ -30,10 +30,18 @@ models:
         description: Provider organisation code.
         data_tests:
           - not_null
-      - name: derived_icb_commissioner_code
+      - name: provider_organisation_name
+        description: Current organisation name for the provider code.
+      - name: source_derived_icb_commissioner_code
         description: ICB commissioner code derived in the source feed.
+      - name: source_derived_icb_commissioner_name
+        description: Current organisation name for the derived ICB commissioner code.
       - name: commissioner_icb_code
         description: Commissioner ICB code resolved for currency reporting.
+      - name: commissioner_icb_name
+        description: Current organisation name for the currency commissioner code.
+      - name: is_wnl_commissioner
+        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
       - name: currency_group
         description: Currency population group.
         data_tests:

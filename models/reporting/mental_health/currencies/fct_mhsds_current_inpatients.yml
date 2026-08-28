@@ -38,6 +38,16 @@ models:
           - not_null
       - name: provider_organisation_name
         description: Provider organisation name.
+      - name: source_derived_icb_commissioner_code
+        description: ICB commissioner code derived in the source feed.
+      - name: source_derived_icb_commissioner_name
+        description: Current organisation name for the source-derived ICB commissioner code.
+      - name: commissioner_icb_code
+        description: Commissioner ICB code resolved for currency reporting.
+      - name: commissioner_icb_name
+        description: Current organisation name for the currency commissioner code.
+      - name: is_wnl_commissioner
+        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
       - name: hospital_provider_spell_start_date
         description: Hospital provider spell start date.
         data_tests:
@@ -54,14 +64,18 @@ models:
         description: MHSDS-derived age at admission.
       - name: is_cyp
         description: Whether age at admission is under 18.
-      - name: mental_health_admitted_patient_class_code
-        description: Latest ward-stay mental health admitted patient class code.
+      - name: mental_health_admitted_patient_classification_type_code
+        description: Latest ward-stay mental health admitted patient classification type code.
+      - name: mental_health_admitted_patient_classification_type_description
+        description: Published description for the admitted patient classification type.
       - name: setting_code
         description: Inpatient setting suffix.
       - name: setting_name
         description: Inpatient setting name.
       - name: icd10_3
         description: Latest three-character ICD-10 code.
+      - name: icd10_3_description
+        description: Published description for the ICD-10 code.
       - name: diagnosis_category
         description: Diagnosis population category.
       - name: winning_tier

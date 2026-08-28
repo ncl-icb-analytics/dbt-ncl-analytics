@@ -84,7 +84,7 @@ with latest_other_teams as (
         , r.uniq_submission_id
         , r.reporting_period_end_date
         , r.dmic_dataset as mhsds_version
-        , r.effective_from as source_effective_from_at
+        , r.effective_from as source_file_received_at
         , r.dmic_date_added as source_loaded_at
     from {{ ref('stg_mhsds_referral') }} as r
     left join {{ ref('stg_mhsds_service_or_team_details') }} as td
@@ -130,7 +130,7 @@ with latest_other_teams as (
         , s.uniq_submission_id
         , s.reporting_period_end_date
         , s.dmic_dataset as mhsds_version
-        , s.effective_from as source_effective_from_at
+        , s.effective_from as source_file_received_at
         , s.dmic_date_added as source_loaded_at
     from latest_other_teams as s
     left join {{ ref('stg_mhsds_service_or_team_details') }} as td
@@ -146,12 +146,24 @@ with latest_other_teams as (
 )
 
 select
-    r.* exclude (refer_rejection_date, refer_rejection_time, closure_date, closure_time)
+    r.referral_service_team_id
+    , r.uniq_serv_req_id as referral_source_record_id
+    , r.source_record_id
+    , r.source_record_type
+    , r.service_or_team_relationship_type
+    , r.service_or_team_id
+    , r.service_or_team_local_id
+    , r.service_or_team_type_code
+    , tt.description as service_or_team_type_description
+    , r.source_service_or_team_type_name
+    , r.service_or_team_intended_age_group_code
+    , intended_age_group.description as service_or_team_intended_age_group_description
+    , r.provider_organisation_code
+    , provider.organisation_name as provider_organisation_name
+    , r.record_start_date
+    , r.record_end_date
     , r.refer_rejection_date as referral_rejection_date
     , r.refer_rejection_time as referral_rejection_time
-    , r.closure_date as referral_closure_date
-    , r.closure_time as referral_closure_time
-    , tt.description as service_or_team_type_description
     , case
         when r.refer_rejection_date is null then null
         when r.refer_rejection_time is null
@@ -166,6 +178,10 @@ select
         when r.refer_rejection_time is null then 'date'
         else 'timestamp'
     end as referral_rejected_time_precision
+    , r.rejection_reason_code
+    , rejection_reason.description as rejection_reason_description
+    , r.closure_date as referral_closure_date
+    , r.closure_time as referral_closure_time
     , case
         when r.closure_date is null then null
         when r.closure_time is null then r.closure_date::timestamp_ntz
@@ -176,11 +192,28 @@ select
         when r.closure_time is null then 'date'
         else 'timestamp'
     end as referral_closed_time_precision
+    , r.closure_reason_code
+    , closure_reason.description as closure_reason_description
     , case
         when r.refer_rejection_date is not null then 'rejected'
         when r.closure_date is not null then 'closed'
         else 'open'
     end as service_or_team_relationship_status
+    , r.uniq_submission_id
+    , r.reporting_period_end_date
+    , r.mhsds_version
+    , r.source_file_received_at
+    , r.source_loaded_at
 from relationships as r
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on r.service_or_team_type_code = tt.code
+left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_group
+    on upper(trim(r.service_or_team_intended_age_group_code)) = intended_age_group.code
+left join {{ ref('mhsds_referral_terminology') }} as rejection_reason
+    on upper(trim(r.rejection_reason_code)) = rejection_reason.code
+    and rejection_reason.terminology_name = 'rejection_reason'
+left join {{ ref('mhsds_referral_terminology') }} as closure_reason
+    on upper(trim(r.closure_reason_code)) = closure_reason.code
+    and closure_reason.terminology_name = 'closure_reason'
+left join {{ ref('int_mhsds_organisation') }} as provider
+    on upper(r.provider_organisation_code) = upper(provider.organisation_code)

@@ -356,3 +356,55 @@ sources:
         identifier: '"dim_Reason_For_Out_Of_Area_Referral_For_Adult_Acute_Mental_Health_SCD"'
         description: Out-of-area referral reason definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: language_code
+        identifier: '"dim_Language_Code_SCD"'
+        description: NHS communication-method language extensions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: child_protection_plan_indicator
+        identifier: '"dim_Child_Protection_Plan_Indication_Code_SCD"'
+        description: Child protection plan indicator definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: looked_after_child_indicator
+        identifier: '"dim_Looked_After_Child_Indicator_SCD"'
+        description: Looked-after-child indicator definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mental_health_admitted_patient_classification_type
+        identifier: '"dim_Mental_Health_Admitted_Patient_Classification_Type_SCD"'
+        description: Mental health admitted patient classification type definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+
+  - name: ukhfd_other
+    database: '"UKHFD"'
+    schema: '"Other"'
+    description: Shared reference data held in UKHFD.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd_other
+    tables:
+      - name: iso_language_codes
+        identifier: '"dim_ISO_Language_Codes_SCD"'
+        description: ISO 639 language codes and their UKHFD history.
+        columns:
+          - name: ISO_639_2_Code
+            quote: true
+          - name: ISO_639_1_Code
+            quote: true
+          - name: English_Name_Of_Language
+            quote: true
+          - name: French_Name_Of_Language
+            quote: true
+          - name: German_Name_Of_Language
+            quote: true
+          - name: In_Source_Data
+            quote: true
+          - name: Import_Date
+            quote: true
+          - name: Created_Date
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true

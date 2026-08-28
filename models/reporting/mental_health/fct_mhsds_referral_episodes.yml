@@ -33,7 +33,9 @@ models:
         description: ICB commissioner code derived in the source feed.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
-      - name: referral_request_received_date
+      - name: is_wnl_commissioner
+        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
+      - name: referral_received_date
         description: >
           Date the referral request was received; null when the source contains
           an Excel-epoch sentinel date.
@@ -84,7 +86,9 @@ models:
       - name: n_contacts
         description: Care contacts linked to the referral.
       - name: n_attended_contacts
-        description: Attended or missing-status care contacts.
+        description: Attended care contacts.
+      - name: n_contacts_with_missing_attendance_status
+        description: Care contacts without a submitted attendance status.
       - name: n_dna_contacts
         description: Did-not-attend care contacts.
       - name: n_cancelled_contacts

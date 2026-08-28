@@ -1,12 +1,3 @@
-with organisations as (
-    select organisation_code, organisation_name
-    from {{ ref('stg_dictionary_dbo_organisation') }}
-    qualify row_number() over (
-        partition by upper(organisation_code)
-        order by coalesce(last_updated, first_created) desc
-    ) = 1
-)
-
 select
     {{ dbt_utils.generate_surrogate_key([
         'c.uniq_serv_req_id',
@@ -45,11 +36,11 @@ select
     , alt.description as activity_location_type_description
     , c.care_cont_subj as care_contact_subject_code
     , contact_subject.description as care_contact_subject_description
-    , c.planned_care_cont_indicator as planned_care_contact_indicator
+    , c.planned_care_cont_indicator as planned_care_contact_code
     , planned_contact.description as planned_care_contact_description
-    , c.place_of_safety_ind as place_of_safety_indicator
+    , c.place_of_safety_ind as place_of_safety_code
     , place_of_safety.description as place_of_safety_description
-    , c.group_therapy_ind as group_therapy_indicator
+    , c.group_therapy_ind as group_therapy_code
     , group_therapy.description as group_therapy_description
     , c.care_cont_patient_ther_mode as patient_therapy_mode_code
     , therapy_mode.description as patient_therapy_mode_description
@@ -57,16 +48,36 @@ select
     , provider.organisation_name as provider_organisation_name
     , c.org_id_comm as commissioner_organisation_code
     , source_commissioner.organisation_name as commissioner_organisation_name
-    , c.dm_icb_commissioner as derived_icb_commissioner_code
-    , derived_icb.organisation_name as derived_icb_commissioner_name
+    , c.dm_icb_commissioner as source_derived_icb_commissioner_code
+    , coalesce(
+        c.dm_icb_commissioner
+        , iff(source_commissioner.is_integrated_care_board, c.org_id_comm, null)
+    ) as derived_icb_commissioner_code
+    , coalesce(
+        derived_icb.organisation_name
+        , iff(
+            source_commissioner.is_integrated_care_board
+            , source_commissioner.organisation_name
+            , null
+        )
+    ) as derived_icb_commissioner_name
+    , case
+        when c.dm_icb_commissioner is not null then 'source_derived'
+        when source_commissioner.is_integrated_care_board then 'submitted_icb'
+    end as icb_commissioner_derivation_method
+    , coalesce(derived_icb.is_wnl_commissioner, false)
+        or coalesce(source_commissioner.is_wnl_commissioner, false)
+        as is_wnl_commissioner
     , c.dm_sub_icb_commissioner as derived_sub_icb_commissioner_code
     , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
-    , c.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , c.site_id_of_treat as treatment_site_code
-    , treatment_site.organisation_name as treatment_site_name
+    , coalesce(
+        treatment_site.organisation_name
+        , treatment_service_provider.service_provider_name
+    ) as treatment_site_name
     , c.admin_cat_code as administrative_category_code
     , administrative_category.description as administrative_category_description
-    , c.specialised_mh_service_code
+    , c.specialised_mh_service_code as specialised_mental_health_service_category_code
     , coalesce(
         c.uniq_other_care_prof_team_local_id
         , c.uniq_care_prof_team_id
@@ -84,14 +95,15 @@ select
     , c.earliest_clin_app_date as earliest_clinically_appropriate_date
     , c.rep_appt_offer_date as appointment_offer_date
     , c.rep_appt_book_date as appointment_booked_date
-    , c.care_cont_cancel_date as care_contact_cancelled_date
+    , c.care_cont_cancel_date as care_contact_cancellation_date
     , c.care_cont_cancel_reas as care_contact_cancellation_reason_code
     , cancellation_reason.description as care_contact_cancellation_reason_description
     , c.language_code_treat as treatment_language_code
-    , c.interpreter_present_ind as interpreter_present_indicator
+    , treatment_language.description as treatment_language_description
+    , c.interpreter_present_ind as interpreter_present_code
     , interpreter_present.description as interpreter_present_description
     , c.com_peri_mh_part_assess_offer_ind
-        as community_perinatal_partner_assessment_offer_indicator
+        as community_perinatal_partner_assessment_offer_code
     , perinatal_offer.description
         as community_perinatal_partner_assessment_offer_description
     , c.reasonable_adjustment_made as reasonable_adjustment_made_code
@@ -108,7 +120,7 @@ select
     , c.reporting_period_start_date
     , c.reporting_period_end_date
     , c.dmic_dataset as mhsds_version
-    , c.effective_from as source_effective_from_at
+    , c.effective_from as source_file_received_at
     , c.dmic_date_added as source_loaded_at
 from {{ ref('stg_mhsds_carecontact') }} as c
 left join {{ ref('stg_mhsds_bridging') }} as b
@@ -154,6 +166,8 @@ left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_
 left join {{ ref('mhsds_care_contact_terminology') }} as cancellation_reason
     on upper(trim(c.care_cont_cancel_reas)) = cancellation_reason.code
     and cancellation_reason.terminology_name = 'care_contact_cancellation_reason'
+left join {{ ref('language') }} as treatment_language
+    on upper(trim(c.language_code_treat)) = treatment_language.code
 left join {{ ref('mhsds_care_contact_terminology') }} as interpreter_present
     on upper(trim(c.interpreter_present_ind)) = interpreter_present.code
     and interpreter_present.terminology_name = 'interpreter_present_indicator'
@@ -169,13 +183,16 @@ left join {{ ref('mhsds_care_contact_terminology') }} as no_imca
 left join {{ ref('mhsds_care_contact_terminology') }} as no_imha
     on upper(trim(c.reason_patient_no_imha)) = no_imha.code
     and no_imha.terminology_name = 'reason_patient_no_imha'
-left join organisations as source_commissioner
+left join {{ ref('int_mhsds_organisation') }} as source_commissioner
     on upper(c.org_id_comm) = upper(source_commissioner.organisation_code)
-left join organisations as provider
+left join {{ ref('int_mhsds_organisation') }} as provider
     on upper(c.org_id_prov) = upper(provider.organisation_code)
-left join organisations as treatment_site
+left join {{ ref('int_mhsds_organisation') }} as treatment_site
     on upper(trim(c.site_id_of_treat)) = upper(trim(treatment_site.organisation_code))
-left join organisations as derived_icb
+left join {{ ref('stg_dictionary_dbo_serviceprovider') }} as treatment_service_provider
+    on upper(trim(c.site_id_of_treat))
+        = upper(trim(treatment_service_provider.service_provider_code))
+left join {{ ref('int_mhsds_organisation') }} as derived_icb
     on upper(c.dm_icb_commissioner) = upper(derived_icb.organisation_code)
-left join organisations as derived_sub_icb
+left join {{ ref('int_mhsds_organisation') }} as derived_sub_icb
     on upper(c.dm_sub_icb_commissioner) = upper(derived_sub_icb.organisation_code)

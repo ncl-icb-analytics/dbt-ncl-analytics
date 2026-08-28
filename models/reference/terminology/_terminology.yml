@@ -154,6 +154,32 @@ models:
     data_tests: *history_grain_test
     columns: *history_columns
 
+  - name: language
+    description: >-
+      One row per ISO 639-1 language code or NHS communication-method
+      extension, using the newest UKHFD definition.
+    config: *owner
+    columns: *default_columns
+
+  - name: language_history
+    description: ISO 639-1 language and NHS communication-method definition revisions from UKHFD.
+    config: *owner
+    data_tests: *history_grain_test
+    columns: *history_columns
+
+  - name: mental_health_admitted_patient_classification_type
+    description: >-
+      One row per mental health admitted patient classification type code ever
+      published, using the newest UKHFD definition.
+    config: *owner
+    columns: *default_columns
+
+  - name: mental_health_admitted_patient_classification_type_history
+    description: Mental health admitted patient classification type revisions from UKHFD.
+    config: *owner
+    data_tests: *history_grain_test
+    columns: *history_columns
+
   - name: csds_source_of_referral
     description: >-
       One row per community source-of-referral code ever published. Uses the

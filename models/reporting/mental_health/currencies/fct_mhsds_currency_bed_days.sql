@@ -49,8 +49,12 @@ select
     , p.sk_patient_id
     , p.person_id
     , p.org_id_prov as provider_organisation_code
-    , p.dm_icb_commissioner as derived_icb_commissioner_code
+    , provider.organisation_name as provider_organisation_name
+    , p.dm_icb_commissioner as source_derived_icb_commissioner_code
+    , derived_icb.organisation_name as source_derived_icb_commissioner_name
     , p.commissioner_icb_code
+    , currency_commissioner.organisation_name as commissioner_icb_name
+    , coalesce(currency_commissioner.is_wnl_commissioner, false) as is_wnl_commissioner
     , p.currency_group
     , p.currency_code
     , p.start_date_hosp_prov_spell as hospital_provider_spell_start_date
@@ -86,3 +90,9 @@ inner join fiscal_years as fy
     ) > 0
 left join {{ ref('nhse_provider_mff_2627') }} as mff
     on p.org_id_prov = mff.provider_code
+left join {{ ref('int_mhsds_organisation') }} as provider
+    on upper(p.org_id_prov) = upper(provider.organisation_code)
+left join {{ ref('int_mhsds_organisation') }} as derived_icb
+    on upper(p.dm_icb_commissioner) = upper(derived_icb.organisation_code)
+left join {{ ref('int_mhsds_organisation') }} as currency_commissioner
+    on upper(p.commissioner_icb_code) = upper(currency_commissioner.organisation_code)

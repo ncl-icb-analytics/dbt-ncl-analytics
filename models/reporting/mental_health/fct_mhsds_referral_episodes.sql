@@ -4,14 +4,14 @@ with contact_aggregates as (
         , count(*) as n_contacts
         , count_if(
             lpad(attendance_status_code, 2, '0') in ('05', '06')
-            or attendance_status_code is null
         ) as n_attended_contacts
+        , count_if(attendance_status_code is null)
+            as n_contacts_with_missing_attendance_status
         , count_if(lpad(attendance_status_code, 2, '0') in ('03', '07')) as n_dna_contacts
         , count_if(lpad(attendance_status_code, 2, '0') in ('02', '04')) as n_cancelled_contacts
         , min(care_contact_date) as first_contact_date
         , min(iff(
             lpad(attendance_status_code, 2, '0') in ('05', '06')
-            or attendance_status_code is null
             , care_contact_date
             , null
         )) as first_attended_contact_date
@@ -46,9 +46,10 @@ select
     , r.provider_organisation_name
     , r.derived_icb_commissioner_code
     , r.derived_icb_commissioner_name
-    , r.referral_request_received_date
+    , r.is_wnl_commissioner
+    , r.referral_received_date
     , r.age_at_referral
-    , coalesce(r.age_at_referral < 18, false) as is_cyp_at_referral
+    , r.age_at_referral < 18 as is_cyp_at_referral
     , r.source_of_referral_code
     , r.source_of_referral_description
     , r.referring_care_professional_type_code
@@ -79,21 +80,23 @@ select
     ) as is_crisis_referral
     , coalesce(c.n_contacts, 0) as n_contacts
     , coalesce(c.n_attended_contacts, 0) as n_attended_contacts
+    , coalesce(c.n_contacts_with_missing_attendance_status, 0)
+        as n_contacts_with_missing_attendance_status
     , coalesce(c.n_dna_contacts, 0) as n_dna_contacts
     , coalesce(c.n_cancelled_contacts, 0) as n_cancelled_contacts
     , c.first_contact_date
     , c.first_attended_contact_date
     , iff(
-        c.first_attended_contact_date < r.referral_request_received_date
+        c.first_attended_contact_date < r.referral_received_date
         , null
         , datediff(
             day
-            , r.referral_request_received_date
+            , r.referral_received_date
             , c.first_attended_contact_date
         )
     ) as wait_days_to_first_attended_contact
     , coalesce(
-        c.first_attended_contact_date < r.referral_request_received_date
+        c.first_attended_contact_date < r.referral_received_date
         , false
     ) as has_pre_referral_contact
     , coalesce(i.n_indirect_activities, 0) as n_indirect_activities

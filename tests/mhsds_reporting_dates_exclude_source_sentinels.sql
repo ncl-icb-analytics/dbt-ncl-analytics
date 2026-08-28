@@ -8,7 +8,7 @@ where least_ignore_nulls(
     earliest_clinically_appropriate_date,
     appointment_offer_date,
     appointment_booked_date,
-    care_contact_cancelled_date,
+    care_contact_cancellation_date,
     reporting_period_start_date,
     reporting_period_end_date
 ) < '1901-01-01'::date
@@ -21,7 +21,7 @@ select
     count(*) as sentinel_row_count
 from {{ ref('fct_mhsds_referral') }}
 where least_ignore_nulls(
-    referral_request_received_date,
+    referral_received_date,
     decision_to_treat_date,
     discharge_plan_created_date,
     discharge_plan_last_updated_date,

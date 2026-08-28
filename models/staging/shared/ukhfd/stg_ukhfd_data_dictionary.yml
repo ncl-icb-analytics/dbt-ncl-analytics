@@ -204,3 +204,51 @@ models:
           arguments:
             combination_of_columns: [code, source_effective_from_at]
     columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_language_code
+    description: UKHFD NHS language extensions. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_child_protection_plan_indicator
+    description: UKHFD child protection plan indicators. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_looked_after_child_indicator
+    description: UKHFD looked-after-child indicators. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_mental_health_admitted_patient_classification_type
+    description: UKHFD mental health admitted patient classification types. One row per code and definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns

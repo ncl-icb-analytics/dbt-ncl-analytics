@@ -29,9 +29,9 @@ models:
         description: MHSDS person identifier.
       - name: sk_patient_id
         description: Pseudonymised cross-system patient key; null where bridging is unavailable.
-      - name: referral_request_received_date
+      - name: referral_received_date
         description: Date the provider received the referral request.
-      - name: referral_request_received_time
+      - name: referral_received_time
         description: Time the provider received the referral request; mainly supplied for urgent and emergency referrals.
       - name: referral_received_at
         description: Referral-received timestamp; date-only records use midnight.
@@ -137,20 +137,25 @@ models:
           an ICB, sub-ICB, commissioning hub, provider or other organisation.
       - name: commissioner_organisation_name
         description: Current organisation name for the submitted commissioner code.
+      - name: source_derived_icb_commissioner_code
+        description: >-
+          ICB commissioner assigned by the source pipeline before dbt fallback.
       - name: derived_icb_commissioner_code
         description: >-
-          English ICB commissioner assigned by the source pipeline; null when
-          the submitted commissioner cannot be assigned to an ICB.
+          ICB commissioner from the source derivation, falling back to the
+          submitted commissioner when its current ODS role is ICB.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
+      - name: icb_commissioner_derivation_method
+        description: Source-derived or submitted-ICB fallback used for the ICB commissioner.
+      - name: is_wnl_commissioner
+        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
       - name: derived_sub_icb_commissioner_code
         description: >-
           Sub-ICB commissioner assigned by the source pipeline; null for
           ICB-only assignments and commissioners outside the mapping.
       - name: derived_sub_icb_commissioner_name
         description: Current organisation name for the derived sub-ICB commissioner code.
-      - name: commissioner_derivation_reason_code
-        description: Source-pipeline flag showing which commissioner assignment stages succeeded.
       - name: referring_organisation_code
         description: Organisation code from which the referral was made.
       - name: referring_organisation_name
@@ -161,8 +166,10 @@ models:
         description: Identifier for the NHS service agreement line under which care is supplied.
       - name: nhs_service_agreement_line_number
         description: Line number within the NHS service agreement.
-      - name: specialised_mh_service_code
-        description: Specialised mental health service category code.
+      - name: specialised_mental_health_service_category_code
+        description: >-
+          NHS England specialised mental health service category code. Its
+          reference list is published outside UKHFD and is not yet modelled in dbt.
       - name: primary_service_or_team_local_id
         description: Provider-local primary service or team identifier.
       - name: primary_service_or_team_id
@@ -199,7 +206,7 @@ models:
         description: End date of the selected submission period.
       - name: mhsds_version
         description: MHSDS version assigned by the source pipeline.
-      - name: source_effective_from_at
+      - name: source_file_received_at
         description: Timestamp when the selected source file was received by the submission portal.
       - name: source_loaded_at
         description: Timestamp when the source pipeline loaded the selected row.
@@ -215,15 +222,15 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - uniq_serv_req_id
+              - referral_source_record_id
               - service_or_team_relationship_type
               - service_or_team_id
     columns:
       - name: referral_service_team_id
         description: Stable key for the referral-to-service-or-team relationship.
         data_tests: [not_null, unique]
-      - name: uniq_serv_req_id
-        description: MHSDS unique service request identifier.
+      - name: referral_source_record_id
+        description: MHSDS unique service request identifier; joins to fct_mhsds_referral.source_record_id.
         data_tests: [not_null]
       - name: source_record_id
         description: Selected MHS101 or MHS102 row supporting the relationship.
@@ -247,12 +254,18 @@ models:
         data_tests: [not_null]
       - name: service_or_team_type_code
         description: Submitted or MHS902-resolved service or team type code.
+      - name: service_or_team_type_description
+        description: Published description for the service or team type, including retired codes.
       - name: source_service_or_team_type_name
         description: Service or team name supplied by the provider.
       - name: service_or_team_intended_age_group_code
         description: Intended patient age group recorded for the service or team.
+      - name: service_or_team_intended_age_group_description
+        description: Published description for the intended age group.
       - name: provider_organisation_code
         description: Organisation code of the provider submitting the relationship.
+      - name: provider_organisation_name
+        description: Current organisation name for the provider code.
       - name: record_start_date
         description: Date the source relationship row first flowed.
       - name: record_end_date
@@ -263,24 +276,26 @@ models:
         description: Time the team referral was rejected.
       - name: rejection_reason_code
         description: Submitted team referral rejection reason code.
+      - name: rejection_reason_description
+        description: Published description for the referral rejection reason.
       - name: referral_closure_date
         description: Date the team referral was closed.
       - name: referral_closure_time
         description: Time the team referral was closed.
       - name: closure_reason_code
         description: Submitted team referral closure reason code.
+      - name: closure_reason_description
+        description: Published description for the referral closure reason.
       - name: uniq_submission_id
         description: Submission containing the selected source row.
       - name: reporting_period_end_date
         description: End date of the selected submission period.
       - name: mhsds_version
         description: MHSDS version assigned by the source pipeline.
-      - name: source_effective_from_at
+      - name: source_file_received_at
         description: Timestamp when the selected source file was received by the submission portal.
       - name: source_loaded_at
         description: Timestamp when the source pipeline loaded the selected row.
-      - name: service_or_team_type_description
-        description: Published description for the service or team type, including retired codes.
       - name: referral_rejected_at
         description: Team referral rejection timestamp; date-only records use midnight.
       - name: referral_rejected_time_precision
@@ -366,16 +381,16 @@ models:
         description: Submitted code for the subject discussed during the contact.
       - name: care_contact_subject_description
         description: Published description for the care contact subject, including retired codes.
-      - name: planned_care_contact_indicator
-        description: Submitted indicator that the contact was planned.
+      - name: planned_care_contact_code
+        description: Submitted code indicating whether the contact was planned.
       - name: planned_care_contact_description
         description: Published description for the planned care contact indicator.
-      - name: place_of_safety_indicator
-        description: Submitted indicator that the contact occurred at a place of safety.
+      - name: place_of_safety_code
+        description: Submitted code indicating whether the contact occurred at a place of safety.
       - name: place_of_safety_description
         description: Published description for the place of safety indicator.
-      - name: group_therapy_indicator
-        description: Submitted indicator that the contact formed part of group therapy.
+      - name: group_therapy_code
+        description: Submitted code indicating whether the contact formed part of group therapy.
       - name: group_therapy_description
         description: Published description for the group therapy indicator.
       - name: patient_therapy_mode_code
@@ -392,20 +407,25 @@ models:
           an ICB, sub-ICB, commissioning hub, provider or other organisation.
       - name: commissioner_organisation_name
         description: Current organisation name for the submitted commissioner code.
+      - name: source_derived_icb_commissioner_code
+        description: >-
+          ICB commissioner assigned by the source pipeline before dbt fallback.
       - name: derived_icb_commissioner_code
         description: >-
-          English ICB commissioner assigned by the source pipeline; null when
-          the submitted commissioner cannot be assigned to an ICB.
+          ICB commissioner from the source derivation, falling back to the
+          submitted commissioner when its current ODS role is ICB.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
+      - name: icb_commissioner_derivation_method
+        description: Source-derived or submitted-ICB fallback used for the ICB commissioner.
+      - name: is_wnl_commissioner
+        description: Whether the commissioner belongs to current WNL or a predecessor commissioner.
       - name: derived_sub_icb_commissioner_code
         description: >-
           Sub-ICB commissioner assigned by the source pipeline; null for
           ICB-only assignments and commissioners outside the mapping.
       - name: derived_sub_icb_commissioner_name
         description: Current organisation name for the derived sub-ICB commissioner code.
-      - name: commissioner_derivation_reason_code
-        description: Source-pipeline flag showing which commissioner assignment stages succeeded.
       - name: treatment_site_code
         description: Organisation site code where the contact took place.
       - name: treatment_site_name
@@ -414,8 +434,10 @@ models:
         description: Patient administrative category recorded for the contact.
       - name: administrative_category_description
         description: Published description for the administrative category, including retired codes.
-      - name: specialised_mh_service_code
-        description: Specialised mental health service category code.
+      - name: specialised_mental_health_service_category_code
+        description: >-
+          NHS England specialised mental health service category code. Its
+          reference list is published outside UKHFD and is not yet modelled in dbt.
       - name: service_or_team_id
         description: MHSDS-derived identifier for the team delivering the contact.
       - name: service_or_team_local_id
@@ -438,20 +460,22 @@ models:
         description: Date the reported appointment was offered; source sentinels are null.
       - name: appointment_booked_date
         description: Date the reported appointment was booked; source sentinels are null.
-      - name: care_contact_cancelled_date
+      - name: care_contact_cancellation_date
         description: Date the contact was cancelled; source sentinels are null.
       - name: care_contact_cancellation_reason_code
         description: Submitted care contact cancellation reason code.
       - name: care_contact_cancellation_reason_description
         description: Published description for the cancellation reason, including retired codes.
       - name: treatment_language_code
-        description: Language used for treatment during the contact.
-      - name: interpreter_present_indicator
+        description: ISO 639-1 language code or NHS communication-method extension used for treatment.
+      - name: treatment_language_description
+        description: Published language or communication-method description.
+      - name: interpreter_present_code
         description: Submitted code for whether an interpreter was present.
       - name: interpreter_present_description
         description: Published description for the interpreter-present indicator.
-      - name: community_perinatal_partner_assessment_offer_indicator
-        description: Submitted indicator that a partner assessment was offered by a community perinatal service.
+      - name: community_perinatal_partner_assessment_offer_code
+        description: Submitted code indicating whether a community perinatal service offered a partner assessment.
       - name: community_perinatal_partner_assessment_offer_description
         description: Published description for the partner-assessment offer indicator.
       - name: reasonable_adjustment_made_code
@@ -482,7 +506,7 @@ models:
         description: End date of the selected submission period.
       - name: mhsds_version
         description: MHSDS version assigned by the source pipeline.
-      - name: source_effective_from_at
+      - name: source_file_received_at
         description: Timestamp when the selected source file was received by the submission portal.
       - name: source_loaded_at
         description: Timestamp when the source pipeline loaded the selected row.

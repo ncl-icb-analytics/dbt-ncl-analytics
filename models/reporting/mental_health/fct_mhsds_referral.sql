@@ -1,12 +1,3 @@
-with organisations as (
-    select organisation_code, organisation_name
-    from {{ ref('stg_dictionary_dbo_organisation') }}
-    qualify row_number() over (
-        partition by upper(organisation_code)
-        order by coalesce(last_updated, first_created) desc
-    ) = 1
-)
-
 select
     r.uniq_serv_req_id as source_record_id
     , 'MHSDS' as source_dataset
@@ -15,8 +6,8 @@ select
     , r.service_request_id
     , r.person_id
     , b.sk_patient_id
-    , r.referral_request_received_date
-    , r.referral_request_received_time
+    , r.referral_request_received_date as referral_received_date
+    , r.referral_request_received_time as referral_received_time
     , case
         when r.referral_request_received_date is null then null
         when r.referral_request_received_time is null
@@ -126,17 +117,34 @@ select
     , provider.organisation_name as provider_organisation_name
     , r.org_id_comm as commissioner_organisation_code
     , source_commissioner.organisation_name as commissioner_organisation_name
-    , r.dm_icb_commissioner as derived_icb_commissioner_code
-    , derived_icb.organisation_name as derived_icb_commissioner_name
+    , r.dm_icb_commissioner as source_derived_icb_commissioner_code
+    , coalesce(
+        r.dm_icb_commissioner
+        , iff(source_commissioner.is_integrated_care_board, r.org_id_comm, null)
+    ) as derived_icb_commissioner_code
+    , coalesce(
+        derived_icb.organisation_name
+        , iff(
+            source_commissioner.is_integrated_care_board
+            , source_commissioner.organisation_name
+            , null
+        )
+    ) as derived_icb_commissioner_name
+    , case
+        when r.dm_icb_commissioner is not null then 'source_derived'
+        when source_commissioner.is_integrated_care_board then 'submitted_icb'
+    end as icb_commissioner_derivation_method
+    , coalesce(derived_icb.is_wnl_commissioner, false)
+        or coalesce(source_commissioner.is_wnl_commissioner, false)
+        as is_wnl_commissioner
     , r.dm_sub_icb_commissioner as derived_sub_icb_commissioner_code
     , derived_sub_icb.organisation_name as derived_sub_icb_commissioner_name
-    , r.dm_commissioner_derivation_reason as commissioner_derivation_reason_code
     , r.org_id_referring_org as referring_organisation_code
     , referring_organisation.organisation_name as referring_organisation_name
     , r.org_id_referring as referring_organisation_or_person_code
     , r.nhs_serv_agree_line_id as nhs_service_agreement_line_id
     , r.nhs_serv_agree_line_num as nhs_service_agreement_line_number
-    , r.specialised_mh_service_code
+    , r.specialised_mh_service_code as specialised_mental_health_service_category_code
     , r.care_prof_team_local_id as primary_service_or_team_local_id
     , r.uniq_care_prof_team_local_id as primary_service_or_team_id
     , coalesce(r.serv_team_type, td.serv_team_type_mh) as primary_service_or_team_type_code
@@ -156,7 +164,7 @@ select
     , r.reporting_period_start_date
     , r.reporting_period_end_date
     , r.dmic_dataset as mhsds_version
-    , r.effective_from as source_effective_from_at
+    , r.effective_from as source_file_received_at
     , r.dmic_date_added as source_loaded_at
 from {{ ref('stg_mhsds_referral') }} as r
 left join {{ ref('stg_mhsds_bridging') }} as b
@@ -192,13 +200,13 @@ left join {{ ref('mhsds_referral_terminology') }} as closure_reason
 left join {{ ref('mhsds_referral_terminology') }} as out_of_area_reason
     on upper(trim(r.reason_oat)) = out_of_area_reason.code
     and out_of_area_reason.terminology_name = 'out_of_area_referral_reason'
-left join organisations as source_commissioner
+left join {{ ref('int_mhsds_organisation') }} as source_commissioner
     on upper(r.org_id_comm) = upper(source_commissioner.organisation_code)
-left join organisations as provider
+left join {{ ref('int_mhsds_organisation') }} as provider
     on upper(r.org_id_prov) = upper(provider.organisation_code)
-left join organisations as referring_organisation
+left join {{ ref('int_mhsds_organisation') }} as referring_organisation
     on upper(r.org_id_referring_org) = upper(referring_organisation.organisation_code)
-left join organisations as derived_icb
+left join {{ ref('int_mhsds_organisation') }} as derived_icb
     on upper(r.dm_icb_commissioner) = upper(derived_icb.organisation_code)
-left join organisations as derived_sub_icb
+left join {{ ref('int_mhsds_organisation') }} as derived_sub_icb
     on upper(r.dm_sub_icb_commissioner) = upper(derived_sub_icb.organisation_code)

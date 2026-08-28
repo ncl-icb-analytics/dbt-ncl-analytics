@@ -27,10 +27,13 @@ Dates, times and timestamps have separate meanings:
 - Source dates before 1901 are Excel-epoch missing-value sentinels and are
   exposed as null.
 
-`mhsds_referral_terminology` and `mhsds_care_contact_terminology` supply current
-UKHFD descriptions for submitted codes. Their `_history` models retain
-definition revisions. Descriptions remain null when a submitted code is absent
-from UKHFD; this is most common for historical consultation-medium codes.
+Reference models supply current UKHFD descriptions for submitted codes. Their
+`_history` models retain definition revisions. This includes referral, contact,
+language, safeguarding and inpatient classification codes. Descriptions remain
+null when a submitted code is absent from UKHFD; this is most common for
+historical consultation-medium codes. Specialised mental health service
+categories remain code-only because their reference list is published outside
+UKHFD and is not yet modelled in dbt.
 
 ## Published interfaces
 
@@ -49,6 +52,16 @@ Join a contact to its recorded referral using
 `fct_mhsds_care_contact.referral_source_record_id =
 fct_mhsds_referral.source_record_id`. A valid contact can refer to a service
 request absent from the retained referral population, so use a left join.
+
+The referral and contact facts retain the source-derived ICB commissioner and
+publish a resolved ICB commissioner. When the source derivation is blank but
+the submitted commissioner has the ODS ICB role, the resolved fields use the
+submitted commissioner. `icb_commissioner_derivation_method` identifies which
+route supplied the value.
+
+`is_wnl_commissioner` provides a present-day footprint filter. It includes the
+current WNL ICB, the legacy NCL and NWL ICB and sub-ICB codes, and their 13
+predecessor CCGs. It does not classify the London Commissioning Hub as WNL.
 
 ## Nearby source facts
 
