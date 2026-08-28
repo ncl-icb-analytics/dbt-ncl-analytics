@@ -30,7 +30,7 @@ models:
       - name: provider_organisation_name
         description: Current organisation name for the provider code.
       - name: derived_icb_commissioner_code
-        description: ICB commissioner code derived in the source feed.
+        description: ICB commissioner code resolved by the referral fact.
       - name: derived_icb_commissioner_name
         description: Current organisation name for the derived ICB commissioner code.
       - name: is_wnl_commissioner
