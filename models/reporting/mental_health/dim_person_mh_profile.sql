@@ -211,9 +211,9 @@ left join mha_aggregates as m
     on p.person_id = m.person_id
 left join safeguarding_aggregates as g
     on p.person_id = g.person_id
-left join {{ ref('mhsds_profile_terminology') }} as cpp
+left join {{ ref('mhsds_profile_code_lookup') }} as cpp
     on g.child_protection_plan_status_code = cpp.code
-    and cpp.terminology_name = 'child_protection_plan_status'
-left join {{ ref('mhsds_profile_terminology') }} as lac
+    and cpp.code_set_name = 'child_protection_plan_status'
+left join {{ ref('mhsds_profile_code_lookup') }} as lac
     on g.looked_after_child_indicator_code = lac.code
-    and lac.terminology_name = 'looked_after_child_indicator'
+    and lac.code_set_name = 'looked_after_child_indicator'

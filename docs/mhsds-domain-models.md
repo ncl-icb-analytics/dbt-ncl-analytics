@@ -90,7 +90,7 @@ These facts need the matching UKHFD code sets before publication. UKHFD holds
 the referral reason, RTT status, onward-referral reason, care-contact attendee,
 indirect-activity person, consultation medium, cancellation, advocacy and other
 MHSDS dictionaries. dbt reference models should expose the current code set and
-its history in `REFERENCE.TERMINOLOGY`.
+its history in `REFERENCE.DATA_DICTIONARY`.
 
 ## Other MHSDS domains
 

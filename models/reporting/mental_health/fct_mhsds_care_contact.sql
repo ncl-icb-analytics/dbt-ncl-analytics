@@ -137,52 +137,52 @@ left join {{ ref('activity_location_type') }} as alt
     on c.act_loc_type_code = alt.code
 left join {{ ref('mhsds_service_or_team_type') }} as tt
     on td.serv_team_type_mh = tt.code
-left join {{ ref('mhsds_care_contact_terminology') }} as consultation_type
+left join {{ ref('mhsds_care_contact_code_lookup') }} as consultation_type
     on upper(trim(c.cons_type)) = consultation_type.code
-    and consultation_type.terminology_name = 'consultation_type'
-left join {{ ref('mhsds_care_contact_terminology') }} as consultation_medium
+    and consultation_type.code_set_name = 'consultation_type'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as consultation_medium
     on upper(trim(c.cons_medium_used)) = consultation_medium.code
-    and consultation_medium.terminology_name = 'consultation_medium_used'
-left join {{ ref('mhsds_care_contact_terminology') }} as contact_subject
+    and consultation_medium.code_set_name = 'consultation_medium_used'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as contact_subject
     on upper(trim(c.care_cont_subj)) = contact_subject.code
-    and contact_subject.terminology_name = 'care_contact_subject'
-left join {{ ref('mhsds_care_contact_terminology') }} as planned_contact
+    and contact_subject.code_set_name = 'care_contact_subject'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as planned_contact
     on upper(trim(c.planned_care_cont_indicator)) = planned_contact.code
-    and planned_contact.terminology_name = 'planned_care_contact_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as place_of_safety
+    and planned_contact.code_set_name = 'planned_care_contact_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as place_of_safety
     on upper(trim(c.place_of_safety_ind)) = place_of_safety.code
-    and place_of_safety.terminology_name = 'place_of_safety_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as group_therapy
+    and place_of_safety.code_set_name = 'place_of_safety_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as group_therapy
     on upper(trim(c.group_therapy_ind)) = group_therapy.code
-    and group_therapy.terminology_name = 'group_therapy_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as therapy_mode
+    and group_therapy.code_set_name = 'group_therapy_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as therapy_mode
     on upper(trim(c.care_cont_patient_ther_mode)) = therapy_mode.code
-    and therapy_mode.terminology_name = 'patient_therapy_mode'
-left join {{ ref('mhsds_care_contact_terminology') }} as administrative_category
+    and therapy_mode.code_set_name = 'patient_therapy_mode'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as administrative_category
     on upper(trim(c.admin_cat_code)) = administrative_category.code
-    and administrative_category.terminology_name = 'administrative_category'
+    and administrative_category.code_set_name = 'administrative_category'
 left join {{ ref('mhsds_service_or_team_intended_age_group') }} as intended_age_group
     on upper(trim(td.serv_team_int_age_group)) = intended_age_group.code
-left join {{ ref('mhsds_care_contact_terminology') }} as cancellation_reason
+left join {{ ref('mhsds_care_contact_code_lookup') }} as cancellation_reason
     on upper(trim(c.care_cont_cancel_reas)) = cancellation_reason.code
-    and cancellation_reason.terminology_name = 'care_contact_cancellation_reason'
+    and cancellation_reason.code_set_name = 'care_contact_cancellation_reason'
 left join {{ ref('language') }} as treatment_language
     on upper(trim(c.language_code_treat)) = treatment_language.code
-left join {{ ref('mhsds_care_contact_terminology') }} as interpreter_present
+left join {{ ref('mhsds_care_contact_code_lookup') }} as interpreter_present
     on upper(trim(c.interpreter_present_ind)) = interpreter_present.code
-    and interpreter_present.terminology_name = 'interpreter_present_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as perinatal_offer
+    and interpreter_present.code_set_name = 'interpreter_present_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as perinatal_offer
     on upper(trim(c.com_peri_mh_part_assess_offer_ind)) = perinatal_offer.code
-    and perinatal_offer.terminology_name = 'perinatal_partner_assessment_offer_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as reasonable_adjustment
+    and perinatal_offer.code_set_name = 'perinatal_partner_assessment_offer_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as reasonable_adjustment
     on upper(trim(c.reasonable_adjustment_made)) = reasonable_adjustment.code
-    and reasonable_adjustment.terminology_name = 'reasonable_adjustment_made_indicator'
-left join {{ ref('mhsds_care_contact_terminology') }} as no_imca
+    and reasonable_adjustment.code_set_name = 'reasonable_adjustment_made_indicator'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as no_imca
     on upper(trim(c.reason_patient_no_imca)) = no_imca.code
-    and no_imca.terminology_name = 'reason_patient_no_imca'
-left join {{ ref('mhsds_care_contact_terminology') }} as no_imha
+    and no_imca.code_set_name = 'reason_patient_no_imca'
+left join {{ ref('mhsds_care_contact_code_lookup') }} as no_imha
     on upper(trim(c.reason_patient_no_imha)) = no_imha.code
-    and no_imha.terminology_name = 'reason_patient_no_imha'
+    and no_imha.code_set_name = 'reason_patient_no_imha'
 left join {{ ref('int_mhsds_organisation') }} as source_commissioner
     on upper(c.org_id_comm) = upper(source_commissioner.organisation_code)
 left join {{ ref('int_mhsds_organisation') }} as provider
