@@ -9,12 +9,7 @@ with deduplicated as (
     {{
         select_latest_mhsds_state(
             mhsds_table = ref('raw_mhsds_mhs604primdiag'),
-            partition_cols = [
-                'uniq_serv_req_id',
-                'coded_diag_timestamp',
-                'prim_diag'
-            ],
-            tie_breaker_cols = ['mhs604_uniq_id']
+            partition_cols = ['mhs604_uniq_id']
         )
     }}
 )
@@ -34,7 +29,8 @@ with deduplicated as (
 
 , resolved as (
     select
-        d.uniq_serv_req_id
+        d.mhs604_uniq_id
+        , d.uniq_serv_req_id
         , d.person_id
         , d.coded_diag_timestamp
         , d.diag_scheme_in_use
@@ -45,13 +41,16 @@ with deduplicated as (
             when d.diag_scheme_in_use = '06' then s.map_target
         end as icd10_code
         , d.org_id_prov
+        , d.record_number as source_record_number
+        , d.row_number as source_row_number
     from deduplicated as d
     left join snomed_to_icd10 as s
         on to_varchar(d.prim_diag) = to_varchar(s.referenced_component_id)
 )
 
 select
-    uniq_serv_req_id
+    mhs604_uniq_id
+    , uniq_serv_req_id
     , person_id
     , coded_diag_timestamp
     , diag_scheme_in_use
@@ -59,6 +58,8 @@ select
     , icd10_code
     , left(replace(replace(icd10_code, '.', ''), 'X', '0'), 3) as icd10_3
     , org_id_prov
+    , source_record_number
+    , source_row_number
 from resolved
 -- ~0.2% of rows have no coded_diag_timestamp (and no diag_date fallback);
 -- unusable for as-at diagnosis selection

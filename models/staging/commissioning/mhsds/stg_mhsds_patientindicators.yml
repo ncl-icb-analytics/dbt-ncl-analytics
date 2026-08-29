@@ -16,7 +16,7 @@ models:
         data_tests:
           - not_null
       - name: unique_local_patient_id
-        description: Provider-scoped patient identifier.
+        description: Derived identifier for a provider-local patient.
         data_tests:
           - unique
           - not_null

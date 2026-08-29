@@ -28,9 +28,9 @@ A currency code has three parts: `MAA98A` = population group (`MAA`) + family (`
 | 97 | Crisis contact | A Core Services, B Alternatives, C MH Crisis Assessment Centres, D A&E Linked, Z unknown |
 | 99 | Cross-cutting contact | MAZ99A–D by crisis setting, MAZ99Z, MCS99Z |
 
-## 1. Deduplicate the raw feed → clean staging
+## 1. Select accepted records
 
-MHSDS is a **monthly resubmission feed**: providers resubmit every active record each month. Every staging model runs [`deduplicate_mhsds`](../macros/transformations/deduplicate_mhsds.sql), which keeps the latest record per business key restricted to active submissions — never count raw rows.
+MHSDS is a monthly resubmission feed. [`stg_mhsds_activesubmission`](../models/staging/commissioning/mhsds/stg_mhsds_activesubmission.sql) identifies the accepted file for each provider and reporting period. State tables use [`select_latest_mhsds_state`](../macros/transformations/select_latest_mhsds_state.sql) to retain the newest reported version of each stable source key. Event tables use [`select_active_mhsds_records`](../macros/transformations/select_active_mhsds_records.sql) to retain all records from accepted files. Do not count raw rows.
 
 Two data facts shape everything downstream:
 
@@ -44,7 +44,7 @@ The staging models:
 - [`stg_mhsds_spell.sql`](../models/staging/commissioning/mhsds/stg_mhsds_spell.sql) — one row per hospital spell.
 - [`stg_mhsds_mhs502wardstay.sql`](../models/staging/commissioning/mhsds/stg_mhsds_mhs502wardstay.sql) — ward stays per spell (bed type, dates).
 - [`stg_mhsds_servicetype.sql`](../models/staging/commissioning/mhsds/stg_mhsds_servicetype.sql) — one team type per referral, resolved MHS102 → MHS902 → MHS101-v6 (~23% of referrals only carry the last).
-- [`stg_mhsds_primdiag.sql`](../models/staging/commissioning/mhsds/stg_mhsds_primdiag.sql) — diagnosis history per referral: ICD-10-coded rows pass through, SNOMED-coded rows (0.1%) map via the UK complex-map refset; codes normalised to 3 characters (strip dot, X→0).
+- [`stg_mhsds_primdiag.sql`](../models/staging/commissioning/mhsds/stg_mhsds_primdiag.sql) — primary diagnosis history at the MHS604 row grain. ICD-10-coded rows pass through and SNOMED-coded rows map through the UK complex-map refset. The currency models use the grouper's record and row ordering when diagnosis timestamps tie.
 - [`stg_mhsds_mhactperiod.sql`](../models/staging/commissioning/mhsds/stg_mhsds_mhactperiod.sql) — Mental Health Act legal status periods (MHS401).
 - [`stg_mhsds_patientindicators.sql`](../models/staging/commissioning/mhsds/stg_mhsds_patientindicators.sql) — child protection / looked-after status (MHS005).
 - [`stg_mhsds_bridging.sql`](../models/staging/commissioning/mhsds/stg_mhsds_bridging.sql) — person → pseudonymised patient id.

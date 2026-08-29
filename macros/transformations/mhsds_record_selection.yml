@@ -8,13 +8,13 @@ macros:
     arguments:
       - name: mhsds_table
         type: relation
-        description: MHSDS relation to select from.
+        description: Relation containing uniq_submission_id, effective_from and the selection columns.
       - name: partition_cols
         type: list
-        description: Columns defining the longitudinal record.
+        description: Non-empty list of columns defining the longitudinal record.
       - name: tie_breaker_cols
         type: list
-        description: Source columns used to resolve remaining ties.
+        description: Descending source columns that make any remaining ties deterministic.
 
   - name: select_active_mhsds_records
     description: >-
@@ -23,4 +23,4 @@ macros:
     arguments:
       - name: mhsds_table
         type: relation
-        description: MHSDS relation to filter to active submissions.
+        description: MHSDS relation containing uniq_submission_id.

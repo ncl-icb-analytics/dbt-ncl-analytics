@@ -104,7 +104,11 @@ with population as (
         on upper(trim(d.icd10_3)) = icd.code
     qualify row_number() over (
         partition by r.person_id
-        order by d.coded_diag_timestamp desc, d.icd10_3
+        order by
+            d.coded_diag_timestamp desc
+            , d.source_record_number
+            , d.source_row_number
+            , d.mhs604_uniq_id
     ) = 1
 )
 
