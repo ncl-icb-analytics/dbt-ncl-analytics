@@ -11,11 +11,18 @@ relationships change between versions.
 
 ## How monthly submissions and repeated rows are handled
 
-MHSDS is a monthly resubmission feed. Selection for monthly submission tables
-starts with `stg_mhsds_activesubmission`, which keeps the accepted file for each
-provider and reporting period. This removes superseded files for the same
-provider-month. It does not remove records repeated in later periods. The person
-bridge is a separate identity-linking feed and does not use this rule.
+### 1. Choose the accepted file for each provider-month
+
+Providers can submit more than one file for the same reporting month. Monthly
+submission tables are first joined to `stg_mhsds_activesubmission`, which names
+the file accepted for each provider and month. This prevents an earlier version
+of the whole file being counted alongside its replacement.
+
+This first step does not remove records repeated in later months. The person
+bridge is a separate identity-linking feed and does not use the monthly file
+rule.
+
+### 2. Decide what a repeat means for that table
 
 What happens next depends on the type of table:
 
@@ -25,31 +32,67 @@ What happens next depends on the type of table:
 | Monthly history | Rows from every accepted month. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
 | Repeated rows needing a table-specific rule | One row using identifiers and ordering defined for that table. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
 
-When a model selects the newest submitted version, our staging rule orders
-matching rows by:
+The choice is made from the meaning of the source table. A referral, contact,
+legal-status period, spell or ward stay can be reported again with corrected or
+newly completed fields. Those rows are versions of the same record. MHS001 and
+MHS902 instead describe what was submitted for a month, so their earlier rows
+remain useful history.
+
+### 3. Select the newest submitted version where records are updated
+
+Models first identify rows that represent the same record. They then order
+those rows by:
 
 1. reporting-period end date, newest first;
 2. file receipt timestamp (`effective_from`), newest first;
-3. submission identifier.
+3. submission identifier, highest first; and
+4. source row order or submitted-row identifier where another tie-break is
+   needed.
 
-If this still leaves a tie, the model uses the source row order, the submitted
-row identifier or both. MHS604 diagnosis also follows the NHS England grouper
-order when diagnosis timestamps are equal.
+The reporting month and receipt time determine which version is newer. The
+remaining fields make the result repeatable when those dates are equal; they do
+not imply that one row is clinically more reliable. MHS604 diagnosis also
+follows the NHS England grouper order when diagnosis timestamps are equal.
 
 The `select_latest_mhsds_record` macro applies this ordering where tables share
 the same pattern. Models with table-specific matching rules apply the same
 first three steps directly in their SQL.
 
-Each model documents and tests the identifiers used to recognise the same
-record. `MHSxxxUniqID` fields identify individual submitted rows, so they cannot
-usually link versions across months. Referral, contact, spell and ward-stay
-identifiers are used where the source provides them.
+`MHSxxxUniqID` fields identify individual submitted rows, so they cannot usually
+link versions across months. Referral, contact, spell and ward-stay identifiers
+are used where the source provides them.
+
+### 4. Rules applied by the current staging models
+
+| Staging model | Rows treated as the same record | Rows retained |
+|---|---|---|
+| `stg_mhsds_referral` | Same unique service request | Newest submitted referral |
+| `stg_mhsds_carecontact` | Same service request and unique care contact | Newest submitted contact |
+| `stg_mhsds_patientindicators` | Same derived local patient identifier | Newest submitted patient indicators |
+| `stg_mhsds_other_service_or_team_type` | Same referral and available service or team identifier | Newest relationship; rows without a service or team identifier are excluded |
+| `stg_mhsds_servicetype` | Same referral | Newest referral service information, supplemented from MHS101, MHS102 and MHS902 |
+| `stg_mhsds_mhactperiod` | Same unique Mental Health Act episode | Newest submitted legal-status period |
+| `stg_mhsds_spell` | Same unique hospital-provider spell number | Newest submitted spell, including a later discharge |
+| `stg_mhsds_mhs502wardstay` | Same unique ward-stay identifier | Newest submitted ward stay, including a later end date |
+| `stg_mhsds_primdiag` | Same referral and diagnosis timestamp | One primary diagnosis using source and NHS England grouper ordering; rows without a timestamp are excluded |
+| `stg_mhsds_mpi_history` | No matching across months | Every MHS001 row from accepted files, identified by its submitted-row id |
+| `stg_mhsds_indirectactivity` | No matching across months | Every MHS204 row from accepted files because it is activity for that reporting period |
+| `stg_mhsds_service_or_team_details` | No matching across months | Every MHS902 team snapshot from accepted files |
+| `stg_mhsds_mhs903warddetails` | Same provider, submission and ward code | One ward definition within each accepted file; ward snapshots remain separate across months |
+
+Each model's YAML description states what one row represents, and its tests
+check the identifiers expected to be unique after these rules are applied.
+
+### 5. Treat later absence separately from correction
 
 This process gives the newest version seen in an accepted file. MHSDS does not
 provide one deletion marker that works across all tables, so a record missing
 from a later submission is not automatically treated as deleted. Models for
 current occupancy or status also use recorded end dates and recent submission
-evidence.
+evidence. An apparently open record is therefore the latest state received, not
+proof that the provider still considers it open today.
+
+### MHS001 patient identity needs separate handling
 
 MHS001 is monthly patient history, not a one-row-per-person dimension.
 `stg_mhsds_mpi_history` retains every MHS001 row from accepted submissions.
@@ -64,17 +107,17 @@ pseudonymised NHS number, so source order cannot identify an authoritative row.
 The history model retains them and labels the submitted pseudonym separately
 from the cross-system patient key supplied by the bridge.
 
-Dates, times and timestamps have separate meanings:
+## Date and time precision
 
-- `*_date` is a Snowflake `DATE`.
-- `*_time` is a Snowflake `TIME`; it does not contain the source placeholder
-  date `1970-01-01`.
-- `*_at` combines the source date and time. A date-only record uses midnight so
-  the field remains sortable.
-- `*_time_precision` states `date` or `timestamp`. Use it when recorded time
-  precision affects an analysis.
-- Source dates before 1901 are Excel-epoch missing-value sentinels and are
-  exposed as null.
+Source times arrive attached to the placeholder date `1970-01-01`; staging
+keeps only the recorded time. Published `*_at` fields combine the source date
+and time. Where no time was supplied, the timestamp uses midnight and the
+matching `*_time_precision` field is `date`. A recorded time uses `timestamp`.
+Use the precision field to distinguish a date-only record from an event
+actually recorded at midnight.
+
+Source dates before 1901 are Excel-epoch missing-value sentinels rather than
+plausible clinical dates and are exposed as null.
 
 Reference models supply current UKHFD descriptions for submitted codes. Their
 `_history` models retain definition revisions. This includes referral, contact,
