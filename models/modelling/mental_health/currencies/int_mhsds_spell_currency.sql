@@ -92,11 +92,7 @@ with deduplicated as (
         and d.coded_diag_timestamp <= coalesce(b.end_date, current_date)
     qualify row_number() over (
         partition by b.uniq_hosp_prov_spell_num
-        order by
-            d.coded_diag_timestamp desc nulls last
-            , d.source_record_number
-            , d.source_row_number
-            , d.mhs604_uniq_id
+        order by d.coded_diag_timestamp desc nulls last
     ) = 1
 )
 

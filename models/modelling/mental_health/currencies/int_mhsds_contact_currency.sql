@@ -25,11 +25,7 @@ with eligible_contacts as (
         and d.coded_diag_timestamp <= c.care_cont_date
     qualify row_number() over (
         partition by c.uniq_serv_req_id, c.uniq_care_cont_id
-        order by
-            d.coded_diag_timestamp desc nulls last
-            , d.source_record_number
-            , d.source_row_number
-            , d.mhs604_uniq_id
+        order by d.coded_diag_timestamp desc nulls last
     ) = 1
 )
 
