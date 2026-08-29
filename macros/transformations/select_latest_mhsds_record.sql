@@ -1,13 +1,13 @@
-{% macro select_latest_mhsds_state(
+{% macro select_latest_mhsds_record(
         mhsds_table,
         partition_cols = [],
         tie_breaker_cols = []
     ) %}
 
-    {# Select the newest reported state of a record that can recur across periods. #}
+    {# Select the newest reported version of a record that recurs across periods. #}
     {% if partition_cols | length == 0 %}
         {{ exceptions.raise_compiler_error(
-            "You must provide at least one partition column to select_latest_mhsds_state."
+            "You must provide at least one partition column to select_latest_mhsds_record."
         ) }}
     {% endif %}
 

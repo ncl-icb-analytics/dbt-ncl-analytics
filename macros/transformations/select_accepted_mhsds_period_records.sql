@@ -1,6 +1,6 @@
-{% macro select_active_mhsds_records(mhsds_table) %}
+{% macro select_accepted_mhsds_period_records(mhsds_table) %}
 
-    {# Retain every record from the accepted submission for each reporting period. #}
+    {# Filter records to the accepted file for each provider and reporting period. #}
     select tbl.*
     from {{ mhsds_table }} as tbl
     inner join {{ ref('stg_mhsds_activesubmission') }} as submission

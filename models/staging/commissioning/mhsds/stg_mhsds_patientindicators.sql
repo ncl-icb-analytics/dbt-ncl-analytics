@@ -7,7 +7,7 @@
 
 with deduplicated as (
     {{
-        select_latest_mhsds_state(
+        select_latest_mhsds_record(
             mhsds_table = ref('raw_mhsds_mhs005patind'),
             partition_cols = ['unique_local_patient_id'],
             tie_breaker_cols = ['mhs005_uniq_id']

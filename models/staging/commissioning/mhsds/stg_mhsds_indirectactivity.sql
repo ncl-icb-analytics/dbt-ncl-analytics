@@ -5,9 +5,9 @@
         )
 }}
 
-with deduplicated as (
+with accepted_records as (
 {{
-    select_active_mhsds_records(
+    select_accepted_mhsds_period_records(
         mhsds_table = ref('raw_mhsds_mhs204indirectactivity')
     )
 }} )
@@ -20,4 +20,4 @@ select
     , duration_indirect_act
     , care_prof_team_local_id
     , other_care_prof_team_local_id
-from deduplicated
+from accepted_records

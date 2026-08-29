@@ -1,22 +1,22 @@
 models:
   - name: stg_mhsds_mhs903warddetails
     description: >-
-      MHSDS ward-detail rows from active submissions. The source can contain
-      more than one definition for a ward within a submission; downstream joins
-      must resolve that exception before joining by provider, submission and
-      ward code.
+      MHSDS ward-detail snapshots. Grain: one row per provider, accepted
+      submission and ward code. Duplicate definitions within a file use the
+      last source row.
     config:
       meta:
         owner:
           name: Kate Homer
-
-
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [org_id_prov, uniq_submission_id, ward_code]
     columns:
       - name: mhs903_uniq_id
         description: Identifier of the submitted ward-detail row.
         data_tests:
           - not_null
-          - unique
 
       - name: ward_code
         description: Provider-local ward identifier.

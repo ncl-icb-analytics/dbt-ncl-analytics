@@ -7,7 +7,7 @@
 
 with latest_spell as (
     {{
-        select_latest_mhsds_state(
+        select_latest_mhsds_record(
             mhsds_table = ref('raw_mhsds_mhs501hospprovspell'),
             partition_cols = ['uniq_hosp_prov_spell_num'],
             tie_breaker_cols = ['mhs501_uniq_id']

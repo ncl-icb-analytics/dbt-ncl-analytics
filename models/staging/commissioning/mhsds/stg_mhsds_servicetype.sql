@@ -7,7 +7,7 @@
 
 with mhs102 as (
     {{
-        select_latest_mhsds_state(
+        select_latest_mhsds_record(
             mhsds_table = ref('raw_mhsds_mhs102servicetypereferredto'),
             partition_cols = ['uniq_serv_req_id'],
             tie_breaker_cols = ['mhs102_uniq_id']
@@ -19,7 +19,7 @@ with mhs102 as (
 -- v6 MHS101 ServTeamType field
 , mhs101 as (
     {{
-        select_latest_mhsds_state(
+        select_latest_mhsds_record(
             mhsds_table = ref('raw_mhsds_mhs101referral'),
             partition_cols = ['uniq_serv_req_id'],
             tie_breaker_cols = ['mhs101_uniq_id']

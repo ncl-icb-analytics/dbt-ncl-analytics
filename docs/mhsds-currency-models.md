@@ -30,7 +30,7 @@ A currency code has three parts: `MAA98A` = population group (`MAA`) + family (`
 
 ## 1. Select accepted records
 
-MHSDS is a monthly resubmission feed. [`stg_mhsds_activesubmission`](../models/staging/commissioning/mhsds/stg_mhsds_activesubmission.sql) identifies the accepted file for each provider and reporting period. State tables use [`select_latest_mhsds_state`](../macros/transformations/select_latest_mhsds_state.sql) to retain the newest reported version of each stable source key. Event tables use [`select_active_mhsds_records`](../macros/transformations/select_active_mhsds_records.sql) to retain all records from accepted files. Do not count raw rows.
+MHSDS is a monthly resubmission feed. [`stg_mhsds_activesubmission`](../models/staging/commissioning/mhsds/stg_mhsds_activesubmission.sql) identifies the accepted file for each provider and reporting period. This is an input filter, not a published grain. Versioned models use [`select_latest_mhsds_record`](../macros/transformations/select_latest_mhsds_record.sql) to retain the newest reported version of each logical record. Period snapshots use [`select_accepted_mhsds_period_records`](../macros/transformations/select_accepted_mhsds_period_records.sql), then resolve and test their own grain. MHS204 activity is restricted to its activity month, so the accepted file is authoritative for that period.
 
 Two data facts shape everything downstream:
 

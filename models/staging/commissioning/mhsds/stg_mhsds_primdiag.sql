@@ -5,11 +5,10 @@
     )
 }}
 
-with latest_source_rows as (
+with accepted_records as (
     {{
-        select_latest_mhsds_state(
-            mhsds_table = ref('raw_mhsds_mhs604primdiag'),
-            partition_cols = ['mhs604_uniq_id']
+        select_accepted_mhsds_period_records(
+            ref('raw_mhsds_mhs604primdiag')
         )
     }}
 )
@@ -43,7 +42,10 @@ with latest_source_rows as (
         , d.org_id_prov
         , d.record_number as source_record_number
         , d.row_number as source_row_number
-    from latest_source_rows as d
+        , d.uniq_submission_id
+        , d.reporting_period_end_date
+        , d.effective_from
+    from accepted_records as d
     left join snomed_to_icd10 as s
         on to_varchar(d.prim_diag) = to_varchar(s.referenced_component_id)
 )
@@ -54,7 +56,13 @@ with latest_source_rows as (
     where coded_diag_timestamp is not null
     qualify row_number() over (
         partition by uniq_serv_req_id, coded_diag_timestamp
-        order by source_record_number, source_row_number, mhs604_uniq_id
+        order by
+            reporting_period_end_date desc
+            , effective_from desc nulls last
+            , uniq_submission_id desc
+            , source_record_number
+            , source_row_number
+            , mhs604_uniq_id
     ) = 1
 )
 
@@ -70,4 +78,7 @@ select
     , org_id_prov
     , source_record_number
     , source_row_number
+    , uniq_submission_id
+    , reporting_period_end_date
+    , effective_from
 from deduplicated

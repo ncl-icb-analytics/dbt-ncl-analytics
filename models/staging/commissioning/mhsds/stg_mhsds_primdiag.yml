@@ -40,6 +40,12 @@ models:
         description: MHSDS record number used to resolve equal diagnosis timestamps.
       - name: source_row_number
         description: MHSDS row number used to resolve equal diagnosis timestamps.
+      - name: uniq_submission_id
+        description: Submission containing the retained diagnosis.
+      - name: reporting_period_end_date
+        description: End of the reporting period containing the retained diagnosis.
+      - name: effective_from
+        description: Time the retained source file was received.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
