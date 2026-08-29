@@ -1,15 +1,15 @@
 # MHSDS domain models
 
-The source facts and relationships expose MHSDS records at their submitted
-business grains. Derived models support analysis and provide inputs to
-cross-system event and clinical record models.
+The source facts and relationships keep MHSDS records at their submitted level
+of detail. Derived models support analysis and provide inputs to cross-system
+event and clinical record models.
 
 Definitions follow the current
 [MHSDS v6 ETOS](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance).
 Historical records retain their submitted MHSDS version because fields and
 relationships change between versions.
 
-## Submission and record-selection rules
+## How monthly submissions and repeated rows are handled
 
 MHSDS is a monthly resubmission feed. Selection for monthly submission tables
 starts with `stg_mhsds_activesubmission`, which keeps the accepted file for each
@@ -17,35 +17,34 @@ provider and reporting period. This removes superseded files for the same
 provider-month. It does not remove records repeated in later periods. The person
 bridge is a separate identity-linking feed and does not use this rule.
 
-Staging then applies one of three contracts:
+What happens next depends on the type of table:
 
-| Contract | Result | Examples |
+| Type of table | What dbt keeps | Examples |
 |---|---|---|
-| Latest submitted state | One row for each documented logical key. The newest reporting period wins. | Referrals, care contacts, patient indicators, referral-team relationships, legal-status periods, hospital spells and ward stays. |
-| Reporting-period history | Accepted rows remain separate by month or submitted source row. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
-| Source-grain resolution | A model-specific key and ordering resolve records where the source repeats a row within or across accepted files. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
+| Records updated in later submissions | The newest reported version of each record. | Referrals, care contacts, patient indicators, referral-team relationships, legal-status periods, hospital spells and ward stays. |
+| Monthly history | Rows from every accepted month. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
+| Repeated rows needing a table-specific rule | One row using identifiers and ordering defined for that table. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
 
-For latest submitted state, ordering begins with:
+When the same record appears more than once, dbt first prefers:
 
 1. reporting-period end date, newest first;
 2. file receipt timestamp (`effective_from`), newest first;
 3. submission identifier.
 
-Where ties remain, the model uses source row order, a submitted-row identifier
-or both. MHS604 diagnosis additionally follows the NHS England grouper order
-for equal diagnosis timestamps.
+If this still leaves a tie, the model uses the source row order, the submitted
+row identifier or both. MHS604 diagnosis also follows the NHS England grouper
+order when diagnosis timestamps are equal.
 
-The partition key is stated and tested by each model. Generated
-`MHSxxxUniqID` fields identify submitted rows; they are not assumed to identify
-the same clinical record across submissions. Referral, contact, spell,
-ward-stay and other derived identifiers provide the longitudinal keys where the
-source defines them.
+Each model documents and tests the identifiers used to recognise the same
+record. `MHSxxxUniqID` fields identify individual submitted rows, so they cannot
+usually link versions across months. Referral, contact, spell and ward-stay
+identifiers are used where the source provides them.
 
-Latest-state selection means the newest version observed in an accepted file.
-The feed does not provide a general deletion marker, so absence from a later
-submission is not treated as proof that an earlier record was deleted. Models
-for current occupancy or status apply their own end-date and recent-evidence
-rules after version selection.
+This process gives the newest version seen in an accepted file. MHSDS does not
+provide one deletion marker that works across all tables, so a record missing
+from a later submission is not automatically treated as deleted. Models for
+current occupancy or status also use recorded end dates and recent submission
+evidence.
 
 MHS001 is monthly patient history, not a one-row-per-person dimension.
 `stg_mhsds_mpi_history` retains every MHS001 row from accepted submissions.
@@ -82,7 +81,7 @@ UKHFD and is not yet modelled in dbt.
 
 ## Published interfaces
 
-| Model | Grain | Use |
+| Model | One row represents | Use |
 |---|---|---|
 | [`fct_mhsds_referral`](../models/reporting/mental_health/fct_mhsds_referral.sql) | One unique service request | Referral receipt, decision, discharge planning, rejection, closure, organisations and primary service context. |
 | [`rel_mhsds_referral_service_team`](../models/reporting/mental_health/rel_mhsds_referral_service_team.sql) | One referral, relationship role and service or team | Primary, referred-to and additional teams without multiplying the referral fact. |
@@ -111,10 +110,10 @@ predecessor CCGs. It does not classify the London Commissioning Hub as WNL.
 ## Nearby source facts
 
 The referral and contact tables are the start of the domain, not a replacement
-for their child records. The following source grains should be published as
+for their child records. The following source records should be published as
 separate facts or relationships.
 
-| Source | Proposed model | Grain and role |
+| Source | Proposed model | One row represents and use |
 |---|---|---|
 | MHS103 Other Reason for Referral | `fct_mhsds_referral_reason` | One additional reason recorded against a referral. Keep primary reason on the referral fact. |
 | MHS104 Referral to Treatment | `fct_mhsds_referral_to_treatment_period` | One submitted RTT period or status record linked to a referral. |
@@ -128,8 +127,8 @@ separate facts or relationships.
 Aggregate profiling in August 2026 found about 0.7m additional referral
 reasons, 0.8m RTT rows, 0.1m onward referrals, 0.2m other-attendee rows and
 1.2m indirect activities in active submissions. MHS106 and MHS205 are small but
-have stable source grains. Their row count is not a reason to fold them into a
-parent fact.
+have clear source identifiers. Their row count is not a reason to fold them
+into a parent fact.
 
 These facts need the matching UKHFD code sets before publication. UKHFD holds
 the referral reason, RTT status, onward-referral reason, care-contact attendee,
