@@ -101,6 +101,14 @@ periods. Use `stg_mhsds_bridging` for the one-row-per-person link to
 `sk_patient_id`, and use `dim_person_mh_profile` for a person-level analytical
 summary.
 
+Accepted files from January 2016 to July 2026 contain 16.4 million MHS001
+snapshot rows for 1.05 million distinct MHS001 person identifiers. Almost all
+of that volume is monthly history: there are 16.39 million distinct
+provider-local-patient months. The remaining 9,490 rows repeat that grain and
+contain the conflicting identifiers described below. The 2.81 million people
+in `stg_mhsds_bridging` are the wider MHSDS-linked population, not an MHS001
+patient count.
+
 Some accepted MHS001 files contain more than one row for the same extended
 local patient identifier. The rows can disagree on `person_id` and the
 pseudonymised NHS number, so source order cannot identify an authoritative row.
@@ -157,26 +165,34 @@ predecessor CCGs. It does not classify the London Commissioning Hub as WNL.
 
 ## Nearby source facts
 
-The referral and contact tables are the start of the domain, not a replacement
-for their child records. The following source records should be published as
-separate facts or relationships.
+The [MHSDS analytical-domain plan](https://github.com/wnl-icb-analytics/dbt-analytics/issues/1028)
+organises the remaining source records around analytical subjects rather than
+publishing one model for every numbered source table.
 
-| Source | Proposed model | One row represents and use |
+| Source | Analytical model or decision | One row represents and use |
 |---|---|---|
-| MHS103 Other Reason for Referral | `fct_mhsds_referral_reason` | One additional reason recorded against a referral. Keep primary reason on the referral fact. |
-| MHS104 Referral to Treatment | `fct_mhsds_referral_to_treatment_period` | One submitted RTT period or status record linked to a referral. |
-| MHS105 Onward Referral | `fct_mhsds_onward_referral` | One onward referral decision, referral date and receiving organisation. This is a recorded service-movement signal. |
-| MHS106 Discharge Plan Agreement | `fct_mhsds_discharge_plan_agreement` | One person or group recorded as agreeing discharge-plan content. |
-| MHS203 Other in Attendance | `fct_mhsds_care_contact_attendee` | One other attendee recorded against a care contact. |
-| MHS204 Indirect Activity | `fct_mhsds_indirect_activity` | One dated activity undertaken for a patient while the patient was not present. It is linked to a referral but is not a patient contact. |
-| MHS205 Patient Self-Directed Digital Intervention | `fct_mhsds_self_directed_digital_intervention` | One patient-linked digital intervention period. This source starts in MHSDS v6. |
-| MHS206 Staff Activity | `rel_mhsds_care_activity_staff` | One care professional recorded against a care activity. It is clinical-record context, not another contact. |
+| MHS103 Other Reason for Referral | `rel_mhsds_referral_reason` | One referral and additional-reason code. The primary reason remains on the referral fact. |
+| MHS104 Referral to Treatment | `fct_mhsds_referral_to_treatment_period` | One logical RTT period using its latest submitted revision. |
+| MHS105 Onward Referral | `fct_mhsds_onward_referral` | One dated onward-referral decision and receiving organisation. This is a recorded service-movement signal. |
+| MHS106 Discharge Plan Agreement | `fct_mhsds_discharge_plan_agreement` | One dated discharge-plan agreement linked to a referral. |
+| MHS202 Care Activity | `fct_mhsds_care_activity` | One care activity linked to its contact and referral. Its populated clinical components can produce separate clinical-record rows. |
+| MHS203 Other in Attendance | `rel_mhsds_care_contact_attendee_type` | One contact and attendee-type code. It does not identify another person. |
+| MHS204 Indirect Activity | `fct_mhsds_indirect_activity` | One dated activity undertaken for a patient while the patient was not present. It is not a care contact. |
+| MHS205 Patient Self-Directed Digital Intervention | Data-quality review in #1032 | A future intervention-period fact if the new v6 records can be linked reliably. |
+| MHS206 Staff Activity | `rel_mhsds_care_activity_staff` | One recorded care-activity-to-professional relationship. Missing MHS202 parents remain a visible source-quality state. |
+| MHS609 Presenting Complaint | Data-quality review in #1033 | A future clinical-record contribution if its v6 patient and referral links are usable. |
+| MHS901 Staff Details | Reporting-period professional context | Staff group, specialty, occupation and job role at the source-defined snapshot grain. |
 
-Aggregate profiling in August 2026 found about 0.7m additional referral
-reasons, 0.8m RTT rows, 0.1m onward referrals, 0.2m other-attendee rows and
-1.2m indirect activities in active submissions. MHS106 and MHS205 are small but
-have clear source identifiers. Their row count is not a reason to fold them
-into a parent fact.
+MHS107 medication prescriptions has no rows in accepted submissions and will
+not receive an empty reporting model. It can be added when source data begins
+flowing.
+
+Aggregate profiling in August 2026 found about 0.7 million additional referral
+reasons, 0.8 million RTT rows, 0.1 million onward referrals, 0.2 million
+contact-attendee rows and 1.2 million indirect activities. MHS205 and MHS609
+are held behind data-quality reviews because their new v6 records do not
+currently link reliably. About 419,000 MHS206 rows refer to an MHS202 care
+activity absent from the received data.
 
 These facts need the matching UKHFD code sets before publication. UKHFD holds
 the referral reason, RTT status, onward-referral reason, care-contact attendee,
