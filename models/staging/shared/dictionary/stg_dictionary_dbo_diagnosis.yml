@@ -16,4 +16,5 @@ models:
       - name: code
         description: ICD-10 diagnosis code
         tests:
+          - unique
           - not_null
