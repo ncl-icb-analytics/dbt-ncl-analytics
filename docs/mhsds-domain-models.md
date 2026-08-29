@@ -19,13 +19,14 @@ bridge is a separate identity-linking feed and does not use this rule.
 
 What happens next depends on the type of table:
 
-| Type of table | What dbt keeps | Examples |
+| Type of table | Rows retained by our models | Examples |
 |---|---|---|
 | Records updated in later submissions | The newest reported version of each record. | Referrals, care contacts, patient indicators, referral-team relationships, legal-status periods, hospital spells and ward stays. |
 | Monthly history | Rows from every accepted month. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
 | Repeated rows needing a table-specific rule | One row using identifiers and ordering defined for that table. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
 
-When the same record appears more than once, dbt first prefers:
+When a model selects the newest submitted version, our staging rule orders
+matching rows by:
 
 1. reporting-period end date, newest first;
 2. file receipt timestamp (`effective_from`), newest first;
@@ -34,6 +35,10 @@ When the same record appears more than once, dbt first prefers:
 If this still leaves a tie, the model uses the source row order, the submitted
 row identifier or both. MHS604 diagnosis also follows the NHS England grouper
 order when diagnosis timestamps are equal.
+
+The `select_latest_mhsds_record` macro applies this ordering where tables share
+the same pattern. Models with table-specific matching rules apply the same
+first three steps directly in their SQL.
 
 Each model documents and tests the identifiers used to recognise the same
 record. `MHSxxxUniqID` fields identify individual submitted rows, so they cannot
