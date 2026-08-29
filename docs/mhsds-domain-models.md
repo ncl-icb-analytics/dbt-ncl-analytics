@@ -9,11 +9,43 @@ Definitions follow the current
 Historical records retain their submitted MHSDS version because fields and
 relationships change between versions.
 
-## Submission and time rules
+## Submission and record-selection rules
 
-MHSDS is a monthly resubmission feed. Reporting models use active provider
-submissions and retain the row from the newest reporting period for each stated
-business key. Source receipt time resolves ties within a reporting period.
+MHSDS is a monthly resubmission feed. Selection for monthly submission tables
+starts with `stg_mhsds_activesubmission`, which keeps the accepted file for each
+provider and reporting period. This removes superseded files for the same
+provider-month. It does not remove records repeated in later periods. The person
+bridge is a separate identity-linking feed and does not use this rule.
+
+Staging then applies one of three contracts:
+
+| Contract | Result | Examples |
+|---|---|---|
+| Latest submitted state | One row for each documented logical key. The newest reporting period wins. | Referrals, care contacts, patient indicators, referral-team relationships, legal-status periods, hospital spells and ward stays. |
+| Reporting-period history | Accepted rows remain separate by month or submitted source row. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
+| Source-grain resolution | A model-specific key and ordering resolve records where the source repeats a row within or across accepted files. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
+
+For latest submitted state, ordering begins with:
+
+1. reporting-period end date, newest first;
+2. file receipt timestamp (`effective_from`), newest first;
+3. submission identifier.
+
+Where ties remain, the model uses source row order, a submitted-row identifier
+or both. MHS604 diagnosis additionally follows the NHS England grouper order
+for equal diagnosis timestamps.
+
+The partition key is stated and tested by each model. Generated
+`MHSxxxUniqID` fields identify submitted rows; they are not assumed to identify
+the same clinical record across submissions. Referral, contact, spell,
+ward-stay and other derived identifiers provide the longitudinal keys where the
+source defines them.
+
+Latest-state selection means the newest version observed in an accepted file.
+The feed does not provide a general deletion marker, so absence from a later
+submission is not treated as proof that an earlier record was deleted. Models
+for current occupancy or status apply their own end-date and recent-evidence
+rules after version selection.
 
 MHS001 is monthly patient history, not a one-row-per-person dimension.
 `stg_mhsds_mpi_history` retains every MHS001 row from accepted submissions.
