@@ -64,7 +64,9 @@ models:
       - name: latest_detention_start_date
         description: Latest formal Mental Health Act legal-status start date.
       - name: is_currently_detained
-        description: Whether a formal legal-status period is current in the feed.
+        description: >-
+          Whether an open formal legal-status period appeared within the latest
+          three accepted reporting periods and has not expired.
       - name: child_protection_plan_status_code
         description: Latest submitted child protection plan status code.
       - name: child_protection_plan_status_description

@@ -20,4 +20,8 @@ select
     , duration_indirect_act
     , care_prof_team_local_id
     , other_care_prof_team_local_id
+    , uniq_submission_id
+    , reporting_period_start_date::date as reporting_period_start_date
+    , reporting_period_end_date::date as reporting_period_end_date
+    , effective_from
 from accepted_records

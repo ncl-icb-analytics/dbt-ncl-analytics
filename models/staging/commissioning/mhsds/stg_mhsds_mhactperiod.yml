@@ -13,6 +13,8 @@ models:
         owner:
           name: Eddie Davison
     columns:
+      - name: mhs401_uniq_id
+        description: Identifier of the retained source row; changes on resubmission.
       - name: uniq_mh_act_episode_id
         description: Unique Mental Health Act episode identifier.
         data_tests:
@@ -32,3 +34,9 @@ models:
         description: Provider organisation code.
       - name: unique_local_patient_id
         description: Provider-local patient identifier.
+      - name: uniq_submission_id
+        description: Accepted submission containing the retained period version.
+      - name: reporting_period_end_date
+        description: Last reporting period in which the period was submitted.
+      - name: effective_from
+        description: Time the retained source file was received.

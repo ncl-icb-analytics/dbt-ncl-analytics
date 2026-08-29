@@ -106,15 +106,24 @@ with population as (
         partition by r.person_id
         order by
             d.coded_diag_timestamp desc
+            , d.reporting_period_end_date desc
+            , d.effective_from desc nulls last
+            , d.uniq_submission_id desc
             , d.source_record_number
             , d.source_row_number
             , d.mhs604_uniq_id
     ) = 1
 )
 
+, latest_reporting_period as (
+    select
+        max(reporting_period_end_date) as latest_reporting_period_end_date
+    from {{ ref('stg_mhsds_activesubmission') }}
+)
+
 , mha_aggregates as (
     select
-        person_id
+        m.person_id
         , count_if(
             nhsd_legal_status is not null
             and nhsd_legal_status not in ('01', '98', '99')
@@ -135,10 +144,14 @@ with population as (
                 expiry_date_mh_act_legal_status_class is null
                 or expiry_date_mh_act_legal_status_class >= current_date
             )
+            and m.reporting_period_end_date >= dateadd(
+                month, -2, p.latest_reporting_period_end_date
+            )
         ) > 0 as is_currently_detained
-    from {{ ref('stg_mhsds_mhactperiod') }}
-    where person_id is not null
-    group by person_id
+    from {{ ref('stg_mhsds_mhactperiod') }} as m
+    cross join latest_reporting_period as p
+    where m.person_id is not null
+    group by m.person_id
 )
 
 , latest_patient_indicators as (

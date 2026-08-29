@@ -4,11 +4,14 @@ macros:
   - name: select_latest_mhsds_record
     description: >-
       Selects the newest reported version of each MHSDS logical record from
-      accepted submissions. Reporting period takes precedence over file receipt.
+      accepted submissions. Reporting period takes precedence over file receipt,
+      followed by source row order and caller-supplied tie-breakers.
     arguments:
       - name: mhsds_table
         type: relation
-        description: Relation containing uniq_submission_id, effective_from and the selection columns.
+        description: >-
+          Relation containing uniq_submission_id, effective_from, row_number
+          and every partition and tie-breaker column.
       - name: partition_cols
         type: list
         description: Non-empty list of columns defining the longitudinal record.

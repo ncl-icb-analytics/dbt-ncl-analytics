@@ -18,7 +18,8 @@ with deduplicated as (
 -- REVIEW: raw MHS401 has no uniq_serv_req_id, so legal-status periods cannot
 -- be linked directly to a referral.
 select
-    uniq_mh_act_episode_id
+    mhs401_uniq_id
+    , uniq_mh_act_episode_id
     , person_id
     , nhsd_legal_status
     , start_date_mh_act_legal_status_class
@@ -26,4 +27,7 @@ select
     , expiry_date_mh_act_legal_status_class
     , org_id_prov
     , unique_local_patient_id
+    , uniq_submission_id
+    , reporting_period_end_date::date as reporting_period_end_date
+    , effective_from
 from deduplicated

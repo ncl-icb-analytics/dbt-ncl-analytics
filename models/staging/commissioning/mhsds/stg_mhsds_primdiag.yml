@@ -5,15 +5,16 @@ models:
     description: >
       MHSDS primary diagnosis history for currency grouping. Grain: one row per
       uniq_serv_req_id and coded_diag_timestamp. Population: MHS604 primary
-      diagnoses with a recorded timestamp. The newest version of each source
-      row is retained. Equal timestamps use the NHS England grouper ordering.
+      diagnoses with a recorded timestamp. A corrected code at the same
+      referral and timestamp supersedes the earlier value. Equal timestamps use
+      the NHS England grouper ordering.
     config:
       meta:
         owner:
           name: Eddie Davison
     columns:
       - name: mhs604_uniq_id
-        description: Stable MHS604 row identifier across reporting periods.
+        description: Identifier of the retained source row; changes on resubmission.
         data_tests:
           - not_null
       - name: uniq_serv_req_id

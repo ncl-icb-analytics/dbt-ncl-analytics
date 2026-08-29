@@ -24,6 +24,7 @@
             submission.reporting_period_end_date desc
             , tbl.effective_from desc nulls last
             , tbl.uniq_submission_id desc
+            , tbl.row_number desc nulls last
             {%- for col in tie_breaker_cols %}
             , tbl.{{ col }} desc
             {%- endfor %}
