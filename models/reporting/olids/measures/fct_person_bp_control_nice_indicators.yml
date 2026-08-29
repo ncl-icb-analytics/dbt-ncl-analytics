@@ -5,7 +5,9 @@ models:
       under on the hypertension register, assessed on the current date. The
       numerator requires a reading in the preceding 12 months below 140/90 mmHg
       in clinic or 135/85 mmHg using HBPM or ABPM. Personalised care adjustments
-      are not applied.
+      are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -72,7 +74,9 @@ models:
       over on the hypertension register, assessed on the current date. The
       numerator requires a reading in the preceding 12 months below 150/90 mmHg
       in clinic or 145/85 mmHg using HBPM or ABPM. Personalised care adjustments
-      are not applied.
+      are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -98,7 +102,9 @@ models:
       under on the coronary heart disease register, assessed on the current
       date. The numerator requires a reading in the preceding 12 months below
       140/90 mmHg in clinic or 135/85 mmHg using HBPM or ABPM. Personalised care
-      adjustments are not applied.
+      adjustments are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -124,7 +130,9 @@ models:
       over on the coronary heart disease register, assessed on the current
       date. The numerator requires a reading in the preceding 12 months below
       150/90 mmHg in clinic or 145/85 mmHg using HBPM or ABPM. Personalised care
-      adjustments are not applied.
+      adjustments are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -150,7 +158,9 @@ models:
       under on the stroke and TIA register, assessed on the current date. The
       numerator requires a reading in the preceding 12 months below 140/90 mmHg
       in clinic or 135/85 mmHg using HBPM or ABPM. Personalised care adjustments
-      are not applied.
+      are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -176,7 +186,9 @@ models:
       over on the stroke and TIA register, assessed on the current date. The
       numerator requires a reading in the preceding 12 months below 150/90 mmHg
       in clinic or 145/85 mmHg using HBPM or ABPM. Personalised care adjustments
-      are not applied.
+      are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -202,7 +214,9 @@ models:
       under on the peripheral arterial disease register, assessed on the current
       date. The numerator requires a reading in the preceding 12 months below
       140/90 mmHg in clinic or 135/85 mmHg using HBPM or ABPM. Personalised care
-      adjustments are not applied.
+      adjustments are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -228,7 +242,9 @@ models:
       over on the peripheral arterial disease register, assessed on the current
       date. The numerator requires a reading in the preceding 12 months below
       150/90 mmHg in clinic or 145/85 mmHg using HBPM or ABPM. Personalised care
-      adjustments are not applied.
+      adjustments are not applied. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       meta:
         owner:
@@ -253,7 +269,9 @@ models:
       NICE IND239 to IND246 blood pressure status in a common interface. One row
       per person and indicator on the current reporting date. Indicator-specific
       views remain the source of each population and threshold definition.
-      Personalised care adjustments are not applied.
+      Personalised care adjustments are not applied. Secondary-use consumers
+      must join DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out
+      and Type 1 opt-out filtering.
     config:
       meta:
         owner:

@@ -12,7 +12,9 @@ models:
       deprivation dimensions. Personalised care adjustments are not applied.
 
       Filter indicator_id before using metrics because a person can appear in
-      more than one indicator.
+      more than one indicator. Secondary-use consumers must join
+      DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
+      opt-out filtering.
     config:
       materialized: semantic_view
       schema: SEMANTIC
