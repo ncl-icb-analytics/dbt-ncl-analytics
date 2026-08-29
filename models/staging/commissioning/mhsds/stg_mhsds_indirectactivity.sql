@@ -1,15 +1,14 @@
 {{
      config(
-        materialized = 'table',
+        materialized = 'view',
         tags=['mhsds']
         )
 }}
 
 with deduplicated as (
 {{
-    deduplicate_mhsds(
-        mhsds_table = ref('raw_mhsds_mhs204indirectactivity'),
-        partition_cols = ['mhs204_uniq_id']
+    select_active_mhsds_records(
+        mhsds_table = ref('raw_mhsds_mhs204indirectactivity')
     )
 }} )
 

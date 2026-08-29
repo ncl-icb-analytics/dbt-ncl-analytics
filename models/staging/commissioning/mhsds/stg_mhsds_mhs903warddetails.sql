@@ -1,9 +1,8 @@
 {{
     config(
-        materialized = 'table',
+        materialized = 'view',
         tags=['mhsds']
         )
 }}
---ward details can be linked to mhs502wardstay using ward_code.
-select *
-FROM {{ ref('raw_mhsds_mhs903warddetails') }}
+-- Ward details must be joined to MHS502 by provider, submission and ward code.
+{{ select_active_mhsds_records(ref('raw_mhsds_mhs903warddetails')) }}

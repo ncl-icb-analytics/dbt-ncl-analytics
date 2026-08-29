@@ -1,6 +1,10 @@
 models:
   - name: stg_mhsds_mhs903warddetails
-    description: 'Mental Health Services Data Set (MHSDS) ward details'
+    description: >-
+      MHSDS ward-detail rows from active submissions. The source can contain
+      more than one definition for a ward within a submission; downstream joins
+      must resolve that exception before joining by provider, submission and
+      ward code.
     config:
       meta:
         owner:
@@ -9,18 +13,28 @@ models:
 
     columns:
       - name: mhs903_uniq_id
-        description: Primary key.
-        tests:
+        description: Identifier of the submitted ward-detail row.
+        data_tests:
           - not_null
+          - unique
 
       - name: ward_code
-        description: identifies the WARD  where ACTIVITY  during a Hospital Provider Spell  took place.
+        description: Provider-local ward identifier.
+        data_tests:
+          - not_null
 
       - name: site_id_of_ward
-        description: ORGANISATION SITE IDENTIFIER  of the  WARD  where the PATIENT was treated.
+        description: Organisation site identifier for the ward.
 
       - name: org_id_prov
-        description: The organisation identifier for the provider
+        description: Provider organisation code.
+        data_tests:
+          - not_null
+
+      - name: uniq_submission_id
+        description: Submission containing the ward definition.
+        data_tests:
+          - not_null
              
       - name: dmic_ccg_code
-        description: The ICB (Integrated Care Board) that commissioned the spell.
+        description: Commissioner code derived by the source pipeline.

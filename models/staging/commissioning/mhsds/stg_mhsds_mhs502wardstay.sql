@@ -5,9 +5,16 @@
     )
 }}
 
--- Older reporting periods can be resubmitted after newer periods. The reporting
--- period therefore identifies the newest ward-stay state; file receipt time only
--- resolves records within that period.
+with latest_ward_stay as (
+    {{
+        select_latest_mhsds_state(
+            mhsds_table = ref('raw_mhsds_mhs502wardstay'),
+            partition_cols = ['uniq_ward_stay_id'],
+            tie_breaker_cols = ['mhs502_uniq_id']
+        )
+    }}
+)
+
 select
     ward_stay.uniq_serv_req_id
     , ward_stay.person_id
@@ -24,15 +31,5 @@ select
     , ward_stay.mh_admitted_patient_class
     , ward_stay.dmic_ccg_code
     , ward_stay.uniq_submission_id
-    , active_submission.reporting_period_end_date
-from {{ ref('raw_mhsds_mhs502wardstay') }} as ward_stay
-inner join {{ ref('raw_mhsds_activesubmission') }} as active_submission
-    on ward_stay.uniq_submission_id = active_submission.uniq_submission_id
-qualify row_number() over (
-    partition by ward_stay.uniq_ward_stay_id
-    order by
-        active_submission.reporting_period_end_date desc
-        , ward_stay.effective_from desc nulls last
-        , ward_stay.uniq_submission_id desc
-        , ward_stay.mhs502_uniq_id desc
-) = 1
+    , ward_stay.reporting_period_end_date
+from latest_ward_stay as ward_stay

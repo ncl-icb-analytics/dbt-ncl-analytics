@@ -4,9 +4,9 @@ models:
   - name: stg_mhsds_primdiag
     description: >
       MHSDS primary diagnosis history for currency grouping. Grain: one row per
-      uniq_serv_req_id and coded_diag_timestamp. Population: MHS604 primary
-      diagnoses. Time semantics: each submitted diagnosis timestamp is retained
-      after deduplication.
+      uniq_serv_req_id, coded_diag_timestamp and prim_diag. Population: MHS604
+      primary diagnoses with a recorded timestamp. The newest reported state of
+      each diagnosis is retained.
     config:
       meta:
         owner:
@@ -38,3 +38,4 @@ models:
             combination_of_columns:
               - uniq_serv_req_id
               - coded_diag_timestamp
+              - prim_diag

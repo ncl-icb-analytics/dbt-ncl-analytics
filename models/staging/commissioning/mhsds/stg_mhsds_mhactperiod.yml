@@ -4,9 +4,10 @@ models:
   - name: stg_mhsds_mhactperiod
     description: >
       MHSDS Mental Health Act legal-status periods. Grain: one row per
-      uniq_mh_act_episode_id. Legal-status codes are NHSD codes: 01 is an
-      informal admission, 98 and 99 are not applicable or unknown, and other
-      codes indicate a formal Mental Health Act legal status.
+      uniq_mh_act_episode_id, using the newest reporting period and then the
+      latest received submission within that period. Legal-status codes are
+      NHSD codes: 01 is an informal admission, 98 and 99 are not applicable or
+      unknown, and other codes indicate a formal Mental Health Act legal status.
     config:
       meta:
         owner:

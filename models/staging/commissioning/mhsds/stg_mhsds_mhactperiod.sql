@@ -7,9 +7,10 @@
 
 with deduplicated as (
     {{
-        deduplicate_mhsds(
+        select_latest_mhsds_state(
             mhsds_table = ref('raw_mhsds_mhs401mhactperiod'),
-            partition_cols = ['uniq_mh_act_episode_id']
+            partition_cols = ['uniq_mh_act_episode_id'],
+            tie_breaker_cols = ['mhs401_uniq_id']
         )
     }}
 )

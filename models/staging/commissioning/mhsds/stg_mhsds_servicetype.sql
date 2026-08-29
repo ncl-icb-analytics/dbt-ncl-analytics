@@ -7,9 +7,10 @@
 
 with mhs102 as (
     {{
-        deduplicate_mhsds(
+        select_latest_mhsds_state(
             mhsds_table = ref('raw_mhsds_mhs102servicetypereferredto'),
-            partition_cols = ['uniq_serv_req_id']
+            partition_cols = ['uniq_serv_req_id'],
+            tie_breaker_cols = ['mhs102_uniq_id']
         )
     }}
 )
@@ -18,9 +19,10 @@ with mhs102 as (
 -- v6 MHS101 ServTeamType field
 , mhs101 as (
     {{
-        deduplicate_mhsds(
+        select_latest_mhsds_state(
             mhsds_table = ref('raw_mhsds_mhs101referral'),
-            partition_cols = ['uniq_serv_req_id']
+            partition_cols = ['uniq_serv_req_id'],
+            tie_breaker_cols = ['mhs101_uniq_id']
         )
     }}
 )
@@ -47,7 +49,11 @@ with mhs102 as (
     where t.serv_team_type_mh is not null
     qualify row_number() over (
         partition by m.uniq_serv_req_id
-        order by m.effective_from desc, t.effective_from desc
+        order by
+            m.reporting_period_end_date desc
+            , m.effective_from desc
+            , t.effective_from desc
+            , m.mhs102_uniq_id desc
     ) = 1
 )
 

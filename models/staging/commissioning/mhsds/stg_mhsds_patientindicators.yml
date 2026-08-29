@@ -4,14 +4,19 @@ models:
   - name: stg_mhsds_patientindicators
     description: >
       MHSDS patient indicators, including child-protection and looked-after
-      status. Grain: one row per mhs005_uniq_id.
+      status. One row per provider-local patient, using the newest reporting
+      period and then the latest received submission within that period.
     config:
       meta:
         owner:
           name: Eddie Davison
     columns:
       - name: mhs005_uniq_id
-        description: Unique patient-indicator record identifier.
+        description: Identifier of the selected source record.
+        data_tests:
+          - not_null
+      - name: unique_local_patient_id
+        description: Provider-scoped patient identifier.
         data_tests:
           - unique
           - not_null
