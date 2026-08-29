@@ -13,7 +13,7 @@
 
     select tbl.*
     from {{ mhsds_table }} as tbl
-    inner join {{ ref('raw_mhsds_activesubmission') }} as submission
+    inner join {{ ref('stg_mhsds_activesubmission') }} as submission
         on tbl.uniq_submission_id = submission.uniq_submission_id
     qualify row_number() over (
         partition by

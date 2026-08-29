@@ -23,5 +23,7 @@ select
     , lac_status
     , lac_legal_status
     , org_id_prov
+    , uniq_submission_id
     , reporting_period_end_date
+    , effective_from
 from deduplicated

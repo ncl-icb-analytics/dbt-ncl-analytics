@@ -146,7 +146,11 @@ with population as (
     where person_id is not null
     qualify row_number() over (
         partition by person_id
-        order by reporting_period_end_date desc nulls last, mhs005_uniq_id
+        order by
+            reporting_period_end_date desc nulls last
+            , effective_from desc nulls last
+            , uniq_submission_id desc
+            , mhs005_uniq_id desc
     ) = 1
 )
 

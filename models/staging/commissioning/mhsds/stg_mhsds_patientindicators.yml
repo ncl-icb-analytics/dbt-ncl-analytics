@@ -30,5 +30,9 @@ models:
         description: Looked-after child legal status.
       - name: org_id_prov
         description: Provider organisation code.
+      - name: uniq_submission_id
+        description: Submission containing the retained patient status.
       - name: reporting_period_end_date
-        description: MHSDS reporting period end date.
+        description: End of the reporting period containing the retained status.
+      - name: effective_from
+        description: Time the retained source file was received.

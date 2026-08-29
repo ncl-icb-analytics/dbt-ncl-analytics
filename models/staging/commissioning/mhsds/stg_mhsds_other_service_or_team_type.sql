@@ -1,4 +1,8 @@
-{{ config(materialized='table', tags=['mhsds']) }}
+{{ config(materialized='view', tags=['mhsds']) }}
+
+with active_records as (
+    {{ select_active_mhsds_records(ref('raw_mhsds_mhs102servicetypereferredto')) }}
+)
 
 select
     s.mhs102_uniq_id
@@ -30,6 +34,4 @@ select
     , s.dmic_dataset
     , s.effective_from
     , s.dmic_date_added
-from {{ ref('raw_mhsds_mhs102servicetypereferredto') }} as s
-inner join {{ ref('stg_mhsds_activesubmission') }} as a
-    on s.uniq_submission_id = a.uniq_submission_id
+from active_records as s

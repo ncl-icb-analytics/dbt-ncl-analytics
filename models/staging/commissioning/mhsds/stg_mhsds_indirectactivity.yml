@@ -1,6 +1,8 @@
 models:
   - name: stg_mhsds_indirectactivity
-    description: 'Mental Health Services Data Set (MHSDS) indirect activities (MHS204): clinical activity on behalf of a patient without the patient present, deduplicated to the latest record per activity within active submissions'
+    description: >
+      MHSDS indirect activity performed for a patient without the patient
+      present. One row per submitted MHS204 activity in accepted submissions.
     config:
       meta:
         owner:
@@ -11,8 +13,9 @@ models:
             min_value: 1
     columns:
       - name: mhs204_uniq_id
-        description: MHSDS indirect activity identifier
+        description: Identifier of the submitted activity row.
         data_tests:
+          - not_null
           - unique
       - name: uniq_serv_req_id
         description: unique service request identifier of the referral the activity belongs to

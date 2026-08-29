@@ -1,33 +1,33 @@
 models:
   - name: stg_mhsds_mpi
-    description: Mental Health Services Data Set (MHSDS) Master Patient Index (MPI)
+    description: MHSDS Master Patient Index rows from accepted submissions.
     config:
       meta:
         owner:
           name: Kate Homer
     columns:
       - name: sk
-        description: row identifier (surrogate key)
-        tests:
+        description: Source row identifier.
+        data_tests:
           - unique
           - not_null
 
       - name: sk_patient_id
-        description: Pseudonymised NHS number (surrogate key for patient)
+        description: Pseudonymised patient key.
 
       - name: person_id
-        description: MHSDS person identifier
+        description: MHSDS person identifier.
 
       - name: local_patient_id
-        description: Local patient identifier (from source system)
+        description: Provider-local patient identifier.
 
       - name: org_id_prov
-        description: The organisation identifier for the provider
+        description: Provider organisation code.
 
       - name: dmic_ccg_code
-        description: The ICB (Integrated Care Board) that commissioned that the person is under the care of
+        description: Commissioner code derived by the source pipeline.
 
-    tests:
+    data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:
             min_value: 1

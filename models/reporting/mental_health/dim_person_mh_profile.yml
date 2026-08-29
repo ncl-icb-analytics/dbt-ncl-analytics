@@ -6,7 +6,9 @@ models:
       MHSDS mental health profile for people with a referral, care contact, or
       occupancy-ruled inpatient spell. Grain: one row per person_id. Current
       state reflects the active MHSDS feed, which runs about six weeks behind
-      the run date. Referral and contact measures use the published MHSDS facts.
+      the run date. Where providers submit different current patient indicators,
+      the newest reporting period and file receipt take precedence. Referral and
+      contact measures use the published MHSDS facts.
     config:
       meta:
         owner:
