@@ -15,6 +15,19 @@ MHSDS is a monthly resubmission feed. Reporting models use active provider
 submissions and retain the row from the newest reporting period for each stated
 business key. Source receipt time resolves ties within a reporting period.
 
+MHS001 is monthly patient history, not a one-row-per-person dimension.
+`stg_mhsds_mpi_history` retains every MHS001 row from accepted submissions.
+Joining it to activity by `person_id` alone will multiply rows across reporting
+periods. Use `stg_mhsds_bridging` for the one-row-per-person link to
+`sk_patient_id`, and use `dim_person_mh_profile` for a person-level analytical
+summary.
+
+Some accepted MHS001 files contain more than one row for the same extended
+local patient identifier. The rows can disagree on `person_id` and the
+pseudonymised NHS number, so source order cannot identify an authoritative row.
+The history model retains them and labels the submitted pseudonym separately
+from the cross-system patient key supplied by the bridge.
+
 Dates, times and timestamps have separate meanings:
 
 - `*_date` is a Snowflake `DATE`.
