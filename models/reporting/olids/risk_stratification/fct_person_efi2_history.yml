@@ -1,0 +1,48 @@
+models:
+  - name: fct_person_efi2_history
+    description: >-
+      Reconstructed monthly eFI2 score and frailty category for active,
+      registered people aged at least 65. One row represents one person at one
+      of the last 60 completed month-ends. History uses clinical effective dates
+      in the data available at build time; it does not show when records first
+      became available to the warehouse.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [person_id, end_date]
+    columns:
+      - name: person_id
+        description: Person identifier.
+        data_tests:
+          - not_null
+      - name: end_date
+        description: Completed month-end used as the scoring date.
+        data_tests:
+          - not_null
+      - name: efi_score
+        description: Electronic Frailty Index 2 score.
+        data_tests:
+          - not_null
+      - name: category
+        description: >-
+          Frailty category: ROBUST, MILD FRAILTY, MODERATE FRAILTY or SEVERE
+          FRAILTY.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - ROBUST
+                  - MILD FRAILTY
+                  - MODERATE FRAILTY
+                  - SEVERE FRAILTY
+      - name: age_at_end
+        description: Age in years at the scoring month-end.
+      - name: gender
+        description: Gender normalised for eFI2 rules.
+      - name: date_of_death
+        description: Approximate death date where recorded.
