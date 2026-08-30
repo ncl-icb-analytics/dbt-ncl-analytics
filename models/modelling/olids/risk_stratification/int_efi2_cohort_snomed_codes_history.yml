@@ -1,0 +1,44 @@
+models:
+  - name: int_efi2_cohort_snomed_codes_history
+    description: >-
+      Weighted eFI2 observations eligible at each historical month-end after
+      codelist, time-window and age rules. One row represents one observation
+      and codelist rule for one person and scoring month. Deficits without a
+      published weight are excluded before month expansion.
+    config:
+      meta:
+        owner:
+          name: em-baldwin
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - observation_id
+              - end_date
+              - deficit
+              - other_instructions
+    columns:
+      - name: observation_id
+        description: Source observation identifier.
+        data_tests:
+          - not_null
+      - name: person_id
+        description: Person identifier.
+        data_tests:
+          - not_null
+      - name: deficit
+        description: Frailty deficit matched by the codelist rule.
+      - name: other_instructions
+        description: Rule instruction applied by the eFI2 rules model.
+      - name: result_value
+        description: Numeric observation result where present.
+      - name: clinical_effective_date
+        description: Clinical date of the observation.
+      - name: age_at_event
+        description: Age in years at the observation date.
+      - name: gender
+        description: Gender normalised for eFI2 rules.
+      - name: end_date
+        description: Completed month-end used as the scoring date.
+        data_tests:
+          - not_null
