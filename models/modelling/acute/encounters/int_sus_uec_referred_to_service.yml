@@ -9,6 +9,7 @@ models:
       records belong to attendances with more than one, so counts must be
       taken here rather than from a single value on the encounter.
     config:
+      tags: ["daily"]
       meta:
         owner:
           name: Eddie Davison

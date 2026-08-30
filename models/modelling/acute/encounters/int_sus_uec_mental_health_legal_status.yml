@@ -9,6 +9,7 @@ models:
       int_sus_uec_encounter on visit_occurrence_id. Recorded on around 5% of
       attendances, and 96% of those are 98 (not applicable) or 99 (not known).
     config:
+      tags: ["daily"]
       meta:
         owner:
           name: Eddie Davison
