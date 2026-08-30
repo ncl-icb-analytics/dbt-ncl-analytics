@@ -1,0 +1,82 @@
+models:
+  - name: int_segmentation_person_month_spine
+    description: >-
+      Monthly population spine for historical segmentation. One row represents
+      one person in dim_person_demographics at one of the last 60 completed
+      month-ends. Birth, death and NCL GP registration are evaluated at the
+      month-end. Only active rows are eligible for a segment downstream. This
+      model does not classify inactive people as out of area.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - person_id
+              - month_end_date
+    columns:
+      - name: person_id
+        description: Unique person identifier.
+        data_tests:
+          - not_null
+
+      - name: sk_patient_id
+        description: Pseudonymised patient key for linkage to activity data.
+
+      - name: month_end_date
+        description: Completed month-end used as the reference date.
+        data_tests:
+          - not_null
+
+      - name: is_born
+        description: Approximate birth date is on or before the month-end.
+        data_tests:
+          - not_null
+
+      - name: is_alive
+        description: Person is born and has no recorded death by month-end.
+        data_tests:
+          - not_null
+
+      - name: is_registered
+        description: >-
+          GP registration period includes the month-end. An end date before
+          its start date is treated as open, matching int_patient_registrations.
+        data_tests:
+          - not_null
+
+      - name: is_active
+        description: Person is alive and registered at month-end.
+        data_tests:
+          - not_null
+
+      - name: is_deceased
+        description: Recorded death date is on or before the month-end.
+        data_tests:
+          - not_null
+
+      - name: age
+        description: Age at month-end, capped at death; null before birth.
+
+      - name: birth_date_approx
+        description: Approximate birth date used for population state and age.
+
+      - name: death_date_approx
+        description: Approximate death date used for population state and age.
+
+      - name: gender
+        description: Gender recorded for the demographic period at month-end.
+
+      - name: practice_code
+        description: GP practice code for the demographic period at month-end.
+
+      - name: practice_name
+        description: GP practice name for the demographic period at month-end.
+
+      - name: borough_registered
+        description: Borough of the GP practice at month-end.
+
+      - name: neighbourhood_registered
+        description: Registered practice neighbourhood at month-end.
