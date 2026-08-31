@@ -5,7 +5,9 @@ models:
       one person in dim_person_demographics at one of the last 60 completed
       month-ends. Birth, death and NCL GP registration are evaluated at the
       month-end. Only active rows are eligible for a segment downstream. This
-      model does not classify inactive people as out of area.
+      model does not classify inactive people as out of area. Incremental runs
+      replace the latest completed month in one transaction and add missing
+      newer months; the monthly full refresh recalculates the 60-month window.
     config:
       meta:
         owner:
