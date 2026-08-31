@@ -4,6 +4,8 @@ models:
       eFI2 deficit rules evaluated at each historical month-end. One row
       represents one distinct deficit result for a person and scoring month.
       BMI and haemoglobin use the latest eligible reading at that month-end.
+      Repeated month-expanded rule results are removed before storage; this is
+      score-neutral because chronology uses the same distinct score keys.
     config:
       meta:
         owner:
