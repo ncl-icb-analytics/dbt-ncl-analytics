@@ -308,6 +308,11 @@ with
         where
             im.bnf_code is not null
             and pu.end_date is not null
+            -- Bound the medication scan to the earliest 90-day window being
+            -- scored before probing it against every month-end. No order the
+            -- window predicate below would keep can fall before this date.
+            and im.clinical_effective_date
+            >= dateadd('day', -90, (select min(end_date) from person_unique))
             and datediff('day', im.clinical_effective_date, pu.end_date) between 0 and 90
     ),
 
