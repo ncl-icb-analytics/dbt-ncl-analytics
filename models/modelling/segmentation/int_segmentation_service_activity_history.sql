@@ -42,6 +42,13 @@ op_treatment_function_monthly AS (
     WHERE treatment_function_code IS NOT NULL
 ),
 
+-- Each window is the whole months after the boundary month, plus the part of
+-- the boundary month from the window start onwards. The two branches cover
+-- different months, so they do not overlap. The boundary branch has to be a
+-- range because the start is not always a month end: 12 months before
+-- 28 February in a non-leap year is 28 February in a leap year, so
+-- 29 February also falls inside the window, and the community window start
+-- is 12 months before an arbitrary CSDS contact date.
 op_treatment_function_presence AS (
     SELECT
         pm.person_id,
@@ -64,7 +71,9 @@ op_treatment_function_presence AS (
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
     INNER JOIN op_activity AS o
         ON pm.sk_patient_id = o.sk_patient_id
-        AND o.activity_date = DATEADD('month', -12, pm.month_end_date)
+        AND o.activity_date BETWEEN
+            DATEADD('month', -12, pm.month_end_date)
+            AND LAST_DAY(DATEADD('month', -12, pm.month_end_date))
     WHERE pm.is_active AND o.treatment_function_code IS NOT NULL
 ),
 
@@ -104,7 +113,7 @@ paediatric_op_full_months AS (
     GROUP BY pm.person_id, pm.month_end_date
 ),
 
-paediatric_op_boundary_day AS (
+paediatric_op_boundary_partial_month AS (
     SELECT
         pm.person_id,
         pm.month_end_date AS end_date,
@@ -112,7 +121,9 @@ paediatric_op_boundary_day AS (
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
     INNER JOIN op_activity AS o
         ON pm.sk_patient_id = o.sk_patient_id
-        AND o.activity_date = DATEADD('month', -12, pm.month_end_date)
+        AND o.activity_date BETWEEN
+            DATEADD('month', -12, pm.month_end_date)
+            AND LAST_DAY(DATEADD('month', -12, pm.month_end_date))
     INNER JOIN {{ ref('paediatric_treatment_function_codes') }} AS p
         ON o.treatment_function_code = p.treatment_function_code
     WHERE pm.is_active
@@ -126,7 +137,7 @@ paediatric_op_rolling AS (
         ZEROIFNULL(f.appointment_count) + ZEROIFNULL(b.appointment_count)
             AS paediatric_op_appointments_12mo
     FROM paediatric_op_full_months AS f
-    FULL OUTER JOIN paediatric_op_boundary_day AS b
+    FULL OUTER JOIN paediatric_op_boundary_partial_month AS b
         ON f.person_id = b.person_id AND f.end_date = b.end_date
 ),
 
@@ -163,7 +174,9 @@ child_specialty_presence AS (
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
     INNER JOIN op_activity AS o
         ON pm.sk_patient_id = o.sk_patient_id
-        AND o.activity_date = DATEADD('month', -12, pm.month_end_date)
+        AND o.activity_date BETWEEN
+            DATEADD('month', -12, pm.month_end_date)
+            AND LAST_DAY(DATEADD('month', -12, pm.month_end_date))
     WHERE
         pm.is_active
         AND o.main_specialty_code NOT IN ('110', '120', '130', '180')
@@ -249,7 +262,7 @@ community_full_months AS (
     GROUP BY pm.person_id, pm.month_end_date
 ),
 
-community_boundary_day AS (
+community_boundary_partial_month AS (
     SELECT
         pm.person_id,
         pm.month_end_date AS end_date,
@@ -259,7 +272,8 @@ community_boundary_day AS (
         ON pm.month_end_date = cv.end_date
     INNER JOIN community_activity AS c
         ON pm.sk_patient_id = c.sk_patient_id
-        AND c.activity_date = cv.community_window_start_date
+        AND c.activity_date BETWEEN cv.community_window_start_date
+            AND LAST_DAY(cv.community_window_start_date)
     WHERE pm.is_active AND cv.community_window_end_date IS NOT NULL
     GROUP BY pm.person_id, pm.month_end_date
 ),
@@ -271,7 +285,7 @@ community_rolling AS (
         ZEROIFNULL(f.contact_count) + ZEROIFNULL(b.contact_count)
             AS community_contacts_12mo
     FROM community_full_months AS f
-    FULL OUTER JOIN community_boundary_day AS b
+    FULL OUTER JOIN community_boundary_partial_month AS b
         ON f.person_id = b.person_id AND f.end_date = b.end_date
 ),
 

@@ -4,9 +4,11 @@ models:
       Rolling 12-month outpatient, mental-health inpatient and community
       activity for segmentation. One row represents one active person with at
       least one qualifying event at one of the last 60 completed month-ends.
-      Windows include the reference month and the exact boundary date 12
-      months earlier. Community windows end on the latest CSDS contact date
-      available by the reference month, matching the current lag-aware model.
+      Outpatient and mental-health windows run from the exact date 12 months
+      before the reference month-end up to and including that month-end.
+      Community windows cover the 12 months ending on the latest CSDS contact
+      date available by the reference month, matching the current lag-aware
+      model.
       Missing rows represent zero activity. CSDS coverage begins in December
       2022; completeness is exposed by
       int_segmentation_service_activity_coverage_history.

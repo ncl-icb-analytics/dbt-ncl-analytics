@@ -4,8 +4,9 @@ models:
       Rolling 12-month GP, urgent and emergency care, and non-elective
       inpatient activity for segmentation. One row represents one active
       person with at least one qualifying event at one of the last 60
-      completed month-ends. Windows include the reference month and the exact
-      boundary date 12 months earlier. Missing rows represent zero activity.
+      completed month-ends. Each window runs from the exact date 12 months
+      before the reference month-end up to and including that month-end.
+      Missing rows represent zero activity.
       Non-elective admissions use the full-history APC encounter model because
       the imputed-spells input to the current mart emits only two years.
     config:
