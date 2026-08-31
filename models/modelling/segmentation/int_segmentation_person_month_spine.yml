@@ -6,6 +6,14 @@ models:
       month-ends. Birth, death and NCL GP registration are evaluated at the
       month-end. Only active rows are eligible for a segment downstream. This
       model does not classify inactive people as out of area.
+
+      Membership is point-in-time: a person is active only if alive and
+      registered on the month-end date itself. The two existing person-month
+      spines, fct_person_months_active and person_month_analysis_base, instead
+      include a person in any month their registration overlapped, so someone
+      who died or deregistered mid-month still counts for that month. Monthly
+      population counts from this spine are therefore slightly lower than
+      those models. The difference is the definition, not a data error.
     config:
       meta:
         owner:
@@ -48,7 +56,11 @@ models:
           - not_null
 
       - name: is_active
-        description: Person is alive and registered at month-end.
+        description: >-
+          Person is alive and registered on the month-end date. A death or
+          deregistration during the month makes that month inactive, unlike
+          fct_person_months_active and person_month_analysis_base, which count
+          any registration overlapping the month.
         data_tests:
           - not_null
 
