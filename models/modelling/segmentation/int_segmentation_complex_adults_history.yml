@@ -1,0 +1,71 @@
+models:
+  - name: int_segmentation_complex_adults_history
+    description: >-
+      Historical adults-with-complexity cohort. One row represents one active,
+      registered adult meeting at least one complexity criterion and at least
+      one utilisation criterion at one of the last 60 completed month-ends.
+      Clinical state, LTCs, eFI2 and rolling activity are evaluated at that
+      month-end. Missing rows do not meet the cohort definition.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [person_id, end_date]
+    columns:
+      - name: person_id
+        description: Person identifier.
+        data_tests:
+          - not_null
+      - name: end_date
+        description: Completed month-end used as the reference date.
+        data_tests:
+          - not_null
+      - name: age
+        description: Age at the month-end.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 18
+      - name: ltc_count
+        description: Included LTC count; learning disability counts from age 65.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 16
+      - name: efi2_score
+        description: eFI2 score for eligible people aged 65 or over.
+      - name: efi2_category
+        description: eFI2 frailty category for eligible people aged 65 or over.
+      - name: has_moderate_severe_frailty
+        description: eFI2 or the latest coded frailty status is moderate or severe.
+        data_tests:
+          - not_null
+      - name: has_3plus_ltcs
+        description: Meets the three-or-more included LTC criterion.
+        data_tests:
+          - not_null
+      - name: has_high_acute_use_no_gp
+        description: >-
+          Has at least three ED attendances or two non-elective admissions and
+          no attended GP appointment in the rolling 12-month window.
+        data_tests:
+          - not_null
+      - name: complexity_criteria_count
+        description: Number of the seven complexity criteria met.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 7
+      - name: activity_criteria_count
+        description: Number of the five utilisation criteria met.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 5
