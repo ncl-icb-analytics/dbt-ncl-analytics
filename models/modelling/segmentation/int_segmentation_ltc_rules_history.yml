@@ -19,6 +19,9 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns: [person_id, end_date, condition_code]
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: LITSTP_COD
     columns:
       - name: person_id
         description: Person identifier.
