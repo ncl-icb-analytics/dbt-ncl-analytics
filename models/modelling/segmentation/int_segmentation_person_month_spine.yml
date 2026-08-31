@@ -82,13 +82,25 @@ models:
         description: Gender recorded for the demographic period at month-end.
 
       - name: practice_code
-        description: GP practice code for the demographic period at month-end.
+        description: >-
+          GP practice code for the demographic period at month-end. Where a
+          person has overlapping registrations, dim_person_demographics_historical
+          picks the open current registration ahead of a closed one, so a past
+          month can show the person's current practice rather than the practice
+          they were with at the time.
 
       - name: practice_name
-        description: GP practice name for the demographic period at month-end.
+        description: >-
+          GP practice name for the demographic period at month-end. Subject to
+          the same current-registration tie-break as practice_code.
 
       - name: borough_registered
-        description: Borough of the GP practice at month-end.
+        description: >-
+          Borough of the GP practice at month-end. Derived from practice_code,
+          so it inherits the same current-registration tie-break.
 
       - name: neighbourhood_registered
-        description: Registered practice neighbourhood at month-end.
+        description: >-
+          Registered practice neighbourhood at month-end. Derived from
+          practice_code, so it inherits the same current-registration
+          tie-break.
