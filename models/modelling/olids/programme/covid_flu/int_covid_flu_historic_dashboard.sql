@@ -38,11 +38,6 @@ ward_code,
 ward_name,
 imd_quintile_25,
 imd_decile_25,
--- --extra LTCS
--- has_ckd,
--- has_chd,
--- has_dm,
--- has_ast
 --from REPORTING.OLIDS_PERSON_ANALYTICS.PERSON_MONTH_ANALYSIS_BASE
 FROM {{ ref('person_month_analysis_base') }}
 where analysis_month = '2026-06-30'
@@ -129,11 +124,7 @@ where analysis_month = '2026-06-30'
         p.is_early_years_age,
         p.is_primary_school_age,
         p.is_secondary_school_age,
-        -- -- extra LTCS
-        -- p.has_ckd,
-        -- p.has_chd,
-        -- p.has_dm,
-        -- p.has_ast,
+       
         -- Flu vaccination setting (Early Years at GP for ages 2-3, School-based for Reception-Year 11)
         CASE
             WHEN u.programme_type = 'FLU' THEN
@@ -145,8 +136,8 @@ where analysis_month = '2026-06-30'
             ELSE NULL
         END AS flu_vaccination_setting,
 
-        -- -- Housebound status from dim_person_housebound_status
-        -- COALESCE(hs.is_housebound, FALSE) AS is_housebound,
+        -- Housebound status from dim_person_housebound_status
+        COALESCE(hs.is_housebound, FALSE) AS is_housebound,
         
         -- Eligibility information from uptake facts
         u.is_eligible,
@@ -185,7 +176,7 @@ where analysis_month = '2026-06-30'
     -- LEFT JOIN {{ ref('dim_person_demographics') }} d ON p.person_id = d.person_id
     -- LEFT JOIN {{ ref('person_pseudo') }} id  ON u.person_id = id.person_id
     -- LEFT JOIN {{ ref('dim_person_age') }} pa ON p.person_id = pa.person_id
-    -- LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON p.person_id = hs.person_id
+    LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON p.person_id = hs.person_id
     LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = p.LSOA_CODE_21
 )
 
