@@ -65,12 +65,7 @@ WITH segment_inputs AS (
 
         cv.community_window_end_date,
         cv.is_community_window_complete,
-        cv.community_lag_days,
-        CASE
-            WHEN NOT pm.is_active THEN NULL
-            WHEN pm.age < 18 THEN cv.is_community_window_complete
-            ELSE TRUE
-        END AS is_segment_complete
+        cv.community_lag_days
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
     LEFT JOIN {{ ref('int_segmentation_clinical_status_history') }} AS c
         ON pm.person_id = c.person_id
@@ -127,7 +122,6 @@ SELECT
     end_date,
     segment_number,
     segment_name,
-    is_segment_complete,
 
     is_born,
     is_alive,

@@ -7,8 +7,10 @@ models:
       and registered. Inactive rows retain their population flags and have a
       null segment. Non-registration is not classified as out of area.
       Children before December 2023 may be understated because the community
-      activity window is incomplete; is_segment_complete identifies those
-      rows.
+      activity window is incomplete; is_community_window_complete identifies
+      the month-ends affected. Community coverage is the only source
+      completeness modelled, so a complete community window says nothing about
+      the other activity sources feeding a segment.
     config:
       meta:
         owner:
@@ -32,11 +34,6 @@ models:
           name: historical_child_segments_are_children
           arguments:
             expression: "segment_number NOT IN (1, 2, 3) OR age < 18"
-      - dbt_utils.expression_is_true:
-          name: historical_segment_completeness_has_active_grain
-          arguments:
-            expression: >-
-              is_active = (is_segment_complete IS NOT NULL)
       - dbt_utils.expression_is_true:
           name: historical_segment_name_matches_number
           arguments:
@@ -70,10 +67,6 @@ models:
                 quote: false
       - name: segment_name
         description: Segment name; null when the person is inactive.
-      - name: is_segment_complete
-        description: >-
-          All source windows used for the assigned segment are complete. Null
-          when no segment is assigned.
       - name: is_born
         description: Approximate birth date is on or before the month-end.
         data_tests:

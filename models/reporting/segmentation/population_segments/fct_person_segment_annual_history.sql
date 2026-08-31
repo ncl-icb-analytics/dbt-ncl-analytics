@@ -50,12 +50,7 @@ SELECT
         MAX(IFF(end_date = '{{ snapshot_date }}', is_active::INT, NULL))::BOOLEAN
             AS is_active_{{ suffix }},
         MAX(IFF(end_date = '{{ snapshot_date }}', is_deceased::INT, NULL))::BOOLEAN
-            AS is_deceased_{{ suffix }},
-        MAX(IFF(
-            end_date = '{{ snapshot_date }}',
-            is_segment_complete::INT,
-            NULL
-        ))::BOOLEAN AS is_segment_complete_{{ suffix }}
+            AS is_deceased_{{ suffix }}
         {% if not loop.last %},{% endif %}
     {% endfor %}
 FROM annual_rows
