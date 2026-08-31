@@ -60,8 +60,15 @@ WITH segment_inputs AS (
         IFF(pm.is_active, ZEROIFNULL(l.ltc_count), NULL) AS ltc_count,
         IFF(pm.is_active, ca.complexity_criteria_count, NULL)
             AS adult_complexity_criteria_count,
-        IFF(pm.is_active, cc.complexity_criteria_count, NULL)
-            AS child_complexity_criteria_count,
+        -- int_segmentation_complex_children_history keeps only children
+        -- meeting at least one criterion, so an active child missing from it
+        -- has met none. Zero-fill inside the child cohort to match
+        -- fct_person_segment, where every under-18 is retained.
+        IFF(
+            pm.is_active AND pm.age < 18,
+            ZEROIFNULL(cc.complexity_criteria_count),
+            NULL
+        ) AS child_complexity_criteria_count,
 
         cv.community_window_end_date,
         cv.is_community_window_complete,

@@ -118,6 +118,54 @@ models:
                   - DEAD
                   - NOT_BORN
                   - NOT_REGISTERED
+      - name: segment_number_2022_07_31
+        description: Segment number at 31 July 2022; null when inactive.
+      - name: is_born_2022_07_31
+        description: Born by 31 July 2022.
+      - name: is_alive_2022_07_31
+        description: Alive at 31 July 2022.
+      - name: is_registered_2022_07_31
+        description: GP registration covers 31 July 2022.
+      - name: is_active_2022_07_31
+        description: Alive and registered at 31 July 2022.
+      - name: is_deceased_2022_07_31
+        description: Recorded death is on or before 31 July 2022.
+      - name: segment_number_2023_07_31
+        description: Segment number at 31 July 2023; null when inactive.
+      - name: is_born_2023_07_31
+        description: Born by 31 July 2023.
+      - name: is_alive_2023_07_31
+        description: Alive at 31 July 2023.
+      - name: is_registered_2023_07_31
+        description: GP registration covers 31 July 2023.
+      - name: is_active_2023_07_31
+        description: Alive and registered at 31 July 2023.
+      - name: is_deceased_2023_07_31
+        description: Recorded death is on or before 31 July 2023.
+      - name: segment_number_2024_07_31
+        description: Segment number at 31 July 2024; null when inactive.
+      - name: is_born_2024_07_31
+        description: Born by 31 July 2024.
+      - name: is_alive_2024_07_31
+        description: Alive at 31 July 2024.
+      - name: is_registered_2024_07_31
+        description: GP registration covers 31 July 2024.
+      - name: is_active_2024_07_31
+        description: Alive and registered at 31 July 2024.
+      - name: is_deceased_2024_07_31
+        description: Recorded death is on or before 31 July 2024.
+      - name: segment_number_2025_07_31
+        description: Segment number at 31 July 2025; null when inactive.
+      - name: is_born_2025_07_31
+        description: Born by 31 July 2025.
+      - name: is_alive_2025_07_31
+        description: Alive at 31 July 2025.
+      - name: is_registered_2025_07_31
+        description: GP registration covers 31 July 2025.
+      - name: is_active_2025_07_31
+        description: Alive and registered at 31 July 2025.
+      - name: is_deceased_2025_07_31
+        description: Recorded death is on or before 31 July 2025.
       - name: segment_number_2026_07_31
         description: Segment number at 31 July 2026; null when inactive.
       - name: is_born_2026_07_31

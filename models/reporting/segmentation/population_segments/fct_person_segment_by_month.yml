@@ -54,6 +54,9 @@ models:
         description: Person identifier.
         data_tests:
           - not_null
+      - name: sk_patient_id
+        description: Pseudonymised patient key for joining to SUS/MHSDS/CSDS
+          activity.
       - name: end_date
         description: Completed month-end used as the reference date.
         data_tests:
@@ -89,13 +92,49 @@ models:
           - not_null
       - name: age
         description: Age at month-end, capped at death and null before birth.
+      - name: gender
+        description: Gender recorded for the demographic period covering the
+          month-end.
+      - name: practice_code
+        description: GP practice code for the demographic period covering the
+          month-end.
+      - name: practice_name
+        description: GP practice name for the demographic period covering the
+          month-end.
+      - name: borough_registered
+        description: Borough of the registered GP practice at the month-end.
+      - name: neighbourhood_registered
+        description: Neighbourhood of the registered GP practice at the
+          month-end.
       - name: is_end_of_life
         description: Active person on the palliative care register.
       - name: is_complex_adult
         description: Active person meeting the adults-with-complexity definition.
+      - name: has_multiple_ltcs
+        description: Cohort flag - active person aged 18+ with 2+ qualifying
+          LTCs (segment 6); null when inactive.
+      - name: has_single_ltc
+        description: Cohort flag - active person aged 18+ with exactly 1
+          qualifying LTC (segment 5); null when inactive.
       - name: is_complex_child
         description: Active child meeting at least one complexity criterion.
+      - name: has_child_health_needs
+        description: Cohort flag - active person aged under 18 with 1+
+          qualifying LTC (segment 2); null when inactive.
       - name: ltc_count
         description: Qualifying segmentation LTC count; null when inactive.
+      - name: adult_complexity_criteria_count
+        description: Complexity criteria met in the complex adults cohort at
+          the month-end; null when the person is not in that cohort, matching
+          fct_person_segment.
+      - name: child_complexity_criteria_count
+        description: Children complexity criteria met, 0-6, for active people
+          aged under 18; 0 where a child meets none. Null for adults and for
+          inactive rows.
+      - name: community_window_end_date
+        description: Latest CSDS contact date available at this month-end. The
+          12-month community activity window ends here, not at the month-end.
       - name: is_community_window_complete
         description: CSDS covers the full rolling window for this month-end.
+      - name: community_lag_days
+        description: Days between the community window end and the month-end.
