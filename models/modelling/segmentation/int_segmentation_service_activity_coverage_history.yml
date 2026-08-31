@@ -1,0 +1,31 @@
+models:
+  - name: int_segmentation_service_activity_coverage_history
+    description: >-
+      CSDS source coverage for each historical segmentation month. One row
+      represents one of the last 60 completed month-ends. The community window
+      ends on the latest contact date available by the reference month. A
+      complete window has 12 months of source history before that date.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: end_date
+        description: Completed segmentation month-end.
+        data_tests:
+          - unique
+          - not_null
+      - name: community_source_first_date
+        description: First attended CSDS contact date in the source.
+        data_tests:
+          - not_null
+      - name: community_window_end_date
+        description: Latest CSDS contact date available by the month-end.
+      - name: community_window_start_date
+        description: Exact date 12 months before the community window end.
+      - name: is_community_window_complete
+        description: Source history covers the full community activity window.
+        data_tests:
+          - not_null
+      - name: community_lag_days
+        description: Days between the community window end and reference month-end.
