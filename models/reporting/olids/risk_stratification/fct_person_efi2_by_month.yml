@@ -1,5 +1,5 @@
 models:
-  - name: fct_person_efi2_history
+  - name: fct_person_efi2_by_month
     description: >-
       Reconstructed monthly eFI2 score and frailty category for people aged at
       least 65 who were alive and GP registered in NCL at the scoring date. One
