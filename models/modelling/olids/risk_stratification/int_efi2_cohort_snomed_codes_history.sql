@@ -1,7 +1,9 @@
 {{
     config(
-        materialized='table',
-        cluster_by=['end_date', 'person_id'],
+        materialized='incremental',
+        incremental_strategy='delete+insert',
+        unique_key='end_date',
+        snowflake_warehouse=env_var('EFI2_HISTORY_WAREHOUSE', target.warehouse),
         tags=['efi2', 'monthly-full']
     )
 }}
@@ -40,6 +42,17 @@ relevant_observations AS (
     FROM {{ ref('stg_olids_observation') }} AS obs
     INNER JOIN codelist AS cd
         ON obs.mapped_concept_code::VARCHAR = cd.snomed_code
+),
+
+patient_months_to_build AS (
+    SELECT *
+    FROM {{ ref('int_efi2_patient_list_history') }}
+    {% if is_incremental() %}
+    WHERE end_date > (
+        SELECT COALESCE(MAX(end_date), '1900-01-01'::DATE) FROM {{ this }}
+    )
+        OR end_date = LAST_DAY(DATEADD('month', -1, CURRENT_DATE))
+    {% endif %}
 )
 
 SELECT
@@ -54,7 +67,7 @@ SELECT
     pd.gender,
     pd.end_date
 FROM relevant_observations AS obs
-INNER JOIN {{ ref('int_efi2_patient_list_history') }} AS pd
+INNER JOIN patient_months_to_build AS pd
     ON obs.person_id = pd.person_id
     AND obs.clinical_effective_date <= pd.end_date
     AND (
