@@ -5,10 +5,12 @@
         cluster_by=['programme_type', 'campaign_id', 'practice_code', 'person_id']
     )
 }}
-/*This is a snapshot of the COVID and FLU Dashboard base for the analysis month end at 2026-09-30. 
+/*This is a snapshot of the COVID and FLU Dashboard base for the analysis month end at 2026-06-30. 
 Includes left and died so we can compared COVID and FLU vaccination uptake from 2024-25 season with the HEI snapshot from 26.09.2025 
+When comparing with HEI snapshot the end date was 2025-09-30.
+31st August 2026 - comparison complete. Set to 30th June 2026 for legacy dashboard 2024-2025
 */
---historical population snapshot for 2025-09-30
+--historical population snapshot for 2026-06-30
 with population as (
 select person_id,
 analysis_month,
@@ -43,12 +45,12 @@ imd_decile_25,
 -- has_ast
 --from REPORTING.OLIDS_PERSON_ANALYTICS.PERSON_MONTH_ANALYSIS_BASE
 FROM {{ ref('person_month_analysis_base') }}
-where analysis_month = '2025-09-30'
+where analysis_month = '2026-06-30'
 )
 
 ,uptake_with_demographics AS (
     SELECT 
-        --population snaphot for 2025-09-30
+        --population snaphot for 2026-06-30
         p.person_id,
         p.analysis_month,
         p.is_active,
