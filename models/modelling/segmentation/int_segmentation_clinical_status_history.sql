@@ -8,30 +8,14 @@
 
 -- Non-activity clinical criteria used by adult and child segmentation.
 
-WITH frailty_events AS (
-    SELECT
-        obs.id,
-        obs.person_id,
-        obs.clinical_effective_date,
-        obs.date_recorded,
-        CASE
-            WHEN obs.mapped_concept_code = '925791000000100' THEN 'Mild'
-            WHEN obs.mapped_concept_code = '925831000000107' THEN 'Moderate'
-            WHEN obs.mapped_concept_code = '925861000000102' THEN 'Severe'
-            ELSE 'Unknown'
-        END AS frailty_severity
-    FROM ({{ get_observations("'FRAILTY_DX'") }}) AS obs
-    WHERE obs.clinical_effective_date IS NOT NULL
-),
-
-frailty_latest AS (
+WITH frailty_latest AS (
     SELECT
         pm.person_id,
         pm.month_end_date AS end_date,
         f.clinical_effective_date AS latest_frailty_date,
         f.frailty_severity AS latest_frailty_severity
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
-    INNER JOIN frailty_events AS f
+    INNER JOIN {{ ref('int_frailty_diagnoses_all') }} AS f
         ON pm.person_id = f.person_id
         AND f.clinical_effective_date <= pm.month_end_date
         AND (
@@ -161,24 +145,14 @@ homeless_qualifying AS (
         AND k.end_date = c.end_date
 ),
 
-alcohol_events AS (
-    SELECT
-        obs.person_id,
-        obs.clinical_effective_date,
-        obs.date_recorded
-    FROM ({{ get_observations("'ALCOHOL_MISUSE_DISORDERS'") }}) AS obs
-    WHERE
-        obs.clinical_effective_date IS NOT NULL
-        AND obs.age_at_event >= 16
-),
-
+-- int_alcohol_misuse_disorders owns the age 16 recording threshold.
 alcohol_qualifying AS (
     SELECT
         pm.person_id,
         pm.month_end_date AS end_date,
         MAX(a.clinical_effective_date) AS latest_alcohol_disorder_date
     FROM {{ ref('int_segmentation_person_month_spine') }} AS pm
-    INNER JOIN alcohol_events AS a
+    INNER JOIN {{ ref('int_alcohol_misuse_disorders') }} AS a
         ON pm.person_id = a.person_id
         AND a.clinical_effective_date <= pm.month_end_date
         AND (
@@ -234,18 +208,12 @@ substance_qualifying AS (
 
 housebound_events AS (
     SELECT
-        obs.id,
-        obs.person_id,
-        obs.clinical_effective_date,
-        obs.date_recorded,
-        obs.cluster_id = 'HOUSEBOUND' AS is_housebound_status
-    FROM (
-        {{ get_observations(
-            "'HOUSEBOUND', 'NO_LONGER_HOUSEBOUND'",
-            source='ECL_CACHE'
-        ) }}
-    ) AS obs
-    WHERE obs.clinical_effective_date IS NOT NULL
+        id,
+        person_id,
+        clinical_effective_date,
+        date_recorded,
+        source_cluster_id = 'HOUSEBOUND' AS is_housebound_status
+    FROM {{ ref('int_housebound_status_all') }}
 ),
 
 housebound_latest AS (
