@@ -33,13 +33,17 @@ jobs:
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
           BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
-          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          {
+            echo 'files<<CHANGED_FILES_EOF'
+            git diff --name-only "$BASE"...HEAD | grep -E '\.(sql)$' | grep -E '^(models|macros|analyses)/' || true
+            echo 'CHANGED_FILES_EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Run check
         if: steps.changed.outputs.files != ''
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: |
-          read -r -a files <<< "$CHANGED_FILES"
+          mapfile -t files <<< "$CHANGED_FILES"
           bash scripts/ci/check_hardcoded_refs.sh "${files[@]}" | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
@@ -62,13 +66,17 @@ jobs:
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
           BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
-          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          {
+            echo 'files<<CHANGED_FILES_EOF'
+            git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' || true
+            echo 'CHANGED_FILES_EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Run check
         if: steps.changed.outputs.files != ''
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: |
-          read -r -a files <<< "$CHANGED_FILES"
+          mapfile -t files <<< "$CHANGED_FILES"
           bash scripts/ci/check_staging_refs.sh "${files[@]}" | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
@@ -95,13 +103,17 @@ jobs:
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
           BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
-          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          {
+            echo 'files<<CHANGED_FILES_EOF'
+            git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' || true
+            echo 'CHANGED_FILES_EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Run check
         if: steps.changed.outputs.files != ''
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: |
-          read -r -a files <<< "$CHANGED_FILES"
+          mapfile -t files <<< "$CHANGED_FILES"
           python3 scripts/ci/check_model_descriptions.py "${files[@]}" | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
@@ -128,13 +140,17 @@ jobs:
         run: |
           # merge_group has no base_ref; diff against the candidate's base SHA.
           BASE="${MERGE_GROUP_BASE_SHA:-origin/$BASE_REF}"
-          echo "files=$(git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          {
+            echo 'files<<CHANGED_FILES_EOF'
+            git diff --name-only "$BASE"...HEAD | grep -E '\.sql$' | grep -E '^models/' || true
+            echo 'CHANGED_FILES_EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Run check
         if: steps.changed.outputs.files != ''
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
         run: |
-          read -r -a files <<< "$CHANGED_FILES"
+          mapfile -t files <<< "$CHANGED_FILES"
           bash scripts/ci/check_model_tests.sh "${files[@]}" | tee result.txt
           cat result.txt >> $GITHUB_STEP_SUMMARY
           grep -q "^FAILED" result.txt && exit 1 || exit 0
