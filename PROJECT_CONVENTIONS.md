@@ -49,9 +49,9 @@ semantic areas must consume staging or a later contract.
 
 Beyond staging, choose a model's area and dependencies from its responsibility,
 consumers and required contract, not from whether the SQL contains a join,
-filter or window function. Models do not need to pass through every area. A
-modelling model may reuse a reporting model when that is the established
-interface and does not create a cycle.
+filter or window function. This is not a rigid upward ladder: a modelling model
+may reuse a reporting model when that is the established interface and does not
+create a cycle.
 
 | Area | Contract | Naming |
 |------|----------|--------|
@@ -267,7 +267,7 @@ model contract.
   to provide them for the review.
 - Consider `cluster_by` for a materialised model when several downstream
   consumers repeatedly filter or join a large result on the same selective
-  columns. Clustering sorts the current output so later queries can avoid
+  columns. The current build pays to sort its output so later queries can avoid
   scanning irrelevant micro-partitions; it does not make the current model's
   upstream reads cheaper. OLIDS clinical event inputs are usually already
   clustered by mapped concept code for the expensive code-filter scan. After
@@ -281,9 +281,9 @@ model contract.
 ## Seeds
 
 Use seeds for small, team-owned lookup values, mappings, thresholds, priorities
-and conversion parameters. Do not store executable logic as data. A seed should
-not contain expressions, operators or branching that a model or macro must
-parse. Keep those rules visible in readable SQL.
+and conversion parameters. Logic must not masquerade as data. A seed should not
+store expressions, operators or branching that a model or macro must parse.
+Keep those rules visible in readable SQL rather than adding syntax to the seed.
 
 ## YAML, documentation and tests
 
@@ -322,8 +322,8 @@ reviewers must still confirm that it covers the stated key or key combination.
   accepted-value, not-null and relationship tests only when the contract makes
   them true. Valid nulls or out-of-scope parents should not be forced away to
   satisfy a generic test.
-- Put a test on the model that defines the contract. Downstream models should
-  test their new composition and grain, not copy every upstream assertion.
+- Put a test where its promise is made. Downstream models should test their new
+  composition and grain, not copy every upstream assertion.
 - Use singular tests for domain rules that generic tests cannot express. Select
   only the model keys and context needed to diagnose a failure. Treat any
   returned rows as potentially patient-level under the safety rules above.

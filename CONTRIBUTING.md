@@ -49,10 +49,10 @@ You'll need the following information from Snowflake (ask your team lead if you 
 4. You'll see your account identifier and other connection details
 
 **You'll need:**
-- **Account identifier:** Shown in the connection dialog
-- **Username:** Your Snowflake username, usually your email prefix
-- **Warehouse:** Usually `NCL_ANALYTICS_XS`
-- **Role:** `ANALYST`
+- **Account identifier** - Shown in the connection dialog
+- **Username** - Your Snowflake username (usually your email prefix)
+- **Warehouse** - Usually `NCL_ANALYTICS_XS`
+- **Role** - `ANALYST`
 
 ## Get started
 
@@ -63,24 +63,7 @@ git clone https://github.com/wnl-icb-analytics/dbt-analytics
 cd dbt-analytics
 ```
 
-### Step 2: Install dbt and the Python tooling
-
-The setup script in step 4 installs the dbt Fusion engine and syncs the Python
-tooling. To install them by hand:
-
-```powershell
-# dbt Fusion engine (runs all dbt commands)
-irm https://public.cdn.getdbt.com/fs/install/install.ps1 | iex
-
-# Python tooling for scripts/ (optional)
-uv sync
-.venv\Scripts\activate
-```
-
-dbt runs on the Fusion engine, not from the Python venv. The `.venv` exists only
-for the helper scripts in `scripts/`.
-
-### Step 3: Configure the Snowflake connection
+### Step 2: Configure the Snowflake connection
 
 The first time you open a terminal with no `.env`, `start_dbt.ps1` walks you through
 setup interactively: it asks for your account, user, role and warehouse, then your
@@ -106,7 +89,7 @@ Auth: leave it there for **browser SSO** (the default). For a **PAT**, set `SNOW
 `SNOWFLAKE_PASSWORD` (used with MFA). `profiles.yml` picks the authenticator from whichever
 you set.
 
-### Step 4: Initialise the development environment
+### Step 3: Initialise the development environment
 
 Run the setup script:
 
@@ -119,7 +102,7 @@ rarely need to run it by hand. It installs/updates the dbt Fusion engine, config
 git hooks, and syncs the Python tooling. (Fusion loads `.env` itself, so dbt works
 even if the script hasn't run.)
 
-### Step 5: Verify the installation
+### Step 4: Verify the installation
 
 ```bash
 dbt deps    # Install dbt packages
@@ -155,22 +138,10 @@ downstream dependencies.
 
 ## Change a model
 
-Before editing SQL:
-
-1. State the subject and grain. Add the population and time basis where the
-   model selects or derives them.
-2. Search model names, YAML and lineage for a contract you can reuse or extend.
-3. Check downstream impact with `dbt ls -s model_name+`.
-4. Confirm the model area. Raw may only be consumed through staging; after
-   staging, use whichever staging-or-later contract fits the work.
-
-Change the model SQL, properties and contract tests together. New non-raw models
-need a description and `config.meta.owner.name`. Every model needs a test of its
-stated grain using its key or key combination. This project does not use
-test-driven development. Beyond grain, add a permanent test only for a durable
-contract or an error likely to recur. Tests run on every build and consume
-Snowflake compute, so do not test implementation details or repeat upstream
-assertions.
+Read [Project conventions](PROJECT_CONVENTIONS.md) before editing SQL. It defines
+model design, layer boundaries, ownership, documentation, tests and data safety.
+Check downstream impact with `dbt ls -s model_name+`, then change the SQL and
+related YAML together.
 
 Validate as you work:
 

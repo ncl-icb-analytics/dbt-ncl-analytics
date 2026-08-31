@@ -7,7 +7,8 @@
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EddieDavison92/fe9920551839b7a85d0f47dfd527e62b/raw/coverage.json)](https://github.com/wnl-icb-analytics/dbt-analytics/actions/workflows/test-coverage.yml)
 [![License](https://img.shields.io/badge/license-OGL%20v3%20|%20MIT-blue)](LICENSE)
 
-dbt project for WNL ICB Analytics healthcare data transformations on Snowflake.
+This dbt project transforms WNL ICB healthcare data on Snowflake for analysis
+and reporting.
 
 New to the project? Use the
 [dbt onboarding courses and handbook](https://dbt-onboarding.vercel.app/).
@@ -43,10 +44,10 @@ automatically. See **[Developing in GitHub Codespaces](docs/codespaces.md)**.
 
 ## What this project does
 
-Transforms healthcare data into analytical datasets across two domains:
+The project covers two broad domains:
 
 - **Commissioning:** Secondary care activity, waiting lists, community and mental health services
-- **OLIDS:** QOF disease registers, clinical programmes, population health metrics
+- **OLIDS:** QOF disease registers, clinical programmes and population health metrics
 
 Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, EPD (prescribing), eRS (referrals).
 
@@ -58,6 +59,7 @@ Data sources: OLIDS (GP data), SUS (secondary care), Waiting Lists, CSDS/MHSDS, 
 | `.\build_changed.ps1` | Build only changed models (auto-detects from git diff) |
 
 **Flags for `build_changed`:**
+
 - `-u` upstream dependencies
 - `-d` downstream dependents
 - `-r` run only (no tests)
@@ -104,7 +106,7 @@ consumers.
 ## Working conventions
 
 Read [Project conventions](PROJECT_CONVENTIONS.md) before changing a model. It
-defines model contracts, layer boundaries, naming, tests, performance and review
+defines model design, layer boundaries, naming, tests, performance and review
 rules. See [Working with Sources](docs/working-with-sources.md) for source
 generation.
 
@@ -165,6 +167,7 @@ Development uses `DEV__` prefixed databases (e.g., `DEV__MODELLING`).
 | `models/partner/published_data/` | `DEV__PUBLISHED_REPORTING__PARTNER.PUBLISHED_DATA` | `PUBLISHED_REPORTING__PARTNER.PUBLISHED_DATA` |
 
 **How it works:**
+
 - **Database**: Set by `+database` in `dbt_project.yml`, prefixed with `DEV__` in dev
 - **Schema**: Either explicit (`+schema`), the source-system folder for staging models, or auto-derived from folder path for the `olids` domain
 
