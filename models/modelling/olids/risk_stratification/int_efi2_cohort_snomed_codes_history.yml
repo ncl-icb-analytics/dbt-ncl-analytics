@@ -4,7 +4,10 @@ models:
       Weighted eFI2 observations eligible at each historical month-end after
       codelist, time-window and age rules. One row represents one observation
       and codelist rule for one person and scoring month. Deficits without a
-      published weight are excluded before month expansion.
+      published weight are excluded before month expansion. Observation
+      identifiers are retained to state and test the evidence-row grain; rule
+      instructions and gender are required by downstream rules. Monthly full
+      refreshes incorporate late-arriving observations across all 60 months.
     config:
       meta:
         owner:

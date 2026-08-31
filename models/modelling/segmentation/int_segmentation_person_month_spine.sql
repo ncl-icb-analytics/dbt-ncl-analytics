@@ -1,6 +1,8 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='delete+insert',
+        unique_key='month_end_date',
         cluster_by=['month_end_date', 'person_id'],
         tags=['monthly-full']
     )
@@ -15,6 +17,15 @@ WITH month_ends AS (
     FROM {{ ref('int_date_spine') }}
     WHERE month_end_date BETWEEN LAST_DAY(DATEADD('month', -60, CURRENT_DATE))
         AND LAST_DAY(DATEADD('month', -1, CURRENT_DATE))
+    {% if is_incremental() %}
+        AND (
+            month_end_date > (
+                SELECT COALESCE(MAX(month_end_date), '1900-01-01'::DATE)
+                FROM {{ this }}
+            )
+            OR month_end_date = LAST_DAY(DATEADD('month', -1, CURRENT_DATE))
+        )
+    {% endif %}
 ),
 
 population AS (
