@@ -60,7 +60,7 @@ WITH criteria_inputs AS (
     LEFT JOIN {{ ref('int_segmentation_complex_adults_ltc_history') }} AS l
         ON pm.person_id = l.person_id
         AND pm.month_end_date = l.end_date
-    LEFT JOIN {{ ref('fct_person_efi2_history') }} AS e
+    LEFT JOIN {{ ref('fct_person_efi2_by_month') }} AS e
         ON pm.person_id = e.person_id
         AND pm.month_end_date = e.end_date
     LEFT JOIN {{ ref('int_segmentation_clinical_status_history') }} AS c
