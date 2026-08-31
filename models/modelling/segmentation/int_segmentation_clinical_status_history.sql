@@ -119,10 +119,18 @@ chip_months AS (
     WHERE is_active AND practice_code = 'Y02674'
 ),
 
-homeless_keys AS (
-    SELECT person_id, end_date
+homeless_residential AS (
+    SELECT
+        person_id,
+        end_date,
+        latest_residential_status_date
     FROM residential_latest
     WHERE is_homeless_status
+),
+
+homeless_keys AS (
+    SELECT person_id, end_date
+    FROM homeless_residential
 
     UNION
 
@@ -130,6 +138,8 @@ homeless_keys AS (
     FROM chip_months
 ),
 
+-- The date is only carried where the latest residential code is a
+-- homelessness code, so it never contradicts the flag beside it.
 homeless_qualifying AS (
     SELECT
         k.person_id,
@@ -137,7 +147,7 @@ homeless_qualifying AS (
         r.latest_residential_status_date,
         c.person_id IS NOT NULL AS is_registered_chip
     FROM homeless_keys AS k
-    LEFT JOIN residential_latest AS r
+    LEFT JOIN homeless_residential AS r
         ON k.person_id = r.person_id
         AND k.end_date = r.end_date
     LEFT JOIN chip_months AS c
