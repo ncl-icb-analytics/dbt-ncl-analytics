@@ -3,10 +3,24 @@
 This is a public NHS dbt project on Snowflake. Read
 `PROJECT_CONVENTIONS.md` before model work.
 
-Use plain, specific language. In this project, `model contract` has the meaning
-defined in `PROJECT_CONVENTIONS.md`; do not use it as a general term for a model,
-grain, rule, output, requirement or design decision. Name the specific thing and
-explain unfamiliar project terms when the context does not make them clear.
+Apply these writing rules to responses, documentation, comments, commit messages
+and pull requests:
+
+- Use plain British English, concrete facts and active voice. Say what changed,
+  why it matters and who or what acts.
+- Prefer a common word to jargon. Explain unfamiliar project terms when the
+  context does not make them clear.
+- In this project, `model contract` has the meaning defined in
+  `PROJECT_CONVENTIONS.md`. Do not use it as a general term for a model, grain,
+  rule, output, requirement or design decision.
+- Cut filler, puffery, vague claims and stock AI phrasing. Remove sentences that
+  could appear unchanged in any project's documentation.
+- Keep one main idea per sentence, but vary sentence length and rhythm. Do not
+  force points into groups of three or cycle through synonyms for a clear term.
+- Use sentence case headings, straight quotes and restrained formatting. Avoid
+  em dashes, decorative emoji and unnecessary bold text.
+- Preserve code, quoted text, technical syntax and accuracy when applying these
+  rules.
 
 Inspect the intended outcome, real constraint, related models, shared
 definitions, configuration and lineage before editing. Prefer the smallest
