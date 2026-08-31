@@ -1,0 +1,79 @@
+models:
+  - name: int_segmentation_complex_children_history
+    description: >-
+      Historical children-with-complexity cohort. One row represents one
+      active, registered child meeting at least one of the six criteria at one
+      of the last 60 completed month-ends. LTCs, diagnoses and rolling activity
+      are evaluated at that month-end. Missing rows do not meet the cohort
+      definition. Community coverage is incomplete before December 2023 and
+      may understate the cohort in earlier months.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [person_id, end_date]
+    columns:
+      - name: person_id
+        description: Person identifier.
+        data_tests:
+          - not_null
+      - name: end_date
+        description: Completed month-end used as the reference date.
+        data_tests:
+          - not_null
+      - name: age
+        description: Age at the month-end.
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 17
+      - name: ltc_count
+        description: Qualifying LTC count, including learning disability.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 17
+      - name: ltc_list
+        description: Sorted qualifying condition codes; null when the count is zero.
+      - name: has_2plus_ltcs
+        description: Meets the two-or-more LTC criterion.
+        data_tests:
+          - not_null
+      - name: has_complexity_diagnosis
+        description: Has a diagnosis from the NWL child-complexity code list.
+        data_tests:
+          - not_null
+      - name: has_5plus_paediatric_op_appointments
+        description: Has at least five paediatric outpatient appointments.
+        data_tests:
+          - not_null
+      - name: has_2plus_outpatient_specialties
+        description: Has qualifying outpatient care across two main specialties.
+        data_tests:
+          - not_null
+      - name: has_mh_inpatient_stay
+        description: Has a mental-health inpatient stay overlapping the window.
+        data_tests:
+          - not_null
+      - name: has_7plus_community_contacts
+        description: Has at least seven community contacts in the window.
+        data_tests:
+          - not_null
+      - name: is_community_window_complete
+        description: CSDS covers the full rolling community window.
+        data_tests:
+          - not_null
+      - name: complexity_criteria_count
+        description: Number of the six child-complexity criteria met.
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 6
