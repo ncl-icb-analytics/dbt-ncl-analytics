@@ -6,6 +6,17 @@
     )
 }}
 
+-- Five annual positions at the month-end immediately before 1 August.
+--
+-- The anchors are literals because the Jinja loop names an output column
+-- after each one. They are only valid while they sit inside the rolling
+-- 60-month window that fct_person_segment_by_month holds, and that window
+-- moves forward at every monthly full refresh. Adding a July position
+-- requires the window to be widened first, and the earliest position expires
+-- once it ages out: its columns then read null for every person.
+-- tests/segmentation_annual_anchors_exist_in_monthly_history.sql fails when
+-- a configured anchor is no longer in the parent. Keep its list in step with
+-- this one.
 {% set annual_snapshots = [
     ('2022-07-31', '2022_07_31'),
     ('2023-07-31', '2023_07_31'),
@@ -13,8 +24,6 @@
     ('2025-07-31', '2025_07_31'),
     ('2026-07-31', '2026_07_31')
 ] %}
-
--- Five annual positions at the month-end immediately before 1 August.
 
 WITH annual_rows AS (
     SELECT

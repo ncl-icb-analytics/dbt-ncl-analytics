@@ -6,7 +6,11 @@ models:
       2026. Status is SEG1-SEG8 for active people, DEAD, NOT_BORN or
       NOT_REGISTERED. NOT_REGISTERED is a factual registration state and does
       not mean out of area. The 2021 point is omitted because it precedes the
-      60 completed month-ends. Child segments in 2022 and 2023 use incomplete
+      60 completed month-ends. The anchor dates are fixed and have to stay
+      inside the rolling 60-month window held by fct_person_segment_by_month:
+      adding a July position needs that window widened first, and the earliest
+      position expires once it ages out of the window. Child segments in 2022
+      and 2023 use incomplete
       community history; is_community_window_complete on
       fct_person_segment_by_month identifies the month-ends affected.
       Community coverage is the only source completeness modelled.
