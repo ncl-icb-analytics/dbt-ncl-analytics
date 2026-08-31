@@ -1,7 +1,8 @@
 {{
     config(
         materialized='table',
-        cluster_by=['person_id']
+        cluster_by=['person_id'],
+        tags=['monthly-full']
     )
 }}
 
