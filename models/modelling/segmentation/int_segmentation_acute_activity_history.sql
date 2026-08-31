@@ -149,10 +149,19 @@ ed_rolling AS (
         ON f.person_id = b.person_id AND f.end_date = b.end_date
 ),
 
--- The current recent mart uses int_sus_apc_imputed_spells, which emits only
--- two years. The underlying encounter model has the same admission definition
--- and continuous coverage for all 60 historical windows. Apply the current
--- mart's spell deduplication key across that full history.
+-- The current recent mart reads int_sus_apc_imputed_spells, which emits only
+-- two years. The encounter model underneath it has continuous coverage for
+-- all 60 historical windows, so history is built from it directly, sharing
+-- the mart's admission-method exclusions and spell deduplication key.
+--
+-- It does not share the mart's date imputation, which fills a missing
+-- admission date from the discharge date and duration before deduplicating.
+-- So spells with no admission date are excluded here although the mart
+-- recovers them, and a missing discharge date leaves the start_date =
+-- end_date term of the deduplication key null, letting same-day spells the
+-- mart keeps separate collapse into one. Together this affects under 0.1% of
+-- in-scope spells and can move nel_admissions_12mo in either direction
+-- against fct_person_sus_apc_recent.apc_nel_12mo.
 nel_spells_deduplicated AS (
     SELECT
         sk_patient_id,

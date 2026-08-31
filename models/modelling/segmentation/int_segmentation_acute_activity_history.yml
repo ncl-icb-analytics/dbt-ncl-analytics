@@ -43,7 +43,15 @@ models:
               arguments:
                 min_value: 0
       - name: nel_admissions_12mo
-        description: Distinct non-elective admissions in the window.
+        description: >-
+          Distinct non-elective admissions in the window. Built from the APC
+          encounter model with the same admission-method exclusions and spell
+          deduplication key as fct_person_sus_apc_recent, but without that
+          mart's admission and discharge date imputation. Spells with no
+          admission date are therefore excluded here, and same-day spells with
+          no discharge date can deduplicate differently. Together this affects
+          under 0.1% of in-scope spells and can move the count in either
+          direction against apc_nel_12mo.
         data_tests:
           - not_null
           - dbt_utils.accepted_range:
