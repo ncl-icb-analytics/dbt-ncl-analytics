@@ -2,7 +2,8 @@
     cohort_relation,
     haemoglobin_relation,
     historical=false,
-    deduplicate_output=false
+    deduplicate_output=false,
+    evidence_tiebreak_expression=none
 ) %}
 {# Shared eFI2 deficit rules for current and monthly scoring. #}
 
@@ -247,6 +248,9 @@ with
             row_number() over (
                 partition by person_id, end_date
                 order by clinical_effective_date desc nulls last
+                    {% if evidence_tiebreak_expression is not none %}
+                    , {{ evidence_tiebreak_expression }} desc
+                    {% endif %}
             ) as rn,
             'BMI' as sub_deficit,
             end_date,
@@ -610,7 +614,7 @@ with
             deficit as sub_deficit,
             end_date,
             clinical_effective_date as last_date
-        from {{ cohort_relation }}
+        from rules_needed
         where other_instructions is null and deficit <> 'BMI' -- high BMI passthrough - 95% missing label
 
         union all

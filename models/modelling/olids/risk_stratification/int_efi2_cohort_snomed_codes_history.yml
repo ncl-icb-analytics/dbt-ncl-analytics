@@ -5,9 +5,11 @@ models:
       codelist, time-window and age rules. One row represents one observation
       and codelist rule for one person and scoring month. Deficits without a
       published weight are excluded before month expansion. Observation
-      identifiers are retained to state and test the evidence-row grain; rule
-      instructions and gender are required by downstream rules. Monthly full
-      refreshes incorporate late-arriving observations across all 60 months.
+      duplicates are removed at the current eFI2 cohort grain before month
+      expansion, with a derived evidence identifier retained for grain tests.
+      Rule instructions and gender are required by downstream rules. Monthly
+      full refreshes incorporate late-arriving observations across all 60
+      months.
     config:
       meta:
         owner:
@@ -16,13 +18,11 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - observation_id
+              - evidence_id
               - end_date
-              - deficit
-              - other_instructions
     columns:
-      - name: observation_id
-        description: Source observation identifier.
+      - name: evidence_id
+        description: Identifier derived from the current eFI2 evidence grain.
         data_tests:
           - not_null
       - name: person_id

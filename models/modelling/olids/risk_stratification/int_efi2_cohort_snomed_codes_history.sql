@@ -20,6 +20,7 @@ WITH weighted_deficits AS (
 codelist AS (
     SELECT DISTINCT
         cd.snomedct_conceptid::VARCHAR AS snomed_code,
+        cd.code_description,
         cd.deficit,
         cd.other_instructions,
         cd.time_constraint_years,
@@ -30,14 +31,30 @@ codelist AS (
 ),
 
 relevant_observations AS (
-    SELECT
-        obs.id AS observation_id,
+    -- Match the current cohort's DISTINCT evidence grain before month expansion.
+    -- The hash retains hidden grain fields without carrying them across 60 months.
+    SELECT DISTINCT
+        HASH(
+            obs.person_id::VARCHAR,
+            cd.snomed_code,
+            cd.code_description,
+            cd.deficit,
+            cd.other_instructions,
+            cd.time_constraint_years,
+            cd.age_limit,
+            obs.result_value,
+            obs.result_unit_display,
+            obs.clinical_effective_date
+        ) AS evidence_id,
         obs.person_id,
+        cd.snomed_code,
+        cd.code_description,
         cd.deficit,
         cd.other_instructions,
         cd.time_constraint_years,
         cd.age_limit,
         obs.result_value,
+        obs.result_unit_display AS result_value_unit,
         obs.clinical_effective_date
     FROM {{ ref('stg_olids_observation') }} AS obs
     INNER JOIN codelist AS cd
@@ -56,7 +73,7 @@ patient_months_to_build AS (
 )
 
 SELECT
-    obs.observation_id,
+    obs.evidence_id,
     pd.person_id,
     obs.deficit,
     obs.other_instructions,
