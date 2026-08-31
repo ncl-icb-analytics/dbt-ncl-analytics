@@ -1,5 +1,5 @@
 models:
-  - name: fct_person_segment_history
+  - name: fct_person_segment_by_month
     description: >-
       Monthly population state and segmentation for the last 60 completed
       month-ends. One row represents one person in the scoped GP population at

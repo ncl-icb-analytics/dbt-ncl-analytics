@@ -25,7 +25,7 @@ WITH annual_rows AS (
             WHEN NOT is_born THEN 'NOT_BORN'
             ELSE 'NOT_REGISTERED'
         END AS annual_status
-    FROM {{ ref('fct_person_segment_history') }}
+    FROM {{ ref('fct_person_segment_by_month') }}
     WHERE end_date IN (
         {% for snapshot_date, suffix in annual_snapshots %}
             '{{ snapshot_date }}'{% if not loop.last %},{% endif %}
