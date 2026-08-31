@@ -1,0 +1,108 @@
+models:
+  - name: fct_person_segment_history
+    description: >-
+      Monthly population state and segmentation for the last 60 completed
+      month-ends. One row represents one person in the scoped GP population at
+      one month-end. A segment is assigned only when the person is born, alive
+      and registered. Inactive rows retain their population flags and have a
+      null segment. Non-registration is not classified as out of area.
+      Children before December 2023 may be understated because the community
+      activity window is incomplete; is_segment_complete identifies those
+      rows.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [person_id, end_date]
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('int_segmentation_person_month_spine')
+      - dbt_utils.expression_is_true:
+          name: historical_segment_only_for_active_people
+          arguments:
+            expression: "is_active = (segment_number IS NOT NULL)"
+      - dbt_utils.expression_is_true:
+          name: historical_adult_segments_are_adults
+          arguments:
+            expression: "segment_number NOT IN (4, 5, 6, 7) OR age >= 18"
+      - dbt_utils.expression_is_true:
+          name: historical_child_segments_are_children
+          arguments:
+            expression: "segment_number NOT IN (1, 2, 3) OR age < 18"
+      - dbt_utils.expression_is_true:
+          name: historical_segment_completeness_has_active_grain
+          arguments:
+            expression: >-
+              is_active = (is_segment_complete IS NOT NULL)
+      - dbt_utils.expression_is_true:
+          name: historical_segment_name_matches_number
+          arguments:
+            expression: >-
+              (segment_number IS NULL AND segment_name IS NULL)
+              OR segment_name = CASE segment_number
+              WHEN 8 THEN 'End of Life'
+              WHEN 7 THEN 'Adults with Complexity'
+              WHEN 6 THEN 'Adults with Multiple LTCs'
+              WHEN 5 THEN 'Adults with a Single LTC'
+              WHEN 4 THEN 'Mostly Healthy Adults'
+              WHEN 3 THEN 'Children with Complexity'
+              WHEN 2 THEN 'Children with Health Needs'
+              WHEN 1 THEN 'Mostly Healthy Children'
+              END
+    columns:
+      - name: person_id
+        description: Person identifier.
+        data_tests:
+          - not_null
+      - name: end_date
+        description: Completed month-end used as the reference date.
+        data_tests:
+          - not_null
+      - name: segment_number
+        description: Segment 1-8; null when the person is inactive.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8]
+                quote: false
+      - name: segment_name
+        description: Segment name; null when the person is inactive.
+      - name: is_segment_complete
+        description: >-
+          All source windows used for the assigned segment are complete. Null
+          when no segment is assigned.
+      - name: is_born
+        description: Approximate birth date is on or before the month-end.
+        data_tests:
+          - not_null
+      - name: is_alive
+        description: Born with no recorded death by the month-end.
+        data_tests:
+          - not_null
+      - name: is_registered
+        description: NCL GP registration covers the month-end.
+        data_tests:
+          - not_null
+      - name: is_active
+        description: Alive and registered at the month-end.
+        data_tests:
+          - not_null
+      - name: is_deceased
+        description: Recorded death date is on or before the month-end.
+        data_tests:
+          - not_null
+      - name: age
+        description: Age at month-end, capped at death and null before birth.
+      - name: is_end_of_life
+        description: Active person on the palliative care register.
+      - name: is_complex_adult
+        description: Active person meeting the adults-with-complexity definition.
+      - name: is_complex_child
+        description: Active child meeting at least one complexity criterion.
+      - name: ltc_count
+        description: Qualifying segmentation LTC count; null when inactive.
+      - name: is_community_window_complete
+        description: CSDS covers the full rolling window for this month-end.
