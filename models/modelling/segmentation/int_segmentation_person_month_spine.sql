@@ -18,13 +18,7 @@ WITH month_ends AS (
     WHERE month_end_date BETWEEN LAST_DAY(DATEADD('month', -60, CURRENT_DATE))
         AND LAST_DAY(DATEADD('month', -1, CURRENT_DATE))
     {% if is_incremental() %}
-        AND (
-            month_end_date > (
-                SELECT COALESCE(MAX(month_end_date), '1900-01-01'::DATE)
-                FROM {{ this }}
-            )
-            OR month_end_date = LAST_DAY(DATEADD('month', -1, CURRENT_DATE))
-        )
+        AND {{ rebuild_month_window('month_end_date') }}
     {% endif %}
 ),
 
