@@ -165,7 +165,7 @@ selection is too large, build direct children and state the limit in the pull
 request. For changed models across a branch, use `.\build_changed.ps1`; add `-d`
 to include downstream consumers.
 
-## Set up commit signing
+## Setting Up Commit Signing
 
 This repository requires all commits to be cryptographically signed.
 

@@ -15,12 +15,24 @@ and pull requests:
   rule, output, requirement or design decision.
 - Cut filler, puffery, vague claims and stock AI phrasing. Remove sentences that
   could appear unchanged in any project's documentation.
+- When judgement is needed, state your view and the real trade-off. Use first
+  person when it sounds natural. Do not flatten complexity into generic pros
+  and cons.
+- Prefer named sources and concrete examples to vague attribution. Say who made
+  a claim or which report contains it, and explain why it matters.
+- Remove chatbot filler, generic openings and generic conclusions. Cut
+  excessive hedging and closing invitations that add no information.
+- Avoid stock AI vocabulary and abstract technical metaphors when a concrete
+  project term exists. Say `model`, `field`, `rule`, `move` or `delete` when
+  that is what you mean.
 - Keep one main idea per sentence, but vary sentence length and rhythm. Do not
   force points into groups of three or cycle through synonyms for a clear term.
 - Use sentence case headings, straight quotes and restrained formatting. Avoid
   em dashes, decorative emoji and unnecessary bold text.
 - Preserve code, quoted text, technical syntax and accuracy when applying these
   rules.
+- Before sending prose, ask which lines sound generated or could belong to any
+  project. Rewrite or remove them.
 
 Inspect the intended outcome, real constraint, related models, shared
 definitions, configuration and lineage before editing. Prefer the smallest
@@ -36,13 +48,16 @@ agree the boundary with the user.
 
 Use these principles when reasoning about every change:
 
-- Inspect existing models, lineage and consequences before editing.
-- Avoid machinery for hypothetical needs, but allow for reusable domain models.
-- Prefer readable SQL and models with clear responsibilities.
-- Centralise stable business definitions. Abstract an implementation pattern
-  only after it has repeated and proved stable.
-- Before merge, demonstrate correct results, clear design and performance that
-  fits the expected scale. Do not turn this into speculative tuning.
+- Measure twice, cut once: inspect existing models, shared definitions, lineage
+  and consequences first.
+- YAGNI: avoid machinery for hypothetical needs, but not reusable domain
+  modelling.
+- KISS and simple design: prefer readable SQL and clear model responsibilities.
+- DRY and the Rule of Three: centralise stable business definitions; abstract
+  implementation patterns only after they repeat and prove stable.
+- Make it work, make it right, make it fast: before merge, demonstrate correct
+  results, clear design and performance that fits the expected scale. Do not
+  turn this into speculative tuning.
 
 Raise a concern before implementing a direction likely to cause wrong results,
 an unclear requirement, a duplicate pipeline or avoidable cost. State the
