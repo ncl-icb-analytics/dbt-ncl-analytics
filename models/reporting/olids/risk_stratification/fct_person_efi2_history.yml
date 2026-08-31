@@ -11,9 +11,10 @@ models:
       became available to the warehouse. No opt-out filter is applied. For
       secondary use, join to DIM_PERSON_SECONDARY_USE_ALLOWED on person_id.
       The newest month can be incomplete because OLIDS arrives after the
-      reference date. Weekly incremental runs replace the latest completed
-      month atomically, and each monthly full refresh recalculates all 60
-      months, incorporating records received since the previous build.
+      reference date. An ad-hoc incremental run can replace the latest
+      completed month atomically. Each scheduled monthly full refresh
+      recalculates all 60 months and incorporates records received since the
+      previous build.
     config:
       meta:
         owner:
