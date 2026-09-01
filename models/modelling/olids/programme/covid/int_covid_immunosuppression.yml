@@ -113,8 +113,10 @@ models:
       - name: birth_date_approx
         description: 'Approximate birth date used for age calculation'
       - name: age_months_at_ref_date
-        description: 'Age in months at campaign reference date'
+        description: 'Completed months of age at the campaign reference date, consistent with the
+          six-month lower bound applied to the cohort.'
       - name: age_years_at_ref_date
-        description: 'Age in years at campaign reference date (eligibility varies by campaign)'
+        description: 'Completed years of age at the campaign reference date. Consistent with the
+          under-75 bound applied to the cohort, so no row in an under-75 campaign reads 75.'
       - name: created_at
         description: 'Audit timestamp for record creation (campaign audit end date)'

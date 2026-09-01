@@ -4,8 +4,9 @@ Flu Campaign Configuration - Single Source of Truth
 This macro provides all campaign-specific dates and parameters in one place.
 Instead of scattered hardcoded dates, everything is defined here clearly.
 
-MULTI-CAMPAIGN SUPPORT:
-All flu models work with any campaign year by changing the flu_current_campaign variable.
+CAMPAIGNS:
+The models build every campaign in flu_reported_campaign_ids(); this macro returns the
+parameters for one of them.
 
 Available campaigns:
 - 'Flu 2023-24' - 2023-24 Flu Vaccination Campaign
@@ -13,18 +14,10 @@ Available campaigns:
 - 'Flu 2025-26' - 2025-26 Flu Vaccination Campaign
 - 'Flu 2026-27' - 2026-27 Flu Vaccination Campaign (default)
 
-The campaigns the models actually build are listed in flu_reported_campaigns()
-in macros/config/flu_campaign_selection.sql.
-
-Usage Examples:
-- Default campaign: {{ flu_campaign_config() }}
-- Specific campaign: {{ flu_campaign_config('Flu 2023-24') }}
-- Via dbt_project.yml: Set flu_current_campaign variable, then run normally
-
-Configuration in dbt_project.yml:
-vars:
-  flu_current_campaign: "Flu 2026-27"     # Change this to switch campaigns
-  flu_previous_campaign: "Flu 2025-26"    # For comparison queries
+Usage:
+- Specific campaign: {{ flu_campaign_config('Flu 2026-27') }}
+- Current season: {{ flu_current_config() }} / {{ flu_previous_config() }}
+- All reported campaigns: {{ flu_reported_campaigns() }}
 
 SOURCE:
 UKHSA Seasonal Influenza Vaccine Uptake Reporting Specification, PRIMIS v16.0,
@@ -38,7 +31,10 @@ do not keep absorbing newly recorded events.
 IMMUNOSUPPRESSION ADMIN CODES:
 Spec v16.0 widened IMMADM_DAT from a fixed six-month floor to any code in the three
 years before AUDITEND_DAT. immuno_admin_lookback_date carries that per campaign, so
-closed seasons keep the six-month rule they were reported under.
+closed seasons keep the six-month rule they were reported under. Because AUDITEND_DAT
+rolls forward during a season, the 2026-27 admin-code window floor moves with it: a
+person whose only IMMADM_COD is close to three years old can leave the cohort as the
+season progresses. That is the rule the spec states, not a data problem.
 
 CHILD AGE GROUPS:
 - Preschool: ages 2-3 at CHILD_DAT (31 August in the campaign year)

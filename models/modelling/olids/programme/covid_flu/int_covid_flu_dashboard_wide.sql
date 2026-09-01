@@ -40,7 +40,10 @@ Testing WIDE FORMAT for RISK GROUP using columns and flags.
 
 with subcohort as (
 select person_id,
---Sub Cohort Clinical groups may change over time as new campaigns are added.
+-- Deliberately person-level, not per campaign: the restricted COVID campaigns do not carry
+-- clinical risk groups of their own, so their rows take a person's clinical profile from
+-- whichever campaign recorded it. The trade-off is that adding a season can set a flag on
+-- an earlier campaign's rows for the same person.
     MAX(IFF(subcohort in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS has_asthma,
     MAX(IFF(subcohort in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS has_asplenia,
     MAX(IFF(subcohort = 'Chronic Heart Disease', 1, 0)) AS has_chd,

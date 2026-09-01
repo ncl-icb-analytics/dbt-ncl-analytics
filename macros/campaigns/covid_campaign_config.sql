@@ -4,8 +4,9 @@ COVID Campaign Configuration - Single Source of Truth
 This macro provides all campaign-specific dates and parameters in one place.
 Instead of scattered hardcoded dates, everything is defined here clearly.
 
-MULTI-CAMPAIGN SUPPORT:
-All COVID models work with any campaign by changing the covid_current_campaign variable.
+CAMPAIGNS:
+The models build every campaign in covid_reported_campaign_ids(); this macro returns the
+parameters for one of them.
 
 Available campaigns:
 - 'COVID Autumn 2024' - Autumn 2024 COVID Vaccination Campaign
@@ -15,18 +16,15 @@ Available campaigns:
 - 'COVID Autumn 2026' - Autumn 2026 COVID Vaccination Campaign
 - 'COVID Spring 2027' - Spring 2027 COVID Vaccination Campaign
 
-The campaigns the models actually build are listed in covid_reported_campaigns()
-in macros/config/covid_campaign_selection.sql.
+Usage:
+- Specific campaign: {{ covid_campaign_config('COVID Autumn 2026') }}
+- Current season: {{ covid_autumn_config() }} / {{ covid_spring_config() }}
+- All reported campaigns: {{ covid_reported_campaigns() }}
 
-Usage Examples:
-- Default campaign: {{ covid_campaign_config() }}
-- Specific campaign: {{ covid_campaign_config('COVID Autumn 2024') }}
-- Via dbt_project.yml: Set covid_current_campaign variable, then run normally
-
-Configuration in dbt_project.yml:
-vars:
-  covid_current_campaign: "COVID Autumn 2026"     # Change this to switch campaigns
-  covid_previous_campaign: "COVID Autumn 2025"    # For comparison queries
+AUDIT END DATE:
+audit_end_date is the spec RUN_DAT. Each campaign gives var('covid_audit_end_date') a
+different default, so supplying that var on the command line moves every season's audit
+end together. Prefer changing a campaign's own default over setting the var.
 
 CAMPAIGN ELIGIBILITY DIFFERENCES:
 - 2024/25: Broader eligibility (age 65+ autumn, clinical risk groups)
@@ -433,13 +431,17 @@ the autumn and spring periods share one set.
             -- Vaccination tracking dates (spec COVADM2_DAT and COVRX2_DAT)
             '2027-04-01'::DATE AS vaccination_tracking_start,
             '2027-06-30'::DATE AS vaccination_tracking_end,
-            -- The spec uses a single COVDECL window for the whole collection year. Declines
-            -- are narrowed to a month before the spring period so that an autumn decline is
-            -- not also counted against spring, matching earlier spring campaigns.
+            -- The spec uses one COVDECL window for the whole collection year. The spring
+            -- window is narrowed to a month before the campaign, matching earlier spring
+            -- campaigns. Autumn 2026's window still runs to 30/06/27, so a decline recorded
+            -- in the spring period counts against both campaigns, as the spec intends.
             '2027-03-01'::DATE AS decline_tracking_start,
             '2027-06-30'::DATE AS decline_tracking_end,
 
-            -- Pregnancy tracking (spec PREGDEL26_DAT, PREG26A_DAT, PREG26B_DAT)
+            -- Pregnancy tracking. Like the steroid windows, PREG26_GROUP is defined once for
+            -- the collection year and shared by the autumn and spring periods, so these match
+            -- Autumn 2026 rather than anchoring on the spring start date the way earlier
+            -- spring campaigns in this file do (spec PREGDEL26_DAT, PREG26A_DAT, PREG26B_DAT).
             '2026-01-01'::DATE AS pregnancy_lookback_start,
             '2026-09-01'::DATE AS pregnancy_current_start,
             '2027-06-30'::DATE AS pregnancy_current_end,
