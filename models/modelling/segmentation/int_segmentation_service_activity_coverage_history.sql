@@ -1,7 +1,6 @@
 {{
     config(
         materialized='table',
-        cluster_by=['end_date'],
         tags=['monthly-full']
     )
 }}
