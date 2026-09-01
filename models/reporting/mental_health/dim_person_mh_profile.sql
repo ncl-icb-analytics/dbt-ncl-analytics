@@ -105,9 +105,16 @@ with latest_reporting_period as (
     group by person_id
 )
 
+-- Ranking is by coding timestamp alone, so the retained row is the person's
+-- latest diagnosis record rather than their latest ICD-10-coded one.
+-- stg_mhsds_primdiag leaves icd10_3 null for an ICD-10 code outside F, G, Q
+-- and R and for a SNOMED code with no map, so the published diagnosis columns
+-- are null whenever that latest record did not resolve. has_diagnosis_record
+-- separates that from a person with no diagnosis record at all.
 , latest_diagnosis as (
     select
         r.person_id
+        , true as has_diagnosis_record
         , d.icd10_3
         , icd.description as icd10_3_description
         , g.population_category as diagnosis_category
@@ -132,36 +139,77 @@ with latest_reporting_period as (
     ) = 1
 )
 
+-- MHSDS defines no national detained or informal derivation, so detention
+-- follows the national code definitions held in
+-- mhsds_mh_act_legal_status_classification: the codes defined as formally
+-- detained under an Act are detention, and informal admission, guardianship,
+-- not applicable and not known are not. nhsd_legal_status is the
+-- specification's cleaned form of the submitted code, so it is the join key.
+-- follow-up (non-blocking): the NHS England Learning Disability and Autism
+-- Mental Health Act measures additionally reclassify a detained patient as
+-- informal while a concurrent Conditional Discharge (MHS403), Community
+-- Treatment Order (MHS404) or CTO Recall (MHS405) is open. Those raw models
+-- hold data but have no staging interface, and the rule belongs to that
+-- publication rather than to MHSDS, so this model does not apply it.
+, mha_periods as (
+    select
+        m.person_id
+        , m.uniq_mh_act_episode_id
+        , m.nhsd_legal_status
+        , m.start_date_mh_act_legal_status_class
+        , m.end_date_mh_act_legal_status_class
+        , m.expiry_date_mh_act_legal_status_class
+        , m.reporting_period_end_date
+        -- a code outside the national list, which is the -1 sentinel and null,
+        -- is not detention
+        , coalesce(c.is_detained, false) as is_detained
+    from {{ ref('stg_mhsds_mhactperiod') }} as m
+    -- one row per nhsd_legal_status in the classification, so the join keeps
+    -- the legal-status period grain
+    left join {{ ref('mhsds_mh_act_legal_status_classification') }} as c
+        on m.nhsd_legal_status = c.nhsd_legal_status
+    where m.person_id is not null
+)
+
+, latest_detention as (
+    select
+        person_id
+        , nhsd_legal_status as latest_detention_code
+        , start_date_mh_act_legal_status_class as latest_detention_start_date
+    from mha_periods
+    where is_detained
+    qualify row_number() over (
+        partition by person_id
+        order by
+            start_date_mh_act_legal_status_class desc nulls last
+            , reporting_period_end_date desc nulls last
+            , uniq_mh_act_episode_id desc
+    ) = 1
+)
+
 , mha_aggregates as (
     select
         m.person_id
+        , count_if(m.is_detained) > 0 as has_ever_been_detained
+        -- a period is current through and including its expiry date: MHSDS
+        -- ETOS M401040 defines it as the date the legal status classification
+        -- expires. Both tests run as of the latest accepted reporting period,
+        -- not the run date, so the feed's six-week lag cannot expire a
+        -- detention that was current in the accepted snapshot.
         , count_if(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-        ) > 0 as ever_detained
-        , max(iff(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-            , start_date_mh_act_legal_status_class
-            , null
-        )) as latest_detention_start_date
-        -- REVIEW: expiry dates are treated as current through the expiry date;
-        -- confirm this matches MHSDS legal-status expiry semantics.
-        , count_if(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-            and end_date_mh_act_legal_status_class is null
+            m.is_detained
+            and m.end_date_mh_act_legal_status_class is null
             and (
-                expiry_date_mh_act_legal_status_class is null
-                or expiry_date_mh_act_legal_status_class >= current_date
+                m.expiry_date_mh_act_legal_status_class is null
+                or m.expiry_date_mh_act_legal_status_class
+                >= p.latest_reporting_period_end_date
             )
             and m.reporting_period_end_date >= dateadd(
                 month, -2, p.latest_reporting_period_end_date
             )
         ) > 0 as is_currently_detained
-    from {{ ref('stg_mhsds_mhactperiod') }} as m
+    from mha_periods as m
     cross join latest_reporting_period as p
-    where m.person_id is not null
     group by m.person_id
 )
 
@@ -209,13 +257,16 @@ select
     , s.latest_discharge_date
     , coalesce(s.n_spells_ever, 0) as n_spells_ever
     , coalesce(s.ever_inpatient, false) as ever_inpatient
+    , coalesce(d.has_diagnosis_record, false) as has_diagnosis_record
     , d.icd10_3
     , d.icd10_3_description
     , d.diagnosis_category
     , d.latest_diagnosis_date
-    , coalesce(m.ever_detained, false) as ever_detained
-    , m.latest_detention_start_date
+    , coalesce(m.has_ever_been_detained, false) as has_ever_been_detained
     , coalesce(m.is_currently_detained, false) as is_currently_detained
+    , ld.latest_detention_start_date
+    , ld.latest_detention_code
+    , mha_status.legal_status_desc as latest_detention_description
     , g.child_protection_plan_status_code
     , cpp.description as child_protection_plan_status_description
     , g.looked_after_child_indicator_code
@@ -241,6 +292,13 @@ left join latest_diagnosis as d
     on p.person_id = d.person_id
 left join mha_aggregates as m
     on p.person_id = m.person_id
+left join latest_detention as ld
+    on p.person_id = ld.person_id
+-- one row per legal_status_code in the reference, so the label join keeps the
+-- one-row-per-person grain
+left join {{ ref('stg_ukhfd_mental_health_act_legal_status_classification') }}
+    as mha_status
+    on ld.latest_detention_code = mha_status.legal_status_code
 left join safeguarding_aggregates as g
     on p.person_id = g.person_id
 left join {{ ref('mhsds_profile_code_lookup') }} as cpp

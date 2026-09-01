@@ -63,7 +63,14 @@ models:
       - name: age_at_admission
         description: MHSDS-derived age at admission.
       - name: is_cyp
-        description: Whether age at admission is under 18.
+        description: >-
+          Whether age at admission is under 18. A spell with no recorded age is
+          classified as adult, so read this with has_known_age_at_admission.
+      - name: has_known_age_at_admission
+        description: >-
+          Whether an age at admission was recorded. False identifies the spells
+          classified as adult through the fallback rather than a known age.
+          Most accepted spells carry no recorded age.
       - name: mental_health_admitted_patient_classification_type_code
         description: Latest ward-stay mental health admitted patient classification type code.
       - name: mental_health_admitted_patient_classification_type_description

@@ -99,7 +99,11 @@ with deduplicated as (
 , categorised as (
     select
         b.*
+        -- A missing age falls to adult, which the cascade below then uses to
+        -- pick the population group. has_known_age_at_admission keeps that
+        -- default visible; most spells carry no recorded age.
         , coalesce(b.age_hosp_start_date < 18, false) as is_cyp
+        , b.age_hosp_start_date is not null as has_known_age_at_admission
         , d.icd10_3
         , ig.population_category as diagnosis_category
         , dg.available_to_cyp as diagnosis_available_to_cyp
@@ -178,6 +182,7 @@ select
     , c.end_date_source
     , c.age_hosp_start_date
     , c.is_cyp
+    , c.has_known_age_at_admission
     , c.icd10_3
     , c.diagnosis_category
     , c.mh_admitted_patient_class

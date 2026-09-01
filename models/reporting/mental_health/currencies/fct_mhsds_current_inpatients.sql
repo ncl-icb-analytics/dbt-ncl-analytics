@@ -28,6 +28,7 @@ select
     , c.last_submission_period_end as last_submission_period_end_date
     , c.age_hosp_start_date as age_at_admission
     , c.is_cyp
+    , c.has_known_age_at_admission
     , c.mh_admitted_patient_class as mental_health_admitted_patient_classification_type_code
     , patient_class.description as mental_health_admitted_patient_classification_type_description
     , c.setting_code

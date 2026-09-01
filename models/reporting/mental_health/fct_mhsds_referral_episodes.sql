@@ -69,15 +69,8 @@ select
     , tt.population_category as team_type_category
     , tt.setting_group
     , tt.setting_name
-    -- This duplicates the contact model's crisis rule pending a shared home.
-    , coalesce(
-        coalesce(tt.is_crisis_referral, false)
-        or (
-            coalesce(tt.crisis_requires_urgent_priority, false)
-            and r.clinical_response_priority_code in ('1', '2', '4')
-        )
-        , false
-    ) as is_crisis_referral
+    , {{ mhsds_is_crisis_referral('tt', 'r.clinical_response_priority_code') }}
+        as is_crisis_referral
     , coalesce(c.n_contacts, 0) as n_contacts
     , coalesce(c.n_attended_contacts, 0) as n_attended_contacts
     , coalesce(c.n_contacts_with_missing_attendance_status, 0)
