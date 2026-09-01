@@ -13,9 +13,12 @@ models:
       denominator and inflating its uptake rate.
 
       Each campaign is resolved to a monthly snapshot in person_month_analysis_base at its
-      reference date, and the people registered and alive at that point are returned. A
-      campaign whose reference date is still in the future, which is any season in flight,
-      falls back to the most recent snapshot available, so it tracks the current list.
+      RUN_DAT, and the people registered and alive at that point are returned. RUN_DAT is
+      the fixed 31 March or 30 June for COVID, and the extraction date capped at the final
+      28 February AUDITEND_DAT for flu, so a closed flu season is measured against its
+      February list rather than the March REF_DAT list. A campaign whose run date is still
+      in the future, which is any season in flight, falls back to the most recent snapshot
+      available, so it tracks the current list.
 
       Consumed by fct_covid_eligibility, fct_covid_status, fct_flu_eligibility and
       fct_flu_status, which apply the population once rather than each intermediate model
@@ -38,12 +41,13 @@ models:
         description: 'Campaign identifier, matching covid_reported_campaign_ids() and flu_reported_campaign_ids()'
         data_tests:
           - not_null
-      - name: campaign_reference_date
-        description: 'REF_DAT for the campaign, used to choose the snapshot'
+      - name: campaign_run_date
+        description: 'RUN_DAT for the campaign (audit_end_date in the campaign config), used to choose the snapshot'
       - name: population_month
         description: >
-          Month end of the population snapshot used. Equals the campaign reference date for
-          a closed campaign, and the latest available snapshot for a season in flight.
+          Month end of the population snapshot used. Equals the month of the campaign run
+          date for a closed campaign, and the latest available snapshot for a season in
+          flight.
       - name: person_id
         description: 'Person registered and alive at population_month'
         data_tests:
