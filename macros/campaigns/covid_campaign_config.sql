@@ -97,7 +97,10 @@ the autumn and spring periods share one set.
             -- Immunosuppression age cap (NULL = no upper age limit)
             NULL AS immuno_max_age_years,                               -- No age cap in 2024/25
 
-            -- Individual condition eligibility flags (2024/25 campaigns)
+            -- Individual condition eligibility flags (2024/25 campaigns). Known gap: the
+            -- Autumn 2024 offer (spec appendix Group I) covered clinical risk groups from
+            -- 6 months, but the clinical models apply the 5-year floor of the ImmForm
+            -- uptake indicators, so at-risk children under 5 are absent from this season.
             TRUE AS eligible_age_75_plus,
             TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
@@ -172,24 +175,27 @@ the autumn and spring periods share one set.
             -- Immunosuppression age cap (NULL = no upper age limit)
             75 AS immuno_max_age_years,                                 -- under 75; 75+ covered by the age group
 
-            -- Individual condition eligibility flags
+            -- Individual condition eligibility flags. The Spring 2025 offer (spec appendix
+            -- Group J) was 75 and over, care home residents aged 65 and over, and
+            -- immunosuppressed people aged 6 months to 74, so the wider clinical risk
+            -- groups were not offered a vaccine.
             TRUE AS eligible_age_75_plus,
             TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
-            TRUE AS eligible_asthma,
-            TRUE AS eligible_chronic_heart_disease,
-            TRUE AS eligible_chronic_kidney_disease,
-            TRUE AS eligible_diabetes,
-            TRUE AS eligible_chronic_liver_disease,
-            TRUE AS eligible_chronic_neurological_disease,
-            TRUE AS eligible_chronic_respiratory_disease,
-            TRUE AS eligible_morbid_obesity,
-            TRUE AS eligible_asplenia,
-            TRUE AS eligible_learning_disability,
-            TRUE AS eligible_severe_mental_illness,
-            TRUE AS eligible_pregnancy,
-            TRUE AS eligible_gestational_diabetes,
-            TRUE AS eligible_homeless,
+            FALSE AS eligible_asthma,
+            FALSE AS eligible_chronic_heart_disease,
+            FALSE AS eligible_chronic_kidney_disease,
+            FALSE AS eligible_diabetes,
+            FALSE AS eligible_chronic_liver_disease,
+            FALSE AS eligible_chronic_neurological_disease,
+            FALSE AS eligible_chronic_respiratory_disease,
+            FALSE AS eligible_morbid_obesity,
+            FALSE AS eligible_asplenia,
+            FALSE AS eligible_learning_disability,
+            FALSE AS eligible_severe_mental_illness,
+            FALSE AS eligible_pregnancy,
+            FALSE AS eligible_gestational_diabetes,
+            FALSE AS eligible_homeless,
 
             -- Minimum age for the age-based cohort
             75 AS age_based_min_age,
@@ -345,7 +351,10 @@ the autumn and spring periods share one set.
             -- Minimum age for the age-based cohort
             75 AS age_based_min_age,
 
-            -- Minimum age for the care home resident cohort
+            -- Minimum age for the care home resident cohort. The Group K denominator in
+            -- spec v3.5 (2025/26) reads AGE >= 65 at 31/03/2026 AND LONGRES_GROUP. The
+            -- historical appendix in v3.6 and v4.0 summarises Group K as "aged 18 years
+            -- or more", which contradicts that table; the denominator table is followed.
             65 AS care_home_min_age,
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be

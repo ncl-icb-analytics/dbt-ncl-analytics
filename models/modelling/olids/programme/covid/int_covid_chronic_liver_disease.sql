@@ -51,7 +51,7 @@ people_with_cld_eligible_with_age AS (
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pcld.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
-        AND DATEDIFF('year', demo.birth_date_approx, pcld.campaign_reference_date) >= 5  -- Minimum age 5
+        AND demo.birth_date_approx <= DATEADD('year', -5, pcld.campaign_reference_date)  -- Minimum age 5, tested on birth date
 ),
 
 -- Step 3: Format for eligibility table

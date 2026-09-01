@@ -135,7 +135,7 @@ people_pregnant_with_age AS (
         ON bpe.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
         AND bpe.rn = 1  -- Only best eligibility per person
-        AND DATEDIFF('year', demo.birth_date_approx, bpe.campaign_reference_date) >= 12  -- Minimum age 12 (as per flu)
+        AND demo.birth_date_approx <= DATEADD('year', -12, bpe.campaign_reference_date)  -- Minimum age 12 (as per flu), tested on birth date
 ),
 
 -- Step 9: Format for eligibility table
@@ -156,5 +156,4 @@ final_eligible AS (
 )
 
 SELECT * FROM final_eligible
-WHERE campaign_id <> 'COVID Spring 2025'
 ORDER BY campaign_id, person_id

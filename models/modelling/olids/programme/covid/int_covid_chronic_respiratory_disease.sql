@@ -67,7 +67,7 @@ people_with_other_respiratory_with_age AS (
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pord.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
-        AND DATEDIFF('year', demo.birth_date_approx, pord.campaign_reference_date) >= 5  -- Minimum age 5
+        AND demo.birth_date_approx <= DATEADD('year', -5, pord.campaign_reference_date)  -- Minimum age 5, tested on birth date
 ),
 
 -- Step 4: Combine asthma and other respiratory conditions (avoid duplicates)

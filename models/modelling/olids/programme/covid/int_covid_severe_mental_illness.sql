@@ -85,7 +85,7 @@ people_with_smi_eligible_with_age AS (
         ON pasmi.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
         AND pasmi.has_active_smi = TRUE
-        AND DATEDIFF('year', demo.birth_date_approx, pasmi.campaign_reference_date) >= 5  -- Minimum age 5
+        AND demo.birth_date_approx <= DATEADD('year', -5, pasmi.campaign_reference_date)  -- Minimum age 5, tested on birth date
 ),
 
 -- Step 5: Format for eligibility table

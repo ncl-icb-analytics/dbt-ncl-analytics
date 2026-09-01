@@ -127,7 +127,7 @@ people_with_ckd_eligible_with_age AS (
         ON pce.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
         AND pce.is_ckd_eligible = TRUE
-        AND DATEDIFF('year', demo.birth_date_approx, pce.campaign_reference_date) >= 5  -- Minimum age 5
+        AND demo.birth_date_approx <= DATEADD('year', -5, pce.campaign_reference_date)  -- Minimum age 5, tested on birth date
 ),
 
 -- Step 6: Format for eligibility table
