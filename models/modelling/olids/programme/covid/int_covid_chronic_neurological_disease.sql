@@ -51,8 +51,7 @@ people_with_cns_eligible_with_age AS (
     FROM people_with_cns_diagnosis pcns
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pcns.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         AND DATEDIFF('year', demo.birth_date_approx, pcns.campaign_reference_date) >= 5  -- Minimum age 5
 ),
 

@@ -92,8 +92,7 @@ people_vaccinated_with_age AS (
     FROM people_with_covid_vaccination pcv
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pcv.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
 ),
 
 -- Step 6: Format for status table

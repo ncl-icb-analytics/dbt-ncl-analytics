@@ -121,8 +121,7 @@ people_with_diabetes_eligible_with_age AS (
     FROM people_with_diabetes_eligible pde
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pde.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         AND pde.is_diabetes_eligible = TRUE
         AND DATEDIFF('year', demo.birth_date_approx, pde.campaign_reference_date) >= 5  -- Minimum age 5
 ),

@@ -150,8 +150,7 @@ people_immunosuppressed_with_age AS (
     FROM people_with_immunosuppression pwi
     LEFT JOIN {{ ref('dim_person_demographics') }} demo
         ON pwi.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         -- Age bounds are tested on birth date because Snowflake DATEDIFF subtracts
         -- calendar years or months rather than counting completed ones, which pushed
         -- people who are still 74 at the reference date out of the under-75 cohort.

@@ -135,6 +135,17 @@ all_eligibility AS (
     SELECT * FROM other_risk_eligibility
 ),
 
+-- Search population. Both specs require the patient to be registered for GMS at RUN_DAT.
+-- int_covid_flu_campaign_population resolves that as at each campaign, so a closed season
+-- keeps the people who were registered then rather than the people registered today.
+registered_population AS (
+    SELECT ae.*
+    FROM all_eligibility ae
+    JOIN {{ ref('int_covid_flu_campaign_population') }} pop
+        ON pop.campaign_id = ae.campaign_id
+        AND pop.person_id = ae.person_id
+),
+
 -- Final formatting (campaign information already included in intermediate models)
 final_eligibility AS (
     SELECT 
@@ -152,7 +163,7 @@ final_eligibility AS (
         age_months_at_ref_date AS age_months,
         age_years_at_ref_date AS age_years,
         created_at
-    FROM all_eligibility
+    FROM registered_population
 )
 
 SELECT distinct * FROM final_eligibility

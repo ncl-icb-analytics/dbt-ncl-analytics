@@ -124,8 +124,7 @@ final_eligible AS (
         ON evidence.campaign_id = cc.campaign_id
     JOIN {{ ref('dim_person_demographics') }} demo
         ON evidence.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         AND DATEADD('year', 18, demo.birth_date_approx) <= cc.campaign_reference_date
 )
 

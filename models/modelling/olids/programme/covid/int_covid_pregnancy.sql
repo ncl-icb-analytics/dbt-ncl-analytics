@@ -133,8 +133,7 @@ people_pregnant_with_age AS (
     FROM best_pregnancy_eligibility bpe
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON bpe.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         AND bpe.rn = 1  -- Only best eligibility per person
         AND DATEDIFF('year', demo.birth_date_approx, bpe.campaign_reference_date) >= 12  -- Minimum age 12 (as per flu)
 ),

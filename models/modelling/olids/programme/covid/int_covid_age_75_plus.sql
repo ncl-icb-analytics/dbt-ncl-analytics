@@ -32,7 +32,6 @@ people_age_eligible AS (
     FROM {{ ref('dim_person_demographics') }} demo
     CROSS JOIN all_campaigns cc
     WHERE cc.eligible_age_75_plus = TRUE
-        AND demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
         AND demo.birth_date_approx <= DATEADD('year', -cc.age_based_min_age, cc.campaign_reference_date)
 ),

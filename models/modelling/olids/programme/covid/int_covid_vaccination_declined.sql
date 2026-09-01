@@ -49,8 +49,7 @@ people_declined_with_age AS (
     FROM people_with_covid_vaccination_declined pcd
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pcd.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
 ),
 
 -- Step 3: Format for status table

@@ -125,8 +125,7 @@ people_with_ckd_eligible_with_age AS (
     FROM people_with_ckd_eligible pce
     LEFT JOIN {{ ref('dim_person_demographics') }} demo 
         ON pce.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         AND pce.is_ckd_eligible = TRUE
         AND DATEDIFF('year', demo.birth_date_approx, pce.campaign_reference_date) >= 5  -- Minimum age 5
 ),

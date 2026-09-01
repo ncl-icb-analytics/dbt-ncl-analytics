@@ -141,8 +141,7 @@ people_with_homeless_eligible_with_age AS (
     FROM eligible_people ep
     LEFT JOIN {{ ref('dim_person_demographics') }} demo
         ON ep.person_id = demo.person_id
-    WHERE demo.is_active = TRUE
-        AND demo.birth_date_approx IS NOT NULL
+    WHERE demo.birth_date_approx IS NOT NULL
         -- Minimum age 5, tested on birth date (DATEDIFF('year') subtracts calendar years)
         AND demo.birth_date_approx <= DATEADD('year', -5, ep.campaign_reference_date)
 ),
