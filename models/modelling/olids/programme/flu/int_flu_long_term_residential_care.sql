@@ -16,14 +16,19 @@ latest dates rather than ranked in a single union - ranking ties every qualifyin
 observation with itself and picks a winner nondeterministically.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Campaigns that still report the long-stay residential care cohort
     -- (campaign list: macros/config/flu_campaign_selection.sql)
     SELECT *
     FROM (
-        {{ flu_reported_campaigns() }}
+        {{ flu_build_campaigns() }}
     )
     WHERE eligible_long_term_residential_care = TRUE
 ),

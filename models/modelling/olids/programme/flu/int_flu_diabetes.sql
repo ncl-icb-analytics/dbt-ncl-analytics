@@ -11,12 +11,17 @@ The exclusion logic ensures that people whose diabetes is resolved
 are not eligible unless they have a more recent diabetes code.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every flu campaign the models report on
     -- (campaign list: macros/config/flu_campaign_selection.sql)
-    {{ flu_reported_campaigns() }}
+    {{ flu_build_campaigns() }}
 ),
 
 -- Step 1: Find people with Addison's disease (always eligible, for all campaigns)

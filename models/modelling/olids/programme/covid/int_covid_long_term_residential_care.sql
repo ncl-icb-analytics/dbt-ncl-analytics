@@ -12,12 +12,17 @@ driven: the Autumn 2024 offer covered adult residents, and every offer from Spri
 2025 onward covers residents aged 65 and over (spec 5.1.1 Group M denominator).
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 -- Step 1: Find people with any residence codes (for all campaigns)

@@ -10,12 +10,17 @@ Snowflake DATEDIFF('year', ...) subtracts calendar years rather than counting
 completed years.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 -- Step 1: Find people at or over the campaign's age threshold at reference date

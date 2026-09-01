@@ -13,12 +13,17 @@ latest dates rather than ranked in a single union - ranking ties every qualifyin
 observation with itself and picks a winner nondeterministically.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every flu campaign the models report on
     -- (campaign list: macros/config/flu_campaign_selection.sql)
-    {{ flu_reported_campaigns() }}
+    {{ flu_build_campaigns() }}
 ),
 
 -- Step 1: Latest homeless code date per person (HOMELESS_DAT)

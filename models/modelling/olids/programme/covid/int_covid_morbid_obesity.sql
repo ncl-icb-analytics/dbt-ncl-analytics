@@ -9,12 +9,17 @@ SEV_OBESITY_COD is a subset of BMI_STAGE_COD. A severe obesity code therefore
 qualifies only when it is also the latest BMI stage entry.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 latest_bmi AS (

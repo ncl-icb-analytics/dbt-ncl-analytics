@@ -10,12 +10,17 @@ Simple diagnosis rule - any learning disability diagnosis qualifies.
 Eligible in 2024/25 campaigns; not eligible in 2025/26.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 -- Step 1: Find people with learning disability diagnosis (for all campaigns)

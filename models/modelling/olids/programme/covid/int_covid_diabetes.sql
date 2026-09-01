@@ -13,12 +13,17 @@ Exclusion rule - resolved diabetes patients are excluded unless more recent diag
 This condition is NOT eligible in 2025/26 restricted campaigns.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 -- Step 1: Find people with diabetes diagnosis (for all campaigns)

@@ -11,12 +11,17 @@ Business Rule: Person is eligible if they have:
 Exclusion rule - carer status with exclusion from other eligibility routes.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every flu campaign the models report on
     -- (campaign list: macros/config/flu_campaign_selection.sql)
-    {{ flu_reported_campaigns() }}
+    {{ flu_build_campaigns() }}
 ),
 
 -- Step 1: Find people with carer codes (for all campaigns)

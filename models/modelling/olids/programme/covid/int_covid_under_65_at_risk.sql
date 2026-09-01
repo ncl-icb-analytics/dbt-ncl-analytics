@@ -15,12 +15,17 @@ under-75 immunosuppressed cohort (immuno_max_age_years IS NULL, Autumn 2024). Fr
 Spring 2025 that cohort is published on its own by fct_covid_eligibility.
 */
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='delete+insert',
+    unique_key='campaign_id',
+    tags=['covid_flu']
+) }}
 
 WITH all_campaigns AS (
     -- Every COVID campaign the models report on
     -- (campaign list: macros/config/covid_campaign_selection.sql)
-    {{ covid_reported_campaigns() }}
+    {{ covid_build_campaigns() }}
 ),
 
 clinical_risk_groups AS (
