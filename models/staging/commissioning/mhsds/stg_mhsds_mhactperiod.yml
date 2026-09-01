@@ -37,6 +37,8 @@ models:
       - name: uniq_submission_id
         description: Accepted submission containing the retained period version.
       - name: reporting_period_end_date
-        description: Last reporting period in which the period was submitted.
+        description: >
+          Reporting period recorded on the retained legal-status record, which
+          is the one from the newest accepted submission containing the period.
       - name: effective_from
         description: Time the retained source file was received.

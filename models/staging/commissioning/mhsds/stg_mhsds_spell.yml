@@ -20,7 +20,8 @@ models:
 
       - name: reporting_period_end_date
         description: >
-          End of the newest active submission period containing the spell. A
+          Reporting period recorded on the retained spell record, which is the
+          one from the newest accepted submission containing the spell. A
           historic value with no discharge date can indicate a spell that stopped
           being submitted without a recorded discharge.
         data_tests:

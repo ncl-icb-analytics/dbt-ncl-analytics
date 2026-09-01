@@ -4,7 +4,13 @@
         tie_breaker_cols = []
     ) %}
 
-    {# Select the newest reported version of a record that recurs across periods. #}
+    {# Select the newest reported version of a record that recurs across periods.
+       Source row order is descending: within one submitted file, a later row
+       for the same key is treated as the later correction. stg_mhsds_primdiag
+       cannot use this macro and deliberately reads source rows ascending, to
+       follow the NHS England grouper order.
+       Ranking uses the submission's reporting period, but the macro returns
+       tbl.*, so callers publish the period recorded on the record itself. #}
     {% if partition_cols | length == 0 %}
         {{ exceptions.raise_compiler_error(
             "You must provide at least one partition column to select_latest_mhsds_record."

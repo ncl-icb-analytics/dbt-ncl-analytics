@@ -44,7 +44,9 @@ models:
         description: Active submission supplying the retained ward stay version.
 
       - name: reporting_period_end_date
-        description: End of the newest active submission period containing the ward stay.
+        description: >
+          Reporting period recorded on the retained ward-stay record, which is
+          the one from the newest accepted submission containing the ward stay.
         data_tests:
           - not_null
 

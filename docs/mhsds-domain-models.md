@@ -28,8 +28,8 @@ What happens next depends on the type of table:
 
 | Type of table | Rows retained by our models | Examples |
 |---|---|---|
-| Records updated in later submissions | The newest reported version of each record. | Referrals, care contacts, patient indicators, referral-team relationships, legal-status periods, hospital spells and ward stays. |
-| Monthly history | Rows from every accepted month. | MHS001 patient history, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
+| Records updated in later submissions | The newest reported version of each record. | Referrals, care contacts, referral-team relationships, legal-status periods, hospital spells and ward stays. |
+| Monthly history | Rows from every accepted month. | MHS001 patient history, MHS005 patient indicators, MHS204 indirect activity and MHS902/MHS903 reference snapshots. |
 | Repeated rows needing a table-specific rule | One row using identifiers and ordering defined for that table. | MHS604 uses referral and diagnosis timestamp; MHS903 uses provider, submission and ward code. |
 
 The choice is made from the meaning of the source table. A referral, contact,
@@ -46,13 +46,16 @@ those rows by:
 1. reporting-period end date, newest first;
 2. file receipt timestamp (`effective_from`), newest first;
 3. submission identifier, highest first; and
-4. source row order or submitted-row identifier where another tie-break is
-   needed.
+4. source row order, last row in the file first, then the submitted-row
+   identifier where another tie-break is needed.
 
 The reporting month and receipt time determine which version is newer. The
 remaining fields make the result repeatable when those dates are equal; they do
-not imply that one row is clinically more reliable. MHS604 diagnosis also
-follows the NHS England grouper order when diagnosis timestamps are equal.
+not imply that one row is clinically more reliable. Source row order runs
+descending, treating the last row for a key in a file as the later correction.
+MHS604 diagnosis is the exception: when diagnosis timestamps are equal it reads
+source record and row numbers ascending, following the NHS England grouper
+order.
 
 The `select_latest_mhsds_record` macro applies this ordering where tables share
 the same pattern. Models with table-specific matching rules apply the same
