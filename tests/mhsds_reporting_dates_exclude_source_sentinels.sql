@@ -49,6 +49,6 @@ where least_ignore_nulls(
     first_referral_date,
     latest_referral_date,
     latest_contact_date,
-    latest_formal_mha_status_start_date
+    latest_detention_start_date
 ) < '1901-01-01'::date
 having count(*) > 0

@@ -10,7 +10,10 @@ models:
       back from the latest accepted reporting period end date, so the model uses
       one clock. Where providers submit different current patient indicators,
       the newest reporting period and file receipt take precedence. Referral and
-      contact measures use the published MHSDS facts.
+      contact measures use the published MHSDS facts. Detention follows the
+      national Mental Health Act legal status code definitions in the MHSDS
+      Enhanced Technical Output Specification, held in
+      mhsds_mh_act_legal_status_classification.
     config:
       meta:
         owner:
@@ -89,36 +92,42 @@ models:
         description: >-
           Coding timestamp of the latest diagnosis record, whether or not it
           resolved to ICD-10.
-      - name: has_ever_had_formal_mha_status
+      - name: has_ever_been_detained
         description: >-
-          Whether any formal Mental Health Act legal status is recorded. Formal
-          means any NHSD legal status other than informal admission (01), not
-          applicable (98), unknown (99) and the -1 sentinel. It is broader than
-          detention: community-based statuses such as Community Treatment Orders
-          and recall, conditional discharge and guardianship all count. Use
-          latest_formal_mha_status_code to narrow.
-      - name: has_current_formal_mha_status
+          Whether any Mental Health Act legal-status period carries a code whose
+          national definition is a detention. Guardianship under Sections 7 and
+          37, informal admission, not applicable, not known and the -1 sentinel
+          do not count. The NHS England Learning Disability and Autism measures
+          additionally treat a patient as informal while a concurrent community
+          order is open; that publication-specific rule is not applied here, so
+          this flag counts such patients as detained.
+      - name: is_currently_detained
         description: >-
-          Whether an open formal legal-status period appeared within the latest
-          three accepted reporting periods and has not expired. Uses the same
-          formal-status definition as has_ever_had_formal_mha_status, so a
-          person living in the community under a Community Treatment Order,
-          conditional discharge or guardianship is included. Use
-          latest_formal_mha_status_code to narrow.
-      - name: latest_formal_mha_status_start_date
+          Whether an open detention period appeared within the latest three
+          accepted reporting periods and has not expired. Uses the same
+          detention definition as has_ever_been_detained, including its
+          treatment of concurrent community orders.
+      - name: latest_detention_start_date
         description: >-
-          Start date of the latest formal Mental Health Act legal-status period.
-          Null when no formal status is recorded, or when the source start date
-          was an Excel-epoch missing-value sentinel.
+          Start date of the latest detention period. Null when no detention is
+          recorded, or when the source start date was an Excel-epoch
+          missing-value sentinel.
       - name: latest_formal_mha_status_code
         description: >-
-          NHSD legal-status code of the latest formal Mental Health Act period.
-          Use it to narrow the flags to the statuses an analysis treats as
-          detention.
+          NHSD legal-status code of the latest detention period, so the flags
+          can be audited and narrowed. Null when no detention is recorded; a
+          person whose only legal-status periods are guardianship, informal or
+          unknown has no value here.
+      - name: latest_formal_mha_status_definition
+        description: >-
+          Specification definition of latest_formal_mha_status_code. This is the
+          text the detention flags are derived from.
       - name: latest_formal_mha_status_description
         description: >-
-          UKHFD description for latest_formal_mha_status_code. Null when the
-          submitted code is absent from the UKHFD classification.
+          UKHFD dictionary description for latest_formal_mha_status_code, for
+          continuity with other UKHFD-labelled columns. Null when the code is
+          absent from the UKHFD classification. The detention rule is not
+          derived from this text.
       - name: child_protection_plan_status_code
         description: Latest submitted child protection plan status code.
       - name: child_protection_plan_status_description
