@@ -136,7 +136,6 @@ final_combined AS (
                 END
             WHEN programme_type = 'FLU' THEN
                 CASE 
-                    WHEN campaign_id = 'Flu 2023-24' THEN '2023/24'
                     WHEN campaign_id = 'Flu 2024-25' THEN '2024/25'
                     WHEN campaign_id = 'Flu 2025-26' THEN '2025/26'
                     WHEN campaign_id = 'Flu 2026-27' THEN '2026/27'

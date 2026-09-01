@@ -74,7 +74,7 @@ models:
           name: EddieDavison92
     columns:
       - name: campaign_id
-        description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
+        description: 'Flu campaign identifier, for example Flu 2025-26 or Flu 2026-27'
         data_tests:
           - not_null
       - name: campaign_category

@@ -12,11 +12,9 @@ macros:
       months to three years before AUDITEND_DAT, and eligible_long_term_residential_care
       switches off the long-stay residential care cohort that v15.7 removed from the spec.
 
-      Available campaigns: Flu 2023-24, Flu 2024-25, Flu 2025-26, Flu 2026-27.
+      Available campaigns: Flu 2024-25, Flu 2025-26, Flu 2026-27.
 
-      The campaigns the models build are listed in flu_reported_campaign_ids().
-
-      Configure via dbt_project.yml vars: flu_current_campaign, flu_previous_campaign
+      The campaigns the models build come from flu_reported_campaign_ids(), not from a var.
     arguments:
       - name: campaign_id
         type: string

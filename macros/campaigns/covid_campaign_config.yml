@@ -11,9 +11,10 @@ macros:
       Available campaigns: COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025,
       COVID Spring 2026, COVID Autumn 2026, COVID Spring 2027.
 
-      The campaigns the models build are listed in covid_reported_campaign_ids().
-
-      Configure via dbt_project.yml vars: covid_current_campaign, covid_previous_campaign
+      The campaigns the models build come from covid_reported_campaign_ids(), not from a
+      var. COVID Spring 2027 is defined here but not listed there: spec v4.0 gives the
+      spring dates and defines call and recall for the autumn period only, so its cohorts
+      are a placeholder until UKHSA authorises a spring offer.
     arguments:
       - name: campaign_id
         type: string

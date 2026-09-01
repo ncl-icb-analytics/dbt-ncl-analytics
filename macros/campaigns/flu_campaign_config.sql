@@ -9,7 +9,6 @@ The models build every campaign in flu_reported_campaign_ids(); this macro retur
 parameters for one of them.
 
 Available campaigns:
-- 'Flu 2023-24' - 2023-24 Flu Vaccination Campaign
 - 'Flu 2024-25' - 2024-25 Flu Vaccination Campaign
 - 'Flu 2025-26' - 2025-26 Flu Vaccination Campaign
 - 'Flu 2026-27' - 2026-27 Flu Vaccination Campaign (default)
@@ -51,41 +50,7 @@ CHILD AGE GROUPS:
 */
 
 {% macro flu_campaign_config(campaign_id='Flu 2026-27') %}
-    {%- if campaign_id == 'Flu 2023-24' -%}
-        SELECT
-            '{{ campaign_id }}' AS campaign_id,
-            '2023-24 Flu Vaccination Campaign' AS campaign_name,
-
-            -- Core campaign dates
-            '2023-09-01'::DATE AS campaign_start_date,
-            '2024-03-31'::DATE AS campaign_reference_date,
-            '2023-08-31'::DATE AS child_reference_date,
-            '2024-03-31'::DATE AS campaign_end_date,
-
-            -- Medication lookback dates
-            '2022-09-01'::DATE AS asthma_medication_lookback_date,
-            '2023-03-01'::DATE AS immuno_medication_lookback_date,
-            '2023-03-01'::DATE AS immuno_admin_lookback_date,
-
-            -- Child age group birth date ranges (campaign-specific)
-            '2019-09-01'::DATE AS child_preschool_birth_start,
-            '2021-08-31'::DATE AS child_preschool_birth_end,
-            '2007-09-01'::DATE AS child_school_age_birth_start,
-            '2019-08-31'::DATE AS child_school_age_birth_end,
-
-            -- Vaccination tracking dates
-            '2023-08-31'::DATE AS flu_vaccination_after_date,
-            '2023-08-31'::DATE AS laiv_vaccination_after_date,
-
-            -- Long-stay residential care was a flu indicator up to spec v15.6
-            TRUE AS eligible_long_term_residential_care,
-
-            -- RUN_DAT: the extraction date, capped at the campaign end
-            LEAST(CURRENT_DATE, '2024-03-31'::DATE) AS run_date,
-
-            -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
-            LEAST(CURRENT_DATE, '2024-03-31'::DATE) AS audit_end_date
-    {%- elif campaign_id == 'Flu 2024-25' -%}
+    {%- if campaign_id == 'Flu 2024-25' -%}
         SELECT
             '{{ campaign_id }}' AS campaign_id,
             '2024-25 Flu Vaccination Campaign' AS campaign_name,
