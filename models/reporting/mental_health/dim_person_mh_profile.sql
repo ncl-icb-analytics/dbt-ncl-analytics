@@ -191,14 +191,18 @@ with latest_reporting_period as (
     select
         m.person_id
         , count_if(m.is_detained) > 0 as has_ever_been_detained
-        -- REVIEW: expiry dates are treated as current through the expiry date;
-        -- confirm this matches MHSDS legal-status expiry semantics.
+        -- a period is current through and including its expiry date: MHSDS
+        -- ETOS M401040 defines it as the date the legal status classification
+        -- expires. Both tests run as of the latest accepted reporting period,
+        -- not the run date, so the feed's six-week lag cannot expire a
+        -- detention that was current in the accepted snapshot.
         , count_if(
             m.is_detained
             and m.end_date_mh_act_legal_status_class is null
             and (
                 m.expiry_date_mh_act_legal_status_class is null
-                or m.expiry_date_mh_act_legal_status_class >= current_date
+                or m.expiry_date_mh_act_legal_status_class
+                >= p.latest_reporting_period_end_date
             )
             and m.reporting_period_end_date >= dateadd(
                 month, -2, p.latest_reporting_period_end_date

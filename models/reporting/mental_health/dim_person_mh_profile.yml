@@ -104,7 +104,9 @@ models:
       - name: is_currently_detained
         description: >-
           Whether an open detention period appeared within the latest three
-          accepted reporting periods and has not expired. Uses the same
+          accepted reporting periods and had not expired as at the latest
+          accepted reporting period end date, not the run date. A period is
+          current through and including its expiry date. Uses the same
           detention definition as has_ever_been_detained, including its
           treatment of concurrent community orders.
       - name: latest_detention_start_date
