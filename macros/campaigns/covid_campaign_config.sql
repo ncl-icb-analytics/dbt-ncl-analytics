@@ -22,9 +22,11 @@ Usage:
 - All reported campaigns: {{ covid_reported_campaigns() }}
 
 AUDIT END DATE:
-audit_end_date is the spec RUN_DAT. Each campaign gives var('covid_audit_end_date') a
-different default, so supplying that var on the command line moves every season's audit
-end together. Prefer changing a campaign's own default over setting the var.
+audit_end_date is the spec RUN_DAT for that period: 31 March for an autumn campaign and
+30 June for a spring one. It caps how late an observation can be and still count toward
+the campaign, so an autumn cohort does not absorb evidence recorded during the following
+spring. It is a per-campaign literal rather than a shared var, because one var with a
+different default in each branch moves every season together when supplied.
 
 CAMPAIGN ELIGIBILITY DIFFERENCES:
 - 2024/25: Broader eligibility (age 65+ autumn, clinical risk groups)
@@ -117,8 +119,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort
             18 AS care_home_min_age,                                    -- Autumn 2024 offer covered adult residents
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2025-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2025' -%}
         SELECT
@@ -186,8 +189,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort
             65 AS care_home_min_age,
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2025-06-30'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2026' -%}
         SELECT
@@ -256,8 +260,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort
             65 AS care_home_min_age,
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2026-06-30'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Autumn 2025' -%}
         SELECT 
@@ -325,8 +330,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort
             65 AS care_home_min_age,
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2026-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Autumn 2026' -%}
         SELECT
@@ -398,8 +404,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort (spec Group M denominator)
             65 AS care_home_min_age,
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2027-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2027-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2027' -%}
         SELECT
@@ -477,8 +484,9 @@ the autumn and spring periods share one set.
             -- Minimum age for the care home resident cohort
             65 AS care_home_min_age,
 
-            -- Current audit date
-            '{{ var("covid_audit_end_date", "2027-06-30") }}'::DATE AS audit_end_date
+            -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
+            -- and still count toward this campaign.
+            '2027-06-30'::DATE AS audit_end_date
 
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
