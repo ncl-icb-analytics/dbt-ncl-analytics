@@ -40,8 +40,8 @@ final_eligibility AS (
         cc.campaign_reference_date AS reference_date,
         'People living with someone with a weakened immune system' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         cc.audit_end_date AS created_at
     FROM people_with_household_immunocompromised hi
     JOIN all_campaigns cc ON hi.campaign_id = cc.campaign_id
@@ -50,7 +50,7 @@ final_eligibility AS (
     WHERE 1=1
         -- Aged 6 months or over at RUN_DAT. Spec indicator 19 reports age bands 1, 5, 6
         -- and 7, which run to 65 and over, so there is no upper bound.
-        AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 6
+        AND DATEADD('month', 6, demo.birth_date_approx) <= cc.run_date
 )
 
 SELECT * FROM final_eligibility

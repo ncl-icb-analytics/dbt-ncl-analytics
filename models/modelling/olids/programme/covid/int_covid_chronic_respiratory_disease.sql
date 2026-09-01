@@ -58,8 +58,8 @@ people_with_other_respiratory_with_age AS (
         pord.campaign_id,
         pord.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, pord.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, pord.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pord.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pord.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         pord.first_resp_date AS qualifying_event_date,
         pord.campaign_reference_date,
         'Other chronic respiratory disease' AS respiratory_condition_type

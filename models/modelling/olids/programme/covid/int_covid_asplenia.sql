@@ -42,8 +42,8 @@ people_with_spleen_eligible_with_age AS (
         psd.campaign_id,
         psd.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, psd.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, psd.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(psd.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(psd.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         psd.first_spleen_date AS qualifying_event_date,
         psd.campaign_reference_date
     FROM people_with_spleen_diagnosis psd

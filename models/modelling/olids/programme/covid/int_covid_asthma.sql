@@ -196,8 +196,8 @@ people_with_asthma_eligible_with_age AS (
         pwae.campaign_id,
         pwae.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, pwae.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, pwae.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pwae.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pwae.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         COALESCE(pwae.latest_admission_date, pwae.latest_steroid_date, pwae.first_asthma_date) AS qualifying_event_date,
         pwae.campaign_reference_date,
         pwae.eligibility_reason

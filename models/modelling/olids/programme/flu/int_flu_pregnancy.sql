@@ -144,8 +144,8 @@ final_eligibility AS (
         cc.campaign_reference_date AS reference_date,
         'Women pregnant at flu campaign start or during campaign period' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         bpe.audit_end_date AS created_at
     FROM best_pregnancy_eligibility bpe
     JOIN all_campaigns cc
@@ -154,7 +154,10 @@ final_eligibility AS (
         ON bpe.person_id = demo.person_id
     WHERE bpe.rn = 1  -- Only the best eligibility per person
         -- Apply age restrictions: 12 to under 65 years (144 months to under 65 years)
-        AND DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) >= 144
+        -- PREG_GROUP carries no age rule in the spec; the search population floor is
+        -- 6 months at RUN_DAT. The 12-year floor here is a local data-quality guard
+        -- against miscoded pregnancy records, not a spec criterion.
+        AND DATEADD('year', 12, demo.birth_date_approx) <= cc.run_date
 )
 
 SELECT * FROM final_eligibility

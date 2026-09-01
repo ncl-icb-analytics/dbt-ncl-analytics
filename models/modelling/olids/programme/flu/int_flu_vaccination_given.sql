@@ -125,8 +125,8 @@ final_eligibility AS (
         cc.campaign_reference_date AS reference_date,
         'People with flu vaccination administration records (including LAIV)' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         cc.audit_end_date AS created_at
     FROM best_flu_vaccination_evidence bfve
     JOIN all_campaigns cc ON bfve.campaign_id = cc.campaign_id

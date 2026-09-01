@@ -44,15 +44,15 @@ final_eligibility AS (
         chd.campaign_reference_date AS reference_date,
         'People with coronary heart disease, heart failure, or stroke' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, chd.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, chd.campaign_reference_date) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(chd.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(chd.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         chd.audit_end_date AS created_at
     FROM people_with_chd_diagnosis chd
     JOIN {{ ref('dim_person_demographics') }} demo
         ON chd.person_id = demo.person_id
     WHERE 1=1
         -- Apply age restrictions: 6 months or older (minimum age for flu vaccination)
-        AND DATEDIFF('month', demo.birth_date_approx, chd.run_date) >= 6
+        AND DATEADD('month', 6, demo.birth_date_approx) <= chd.run_date
 )
 
 SELECT * FROM final_eligibility

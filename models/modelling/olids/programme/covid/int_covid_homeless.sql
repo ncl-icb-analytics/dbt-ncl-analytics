@@ -133,8 +133,8 @@ people_with_homeless_eligible_with_age AS (
         ep.campaign_id,
         ep.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, ep.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, ep.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(ep.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(ep.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         ep.qualifying_event_date,
         ep.campaign_reference_date,
         ep.via_homeless_code

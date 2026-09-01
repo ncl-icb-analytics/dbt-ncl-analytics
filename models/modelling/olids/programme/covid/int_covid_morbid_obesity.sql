@@ -107,7 +107,7 @@ final_eligible AS (
         cc.campaign_reference_date AS reference_date,
         'Morbid obesity based on the latest BMI and BMI stage evidence' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date)
         - IFF(
             DATEADD(

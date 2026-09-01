@@ -84,8 +84,8 @@ people_vaccinated_with_age AS (
         pcv.campaign_id,
         pcv.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, pcv.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, pcv.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pcv.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pcv.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         pcv.latest_vaccination_date AS qualifying_event_date,
         pcv.campaign_reference_date,
         pcv.vaccination_types

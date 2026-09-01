@@ -42,8 +42,8 @@ people_declined_with_age AS (
         pcd.campaign_id,
         pcd.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, pcd.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, pcd.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pcd.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(pcd.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         pcd.latest_declined_date AS qualifying_event_date,
         pcd.campaign_reference_date
     FROM people_with_covid_vaccination_declined pcd

@@ -125,8 +125,8 @@ final_eligibility AS (
         cc.campaign_reference_date AS reference_date,
         'People with weakened immune systems or receiving immunosuppressive treatment' AS description,
         demo.birth_date_approx,
-        DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
-        DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(cc.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         cc.audit_end_date AS created_at
     FROM best_immuno_evidence bie
     JOIN all_campaigns cc ON bie.campaign_id = cc.campaign_id
@@ -134,7 +134,7 @@ final_eligibility AS (
         ON bie.person_id = demo.person_id
     WHERE bie.rn = 1  -- Only the most recent evidence per person per campaign
         -- Apply age restrictions: 6 months to under 65 years
-        AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 6
+        AND DATEADD('month', 6, demo.birth_date_approx) <= cc.run_date
 )
 
 SELECT * FROM final_eligibility

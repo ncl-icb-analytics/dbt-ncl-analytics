@@ -125,8 +125,8 @@ people_pregnant_with_age AS (
         bpe.campaign_id,
         bpe.person_id,
         demo.birth_date_approx,
-        DATEDIFF('year', demo.birth_date_approx, bpe.campaign_reference_date) AS age_years_at_ref_date,
-        DATEDIFF('month', demo.birth_date_approx, bpe.campaign_reference_date) AS age_months_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(bpe.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
+        FLOOR(MONTHS_BETWEEN(bpe.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         bpe.qualifying_event_date,
         bpe.campaign_reference_date,
         bpe.eligibility_reason
