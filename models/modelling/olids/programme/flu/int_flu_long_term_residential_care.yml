@@ -12,7 +12,7 @@ models:
 
       • Captures current residential status (not historical)
 
-      • Generates data for current and previous flu campaigns automatically
+      • Not reported from 2026-27: UKHSA removed the long-stay residential care indicator and the LONGRES_COD group from the flu specification at v15.7, so only campaigns that were reported with the cohort keep rows
 
       Purpose: Identify care home residents eligible for flu vaccination due to communal living infection risk.'
     config:
@@ -31,7 +31,9 @@ models:
             from long-term care cluster (LONGRES_COD) to qualify. Minimum age requirement
             of 6 months. Captures current residential status to identify communal
             living
-            infection risks.
+            infection risks. UKHSA removed this indicator from the flu specification at
+            v15.7, so the cohort covers campaigns up to 2025-26 only and is empty from
+            2026-27.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_18_CARE_HOME_RESIDENT"

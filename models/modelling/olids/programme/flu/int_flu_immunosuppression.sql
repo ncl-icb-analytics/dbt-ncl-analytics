@@ -4,9 +4,10 @@ Simplified Immunosuppression Eligibility Rule
 Business Rule: Person is eligible if they have:
 1. ANY of the following evidence of immunosuppression:
    - Immunosuppression diagnosis (IMMDX_COD) - latest occurrence
-   - Immunosuppression medication (IMMRX_COD) since lookback date
-   - Immunosuppression administration (IMM_ADM_COD) since lookback date
-   - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since lookback date
+   - Immunosuppression medication (IMMRX_COD) since the six-month medication lookback date
+   - Immunosuppression administration (IMM_ADM_COD) since the admin lookback date, which
+     spec v16.0 widened from six months to three years before AUDITEND_DAT for 2026-27
+   - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since the six-month medication lookback date
 2. AND aged 6 months or older (minimum age for flu vaccination)
 
 Combination rule - multiple evidence sources with OR logic.
@@ -15,10 +16,9 @@ Combination rule - multiple evidence sources with OR logic.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_current_config() }})
-    UNION ALL
-    SELECT * FROM ({{ flu_previous_config() }})
+    -- Every flu campaign the models report on
+    -- (campaign list: macros/config/flu_campaign_selection.sql)
+    {{ flu_reported_campaigns() }}
 ),
 
 -- Step 1: Find people with immunosuppression diagnosis (for all campaigns)
@@ -51,6 +51,7 @@ people_with_recent_immuno_medications AS (
 ),
 
 -- Step 3: Find people with recent immunosuppression administration codes (for all campaigns)
+-- IMMADM_DAT uses its own lookback: six months to 2025-26, three years from 2026-27
 people_with_recent_immuno_admin AS (
     SELECT 
         cc.campaign_id,
@@ -60,7 +61,7 @@ people_with_recent_immuno_admin AS (
     FROM ({{ get_observations("'IMM_ADM_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
-        AND obs.clinical_effective_date >= cc.immuno_medication_lookback_date
+        AND obs.clinical_effective_date >= cc.immuno_admin_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),

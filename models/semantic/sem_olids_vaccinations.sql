@@ -55,7 +55,7 @@ DIMENSIONS(
 
     -- COVID and flu uptake: one row per person per campaign per risk group
     covid_flu.programme_type AS programme_type COMMENT = 'Vaccination programme: COVID or FLU. Always filter with campaign_id before uptake calculations.',
-    covid_flu.campaign_id AS campaign_id COMMENT = 'Campaign: COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026, Flu 2024-25, or Flu 2025-26.',
+    covid_flu.campaign_id AS campaign_id COMMENT = 'Campaign: COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026, COVID Autumn 2026, COVID Spring 2027, Flu 2024-25, Flu 2025-26, or Flu 2026-27.',
     covid_flu.campaign_year AS campaign_year COMMENT = 'Campaign year, such as 2024/25',
     covid_flu.campaign_season AS campaign_season COMMENT = 'Campaign season: Autumn, Spring, or Annual.',
     covid_flu.risk_group AS risk_group COMMENT = 'Eligibility risk group. Eligible people can have more than one row, so use distinct-person metrics.',

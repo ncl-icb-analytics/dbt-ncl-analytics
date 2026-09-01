@@ -6,6 +6,11 @@ Business Rule: Person is eligible if they have:
    their latest residence code (RESIDE_COD), i.e. LONGRES_DAT >= RESIDE_DAT
 2. AND aged 6 months or over (no upper age limit)
 
+UKHSA removed the long-stay residential care indicator and the LONGRES_COD group from
+the flu specification at v15.7, so no campaign from 2026-27 reports this cohort. The
+campaigns that were reported with it keep their rows, driven by the
+eligible_long_term_residential_care flag in flu_campaign_config().
+
 LONGRES_COD is a subset of RESIDE_COD, so the two clusters are compared as separate
 latest dates rather than ranked in a single union - ranking ties every qualifying
 observation with itself and picks a winner nondeterministically.
@@ -14,10 +19,13 @@ observation with itself and picks a winner nondeterministically.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_current_config() }})
-    UNION ALL
-    SELECT * FROM ({{ flu_previous_config() }})
+    -- Campaigns that still report the long-stay residential care cohort
+    -- (campaign list: macros/config/flu_campaign_selection.sql)
+    SELECT *
+    FROM (
+        {{ flu_reported_campaigns() }}
+    )
+    WHERE eligible_long_term_residential_care = TRUE
 ),
 
 -- Step 1: Latest long-term care code date per person (LONGRES_DAT)

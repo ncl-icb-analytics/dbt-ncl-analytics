@@ -11,10 +11,9 @@ No clinical codes, no complex logic, just age calculation.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ flu_current_config() }})
-    UNION ALL
-    SELECT * FROM ({{ flu_previous_config() }})
+    -- Every flu campaign the models report on
+    -- (campaign list: macros/config/flu_campaign_selection.sql)
+    {{ flu_reported_campaigns() }}
 ),
 
 -- Step 1: Find people aged 65+ at reference date (for all campaigns)

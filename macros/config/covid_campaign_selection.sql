@@ -6,19 +6,68 @@ Usage:
     AND observation_date <= {{ covid_autumn_campaign_end_date() }}
 
 To change campaign year, update covid_current_autumn() etc below.
+
+covid_reported_campaign_ids() is the set of campaigns the COVID models build. Every
+campaign listed there stays in the models for good, so published campaigns keep their
+figures when a new season is added. Add the new campaign to covid_campaign_config()
+first, then append its id here.
 */
+
+{# ===== Campaigns the models build (add new campaigns here; never remove) ===== #}
+
+{% macro covid_reported_campaign_ids() %}
+    {{ return([
+        'COVID Autumn 2024',
+        'COVID Spring 2025',
+        'COVID Autumn 2025',
+        'COVID Spring 2026',
+        'COVID Autumn 2026',
+        'COVID Spring 2027'
+    ]) }}
+{% endmacro %}
+
+{% macro covid_reported_campaigns() %}
+    {%- for campaign_id in covid_reported_campaign_ids() %}
+    {%- if not loop.first %}
+    UNION ALL
+    {% endif %}
+    SELECT * FROM ({{ covid_campaign_config(campaign_id) }})
+    {%- endfor %}
+{% endmacro %}
 
 {# ===== Campaign ID selectors (edit these to change campaign year) ===== #}
 
-{% macro covid_current_autumn() %}COVID Autumn 2025{% endmacro %}
-{% macro covid_current_spring() %}COVID Spring 2026{% endmacro %}
-{% macro covid_previous_autumn() %}COVID Autumn 2024{% endmacro %}
-{% macro covid_previous_spring() %}COVID Spring 2025{% endmacro %}
+{% macro covid_current_autumn() %}COVID Autumn 2026{% endmacro %}
+{% macro covid_current_spring() %}COVID Spring 2027{% endmacro %}
+{% macro covid_previous_autumn() %}COVID Autumn 2025{% endmacro %}
+{% macro covid_previous_spring() %}COVID Spring 2026{% endmacro %}
 
 {# ===== Campaign data lookup ===== #}
 
 {% macro _covid_campaign_data(campaign_id, field) %}
-    {%- if campaign_id == 'COVID Autumn 2025' -%}
+    {%- if campaign_id == 'COVID Autumn 2026' -%}
+        {%- if field == 'campaign_name' -%}Autumn 2026 COVID Vaccination Campaign
+        {%- elif field == 'campaign_start_date' -%}'2026-09-01'::DATE
+        {%- elif field == 'campaign_end_date' -%}'2027-03-31'::DATE
+        {%- elif field == 'campaign_reference_date' -%}'2027-03-31'::DATE
+        {%- elif field == 'vaccination_tracking_start' -%}'2026-09-01'::DATE
+        {%- elif field == 'vaccination_tracking_end' -%}'2027-03-31'::DATE
+        {%- elif field == 'decline_tracking_start' -%}'2026-08-01'::DATE
+        {%- elif field == 'decline_tracking_end' -%}'2027-06-30'::DATE
+        {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
+        {%- endif -%}
+    {%- elif campaign_id == 'COVID Spring 2027' -%}
+        {%- if field == 'campaign_name' -%}Spring 2027 COVID Vaccination Campaign
+        {%- elif field == 'campaign_start_date' -%}'2027-04-01'::DATE
+        {%- elif field == 'campaign_end_date' -%}'2027-06-30'::DATE
+        {%- elif field == 'campaign_reference_date' -%}'2027-06-30'::DATE
+        {%- elif field == 'vaccination_tracking_start' -%}'2027-04-01'::DATE
+        {%- elif field == 'vaccination_tracking_end' -%}'2027-06-30'::DATE
+        {%- elif field == 'decline_tracking_start' -%}'2027-03-01'::DATE
+        {%- elif field == 'decline_tracking_end' -%}'2027-06-30'::DATE
+        {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
+        {%- endif -%}
+    {%- elif campaign_id == 'COVID Autumn 2025' -%}
         {%- if field == 'campaign_name' -%}Autumn 2025 COVID Vaccination Campaign
         {%- elif field == 'campaign_start_date' -%}'2025-09-01'::DATE
         {%- elif field == 'campaign_end_date' -%}'2026-03-31'::DATE
@@ -74,7 +123,7 @@ To change campaign year, update covid_current_autumn() etc below.
         {%- else -%}{{ exceptions.raise_compiler_error("Unknown field '" ~ field ~ "' for campaign '" ~ campaign_id ~ "'") }}
         {%- endif -%}
     {%- else -%}
-        {{ exceptions.raise_compiler_error("Unknown COVID campaign_id: '" ~ campaign_id ~ "'. Valid campaigns: COVID Autumn 2025, COVID Autumn 2024, COVID Spring 2026, COVID Spring 2025, COVID Spring 2024") }}
+        {{ exceptions.raise_compiler_error("Unknown COVID campaign_id: '" ~ campaign_id ~ "'. Valid campaigns: COVID Autumn 2026, COVID Spring 2027, COVID Autumn 2025, COVID Spring 2026, COVID Autumn 2024, COVID Spring 2025, COVID Spring 2024") }}
     {%- endif -%}
 {% endmacro %}
 

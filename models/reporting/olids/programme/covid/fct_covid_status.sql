@@ -15,9 +15,11 @@ Key features:
 
 Multi-Campaign Support:
 - COVID Autumn 2024: September 2024 - March 2025 (broader eligibility)
-- COVID Spring 2025: April 2025 - June 2025 (broader eligibility)
+- COVID Spring 2025: April 2025 - June 2025 (restricted eligibility)
 - COVID Autumn 2025: September 2025 - March 2026 (restricted eligibility)
 - COVID Spring 2026: April 2026 - June 2026 (restricted eligibility)
+- COVID Autumn 2026: September 2026 - March 2027 (restricted eligibility)
+- COVID Spring 2027: April 2027 - June 2027 (restricted eligibility)
 
 This gives a complete picture of vaccination patterns across the population.
 */

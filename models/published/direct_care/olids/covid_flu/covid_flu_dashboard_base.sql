@@ -20,10 +20,11 @@ Key features:
 
 Multi-Programme Support:
 COVID Campaigns:
-- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026
+- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026,
+  COVID Autumn 2026, COVID Spring 2027
 
 Flu Campaigns: 
-- Flu 2023-24, Flu 2024-25, Flu 2025-26
+- Flu 2024-25, Flu 2025-26, Flu 2026-27
 
 Usage:
 - Primary table for COVID and Flu Dashboard in PowerBI/Tableau
@@ -43,6 +44,8 @@ WITH uptake_with_demographics AS (
          WHEN u.campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
          WHEN u.campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
          WHEN u.campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
+         WHEN u.campaign_id = 'COVID Autumn 2026' THEN 'CV Autumn 2026'
+         WHEN u.campaign_id = 'COVID Spring 2027' THEN 'CV Spring 2027'
          ELSE u.campaign_id END AS campaign_id,
         CASE 
         WHEN u.campaign_id = 'Flu 2024-25' THEN 1
@@ -51,6 +54,9 @@ WITH uptake_with_demographics AS (
         WHEN u.campaign_id = 'Flu 2025-26' THEN 4
         WHEN u.campaign_id = 'COVID Autumn 2025' THEN 5
         WHEN u.campaign_id = 'COVID Spring 2026' THEN 6
+        WHEN u.campaign_id = 'Flu 2026-27' THEN 7
+        WHEN u.campaign_id = 'COVID Autumn 2026' THEN 8
+        WHEN u.campaign_id = 'COVID Spring 2027' THEN 9
         END AS campaign_sort,
         u.campaign_year,
         u.campaign_season,

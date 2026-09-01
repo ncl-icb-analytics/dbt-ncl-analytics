@@ -12,13 +12,9 @@ qualifies only when it is also the latest BMI stage entry.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    SELECT * FROM ({{ covid_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_spring_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_spring_config() }})
+    -- Every COVID campaign the models report on
+    -- (campaign list: macros/config/covid_campaign_selection.sql)
+    {{ covid_reported_campaigns() }}
 ),
 
 latest_bmi AS (

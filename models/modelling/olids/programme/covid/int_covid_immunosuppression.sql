@@ -7,7 +7,8 @@ Business Rule: Person is eligible if they have:
    - Immunosuppression medication (IMMRX_COD) since lookback date (6 months)
    - Immunosuppression administration (IMM_ADM_COD) since lookback date (3 years)  
    - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since lookback date (6 months)
-2. AND aged 6 months to <75 years (for 2025/26 via immuno_max_age_years) or any age (for 2024/25)
+2. AND aged 6 months to under immuno_max_age_years (75 from Spring 2025 onward, so the
+   75+ age cohort is not double counted; no upper limit for Autumn 2024)
 
 Combination rule - multiple evidence sources with OR logic.
 KEY ELIGIBILITY GROUP for restricted 2025/26 campaigns.
@@ -16,14 +17,9 @@ KEY ELIGIBILITY GROUP for restricted 2025/26 campaigns.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_spring_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_spring_config() }})
+    -- Every COVID campaign the models report on
+    -- (campaign list: macros/config/covid_campaign_selection.sql)
+    {{ covid_reported_campaigns() }}
 ),
 
 -- Step 1: Find people with immunosuppression diagnosis (for all campaigns)
@@ -149,10 +145,13 @@ people_immunosuppressed_with_age AS (
         ON pwi.person_id = demo.person_id
     WHERE demo.is_active = TRUE
         AND demo.birth_date_approx IS NOT NULL
-        AND DATEDIFF('month', demo.birth_date_approx, pwi.campaign_reference_date) >= 6  -- Minimum age 6 months
+        -- Age bounds are tested on birth date because Snowflake DATEDIFF subtracts
+        -- calendar years or months rather than counting completed ones, which pushed
+        -- people who are still 74 at the reference date out of the under-75 cohort.
+        AND demo.birth_date_approx <= DATEADD('month', -6, pwi.campaign_reference_date)
         AND (
             pwi.immuno_max_age_years IS NULL
-            OR DATEDIFF('year', demo.birth_date_approx, pwi.campaign_reference_date) < pwi.immuno_max_age_years
+            OR demo.birth_date_approx > DATEADD('year', -pwi.immuno_max_age_years, pwi.campaign_reference_date)
         )
 ),
 

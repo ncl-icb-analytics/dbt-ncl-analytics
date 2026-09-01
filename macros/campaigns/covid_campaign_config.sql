@@ -12,6 +12,11 @@ Available campaigns:
 - 'COVID Spring 2025' - Spring 2025 COVID Vaccination Campaign
 - 'COVID Autumn 2025' - Autumn 2025 COVID Vaccination Campaign
 - 'COVID Spring 2026' - Spring 2026 COVID Vaccination Campaign
+- 'COVID Autumn 2026' - Autumn 2026 COVID Vaccination Campaign
+- 'COVID Spring 2027' - Spring 2027 COVID Vaccination Campaign
+
+The campaigns the models actually build are listed in covid_reported_campaigns()
+in macros/config/covid_campaign_selection.sql.
 
 Usage Examples:
 - Default campaign: {{ covid_campaign_config() }}
@@ -20,18 +25,33 @@ Usage Examples:
 
 Configuration in dbt_project.yml:
 vars:
-  covid_current_campaign: "COVID Autumn 2025"     # Change this to switch campaigns
-  covid_previous_campaign: "COVID Autumn 2024"    # For comparison queries
+  covid_current_campaign: "COVID Autumn 2026"     # Change this to switch campaigns
+  covid_previous_campaign: "COVID Autumn 2025"    # For comparison queries
 
 CAMPAIGN ELIGIBILITY DIFFERENCES:
 - 2024/25: Broader eligibility (age 65+ autumn, clinical risk groups)
 - 2025/26: Restricted eligibility (age 75+, immunosuppressed, care home 65+ only)
+- 2026/27: Same restricted cohorts as 2025/26 (UKHSA COVID spec v4.0, section 5.1.1)
+
+SOURCE:
+Business Rules for UKHSA SARS-CoV2 (COVID-19) Vaccine Uptake Reporting 2026/27,
+PRIMIS v4.0, 7 August 2026. Section references in the campaign blocks below point
+at that document.
+
+IMMUNOSUPPRESSION LOOKBACKS:
+The spec defines two immunosuppression groups: IMMUNO_GROUP for uptake monitoring, whose
+medication and admin lookbacks are measured from START_DAT, and RECALL_IMMUNO_GROUP for
+call and recall, whose lookbacks are measured from the search run date. These models use
+the START_DAT-anchored lookbacks, so a person's eligibility is fixed for the season rather
+than moving every time the models rebuild.
 
 COMPLEX ASTHMA STEROID WINDOWS:
 Three overlapping 2-year windows to capture repeated steroid use across campaign periods.
+From 2026/27 the windows are the absolute collection-year windows the spec states, so
+the autumn and spring periods share one set.
 */
 
-{% macro covid_campaign_config(campaign_id='COVID Autumn 2025') %}
+{% macro covid_campaign_config(campaign_id='COVID Autumn 2026') %}
     {%- if campaign_id == 'COVID Autumn 2024' -%}
         SELECT 
             '{{ campaign_id }}' AS campaign_id,
@@ -96,6 +116,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Minimum age for the age-based cohort
             65 AS age_based_min_age,                                    -- Autumn 2024 offer was 65+
 
+            -- Minimum age for the care home resident cohort
+            18 AS care_home_min_age,                                    -- Autumn 2024 offer covered adult residents
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
 
@@ -138,9 +161,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             '2025-01-14'::DATE AS gestational_diabetes_start,          -- Gestational diabetes tracking
 
             -- Immunosuppression age cap (NULL = no upper age limit)
-            NULL AS immuno_max_age_years,                               -- No age cap in 2024/25
+            75 AS immuno_max_age_years,                                 -- under 75; 75+ covered by the age group
 
-            -- Individual condition eligibility flags (2024/25 campaigns)
+            -- Individual condition eligibility flags
             TRUE AS eligible_age_75_plus,
             TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
@@ -161,6 +184,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
 
             -- Minimum age for the age-based cohort
             75 AS age_based_min_age,
+
+            -- Minimum age for the care home resident cohort
+            65 AS care_home_min_age,
 
             -- Current audit date
             '{{ var("covid_audit_end_date", "2025-06-30") }}'::DATE AS audit_end_date
@@ -229,6 +255,9 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Minimum age for the age-based cohort
             75 AS age_based_min_age,
 
+            -- Minimum age for the care home resident cohort
+            65 AS care_home_min_age,
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
 
@@ -295,12 +324,163 @@ Three overlapping 2-year windows to capture repeated steroid use across campaign
             -- Minimum age for the age-based cohort
             75 AS age_based_min_age,
 
+            -- Minimum age for the care home resident cohort
+            65 AS care_home_min_age,
+
             -- Current audit date
             '{{ var("covid_audit_end_date", "2026-06-30") }}'::DATE AS audit_end_date
 
+    {%- elif campaign_id == 'COVID Autumn 2026' -%}
+        SELECT
+            '{{ campaign_id }}' AS campaign_id,
+            'Autumn 2026 COVID Vaccination Campaign' AS campaign_name,
+            'covid_2026_27' AS campaign_year,
+            'autumn' AS campaign_period,
+
+            -- Core campaign dates (spec 2.1: START_DAT 01/09/26, REF_DAT and RUN_DAT 31/03/27)
+            '2026-09-01'::DATE AS campaign_start_date,
+            '2027-03-31'::DATE AS campaign_end_date,
+            '2027-03-31'::DATE AS campaign_reference_date,
+
+            -- Medication and admin lookbacks, measured from START_DAT (spec 2.3)
+            '2026-03-01'::DATE AS immuno_medication_lookback_date,      -- START_DAT - 6 months
+            '2025-08-31'::DATE AS asthma_medication_lookback_date,      -- START_DAT - 366 days
+            '2024-08-31'::DATE AS asthma_admission_lookback_date,       -- START_DAT - 731 days
+            '2023-09-01'::DATE AS immuno_admin_lookback_date,           -- START_DAT - 3 years
+
+            -- Asthma oral steroid windows: absolute for the collection year and shared by
+            -- the autumn and spring periods (spec ASTRXM2E1/L1, E2/L2, E3/L3)
+            '2024-09-01'::DATE AS asthma_steroid_window_1_start,        -- from 1/9/2024
+            '2026-08-31'::DATE AS asthma_steroid_window_1_end,          -- before 1/9/2026
+            '2025-04-01'::DATE AS asthma_steroid_window_2_start,        -- from 1/4/2025
+            '2027-03-31'::DATE AS asthma_steroid_window_2_end,          -- before 1/4/2027
+            '2025-07-01'::DATE AS asthma_steroid_window_3_start,        -- from 1/7/2025
+            '2027-06-30'::DATE AS asthma_steroid_window_3_end,          -- before 1/7/2027
+
+            -- Vaccination tracking dates (spec COVADM1_DAT and COVRX1_DAT)
+            '2026-09-01'::DATE AS vaccination_tracking_start,
+            '2027-03-31'::DATE AS vaccination_tracking_end,
+            '2026-08-01'::DATE AS decline_tracking_start,               -- spec COVDECL_DAT from 01/08/26
+            '2027-06-30'::DATE AS decline_tracking_end,                 -- spec COVDECL_DAT to 30/06/27
+
+            -- Pregnancy tracking (spec PREGDEL26_DAT, PREG26A_DAT, PREG26B_DAT)
+            '2026-01-01'::DATE AS pregnancy_lookback_start,             -- 8 months before START_DAT
+            '2026-09-01'::DATE AS pregnancy_current_start,
+            '2027-06-30'::DATE AS pregnancy_current_end,
+            '2026-01-14'::DATE AS gestational_diabetes_start,           -- spec GDIAB_DAT from 14/01/26
+
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            75 AS immuno_max_age_years,                                 -- under 75; 75+ covered by the age group
+
+            -- Individual condition eligibility flags. The Autumn 2026 offer is 75 and over,
+            -- care home residents aged 65 and over, and recently or currently immunosuppressed
+            -- people under 75 (spec 5.1.1 Group M), so the wider clinical risk groups are not
+            -- offered a vaccine this campaign.
+            TRUE AS eligible_age_75_plus,
+            TRUE AS eligible_immunosuppression,
+            TRUE AS eligible_care_home,
+            FALSE AS eligible_asthma,
+            FALSE AS eligible_chronic_heart_disease,
+            FALSE AS eligible_chronic_kidney_disease,
+            FALSE AS eligible_diabetes,
+            FALSE AS eligible_chronic_liver_disease,
+            FALSE AS eligible_chronic_neurological_disease,
+            FALSE AS eligible_chronic_respiratory_disease,
+            FALSE AS eligible_morbid_obesity,
+            FALSE AS eligible_asplenia,
+            FALSE AS eligible_learning_disability,
+            FALSE AS eligible_severe_mental_illness,
+            FALSE AS eligible_pregnancy,
+            FALSE AS eligible_gestational_diabetes,
+            FALSE AS eligible_homeless,
+
+            -- Minimum age for the age-based cohort
+            75 AS age_based_min_age,
+
+            -- Minimum age for the care home resident cohort (spec Group M denominator)
+            65 AS care_home_min_age,
+
+            -- Current audit date
+            '{{ var("covid_audit_end_date", "2027-06-30") }}'::DATE AS audit_end_date
+
+    {%- elif campaign_id == 'COVID Spring 2027' -%}
+        SELECT
+            '{{ campaign_id }}' AS campaign_id,
+            'Spring 2027 COVID Vaccination Campaign' AS campaign_name,
+            'covid_2026_27' AS campaign_year,
+            'spring' AS campaign_period,
+
+            -- Core campaign dates (spec 2.1: START_DAT 01/04/27, REF_DAT and RUN_DAT 30/06/27)
+            '2027-04-01'::DATE AS campaign_start_date,
+            '2027-06-30'::DATE AS campaign_end_date,
+            '2027-06-30'::DATE AS campaign_reference_date,
+
+            -- Medication and admin lookbacks, measured from START_DAT (spec 2.3)
+            '2026-10-01'::DATE AS immuno_medication_lookback_date,      -- START_DAT - 6 months
+            '2026-03-31'::DATE AS asthma_medication_lookback_date,      -- START_DAT - 366 days
+            '2025-03-31'::DATE AS asthma_admission_lookback_date,       -- START_DAT - 731 days
+            '2024-04-01'::DATE AS immuno_admin_lookback_date,           -- START_DAT - 3 years
+
+            -- Asthma oral steroid windows: the same absolute collection-year windows as
+            -- Autumn 2026 (spec ASTRXM2E1/L1, E2/L2, E3/L3)
+            '2024-09-01'::DATE AS asthma_steroid_window_1_start,        -- from 1/9/2024
+            '2026-08-31'::DATE AS asthma_steroid_window_1_end,          -- before 1/9/2026
+            '2025-04-01'::DATE AS asthma_steroid_window_2_start,        -- from 1/4/2025
+            '2027-03-31'::DATE AS asthma_steroid_window_2_end,          -- before 1/4/2027
+            '2025-07-01'::DATE AS asthma_steroid_window_3_start,        -- from 1/7/2025
+            '2027-06-30'::DATE AS asthma_steroid_window_3_end,          -- before 1/7/2027
+
+            -- Vaccination tracking dates (spec COVADM2_DAT and COVRX2_DAT)
+            '2027-04-01'::DATE AS vaccination_tracking_start,
+            '2027-06-30'::DATE AS vaccination_tracking_end,
+            -- The spec uses a single COVDECL window for the whole collection year. Declines
+            -- are narrowed to a month before the spring period so that an autumn decline is
+            -- not also counted against spring, matching earlier spring campaigns.
+            '2027-03-01'::DATE AS decline_tracking_start,
+            '2027-06-30'::DATE AS decline_tracking_end,
+
+            -- Pregnancy tracking (spec PREGDEL26_DAT, PREG26A_DAT, PREG26B_DAT)
+            '2026-01-01'::DATE AS pregnancy_lookback_start,
+            '2026-09-01'::DATE AS pregnancy_current_start,
+            '2027-06-30'::DATE AS pregnancy_current_end,
+            '2026-01-14'::DATE AS gestational_diabetes_start,           -- spec GDIAB_DAT from 14/01/26
+
+            -- Immunosuppression age cap (NULL = no upper age limit)
+            75 AS immuno_max_age_years,                                 -- under 75; 75+ covered by the age group
+
+            -- Individual condition eligibility flags. Spec v4.0 defines call and recall for
+            -- the autumn period only, so the Autumn 2026 cohorts are carried forward until
+            -- UKHSA publishes a spring 2027 offer.
+            TRUE AS eligible_age_75_plus,
+            TRUE AS eligible_immunosuppression,
+            TRUE AS eligible_care_home,
+            FALSE AS eligible_asthma,
+            FALSE AS eligible_chronic_heart_disease,
+            FALSE AS eligible_chronic_kidney_disease,
+            FALSE AS eligible_diabetes,
+            FALSE AS eligible_chronic_liver_disease,
+            FALSE AS eligible_chronic_neurological_disease,
+            FALSE AS eligible_chronic_respiratory_disease,
+            FALSE AS eligible_morbid_obesity,
+            FALSE AS eligible_asplenia,
+            FALSE AS eligible_learning_disability,
+            FALSE AS eligible_severe_mental_illness,
+            FALSE AS eligible_pregnancy,
+            FALSE AS eligible_gestational_diabetes,
+            FALSE AS eligible_homeless,
+
+            -- Minimum age for the age-based cohort
+            75 AS age_based_min_age,
+
+            -- Minimum age for the care home resident cohort
+            65 AS care_home_min_age,
+
+            -- Current audit date
+            '{{ var("covid_audit_end_date", "2027-06-30") }}'::DATE AS audit_end_date
+
     {%- else -%}
         -- Default to current campaign if unknown campaign_id
-        {{ covid_campaign_config('COVID Autumn 2025') }}
+        {{ covid_campaign_config('COVID Autumn 2026') }}
     {%- endif -%}
 {% endmacro %}
 
@@ -309,6 +489,6 @@ Helper macro to get a specific campaign date
 Usage: {{ covid_get_campaign_date('campaign_reference_date') }}
 */
 {% macro covid_get_campaign_date(date_name, campaign_id=none) %}
-    {%- set campaign_id = campaign_id or var('covid_current_campaign', 'COVID Autumn 2025') -%}
+    {%- set campaign_id = campaign_id or var('covid_current_campaign', 'COVID Autumn 2026') -%}
     (SELECT {{ date_name }} FROM ({{ covid_campaign_config(campaign_id) }}))
 {% endmacro %}

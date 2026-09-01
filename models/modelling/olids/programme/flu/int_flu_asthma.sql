@@ -11,9 +11,9 @@ An emergency admission qualifies without a separate diagnosis or medication entr
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    SELECT * FROM ({{ flu_current_config() }})
-    UNION ALL
-    SELECT * FROM ({{ flu_previous_config() }})
+    -- Every flu campaign the models report on
+    -- (campaign list: macros/config/flu_campaign_selection.sql)
+    {{ flu_reported_campaigns() }}
 ),
 
 asthma_diagnosis AS (

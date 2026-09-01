@@ -13,14 +13,9 @@ Eligible in 2024/25 campaigns; not eligible in 2025/26.
 {{ config(materialized='table') }}
 
 WITH all_campaigns AS (
-    -- Generate data for both current and previous campaigns automatically
-    SELECT * FROM ({{ covid_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_spring_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_autumn_config() }})
-    UNION ALL
-    SELECT * FROM ({{ covid_previous_spring_config() }})
+    -- Every COVID campaign the models report on
+    -- (campaign list: macros/config/covid_campaign_selection.sql)
+    {{ covid_reported_campaigns() }}
 ),
 
 -- Step 1: Find people with learning disability diagnosis (for all campaigns)

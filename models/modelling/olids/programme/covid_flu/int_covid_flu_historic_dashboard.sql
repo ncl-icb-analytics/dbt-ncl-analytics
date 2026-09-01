@@ -178,6 +178,13 @@ where analysis_month = '2026-06-30'
     -- LEFT JOIN {{ ref('dim_person_age') }} pa ON p.person_id = pa.person_id
     LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON p.person_id = hs.person_id
     LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = p.LSOA_CODE_21
+    -- Only campaigns that had closed by the 2026-06-30 population snapshot. Later
+    -- campaigns belong in the current dashboard; measuring them against a June 2026
+    -- population would understate uptake.
+    WHERE u.campaign_id IN (
+        'COVID Autumn 2024', 'COVID Spring 2025', 'COVID Autumn 2025', 'COVID Spring 2026',
+        'Flu 2024-25', 'Flu 2025-26'
+    )
 )
 
 SELECT distinct * FROM uptake_with_demographics

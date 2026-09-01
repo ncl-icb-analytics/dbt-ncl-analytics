@@ -15,9 +15,11 @@ Use COUNT(DISTINCT person_id) for headcounts, not SUM(vaccinated).
 
 Multi-Campaign Support:
 - COVID Autumn 2024: September 2024 - March 2025 (broader eligibility)
-- COVID Spring 2025: April 2025 - June 2025 (broader eligibility)
+- COVID Spring 2025: April 2025 - June 2025 (restricted eligibility)
 - COVID Autumn 2025: September 2025 - March 2026 (restricted eligibility)
 - COVID Spring 2026: April 2026 - June 2026 (restricted eligibility)
+- COVID Autumn 2026: September 2026 - March 2027 (restricted eligibility)
+- COVID Spring 2027: April 2027 - June 2027 (restricted eligibility)
 
 Usage:
 - Filter by campaign_id to analyze specific campaigns
@@ -178,18 +180,10 @@ final_uptake AS (
         
     FROM combined_data cd
     LEFT JOIN (
-        -- Include all defined COVID campaigns using variables like flu models
+        -- Every COVID campaign the models report on
+        -- (campaign list: macros/config/covid_campaign_selection.sql)
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_autumn_config() }})
-        UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_spring_config() }})
-        UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_previous_autumn_config() }})
-        UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ covid_previous_spring_config() }})
+        FROM ({{ covid_reported_campaigns() }})
     ) cc
         ON cd.campaign_id = cc.campaign_id
 )

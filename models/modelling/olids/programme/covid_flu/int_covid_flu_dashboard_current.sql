@@ -54,8 +54,9 @@ WITH uptake_with_demographics AS (
         WHEN u.campaign_id = 'Flu 2025-26' THEN 4
         WHEN u.campaign_id = 'COVID Autumn 2025' THEN 5
         WHEN u.campaign_id = 'COVID Spring 2026' THEN 6
-        WHEN u.campaign_id = 'COVID Autumn 2026' THEN 7
-        WHEN u.campaign_id = 'COVID Spring 2027' THEN 8
+        WHEN u.campaign_id = 'Flu 2026-27' THEN 7
+        WHEN u.campaign_id = 'COVID Autumn 2026' THEN 8
+        WHEN u.campaign_id = 'COVID Spring 2027' THEN 9
         END AS campaign_sort,
         u.campaign_year,
         u.campaign_season,
