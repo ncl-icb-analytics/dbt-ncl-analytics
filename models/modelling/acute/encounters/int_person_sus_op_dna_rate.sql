@@ -87,7 +87,8 @@ Known limitations
   affects the level of every rate here.
 */
 
-with appointments as (
+/* 1. FILTER TO PERIOD AND OUTCOMES OF INTEREST AND DERIVE RELEVANT TOTALS */
+with appointments as ( 
     select
         sk_patient_id,
         visit_occurrence_id,
@@ -151,6 +152,7 @@ prior_mean_by_age_band as (
     group by age_band
 ),
 
+/* 2. CALCULATE WITHIN PERSON MEAN SQUARE AND BETWEEN PERSON MEAN SQUARE TO ESTIMATE CORRELATION BETWEEN APPOINMENT OUTCOMES FROM SAME PERSON */
 -- The population mean is cross joined rather than subtracted afterwards so
 -- the between-person sum of squares stays a sum of non-negative terms
 -- instead of a difference between two large, similar quantities.
@@ -180,6 +182,7 @@ population_correlation as (
     from population_mean_squares
 ),
 
+/* 3. USE P TO DERIVE M AND SET STRENGTH OF PRIOR */
 -- rho at or below zero means no detectable variation between people beyond
 -- chance, whose correct limit is complete pooling (M tends to infinity).
 -- The floor caps that at M of about 999 so the model still returns rows;
@@ -214,6 +217,7 @@ person_prior as (
         on p.age_band = b.age_band
 ),
 
+/* 4. CALCULATE POSTERIOR */
 -- Posterior parameters for the age-adjusted prior. Both posteriors share the
 -- same total (opportunities + prior strength), so only alpha differs.
 person_posterior as (
