@@ -14,6 +14,9 @@ This includes number of checks missed and vulnerabilities. The MHSDS active subm
 with mpi_latest as (
     select *
     from {{ ref('stg_mhsds_mpi_history') }}
+    -- restrict to NLFT before ranking: org_id_prov is part of the partition,
+    -- so other providers form separate partitions this model never uses
+    where org_id_prov in ('G6V2S')
     qualify row_number() over (
         partition by person_id, org_id_prov
         order by reporting_period_end_date desc, mhs001_uniq_id desc
