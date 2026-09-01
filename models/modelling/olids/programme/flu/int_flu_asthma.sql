@@ -119,7 +119,7 @@ final_eligibility AS (
         ON asthma.campaign_id = cc.campaign_id
     JOIN {{ ref('dim_person_demographics') }} demo
         ON asthma.person_id = demo.person_id
-    WHERE DATEADD('month', 6, demo.birth_date_approx) <= cc.campaign_reference_date
+    WHERE DATEADD('month', 6, demo.birth_date_approx) <= cc.run_date
 )
 
 SELECT * FROM final_eligibility

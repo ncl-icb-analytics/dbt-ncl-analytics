@@ -24,12 +24,13 @@ people_with_chd_diagnosis AS (
         obs.person_id,
         MIN(obs.clinical_effective_date) AS first_chd_date,
         cc.campaign_reference_date,
+        cc.run_date,
         cc.audit_end_date
     FROM ({{ get_observations("'CHD_COD'", 'UKHSA_FLU') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-    GROUP BY cc.campaign_id, obs.person_id, cc.campaign_reference_date, cc.audit_end_date
+    GROUP BY cc.campaign_id, obs.person_id, cc.campaign_reference_date, cc.run_date, cc.audit_end_date
 ),
 
 -- Step 2: Add demographics and apply age restrictions (for all campaigns)
@@ -51,7 +52,7 @@ final_eligibility AS (
         ON chd.person_id = demo.person_id
     WHERE 1=1
         -- Apply age restrictions: 6 months or older (minimum age for flu vaccination)
-        AND DATEDIFF('month', demo.birth_date_approx, chd.campaign_reference_date) >= 6
+        AND DATEDIFF('month', demo.birth_date_approx, chd.run_date) >= 6
 )
 
 SELECT * FROM final_eligibility

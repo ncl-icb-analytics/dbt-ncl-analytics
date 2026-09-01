@@ -23,10 +23,18 @@ SOURCE:
 UKHSA Seasonal Influenza Vaccine Uptake Reporting Specification, PRIMIS v16.0,
 23 July 2026 (titled 2526 but published for the 2026-27 collection year).
 
-AUDIT END DATE:
-audit_end_date is the spec AUDITEND_DAT. It rolls forward with CURRENT_DATE while a
-campaign is running and stops at that campaign's campaign_end_date, so closed seasons
-do not keep absorbing newly recorded events.
+DATE REFERENCES:
+The spec distinguishes three dates and this config carries all three.
+- campaign_reference_date is REF_DAT (31 March), used for the 65 and over threshold.
+- run_date is RUN_DAT, the extraction date, used for the search population age floor.
+- audit_end_date is AUDITEND_DAT, the submission cut-off that bounds clinical evidence
+  and vaccinations.
+Both run_date and audit_end_date roll forward with CURRENT_DATE while a campaign is
+running and stop at campaign_end_date, so closed seasons do not keep absorbing newly
+recorded events. Note the deviation: the spec sets AUDITEND_DAT to the five ImmForm
+submission month ends, whereas this rolls daily so the dashboard reflects the data as
+it lands. Figures taken mid-month therefore sit between two submission points and are
+not an ImmForm submission.
 
 IMMUNOSUPPRESSION ADMIN CODES:
 Spec v16.0 widened IMMADM_DAT from a fixed six-month floor to any code in the three
@@ -72,6 +80,9 @@ CHILD AGE GROUPS:
             -- Long-stay residential care was a flu indicator up to spec v15.6
             TRUE AS eligible_long_term_residential_care,
 
+            -- RUN_DAT: the extraction date, capped at the campaign end
+            LEAST(CURRENT_DATE, '2024-03-31'::DATE) AS run_date,
+
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
             LEAST(CURRENT_DATE, '2024-03-31'::DATE) AS audit_end_date
     {%- elif campaign_id == 'Flu 2024-25' -%}
@@ -102,6 +113,9 @@ CHILD AGE GROUPS:
 
             -- Long-stay residential care was a flu indicator up to spec v15.6
             TRUE AS eligible_long_term_residential_care,
+
+            -- RUN_DAT: the extraction date, capped at the campaign end
+            LEAST(CURRENT_DATE, '2025-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
             LEAST(CURRENT_DATE, '2025-02-28'::DATE) AS audit_end_date
@@ -134,6 +148,9 @@ CHILD AGE GROUPS:
             -- Spec v15.7 removed the long-stay residential care indicator. The cohort is
             -- kept on for 2025-26 because the season was reported with it.
             TRUE AS eligible_long_term_residential_care,
+
+            -- RUN_DAT: the extraction date, capped at the campaign end
+            LEAST(CURRENT_DATE, '2026-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
             LEAST(CURRENT_DATE, '2026-02-28'::DATE) AS audit_end_date
@@ -168,6 +185,9 @@ CHILD AGE GROUPS:
             -- Spec v15.7 removed the long-stay residential care indicator from the flu
             -- programme, so the cohort is not reported from 2026-27.
             FALSE AS eligible_long_term_residential_care,
+
+            -- RUN_DAT: the extraction date, capped at the campaign end
+            LEAST(CURRENT_DATE, '2027-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
             LEAST(CURRENT_DATE, '2027-02-28'::DATE) AS audit_end_date

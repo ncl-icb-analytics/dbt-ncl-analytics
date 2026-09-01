@@ -89,7 +89,7 @@ final_eligibility AS (
         ON bre.person_id = demo.person_id
     WHERE bre.rn = 1  -- Only the best eligibility per person
         -- Apply age restrictions: 6 months or older (minimum age for flu vaccination)
-        AND DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) >= 6
+        AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 6
 )
 
 SELECT * FROM final_eligibility

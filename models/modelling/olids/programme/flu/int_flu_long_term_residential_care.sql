@@ -89,7 +89,7 @@ final_eligibility AS (
         ON pltc.person_id = demo.person_id
     WHERE 1=1
         -- Apply age restrictions: 6 months or over (no upper age limit)
-        AND DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) >= 6
+        AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 6
 )
 
 SELECT * FROM final_eligibility
