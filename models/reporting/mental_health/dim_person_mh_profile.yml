@@ -90,7 +90,8 @@ models:
       - name: latest_formal_mha_status_start_date
         description: >-
           Start date of the latest formal Mental Health Act legal-status period.
-          Null when no formal status is recorded.
+          Null when no formal status is recorded, or when the source start date
+          was an Excel-epoch missing-value sentinel.
       - name: latest_formal_mha_status_code
         description: >-
           NHSD legal-status code of the latest formal Mental Health Act period.

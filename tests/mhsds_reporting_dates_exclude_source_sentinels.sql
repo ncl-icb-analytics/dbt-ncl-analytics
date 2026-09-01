@@ -34,3 +34,21 @@ where least_ignore_nulls(
     reporting_period_end_date
 ) < '1901-01-01'::date
 having count(*) > 0
+
+union all
+
+-- Spell and diagnosis dates are not listed: stg_mhsds_spell and
+-- stg_mhsds_primdiag still pass their source values through uncast, so the
+-- sentinel contract does not yet hold for latest_admission_date,
+-- latest_discharge_date or latest_diagnosis_date.
+select
+    'person_mh_profile' as model_name,
+    count(*) as sentinel_row_count
+from {{ ref('dim_person_mh_profile') }}
+where least_ignore_nulls(
+    first_referral_date,
+    latest_referral_date,
+    latest_contact_date,
+    latest_formal_mha_status_start_date
+) < '1901-01-01'::date
+having count(*) > 0
