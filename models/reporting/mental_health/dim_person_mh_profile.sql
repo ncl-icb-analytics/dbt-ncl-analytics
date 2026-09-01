@@ -105,9 +105,16 @@ with latest_reporting_period as (
     group by person_id
 )
 
+-- Ranking is by coding timestamp alone, so the retained row is the person's
+-- latest diagnosis record rather than their latest ICD-10-coded one.
+-- stg_mhsds_primdiag leaves icd10_3 null for an ICD-10 code outside F, G, Q
+-- and R and for a SNOMED code with no map, so the published diagnosis columns
+-- are null whenever that latest record did not resolve. has_diagnosis_record
+-- separates that from a person with no diagnosis record at all.
 , latest_diagnosis as (
     select
         r.person_id
+        , true as has_diagnosis_record
         , d.icd10_3
         , icd.description as icd10_3_description
         , g.population_category as diagnosis_category
@@ -239,6 +246,7 @@ select
     , s.latest_discharge_date
     , coalesce(s.n_spells_ever, 0) as n_spells_ever
     , coalesce(s.ever_inpatient, false) as ever_inpatient
+    , coalesce(d.has_diagnosis_record, false) as has_diagnosis_record
     , d.icd10_3
     , d.icd10_3_description
     , d.diagnosis_category

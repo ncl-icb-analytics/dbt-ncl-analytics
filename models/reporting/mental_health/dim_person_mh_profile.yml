@@ -63,14 +63,32 @@ models:
         description: Number of occupancy-ruled inpatient spells.
       - name: ever_inpatient
         description: Whether the person has an occupancy-ruled inpatient spell.
+      - name: has_diagnosis_record
+        description: >-
+          Whether the person has any MHS604 primary diagnosis record on a
+          retained referral. Read it with icd10_3: true with a null icd10_3
+          means the latest diagnosis record did not resolve to ICD-10, false
+          means no diagnosis record at all.
       - name: icd10_3
-        description: Latest three-character ICD-10 diagnosis code.
+        description: >-
+          Three-character ICD-10 code of the person's latest diagnosis record,
+          selected by coding timestamp. Null when that record did not resolve
+          to ICD-10, which happens for an ICD-10 code outside F, G, Q and R and
+          for a SNOMED code with no ICD-10 map. This is not the latest ICD-10
+          code available: an earlier coded diagnosis is not substituted.
       - name: icd10_3_description
-        description: Published description for the latest ICD-10 code.
+        description: >-
+          Published description for icd10_3. Null when icd10_3 is null or the
+          code is absent from the ICD-10 reference.
       - name: diagnosis_category
-        description: Currency population category for the latest diagnosis.
+        description: >-
+          Currency population category for icd10_3. Null when icd10_3 is null
+          or falls outside the currency ICD-10 ranges, so use
+          has_diagnosis_record and icd10_3 to tell those states apart.
       - name: latest_diagnosis_date
-        description: Latest diagnosis coding timestamp.
+        description: >-
+          Coding timestamp of the latest diagnosis record, whether or not it
+          resolved to ICD-10.
       - name: has_ever_had_formal_mha_status
         description: >-
           Whether any formal Mental Health Act legal status is recorded. Formal
