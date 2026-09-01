@@ -34,34 +34,14 @@ Usage:
 PowerBI
 Testing WIDE FORMAT for RISK GROUP using columns and flags. 
 */
---TESTING NEW DASHBOARD MODEL with WIDE RISK GROUPS - NEED TO SPLIT FURTHER INTO SUBCOHORTS AND RISK GROUPS.
+-- Clinical risk group flags come from int_covid_flu_risk_group_flags, joined per
+-- programme and campaign. They cover every age, so a person aged 65 or over with CKD
+-- carries has_ckd = 1 on their age-based row, and they are bounded to the campaign's
+-- own evidence window rather than carried between seasons.
 
-----1,027,933 historical people with a vaccination record (2026/27 not yet added)
-
-with subcohort as (
-select person_id,
--- Deliberately person-level, not per campaign: the restricted COVID campaigns do not carry
--- clinical risk groups of their own, so their rows take a person's clinical profile from
--- whichever campaign recorded it. The trade-off is that adding a season can set a flag on
--- an earlier campaign's rows for the same person.
-    MAX(IFF(subcohort in ( 'Active Asthma Management', 'Asthma','Asthma Admission' ), 1, 0)) AS has_asthma,
-    MAX(IFF(subcohort in ('Asplenia/Spleen Dysfunction','Asplenia'), 1, 0)) AS has_asplenia,
-    MAX(IFF(subcohort = 'Chronic Heart Disease', 1, 0)) AS has_chd,
-    MAX(IFF(subcohort in ('Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)'), 1, 0)) AS has_ckd,
-    MAX(IFF(subcohort = 'Chronic Liver Disease', 1, 0)) AS has_cld,
-    MAX(IFF(subcohort = 'Chronic Neurological Disease', 1, 0)) AS has_cnd,
-    MAX(IFF(subcohort = 'Chronic Respiratory Disease', 1, 0)) AS has_crd,
-    MAX(IFF(subcohort in ('Diabetes','Gestational Diabetes'), 1, 0)) AS has_diabetes,
-    MAX(IFF(subcohort = 'Immunosuppression', 1, 0)) AS is_immunosuppressed,
-    MAX(IFF(subcohort = 'Learning Disability', 1, 0)) AS has_ld
-FROM {{ ref('fct_covid_flu_uptake') }} 
---FROM REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE
-GROUP BY all
- order by 1
-)
-,VACC_POP as (
-SELECT 
-    s.person_id,
+with VACC_POP as (
+SELECT
+    cf.person_id,
     -- Eligibility information from uptake facts
     cf.is_eligible,
     CASE WHEN cf.campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
@@ -104,30 +84,27 @@ SELECT
     cf.campaign_start_date,
     cf.campaign_reference_date,
    cf.risk_group,
-   --add subcohort clinical flags for dashboard filtering and analysis.
-   s.has_asthma,
-   s.has_asplenia,
-   s.has_chd,
-   s.has_ckd,
-   s.has_cld,
-   s.has_cnd,
-   s.has_crd,
-   s.has_diabetes,
-   s.is_immunosuppressed
-   
-FROM Subcohort s
---LEFT JOIN REPORTING.OLIDS_PROGRAMME.FCT_COVID_FLU_UPTAKE cf using (person_id)
-LEFT JOIN {{ ref('fct_covid_flu_uptake') }} cf using (person_id)
-where risk_group   not in ('Active Asthma Management', 'Asthma','Asthma Admission', 
-      'Asplenia/Spleen Dysfunction','Asplenia',
-      'Chronic Heart Disease', 
-      'Chronic Kidney Disease', 'Chronic Kidney Disease (Stage 3-5)',
-      'Chronic Liver Disease', 
-      'Chronic Neurological Disease' ,
-      'Chronic Respiratory Disease', 
-    'Diabetes','Gestational Diabetes',
-    'Immunosuppression'
-    )  
+   -- Clinical risk group flags for dashboard filtering, any age, per campaign
+   COALESCE(f.has_asthma, 0) AS has_asthma,
+   COALESCE(f.has_asplenia, 0) AS has_asplenia,
+   COALESCE(f.has_chd, 0) AS has_chd,
+   COALESCE(f.has_ckd, 0) AS has_ckd,
+   COALESCE(f.has_cld, 0) AS has_cld,
+   COALESCE(f.has_cnd, 0) AS has_cnd,
+   COALESCE(f.has_crd, 0) AS has_crd,
+   COALESCE(f.has_diabetes, 0) AS has_diabetes,
+   COALESCE(f.is_immunosuppressed, 0) AS is_immunosuppressed,
+   COALESCE(f.has_ld, 0) AS has_ld,
+   COALESCE(f.has_smi, 0) AS has_smi,
+   COALESCE(f.in_clinical_risk_group, 0) AS in_clinical_risk_group
+
+FROM {{ ref('fct_covid_flu_uptake') }} cf
+LEFT JOIN {{ ref('int_covid_flu_risk_group_flags') }} f
+    ON f.programme_type = cf.programme_type
+    AND f.campaign_id = cf.campaign_id
+    AND f.person_id = cf.person_id
+-- subcohort is not selected, so the one-row-per-condition rows of the under-65
+-- at-risk cohort collapse to one row per person, campaign and risk group.
  group by all
 )
 --add in demographics.

@@ -31,7 +31,6 @@ people_with_asthma_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
@@ -47,7 +46,6 @@ people_with_asthma_admissions AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.asthma_admission_lookback_date  -- 2 years before campaign
         AND obs.clinical_effective_date <= cc.audit_end_date
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
@@ -63,7 +61,6 @@ people_with_recent_asthma_inhalers AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_medication_lookback_date  -- 12 months before campaign
         AND med.order_date <= cc.audit_end_date
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id, cc.audit_end_date
 ),
 
@@ -81,7 +78,6 @@ oral_steroids_window_1 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_1_start
         AND med.order_date <= cc.asthma_steroid_window_1_end
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 
@@ -98,7 +94,6 @@ oral_steroids_window_2 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_2_start
         AND med.order_date <= cc.asthma_steroid_window_2_end
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 
@@ -115,7 +110,6 @@ oral_steroids_window_3 AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_3_start
         AND med.order_date <= cc.asthma_steroid_window_3_end
-        AND cc.eligible_asthma = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 

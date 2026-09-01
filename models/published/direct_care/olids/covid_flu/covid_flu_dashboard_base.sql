@@ -161,6 +161,22 @@ WITH uptake_with_demographics AS (
         u.subcohort,
         --u.eligibility_reason,
         --u.rule_type,
+
+        -- Clinical risk group flags, any age, bounded to the campaign
+        -- (int_covid_flu_risk_group_flags). A person aged 65 or over with CKD carries
+        -- has_ckd = 1 on their age-based row.
+        COALESCE(f.has_asthma, 0) AS has_asthma,
+        COALESCE(f.has_asplenia, 0) AS has_asplenia,
+        COALESCE(f.has_chd, 0) AS has_chd,
+        COALESCE(f.has_ckd, 0) AS has_ckd,
+        COALESCE(f.has_cld, 0) AS has_cld,
+        COALESCE(f.has_cnd, 0) AS has_cnd,
+        COALESCE(f.has_crd, 0) AS has_crd,
+        COALESCE(f.has_diabetes, 0) AS has_diabetes,
+        COALESCE(f.is_immunosuppressed, 0) AS is_immunosuppressed,
+        COALESCE(f.has_ld, 0) AS has_ld,
+        COALESCE(f.has_smi, 0) AS has_smi,
+        COALESCE(f.in_clinical_risk_group, 0) AS in_clinical_risk_group,
         
         -- Vaccination information from uptake facts
         u.vaccination_status,
@@ -187,6 +203,10 @@ WITH uptake_with_demographics AS (
         u.created_at
         
     FROM {{ ref('fct_covid_flu_uptake') }} u
+    LEFT JOIN {{ ref('int_covid_flu_risk_group_flags') }} f
+        ON f.programme_type = u.programme_type
+        AND f.campaign_id = u.campaign_id
+        AND f.person_id = u.person_id
     LEFT JOIN {{ ref('dim_person_demographics') }} d
         ON u.person_id = d.person_id
     LEFT JOIN {{ ref('person_pseudo') }} id  

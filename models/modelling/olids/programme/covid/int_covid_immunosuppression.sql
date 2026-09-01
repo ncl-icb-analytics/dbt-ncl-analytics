@@ -12,8 +12,12 @@ Business Rule: Person is eligible if they have:
    - Immunosuppression medication (IMMRX_COD) in the 6 months before RUN_DAT
    - Immunosuppression administration (IMM_ADM_COD) in the 3 years before RUN_DAT
    - Chemotherapy/radiotherapy (DXT_CHEMO_COD) in the 6 months before RUN_DAT
-2. AND aged 6 months to under immuno_max_age_years (75 from Spring 2025 onward, so the
-   75+ age cohort is not double counted; no upper limit for Autumn 2024)
+2. AND aged 6 months or over at the reference date
+
+No upper age bound is applied here. The offer's under-75 cap (immuno_max_age_years,
+Spring 2025 onward) is applied by fct_covid_eligibility, so this model can also feed
+int_covid_flu_risk_group_flags with immunosuppression status at any age, and it is
+computed for every campaign whether or not that campaign offers the cohort.
 
 Combination rule - multiple evidence sources with OR logic.
 KEY ELIGIBILITY GROUP for restricted 2025/26 campaigns.
@@ -38,7 +42,6 @@ people_with_immuno_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
 ),
 
@@ -54,7 +57,6 @@ people_with_recent_immuno_medications AS (
     WHERE med.order_date IS NOT NULL
         AND med.order_date >= cc.recall_immuno_medication_lookback_date
         AND med.order_date <= cc.audit_end_date
-        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, med.person_id
 ),
 
@@ -70,7 +72,6 @@ people_with_recent_immuno_admin AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.recall_immuno_admin_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
-        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
 ),
 
@@ -86,7 +87,6 @@ people_with_recent_chemo AS (
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.recall_immuno_medication_lookback_date  -- same 6-month recall window
         AND obs.clinical_effective_date <= cc.audit_end_date
-        AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
 ),
 
@@ -123,25 +123,21 @@ people_with_immunosuppression AS (
         MAX(aie.evidence_date) AS latest_evidence_date,
         LISTAGG(DISTINCT aie.evidence_type, '; ') AS evidence_types,
         cc.campaign_reference_date,
-        cc.immuno_max_age_years,
         cc.audit_end_date
     FROM all_immuno_evidence aie
     LEFT JOIN all_campaigns cc ON aie.campaign_id = cc.campaign_id
     GROUP BY
-        aie.campaign_id, aie.person_id, cc.campaign_reference_date,
-        cc.immuno_max_age_years, cc.audit_end_date
+        aie.campaign_id, aie.person_id, cc.campaign_reference_date, cc.audit_end_date
 ),
 
--- Step 7: Add age information and apply campaign-specific age restrictions
--- Minimum age: 6 months (all campaigns)
--- Maximum age: immuno_max_age_years from config (NULL = no cap, 75 = <75 for 2025/26)
+-- Step 7: Add age information and apply the 6-month floor (all campaigns)
 people_immunosuppressed_with_age AS (
     SELECT
         pwi.campaign_id,
         pwi.person_id,
         demo.birth_date_approx,
         -- Completed years and months, not Snowflake's calendar-part subtraction, so the
-        -- published age agrees with the under-75 bound applied below.
+        -- published age agrees with the age bounds tested on birth date downstream.
         FLOOR(MONTHS_BETWEEN(pwi.campaign_reference_date, demo.birth_date_approx) / 12) AS age_years_at_ref_date,
         FLOOR(MONTHS_BETWEEN(pwi.campaign_reference_date, demo.birth_date_approx)) AS age_months_at_ref_date,
         pwi.latest_evidence_date,
@@ -151,14 +147,9 @@ people_immunosuppressed_with_age AS (
     LEFT JOIN {{ ref('dim_person_demographics') }} demo
         ON pwi.person_id = demo.person_id
     WHERE demo.birth_date_approx IS NOT NULL
-        -- Age bounds are tested on birth date because Snowflake DATEDIFF subtracts
-        -- calendar years or months rather than counting completed ones, which pushed
-        -- people who are still 74 at the reference date out of the under-75 cohort.
+        -- Tested on birth date because Snowflake DATEDIFF subtracts calendar parts
+        -- rather than counting completed months.
         AND demo.birth_date_approx <= DATEADD('month', -6, pwi.campaign_reference_date)
-        AND (
-            pwi.immuno_max_age_years IS NULL
-            OR demo.birth_date_approx > DATEADD('year', -pwi.immuno_max_age_years, pwi.campaign_reference_date)
-        )
 ),
 
 -- Step 8: Format for eligibility table

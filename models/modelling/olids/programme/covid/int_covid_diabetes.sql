@@ -33,8 +33,6 @@ people_with_diabetes_diagnosis AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-        -- Only include if this condition is eligible in the campaign
-        AND cc.eligible_diabetes = TRUE
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.audit_end_date,
         cc.campaign_reference_date
@@ -51,8 +49,6 @@ people_with_diabetes_resolved AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-        -- Only include if this condition is eligible in the campaign
-        AND cc.eligible_diabetes = TRUE
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
 
@@ -68,8 +64,6 @@ people_with_addisons AS (
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
-        -- Only include if this condition is eligible in the campaign
-        AND cc.eligible_diabetes = TRUE
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.audit_end_date, cc.campaign_reference_date
 ),
