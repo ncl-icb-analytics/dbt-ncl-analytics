@@ -1,5 +1,9 @@
 {{ config(materialized='table', tags=['mhsds']) }}
 
+with accepted_records as (
+    {{ select_accepted_mhsds_period_records(ref('raw_mhsds_mhs102servicetypereferredto')) }}
+)
+
 select
     s.mhs102_uniq_id
     , s.uniq_serv_req_id
@@ -10,6 +14,12 @@ select
     , s.other_care_prof_team_local_id
     , s.uniq_care_prof_team_id
     , s.uniq_other_care_prof_team_local_id
+    , coalesce(
+        s.uniq_other_care_prof_team_local_id
+        , s.uniq_care_prof_team_id
+        , s.other_care_prof_team_local_id
+        , s.care_prof_team_local_id
+    ) as service_or_team_id
     , s.serv_team_type_ref_to_mh
     , s.service_type_name
     , s.serv_team_int_age_group
@@ -30,6 +40,14 @@ select
     , s.dmic_dataset
     , s.effective_from
     , s.dmic_date_added
-from {{ ref('raw_mhsds_mhs102servicetypereferredto') }} as s
-inner join {{ ref('stg_mhsds_activesubmission') }} as a
-    on s.uniq_submission_id = a.uniq_submission_id
+from accepted_records as s
+where service_or_team_id is not null
+qualify row_number() over (
+    partition by s.uniq_serv_req_id, service_or_team_id
+    order by
+        s.reporting_period_end_date desc
+        , s.effective_from desc nulls last
+        , s.uniq_submission_id desc
+        , s.row_number desc
+        , s.mhs102_uniq_id desc
+) = 1

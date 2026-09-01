@@ -6,7 +6,11 @@ models:
       MHSDS mental health profile for people with a referral, care contact, or
       occupancy-ruled inpatient spell. Grain: one row per person_id. Current
       state reflects the active MHSDS feed, which runs about six weeks behind
-      the run date. Referral and contact measures use the published MHSDS facts.
+      the run date. Contact recency and Mental Health Act currency both measure
+      back from the latest accepted reporting period end date, so the model uses
+      one clock. Where providers submit different current patient indicators,
+      the newest reporting period and file receipt take precedence. Referral and
+      contact measures use the published MHSDS facts.
     config:
       meta:
         owner:
@@ -30,15 +34,25 @@ models:
       - name: latest_contact_date
         description: Latest care contact date.
       - name: has_contact_last_12m
-        description: Whether a contact is recorded in the last 12 months.
+        description: >-
+          Whether a contact is recorded in the 12 months ending at the latest
+          accepted reporting period end date.
       - name: has_contact_last_90d
-        description: Whether a contact is recorded in the last 90 days.
+        description: >-
+          Whether a contact is recorded in the 90 days ending at the latest
+          accepted reporting period end date.
       - name: n_attended_contacts_12m
-        description: Number of attended care contacts in the last 12 months.
+        description: >-
+          Number of attended care contacts in the 12 months ending at the
+          latest accepted reporting period end date.
       - name: n_contacts_with_missing_attendance_status_12m
-        description: Number of contacts without an attendance status in the last 12 months.
+        description: >-
+          Number of contacts without an attendance status in the 12 months
+          ending at the latest accepted reporting period end date.
       - name: has_crisis_contact_12m
-        description: Whether an attended crisis-referral contact is recorded in the last 12 months.
+        description: >-
+          Whether an attended crisis-referral contact is recorded in the 12
+          months ending at the latest accepted reporting period end date.
       - name: is_current_inpatient
         description: Whether the person has an open occupancy-ruled inpatient spell.
       - name: latest_admission_date
@@ -62,7 +76,9 @@ models:
       - name: latest_detention_start_date
         description: Latest formal Mental Health Act legal-status start date.
       - name: is_currently_detained
-        description: Whether a formal legal-status period is current in the feed.
+        description: >-
+          Whether an open formal legal-status period appeared within the latest
+          three accepted reporting periods and has not expired.
       - name: child_protection_plan_status_code
         description: Latest submitted child protection plan status code.
       - name: child_protection_plan_status_description

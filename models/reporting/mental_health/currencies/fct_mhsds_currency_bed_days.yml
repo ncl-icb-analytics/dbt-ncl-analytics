@@ -47,9 +47,13 @@ models:
         data_tests:
           - not_null
       - name: currency_code
-        description: Inpatient currency code.
+        description: NHSE inpatient currency code.
         data_tests:
           - not_null
+      - name: pricing_currency_code
+        description: >-
+          Code used to resolve a bed-day price. MAZ99 spells use the matching
+          MBU98 setting because MAZ99 has no published bed-day price.
       - name: hospital_provider_spell_start_date
         description: Hospital provider spell start date.
         data_tests:
@@ -75,7 +79,7 @@ models:
         data_tests:
           - not_null
       - name: price_source
-        description: Price resolution attempt that supplied the price.
+        description: Price fallback that supplied the bed-day price.
         data_tests:
           - not_null
           - accepted_values:

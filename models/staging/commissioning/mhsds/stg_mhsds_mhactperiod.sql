@@ -7,9 +7,10 @@
 
 with deduplicated as (
     {{
-        deduplicate_mhsds(
+        select_latest_mhsds_record(
             mhsds_table = ref('raw_mhsds_mhs401mhactperiod'),
-            partition_cols = ['uniq_mh_act_episode_id']
+            partition_cols = ['uniq_mh_act_episode_id'],
+            tie_breaker_cols = ['mhs401_uniq_id']
         )
     }}
 )
@@ -17,7 +18,8 @@ with deduplicated as (
 -- REVIEW: raw MHS401 has no uniq_serv_req_id, so legal-status periods cannot
 -- be linked directly to a referral.
 select
-    uniq_mh_act_episode_id
+    mhs401_uniq_id
+    , uniq_mh_act_episode_id
     , person_id
     , nhsd_legal_status
     , start_date_mh_act_legal_status_class
@@ -25,4 +27,7 @@ select
     , expiry_date_mh_act_legal_status_class
     , org_id_prov
     , unique_local_patient_id
+    , uniq_submission_id
+    , reporting_period_end_date::date as reporting_period_end_date
+    , effective_from
 from deduplicated
