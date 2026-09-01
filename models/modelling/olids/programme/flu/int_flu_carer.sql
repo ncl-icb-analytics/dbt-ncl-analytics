@@ -122,7 +122,7 @@ final_eligibility AS (
         peco.person_id,
         peco.latest_carer_date AS qualifying_event_date,
         cc.campaign_reference_date AS reference_date,
-        'Carers aged 5+ (not eligible via other risk groups)' AS description,
+        'Carers aged 5 to under 65, not eligible via other risk groups' AS description,
         demo.birth_date_approx,
         DATEDIFF('month', demo.birth_date_approx, cc.campaign_reference_date) AS age_months_at_ref_date,
         DATEDIFF('year', demo.birth_date_approx, cc.campaign_reference_date) AS age_years_at_ref_date,
@@ -133,8 +133,12 @@ final_eligibility AS (
     JOIN {{ ref('dim_person_demographics') }} demo
         ON peco.person_id = demo.person_id
     WHERE 1=1
-        -- Apply age restrictions: 5 to under 65 years (60 months to under 65 years)
+        -- Aged 5 or over at RUN_DAT and under 65 at REF_DAT (spec indicator 20, age bands
+        -- 4 to 6). Carers aged 65 and over are reported by the 65 and over indicator, and
+        -- the spec has no carer field for them. Tested on birth date for the upper bound,
+        -- because DATEDIFF subtracts calendar parts rather than counting completed years.
         AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 60
+        AND demo.birth_date_approx > DATEADD('year', -65, cc.campaign_reference_date)
 )
 
 SELECT * FROM final_eligibility
