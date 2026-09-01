@@ -132,36 +132,66 @@ with latest_reporting_period as (
     ) = 1
 )
 
+-- A formal Mental Health Act status is any NHSD legal status other than
+-- informal admission (01), not applicable (98), unknown (99) and the -1
+-- sentinel. It is broader than detention: it also covers community-based
+-- statuses such as Community Treatment Orders and recall, conditional
+-- discharge and guardianship. Use latest_formal_mha_status_code to narrow to
+-- the statuses a piece of analysis treats as detention.
+, mha_periods as (
+    select
+        m.person_id
+        , m.uniq_mh_act_episode_id
+        , m.nhsd_legal_status
+        , m.start_date_mh_act_legal_status_class
+        , m.end_date_mh_act_legal_status_class
+        , m.expiry_date_mh_act_legal_status_class
+        , m.reporting_period_end_date
+        , (
+            m.nhsd_legal_status is not null
+            and m.nhsd_legal_status not in ('-1', '01', '98', '99')
+        ) as is_formal_mha_status
+    from {{ ref('stg_mhsds_mhactperiod') }} as m
+    where m.person_id is not null
+)
+
+, latest_formal_mha_status as (
+    select
+        person_id
+        , nhsd_legal_status as latest_formal_mha_status_code
+        , start_date_mh_act_legal_status_class
+            as latest_formal_mha_status_start_date
+    from mha_periods
+    where is_formal_mha_status
+    qualify row_number() over (
+        partition by person_id
+        order by
+            start_date_mh_act_legal_status_class desc nulls last
+            , reporting_period_end_date desc nulls last
+            , uniq_mh_act_episode_id desc
+    ) = 1
+)
+
 , mha_aggregates as (
     select
         m.person_id
-        , count_if(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-        ) > 0 as ever_detained
-        , max(iff(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-            , start_date_mh_act_legal_status_class
-            , null
-        )) as latest_detention_start_date
+        , count_if(m.is_formal_mha_status) > 0
+            as has_ever_had_formal_mha_status
         -- REVIEW: expiry dates are treated as current through the expiry date;
         -- confirm this matches MHSDS legal-status expiry semantics.
         , count_if(
-            nhsd_legal_status is not null
-            and nhsd_legal_status not in ('01', '98', '99')
-            and end_date_mh_act_legal_status_class is null
+            m.is_formal_mha_status
+            and m.end_date_mh_act_legal_status_class is null
             and (
-                expiry_date_mh_act_legal_status_class is null
-                or expiry_date_mh_act_legal_status_class >= current_date
+                m.expiry_date_mh_act_legal_status_class is null
+                or m.expiry_date_mh_act_legal_status_class >= current_date
             )
             and m.reporting_period_end_date >= dateadd(
                 month, -2, p.latest_reporting_period_end_date
             )
-        ) > 0 as is_currently_detained
-    from {{ ref('stg_mhsds_mhactperiod') }} as m
+        ) > 0 as has_current_formal_mha_status
+    from mha_periods as m
     cross join latest_reporting_period as p
-    where m.person_id is not null
     group by m.person_id
 )
 
@@ -213,9 +243,13 @@ select
     , d.icd10_3_description
     , d.diagnosis_category
     , d.latest_diagnosis_date
-    , coalesce(m.ever_detained, false) as ever_detained
-    , m.latest_detention_start_date
-    , coalesce(m.is_currently_detained, false) as is_currently_detained
+    , coalesce(m.has_ever_had_formal_mha_status, false)
+        as has_ever_had_formal_mha_status
+    , coalesce(m.has_current_formal_mha_status, false)
+        as has_current_formal_mha_status
+    , lm.latest_formal_mha_status_start_date
+    , lm.latest_formal_mha_status_code
+    , mha_status.legal_status_desc as latest_formal_mha_status_description
     , g.child_protection_plan_status_code
     , cpp.description as child_protection_plan_status_description
     , g.looked_after_child_indicator_code
@@ -241,6 +275,13 @@ left join latest_diagnosis as d
     on p.person_id = d.person_id
 left join mha_aggregates as m
     on p.person_id = m.person_id
+left join latest_formal_mha_status as lm
+    on p.person_id = lm.person_id
+-- one row per legal_status_code in the reference, so the label join keeps the
+-- one-row-per-person grain
+left join {{ ref('stg_ukhfd_mental_health_act_legal_status_classification') }}
+    as mha_status
+    on lm.latest_formal_mha_status_code = mha_status.legal_status_code
 left join safeguarding_aggregates as g
     on p.person_id = g.person_id
 left join {{ ref('mhsds_profile_code_lookup') }} as cpp

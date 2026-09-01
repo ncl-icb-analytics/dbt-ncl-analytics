@@ -71,14 +71,35 @@ models:
         description: Currency population category for the latest diagnosis.
       - name: latest_diagnosis_date
         description: Latest diagnosis coding timestamp.
-      - name: ever_detained
-        description: Whether a formal Mental Health Act legal status is recorded.
-      - name: latest_detention_start_date
-        description: Latest formal Mental Health Act legal-status start date.
-      - name: is_currently_detained
+      - name: has_ever_had_formal_mha_status
+        description: >-
+          Whether any formal Mental Health Act legal status is recorded. Formal
+          means any NHSD legal status other than informal admission (01), not
+          applicable (98), unknown (99) and the -1 sentinel. It is broader than
+          detention: community-based statuses such as Community Treatment Orders
+          and recall, conditional discharge and guardianship all count. Use
+          latest_formal_mha_status_code to narrow.
+      - name: has_current_formal_mha_status
         description: >-
           Whether an open formal legal-status period appeared within the latest
-          three accepted reporting periods and has not expired.
+          three accepted reporting periods and has not expired. Uses the same
+          formal-status definition as has_ever_had_formal_mha_status, so a
+          person living in the community under a Community Treatment Order,
+          conditional discharge or guardianship is included. Use
+          latest_formal_mha_status_code to narrow.
+      - name: latest_formal_mha_status_start_date
+        description: >-
+          Start date of the latest formal Mental Health Act legal-status period.
+          Null when no formal status is recorded.
+      - name: latest_formal_mha_status_code
+        description: >-
+          NHSD legal-status code of the latest formal Mental Health Act period.
+          Use it to narrow the flags to the statuses an analysis treats as
+          detention.
+      - name: latest_formal_mha_status_description
+        description: >-
+          UKHFD description for latest_formal_mha_status_code. Null when the
+          submitted code is absent from the UKHFD classification.
       - name: child_protection_plan_status_code
         description: Latest submitted child protection plan status code.
       - name: child_protection_plan_status_description
