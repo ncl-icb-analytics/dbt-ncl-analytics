@@ -9,16 +9,12 @@ covid_reported_campaigns() emits them as one CTE:
   )
 
 Every campaign listed there stays in the models for good, so a season that has been
-reported keeps its ROWS when the next one is added.
+reported keeps its rows when the next one is added, and its population is resolved as at
+the campaign rather than as at today (int_covid_flu_campaign_population). Clinical
+eligibility is still recomputed on every build, so a code entered retrospectively can
+still move a closed season.
 
-That is not the same as keeping its FIGURES. Eligibility is recomputed against current
-data on every build, and the COVID intermediate models filter
-dim_person_demographics.is_active, which reflects registration now rather than
-registration during the campaign. A closed campaign therefore loses anyone who has since
-left the list or died: COVID Autumn 2024 currently reports no inactive eligible people at
-all, while the flu models, which do not filter, show around a fifth. Making closed
-campaigns stable needs as-at registration, which is tracked separately. To add a season, define it in
-covid_campaign_config() first, then append its id here.
+To add a season, define it in covid_campaign_config() first, then append its id here.
 
 covid_current_autumn() and its siblings name the season in flight. They do not control
 which campaigns are built; they exist so a model that needs "this season" can say so
