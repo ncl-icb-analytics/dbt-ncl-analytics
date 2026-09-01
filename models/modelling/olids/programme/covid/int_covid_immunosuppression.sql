@@ -1,12 +1,17 @@
 /*
 COVID Immunosuppression Eligibility Rule
 
+This implements RECALL_IMMUNO_GROUP, the group the campaign offer selects (spec 5.1.1
+Group M and its predecessors), not IMMUNO_GROUP, which is the uptake monitoring variant.
+The two differ only in where the medication, chemotherapy and admin lookbacks are anchored:
+the recall group measures them from RUN_DAT, the uptake group from START_DAT.
+
 Business Rule: Person is eligible if they have:
 1. ANY of the following evidence of immunosuppression:
-   - Immunosuppression diagnosis (IMMDX_COV_COD) - latest occurrence
-   - Immunosuppression medication (IMMRX_COD) since lookback date (6 months)
-   - Immunosuppression administration (IMM_ADM_COD) since lookback date (3 years)  
-   - Chemotherapy/radiotherapy (DXT_CHEMO_COD) since lookback date (6 months)
+   - Immunosuppression diagnosis (IMMDX_COV_COD) - ever
+   - Immunosuppression medication (IMMRX_COD) in the 6 months before RUN_DAT
+   - Immunosuppression administration (IMM_ADM_COD) in the 3 years before RUN_DAT
+   - Chemotherapy/radiotherapy (DXT_CHEMO_COD) in the 6 months before RUN_DAT
 2. AND aged 6 months to under immuno_max_age_years (75 from Spring 2025 onward, so the
    75+ age cohort is not double counted; no upper limit for Autumn 2024)
 
@@ -47,7 +52,7 @@ people_with_recent_immuno_medications AS (
     FROM ({{ get_medication_orders(cluster_id='IMMRX_COD', source='UKHSA_COVID') }}) med
     CROSS JOIN all_campaigns cc
     WHERE med.order_date IS NOT NULL
-        AND med.order_date >= cc.immuno_medication_lookback_date
+        AND med.order_date >= cc.recall_immuno_medication_lookback_date
         AND med.order_date <= cc.audit_end_date
         AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, med.person_id
@@ -63,7 +68,7 @@ people_with_recent_immuno_admin AS (
     FROM ({{ get_observations("'IMM_ADM_COD'", 'UKHSA_COVID') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
-        AND obs.clinical_effective_date >= cc.immuno_admin_lookback_date
+        AND obs.clinical_effective_date >= cc.recall_immuno_admin_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id
@@ -79,7 +84,7 @@ people_with_recent_chemo AS (
     FROM ({{ get_observations("'DXT_CHEMO_COD'", 'UKHSA_COVID') }}) obs
     CROSS JOIN all_campaigns cc
     WHERE obs.clinical_effective_date IS NOT NULL
-        AND obs.clinical_effective_date >= cc.immuno_medication_lookback_date  -- Same 6-month lookback
+        AND obs.clinical_effective_date >= cc.recall_immuno_medication_lookback_date  -- same 6-month recall window
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_immunosuppression = TRUE
     GROUP BY cc.campaign_id, obs.person_id

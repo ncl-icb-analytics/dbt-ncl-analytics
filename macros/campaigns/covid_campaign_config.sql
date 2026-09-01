@@ -39,11 +39,14 @@ PRIMIS v4.0, 7 August 2026. Section references in the campaign blocks below poin
 at that document.
 
 IMMUNOSUPPRESSION LOOKBACKS:
-The spec defines two immunosuppression groups: IMMUNO_GROUP for uptake monitoring, whose
-medication and admin lookbacks are measured from START_DAT, and RECALL_IMMUNO_GROUP for
-call and recall, whose lookbacks are measured from the search run date. These models use
-the START_DAT-anchored lookbacks, so a person's eligibility is fixed for the season rather
-than moving every time the models rebuild.
+The spec defines two immunosuppression groups and this config carries both.
+IMMUNO_GROUP, for uptake monitoring, anchors its medication and admin lookbacks on
+START_DAT: immuno_medication_lookback_date and immuno_admin_lookback_date.
+RECALL_IMMUNO_GROUP, which the campaign offer selects (5.1.1 Group M), anchors them on
+RUN_DAT: recall_immuno_medication_lookback_date and recall_immuno_admin_lookback_date.
+int_covid_immunosuppression implements the recall group, because its consumer is the
+eligible cohort. RUN_DAT is a fixed audit date per period, not the build date, so this is
+just as stable across rebuilds as the START_DAT anchor.
 
 COMPLEX ASTHMA STEROID WINDOWS:
 Three overlapping 2-year windows to capture repeated steroid use across campaign periods.
@@ -121,6 +124,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2024-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2022-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2025-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2025' -%}
@@ -191,6 +199,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2024-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2022-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2025-06-30'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2026' -%}
@@ -262,6 +275,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2025-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2023-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2026-06-30'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Autumn 2025' -%}
@@ -332,6 +350,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2025-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2023-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2026-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Autumn 2026' -%}
@@ -406,6 +429,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2026-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2024-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2027-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2027' -%}
@@ -490,6 +518,11 @@ the autumn and spring periods share one set.
 
             -- RUN_DAT for this period (spec 2.1). Caps how late an observation can be
             -- and still count toward this campaign.
+            -- RECALL_IMMUNO_GROUP lookbacks, measured from RUN_DAT (spec table 10).
+            -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
+            '2026-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
+            '2024-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
             '2027-06-30'::DATE AS audit_end_date
 
     {%- else -%}
