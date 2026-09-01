@@ -14,7 +14,8 @@ covid_campaign_config() first, then append its id here.
 
 covid_current_autumn() and its siblings name the season in flight. They do not control
 which campaigns are built; they exist so a model that needs "this season" can say so
-rather than hardcoding an id.
+rather than hardcoding an id. covid_current_spring() names COVID Spring 2027 even though
+that campaign is not published yet, so that it is ready when UKHSA authorises the offer.
 
 Dates live in covid_campaign_config() only. This file holds no dates.
 */
@@ -27,9 +28,12 @@ Dates live in covid_campaign_config() only. This file holds no dates.
         'COVID Spring 2025',
         'COVID Autumn 2025',
         'COVID Spring 2026',
-        'COVID Autumn 2026',
-        'COVID Spring 2027'
+        'COVID Autumn 2026'
     ]) }}
+    {#- COVID Spring 2027 is configured in covid_campaign_config() but deliberately not
+        listed. Spec v4.0 supplies the spring dates but defines a call and recall group
+        for Autumn 2026 only, so there is no authorised spring offer to publish an
+        eligible cohort against. Add it here once UKHSA defines one. #}
 {% endmacro %}
 
 {% macro covid_reported_campaigns() %}

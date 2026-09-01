@@ -409,6 +409,11 @@ the autumn and spring periods share one set.
             '2027-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2027' -%}
+        {#- Not published: this campaign is deliberately absent from
+            covid_reported_campaign_ids(). Spec v4.0 gives the spring dates but defines
+            call and recall for Autumn 2026 only, so the eligibility flags below are a
+            placeholder carried from autumn and must be confirmed against the spring
+            offer before the campaign is added to the reported list. #}
         SELECT
             '{{ campaign_id }}' AS campaign_id,
             'Spring 2027 COVID Vaccination Campaign' AS campaign_name,
@@ -438,11 +443,11 @@ the autumn and spring periods share one set.
             -- Vaccination tracking dates (spec COVADM2_DAT and COVRX2_DAT)
             '2027-04-01'::DATE AS vaccination_tracking_start,
             '2027-06-30'::DATE AS vaccination_tracking_end,
-            -- The spec uses one COVDECL window for the whole collection year. The spring
-            -- window is narrowed to a month before the campaign, matching earlier spring
-            -- campaigns. Autumn 2026's window still runs to 30/06/27, so a decline recorded
-            -- in the spring period counts against both campaigns, as the spec intends.
-            '2027-03-01'::DATE AS decline_tracking_start,
+            -- COVDECL_DAT is one window for the whole collection year (spec 2.3), so this
+            -- matches Autumn 2026 rather than being narrowed to the spring period the way
+            -- earlier spring campaigns in this file are. A decline recorded at any point in
+            -- the year counts against the spring offer, which is what the spec states.
+            '2026-08-01'::DATE AS decline_tracking_start,
             '2027-06-30'::DATE AS decline_tracking_end,
 
             -- Pregnancy tracking. Like the steroid windows, PREG26_GROUP is defined once for
@@ -457,9 +462,8 @@ the autumn and spring periods share one set.
             -- Immunosuppression age cap (NULL = no upper age limit)
             75 AS immuno_max_age_years,                                 -- under 75; 75+ covered by the age group
 
-            -- Individual condition eligibility flags. Spec v4.0 defines call and recall for
-            -- the autumn period only, so the Autumn 2026 cohorts are carried forward until
-            -- UKHSA publishes a spring 2027 offer.
+            -- Placeholder cohorts carried from Autumn 2026. Not reported: see the note at
+            -- the head of this branch.
             TRUE AS eligible_age_75_plus,
             TRUE AS eligible_immunosuppression,
             TRUE AS eligible_care_home,
