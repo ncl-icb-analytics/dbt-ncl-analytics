@@ -14,9 +14,9 @@ models:
           name: Kate Homer
     columns:
       - name: sk
-        description: Source row identifier.
+        description: >
+          Source row identifier. Row uniqueness is asserted on mhs001_uniq_id.
         data_tests:
-          - unique
           - not_null
 
       - name: mhs001_uniq_id
