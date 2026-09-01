@@ -9,6 +9,11 @@ models:
       Missing rows represent zero activity.
       Non-elective admissions use the full-history APC encounter model because
       the imputed-spells input to the current mart emits only two years.
+      Windows end on the calendar month-end rather than on the latest date
+      each source has reached, so the newest month-ends undercount sources
+      that submit in arrears. Read the lag columns in
+      int_segmentation_service_activity_coverage_history before interpreting a
+      trend at the trailing edge.
     config:
       meta:
         owner:

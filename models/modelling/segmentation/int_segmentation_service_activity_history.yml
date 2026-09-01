@@ -11,7 +11,11 @@ models:
       model.
       Missing rows represent zero activity. CSDS coverage begins in December
       2022; completeness is exposed by
-      int_segmentation_service_activity_coverage_history.
+      int_segmentation_service_activity_coverage_history. The outpatient and
+      mental-health windows end on the calendar month-end rather than on the
+      latest date each source has reached, so the newest month-ends
+      undercount sources that submit in arrears. Read the lag columns in the
+      coverage model before interpreting a trend at the trailing edge.
     config:
       meta:
         owner:

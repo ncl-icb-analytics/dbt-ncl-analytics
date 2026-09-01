@@ -5,7 +5,12 @@ models:
       registered adult meeting at least one complexity criterion and at least
       one utilisation criterion at one of the last 60 completed month-ends.
       Clinical state, LTCs, eFI2 and rolling activity are evaluated at that
-      month-end. Missing rows do not meet the cohort definition.
+      month-end. Missing rows do not meet the cohort definition. Activity
+      windows end on the calendar month-end rather than on the latest date
+      each source has reached, so the newest month-ends undercount sources
+      that submit in arrears and can understate the cohort. Read the lag
+      columns in int_segmentation_service_activity_coverage_history before
+      interpreting a trend at the trailing edge.
     config:
       meta:
         owner:
