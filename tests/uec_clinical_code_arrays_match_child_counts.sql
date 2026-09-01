@@ -1,17 +1,17 @@
 -- int_sus_uec_encounter_clinical_codes must hold every coded child record: for
 -- each collection the count column and both array sizes equal the number of
--- non-null codes in its staging feed.
---
--- Secondary diagnoses are counted from is_primary, the flag int_sus_uec_encounter
--- uses to select the primary diagnosis, while the model excludes source position
--- 1. Reconciling the two rules here stops a diagnosis falling between the models
--- if the flagged row ever moves off position 1. is_primary is null rather than
--- false on a secondary row, hence the coalesce.
+-- non-null codes in its staging feed. Secondary diagnoses exclude source
+-- position 1, matching the model, because this test reconciles what the model
+-- kept against what it selected. That the excluded row is the primary diagnosis
+-- carried on int_sus_uec_encounter is a separate promise, asserted by
+-- uec_primary_diagnosis_is_the_first_listed: counts alone cannot check it,
+-- since removing one row per attendance from either rule leaves the same
+-- total.
 with staging_counts as (
     select 'secondary_diagnoses' as collection, primarykey_id, count(*) as staging_codes
     from {{ ref('stg_sus_ecds_clinical_diagnoses_snomed') }}
     where code is not null
-      and not coalesce(is_primary, false)
+      and snomed_id >= 2
     group by primarykey_id
 
     union all
