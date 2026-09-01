@@ -47,7 +47,15 @@ models:
       - name: age_hosp_start_date
         description: MHSDS-derived age at admission.
       - name: is_cyp
-        description: Whether age at admission is under 18.
+        description: >-
+          Whether age at admission is under 18. A spell with no recorded age is
+          treated as adult, so read this with has_known_age_at_admission. Most
+          accepted spells carry no recorded age.
+      - name: has_known_age_at_admission
+        description: >-
+          Whether an age at admission was recorded. False means is_cyp and the
+          population-group cascade fell back to the adult branch rather than
+          using a known age.
       - name: icd10_3
         description: Latest three-character ICD-10 code.
       - name: diagnosis_category

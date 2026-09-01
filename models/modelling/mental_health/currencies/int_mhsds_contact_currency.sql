@@ -38,7 +38,11 @@ with eligible_contacts as (
         , c.org_id_prov
         , c.care_cont_date
         , c.age_care_cont_date
+        -- A missing age falls to adult, which the cascade below then uses to
+        -- pick the population group. has_known_age_at_contact keeps that
+        -- default visible.
         , coalesce(c.age_care_cont_date < 18, false) as is_cyp
+        , c.age_care_cont_date is not null as has_known_age_at_contact
         , c.dm_icb_commissioner
         , c.attend_status
         , c.cons_mechanism_mh
@@ -131,6 +135,7 @@ select
     , c.care_cont_date
     , c.age_care_cont_date
     , c.is_cyp
+    , c.has_known_age_at_contact
     , c.dm_icb_commissioner
     , coalesce(comm.icb_code, iff(left(c.dm_icb_commissioner, 1) = 'Q', c.dm_icb_commissioner, null)) as commissioner_icb_code
     , c.attend_status
