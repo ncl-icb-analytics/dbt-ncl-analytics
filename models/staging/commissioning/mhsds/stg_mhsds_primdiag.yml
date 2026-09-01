@@ -5,13 +5,18 @@ models:
     description: >
       MHSDS primary diagnosis history for currency grouping. Grain: one row per
       uniq_serv_req_id and coded_diag_timestamp. Population: MHS604 primary
-      diagnoses. Time semantics: each submitted diagnosis timestamp is retained
-      after deduplication.
+      diagnoses with a recorded timestamp. A corrected code at the same
+      referral and timestamp supersedes the earlier value. Equal timestamps use
+      the NHS England grouper ordering.
     config:
       meta:
         owner:
           name: Eddie Davison
     columns:
+      - name: mhs604_uniq_id
+        description: Identifier of the retained source row; changes on resubmission.
+        data_tests:
+          - not_null
       - name: uniq_serv_req_id
         description: Unique service request identifier.
         data_tests:
@@ -32,6 +37,16 @@ models:
         description: Three-character normalised ICD-10 code.
       - name: org_id_prov
         description: Provider organisation code.
+      - name: source_record_number
+        description: MHSDS record number used to resolve equal diagnosis timestamps.
+      - name: source_row_number
+        description: MHSDS row number used to resolve equal diagnosis timestamps.
+      - name: uniq_submission_id
+        description: Submission containing the retained diagnosis.
+      - name: reporting_period_end_date
+        description: End of the reporting period containing the retained diagnosis.
+      - name: effective_from
+        description: Time the retained source file was received.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:

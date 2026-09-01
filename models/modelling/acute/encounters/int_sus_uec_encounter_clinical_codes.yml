@@ -16,6 +16,7 @@ models:
       are absent here. For descriptions and one-row-per-code analysis use
       int_sus_uec_diagnosis and int_sus_uec_procedure.
     config:
+      tags: ["daily"]
       meta:
         owner:
           name: Eddie Davison

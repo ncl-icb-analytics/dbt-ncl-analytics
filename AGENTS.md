@@ -3,10 +3,41 @@
 This is a public NHS dbt project on Snowflake. Read
 `PROJECT_CONVENTIONS.md` before model work.
 
-Inspect the intended outcome, real constraint, related contracts, configuration
-and lineage before editing. Prefer the smallest coherent design, not the
-smallest diff or narrowest answer. Reuse established contracts, but do not
-preserve complexity merely because it exists.
+Apply these writing rules to responses, documentation, comments, commit messages
+and pull requests:
+
+- Use plain British English, concrete facts and active voice. Say what changed,
+  why it matters and who or what acts.
+- Prefer a common word to jargon. Explain unfamiliar project terms when the
+  context does not make them clear.
+- In this project, `model contract` has the meaning defined in
+  `PROJECT_CONVENTIONS.md`. Do not use it as a general term for a model, grain,
+  rule, output, requirement or design decision.
+- Cut filler, puffery, vague claims and stock AI phrasing. Remove sentences that
+  could appear unchanged in any project's documentation.
+- When judgement is needed, state your view and the real trade-off. Use first
+  person when it sounds natural. Do not flatten complexity into generic pros
+  and cons.
+- Prefer named sources and concrete examples to vague attribution. Say who made
+  a claim or which report contains it, and explain why it matters.
+- Remove chatbot filler, generic openings and generic conclusions. Cut
+  excessive hedging and closing invitations that add no information.
+- Avoid stock AI vocabulary and abstract technical metaphors when a concrete
+  project term exists. Say `model`, `field`, `rule`, `move` or `delete` when
+  that is what you mean.
+- Keep one main idea per sentence, but vary sentence length and rhythm. Do not
+  force points into groups of three or cycle through synonyms for a clear term.
+- Use sentence case headings, straight quotes and restrained formatting. Avoid
+  em dashes, decorative emoji and unnecessary bold text.
+- Preserve code, quoted text, technical syntax and accuracy when applying these
+  rules.
+- Before sending prose, ask which lines sound generated or could belong to any
+  project. Rewrite or remove them.
+
+Inspect the intended outcome, real constraint, related models, shared
+definitions, configuration and lineage before editing. Prefer the smallest
+coherent design, not the smallest diff or narrowest answer. Reuse established
+work, but do not preserve complexity merely because it exists.
 
 Many healthcare objects in the warehouse are not yet represented in dbt. For a
 new domain, model generally useful, durable entities or concepts at an explicit
@@ -17,33 +48,35 @@ agree the boundary with the user.
 
 Use these principles when reasoning about every change:
 
-- Measure twice, cut once: inspect contracts, lineage and consequences first.
+- Measure twice, cut once: inspect existing models, shared definitions, lineage
+  and consequences first.
 - YAGNI: avoid machinery for hypothetical needs, but not reusable domain
   modelling.
-- KISS and simple design: prefer readable SQL and obvious contracts.
+- KISS and simple design: prefer readable SQL and clear model responsibilities.
 - DRY and the Rule of Three: centralise stable business definitions; abstract
-  implementation patterns only after they prove stable.
-- Make it work, make it right, make it fast: a pull request should normally
-  demonstrate a correct contract, clear design and performance fit for expected
-  scale before merge. Do not turn this into speculative tuning.
+  implementation patterns only after they repeat and prove stable.
+- Make it work, make it right, make it fast: before merge, demonstrate correct
+  results, clear design and performance that fits the expected scale. Do not
+  turn this into speculative tuning.
 
 Raise a concern before implementing a direction likely to cause wrong results,
-an unclear contract, a duplicate pipeline or avoidable cost. State the
+an unclear requirement, a duplicate pipeline or avoidable cost. State the
 consequence and offer the smallest realistic alternative without turning it
 into an unrequested redesign. Make routine, reversible choices yourself. Ask
 the user who owns or authorises a clinical or business definition when that is
-unclear, and before changing scope, an analyst-facing contract or anything hard
-to reverse. When both choices are safe and follow project rules, let the user
-decide. Public-data safety and the raw-to-staging boundary are hard constraints.
+unclear, and before changing scope, the meaning or output of an analyst-facing
+model, or anything hard to reverse. When both choices are safe and follow
+project rules, let the user decide. Public-data safety and the raw-to-staging
+boundary are hard constraints.
 
 Before writing SQL:
 
 - State the subject and grain. Add population and time when the model selects or
   derives them.
 - Search model names, YAML and lineage. Start from the most downstream
-  established model whose contract fits, and move upstream only when it is
-  insufficient. Reuse, compose or extend where possible; create a model or seed
-  only for a distinct, durable contract.
+  established model whose subject, grain, population and outputs fit the work.
+  Move upstream only when that model is insufficient. Reuse, compose or extend
+  where possible. Create a model or seed only for a distinct, durable purpose.
 - Only staging models may reference `raw_` models. Hand-written models use
   `ref()`.
 - Do not guess clinical meaning. Make population, code-list, threshold and date
@@ -62,19 +95,18 @@ models before adding a local override. Call out `dbt_project.yml` changes becaus
 they can affect many models. Tags drive schedules; hooks apply grants, comments
 and governance.
 
-Write YAML descriptions as short analyst-facing contracts. State the subject,
-what one row represents and the population scope. Explain material inclusion or
-exclusion rules, thresholds, dates and definitions without narrating the SQL.
+Write YAML descriptions for analysts. State the subject, what one row represents
+and the population scope. Explain material inclusion or exclusion rules,
+thresholds, dates and definitions without narrating the SQL.
 Project hooks publish model descriptions and `persist_docs` publishes column
 descriptions to Snowflake metadata used by Snowsight and other tools. Document
 units, codes and null meaning where they affect interpretation.
 
-Keep SQL, descriptions, business ownership and contract tests together. Test
-every model's grain with its key or key combination. This project does not use
-test-driven development. Beyond grain, add permanent tests only for durable
-contracts or errors likely to recur. Tests run on every build and consume
-Snowflake compute; do not test implementation details or repeat upstream
-assertions.
+Keep SQL, descriptions, business ownership and tests together. Test every
+model's grain with its key or key combination. This project does not use
+test-driven development. Beyond grain, add permanent tests only for documented
+rules or errors likely to recur. Tests run on every build and consume Snowflake
+compute; do not test implementation details or repeat upstream assertions.
 
 Check downstream impact with `dbt ls -s model_name+`. Compile and build the
 smallest useful selection, then build downstream models whose results may
@@ -87,15 +119,14 @@ description with the problem and why it matters, then give the solution,
 validation and review focus. Do not add attribution to an AI agent, language
 model or execution harness.
 
-Focus on what was won or corrected. The Conventional Commit scope is secondary:
+Focus on what was corrected. The Conventional Commit scope is secondary:
 
-- Weak title: `feat: covid flu wide fix`
-- Stronger title: `fix(olids): allow empty missing-practice views`
-- Weak opening: `add a thin snapshot input containing only source_schema and
-  content_date`
-- Stronger opening: `The missing-practice views can legitimately return no rows
-  when every reference practice is present in OLIDS. Requiring at least one row
-  causes valid empty results to fail CI.`
+- Weak title: `fix: referral dedup changes`
+- Stronger title: `fix(mhsds): retain the latest version of each referral`
+- Weak opening: `change the row_number ordering in the referral model`
+- Stronger opening: `Resubmitted MHSDS referrals can have several versions. The
+  current ordering can retain an older version, which leaves downstream reports
+  with stale referral details.`
 
 Draft pull requests are fine while work or decisions remain; CodeRabbit reviews
 them. Before human review, fetch and check against `origin/main`, then surface
