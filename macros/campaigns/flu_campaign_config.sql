@@ -145,8 +145,10 @@ CHILD AGE GROUPS:
             '2025-08-31'::DATE AS flu_vaccination_after_date,
             '2025-08-31'::DATE AS laiv_vaccination_after_date,
 
-            -- Spec v15.7 removed the long-stay residential care indicator. The cohort is
-            -- kept on for 2025-26 because the season was reported with it.
+            -- Legacy local extension. Spec v15.7 removed the long-stay residential care
+            -- indicator, so 2025-26 was already outside the spec when it was reported with
+            -- this cohort. It stays on to preserve figures already published locally, and
+            -- retiring it needs business agreement rather than a code change.
             TRUE AS eligible_long_term_residential_care,
 
             -- RUN_DAT: the extraction date, capped at the campaign end

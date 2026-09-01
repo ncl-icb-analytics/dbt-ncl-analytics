@@ -8,8 +8,10 @@ flu_reported_campaigns() emits them as one CTE:
       {{ flu_reported_campaigns() }}
   )
 
-Every campaign listed there stays in the models for good, so published seasons keep their
-figures when a new season is added. To add a season, define it in flu_campaign_config()
+Every campaign listed there stays in the models for good, so a season that has been
+reported keeps its rows when the next one is added. Unlike the COVID models, the flu
+models do not filter on current registration, so their closed seasons retain people who
+have since left the list. To add a season, define it in flu_campaign_config()
 first, then append its id here.
 
 flu_current_campaign() and flu_previous_campaign() name the season in flight. They do not

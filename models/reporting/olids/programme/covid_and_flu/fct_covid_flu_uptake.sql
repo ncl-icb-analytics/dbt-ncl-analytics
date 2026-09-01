@@ -14,7 +14,7 @@ Key features:
 Multi-Programme Support:
 COVID Campaigns:
 - COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026,
-  COVID Autumn 2026, COVID Spring 2027
+  COVID Autumn 2026
 
 Flu Campaigns: 
 - Flu 2024-25, Flu 2025-26, Flu 2026-27

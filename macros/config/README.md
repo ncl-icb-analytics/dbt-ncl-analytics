@@ -14,7 +14,9 @@ WITH all_campaigns AS (
 ```
 
 Campaigns are added to those lists and never removed, so a season that has been reported
-keeps its rows when the next one is added.
+keeps its rows when the next one is added. Its figures can still move: eligibility is
+recomputed against current data on every build, and the COVID models filter on current
+registration. See the note in `covid_campaign_selection.sql`.
 
 For a single campaign's parameters, use `covid_autumn_config()`, `flu_current_config()`
 and their siblings, or call `covid_campaign_config('COVID Autumn 2026')` directly. Dates
