@@ -55,11 +55,8 @@ with eligible_contacts as (
         , r.prim_reason_referral_mh
         , rr.population_category as referral_reason_category
         , rg.available_to_cyp as referral_reason_available_to_cyp
-        , coalesce(
-            coalesce(tt.is_crisis_referral, false)
-            or (coalesce(tt.crisis_requires_urgent_priority, false)
-                and r.clin_resp_priority_type in ('1', '2', '4'))
-            , false) as is_crisis_referral
+        , {{ mhsds_is_crisis_referral('tt', 'r.clin_resp_priority_type') }}
+            as is_crisis_referral
     from eligible_contacts as c
     left join {{ ref('stg_mhsds_bridging') }} as b
         on c.person_id = b.person_id
