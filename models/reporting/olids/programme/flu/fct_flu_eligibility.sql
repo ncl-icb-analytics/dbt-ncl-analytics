@@ -164,6 +164,20 @@ all_eligibility AS (
 ),
 
 
+-- Search population: spec 2.2 requires the patient to be currently registered for GMS at
+-- RUN_DAT. This is applied to the season in flight only. is_active and is_deceased describe
+-- registration now, so applying them to a closed season would restate it against a
+-- population that did not exist when it was reported; those seasons keep the people who
+-- were eligible at the time.
+registered_population AS (
+    SELECT ae.*
+    FROM all_eligibility ae
+    LEFT JOIN {{ ref('dim_person_demographics') }} demo
+        ON demo.person_id = ae.person_id
+    WHERE ae.campaign_id <> '{{ flu_current_campaign() }}'
+       OR (demo.is_active = TRUE AND COALESCE(demo.is_deceased, FALSE) = FALSE)
+),
+
 -- Final formatting (campaign information already included in intermediate models)
 final_eligibility AS (
     SELECT 
@@ -181,7 +195,7 @@ final_eligibility AS (
         age_months_at_ref_date AS age_months,
         age_years_at_ref_date AS age_years,
         created_at
-    FROM all_eligibility
+    FROM registered_population
 )
 
 SELECT * FROM final_eligibility
