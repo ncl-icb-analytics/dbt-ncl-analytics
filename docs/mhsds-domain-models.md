@@ -68,7 +68,6 @@ are used where the source provides them.
 |---|---|---|
 | `stg_mhsds_referral` | Same unique service request | Newest submitted referral |
 | `stg_mhsds_carecontact` | Same service request and unique care contact | Newest submitted contact |
-| `stg_mhsds_patientindicators` | Same derived local patient identifier | Newest submitted patient indicators |
 | `stg_mhsds_other_service_or_team_type` | Same referral and available service or team identifier | Newest relationship; rows without a service or team identifier are excluded |
 | `stg_mhsds_servicetype` | Same referral | Newest referral service information, supplemented from MHS101, MHS102 and MHS902 |
 | `stg_mhsds_mhactperiod` | Same unique Mental Health Act episode | Newest submitted legal-status period |
@@ -76,6 +75,7 @@ are used where the source provides them.
 | `stg_mhsds_mhs502wardstay` | Same unique ward-stay identifier | Newest submitted ward stay, including a later end date |
 | `stg_mhsds_primdiag` | Same referral and diagnosis timestamp | One primary diagnosis using source and NHS England grouper ordering; rows without a timestamp are excluded |
 | `stg_mhsds_mpi_history` | No matching across months | Every MHS001 row from accepted files, identified by its submitted-row id |
+| `stg_mhsds_patientindicators` | No matching across months | Every MHS005 row from accepted files because the reporting period is its only time reference |
 | `stg_mhsds_indirectactivity` | No matching across months | Every MHS204 row from accepted files because it is activity for that reporting period |
 | `stg_mhsds_service_or_team_details` | No matching across months | Every MHS902 team snapshot from accepted files |
 | `stg_mhsds_mhs903warddetails` | Same provider, submission and ward code | One ward definition within each accepted file; ward snapshots remain separate across months |

@@ -5,14 +5,8 @@
     )
 }}
 
-with deduplicated as (
-    {{
-        select_latest_mhsds_record(
-            mhsds_table = ref('raw_mhsds_mhs005patind'),
-            partition_cols = ['unique_local_patient_id'],
-            tie_breaker_cols = ['mhs005_uniq_id']
-        )
-    }}
+with accepted_records as (
+    {{ select_accepted_mhsds_period_records(ref('raw_mhsds_mhs005patind')) }}
 )
 
 select
@@ -26,4 +20,4 @@ select
     , uniq_submission_id
     , reporting_period_end_date
     , effective_from
-from deduplicated
+from accepted_records
