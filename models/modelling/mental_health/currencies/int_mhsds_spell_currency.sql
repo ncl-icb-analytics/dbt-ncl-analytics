@@ -197,9 +197,11 @@ select
     , coalesce(pg.currency_group, c.winning_category) as currency_group
     , case
         -- NHSE keeps cross-cutting crisis in family 99 even when the
-        -- activity is an inpatient spell.
+        -- activity is an inpatient spell. The family 99 suffixes A-D name
+        -- crisis service settings, not inpatient bed types, so a spell takes
+        -- Z; its bed setting stays in setting_code.
         when coalesce(pg.currency_group, c.winning_category) = 'MAZ'
-            then 'MAZ99' || coalesce(c.setting_code, 'Z')
+            then 'MAZ99Z'
         else coalesce(pg.currency_group, c.winning_category) || '98' || coalesce(c.setting_code, 'Z')
     end as currency_code
 from classified as c

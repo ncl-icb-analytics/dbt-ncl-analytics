@@ -26,7 +26,7 @@ A currency code has three parts: `MAA98A` = population group (`MAA`) + family (`
 | 98 | Inpatient bed day | A Acute & PICU, B Rehab, C Specialist, D Forensic, Z unknown |
 | 96 | Community contact | A Community & Neighbourhood (CMHT), B Specialist, C Forensic, D Day Hospitals & Community Rehab, Z unknown |
 | 97 | Crisis contact | A Core Services, B Alternatives, C MH Crisis Assessment Centres, D A&E Linked, Z unknown |
-| 99 | Cross-cutting activity | MAZ99A–D by setting, MAZ99Z, MCS99Z |
+| 99 | Cross-cutting activity | MAZ99A–D by crisis setting (contacts only), MAZ99Z, MCS99Z |
 
 ## 1. Select accepted records
 
@@ -68,7 +68,7 @@ One row per hospital spell. Reading it CTE by CTE:
 - **`latest_ward_stay`** picks the spell's current ward, whose admitted-patient class gives the bed-type category and the inpatient setting (98A–D).
 - **`latest_diagnosis`** takes the latest primary diagnosis on or before the spell's derived end date, categorised by ICD-10 range.
 - **`classified`** runs the NHSE cascade: **diagnosis → bed type → referral reason**, each tier consulted only when earlier tiers cannot classify. Children (under 18 at admission) can only land in the all-age groups (MBC/MBY); a child whose diagnosis says an adult-only group goes to `MCG`, not through the cascade. Unclassifiable adults go to `MBU`.
-- Currency code = group + `98` + ward setting (`Z` if unknown). The national grouper keeps cross-cutting crisis spells in `MAZ99`, so those retain family `99`. `winning_tier` and the per-tier categories are kept on every row so each classification is explainable.
+- Currency code = group + `98` + ward setting (`Z` if unknown). The national grouper keeps cross-cutting crisis spells in `MAZ99`, so those retain family `99`. They publish as `MAZ99Z`: the `MAZ99A–D` suffixes name crisis service settings, not inpatient bed types, so a bed setting must not be carried into them. The bed setting stays in `setting_code`. `winning_tier` and the per-tier categories are kept on every row so each classification is explainable.
 
 ## 4. Contact classification — [`int_mhsds_contact_currency.sql`](../models/modelling/mental_health/currencies/int_mhsds_contact_currency.sql)
 
