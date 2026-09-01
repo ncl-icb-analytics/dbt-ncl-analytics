@@ -26,7 +26,7 @@ with accepted_records as (
     ) = 1
 )
 
-, resolved as (
+, deduplicated as (
     select
         d.mhs604_uniq_id
         , d.uniq_serv_req_id
@@ -34,11 +34,6 @@ with accepted_records as (
         , d.coded_diag_timestamp
         , d.diag_scheme_in_use
         , d.prim_diag
-        , case
-            when d.diag_scheme_in_use = '02'
-                and left(d.prim_diag, 1) in ('F', 'G', 'Q', 'R') then d.prim_diag
-            when d.diag_scheme_in_use = '06' then s.map_target
-        end as icd10_code
         , d.org_id_prov
         , d.record_number as source_record_number
         , d.row_number as source_row_number
@@ -46,24 +41,33 @@ with accepted_records as (
         , d.reporting_period_end_date
         , d.effective_from
     from accepted_records as d
-    left join snomed_to_icd10 as s
-        on to_varchar(d.prim_diag) = to_varchar(s.referenced_component_id)
+    where d.coded_diag_timestamp is not null
+    qualify row_number() over (
+        partition by d.uniq_serv_req_id, d.coded_diag_timestamp
+        order by
+            d.reporting_period_end_date desc
+            , d.effective_from desc nulls last
+            , d.uniq_submission_id desc
+            , d.record_number
+            , d.row_number
+            , d.mhs604_uniq_id
+    ) = 1
 )
 
-, deduplicated as (
-    select *
-    from resolved
-    where coded_diag_timestamp is not null
-    qualify row_number() over (
-        partition by uniq_serv_req_id, coded_diag_timestamp
-        order by
-            reporting_period_end_date desc
-            , effective_from desc nulls last
-            , uniq_submission_id desc
-            , source_record_number
-            , source_row_number
-            , mhs604_uniq_id
-    ) = 1
+, resolved as (
+    -- map SNOMED-coded rows after selection: the ordering above reads only
+    -- MHS604 columns, and the map holds at most one row per component id,
+    -- so joining the survivors cannot change which row wins
+    select
+        d.*
+        , case
+            when d.diag_scheme_in_use = '02'
+                and left(d.prim_diag, 1) in ('F', 'G', 'Q', 'R') then d.prim_diag
+            when d.diag_scheme_in_use = '06' then s.map_target
+        end as icd10_code
+    from deduplicated as d
+    left join snomed_to_icd10 as s
+        on to_varchar(d.prim_diag) = to_varchar(s.referenced_component_id)
 )
 
 select
@@ -81,4 +85,4 @@ select
     , uniq_submission_id
     , reporting_period_end_date
     , effective_from
-from deduplicated
+from resolved
