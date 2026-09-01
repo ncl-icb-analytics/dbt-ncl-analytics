@@ -12,7 +12,7 @@ models:
 
       • Focuses on current employment status indicators
 
-      • Generates data for current and previous flu campaigns automatically
+      • Generates data for every campaign in flu_reported_campaign_ids()
 
       Purpose: Identify healthcare workers eligible for flu vaccination due to occupational exposure risk.'
     data_tests:
@@ -80,7 +80,7 @@ models:
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "Occupational")'
@@ -88,7 +88,7 @@ models:
         description: 'Risk group classification (always "Health Social Care Worker")'
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of qualifying employment indicator (latest care setting code)'

@@ -75,7 +75,7 @@ models:
     columns:
       - name: campaign_id
         description: 'COVID campaign identifier (e.g., covid_2025_autumn, covid_2024_autumn)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "SPECIAL_POPULATION")'
@@ -83,7 +83,7 @@ models:
         description: 'Risk group classification (always "Long-term Residential Care")'
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of the latest residence code, which is the qualifying long-term care code'

@@ -21,8 +21,8 @@ models:
           name: EddieDavison92
     columns:
       - name: campaign_id
-        tests:
+        data_tests:
           - not_null
       - name: person_id
-        tests:
+        data_tests:
           - not_null

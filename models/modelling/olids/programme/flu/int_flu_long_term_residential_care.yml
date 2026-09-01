@@ -2,6 +2,9 @@ models:
   - name: int_flu_long_term_residential_care
     description: 'Flu vaccination eligibility for people in long-term residential care settings.
 
+      Grain: at most one row per campaign per person. Campaigns with the cohort switched
+      off produce no rows at all, so the model is empty from Flu 2026-27 onward.
+
       Key Features:
 
       • Residential status logic using LONGRES_COD vs RESIDE_COD comparison
@@ -72,7 +75,7 @@ models:
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "Social Care")'
@@ -80,7 +83,7 @@ models:
         description: 'Risk group classification (always "Long Term Residential Care")'
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of qualifying residential care code'

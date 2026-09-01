@@ -12,7 +12,7 @@ models:
 
       • Complex logic combining historical diagnoses with recent treatment indicators
 
-      • Generates data for current and previous flu campaigns automatically
+      • Generates data for every campaign in flu_reported_campaign_ids()
 
       Purpose: Identify people eligible for flu vaccination due to immunosuppression from causes.'
     data_tests:
@@ -91,7 +91,7 @@ models:
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'
-        tests:
+        data_tests:
           - not_null
       - name: campaign_category
         description: 'Category of eligibility criteria (always "Clinical Condition")'
@@ -99,7 +99,7 @@ models:
         description: 'Risk group classification (always "Immunosuppression")'
       - name: person_id
         description: 'Unique identifier for the person'
-        tests:
+        data_tests:
           - not_null
       - name: qualifying_event_date
         description: 'Date of qualifying immunosuppression event (diagnosis, medication, or treatment)'
