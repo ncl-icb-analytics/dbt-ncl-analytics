@@ -10,7 +10,8 @@ models:
     tests:
       - cluster_ids_exist:
           arguments:
-            cluster_ids: AST_COD,ASTRXM1_COD,ASTRXM2_COD,ASTADM_COD
+            cluster_ids: ASTADM_COD,ASTRXM1_COD,ASTRXM2_COD,AST_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:

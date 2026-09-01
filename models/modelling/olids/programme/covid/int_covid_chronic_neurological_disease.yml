@@ -19,6 +19,7 @@ models:
       - cluster_ids_exist:
           arguments:
             cluster_ids: CNS_COV_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:

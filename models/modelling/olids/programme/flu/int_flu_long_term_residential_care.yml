@@ -15,6 +15,19 @@ models:
       • Not reported from 2026-27: UKHSA removed the long-stay residential care indicator and the LONGRES_COD group from the flu specification at v15.7, so only campaigns that were reported with the cohort keep rows
 
       Purpose: Identify care home residents eligible for flu vaccination due to communal living infection risk.'
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: LONGRES_COD,RESIDE_COD
+            source: UKHSA_FLU
     config:
       meta:
         indicator:
@@ -56,15 +69,6 @@ models:
 
         owner:
           name: EddieDavison92
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - campaign_id
-              - person_id
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          arguments:
-            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

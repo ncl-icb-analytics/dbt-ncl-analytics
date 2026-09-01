@@ -17,6 +17,7 @@ models:
       - cluster_ids_exist:
           arguments:
             cluster_ids: BMI_COD,BMI_STAGE_COD,SEV_OBESITY_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:

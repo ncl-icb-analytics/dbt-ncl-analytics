@@ -17,6 +17,19 @@ models:
       • Deduplicates to best qualifying event per person
 
       Purpose: Identify people eligible for flu vaccination due to diabetes or related conditions.'
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - campaign_id
+              - person_id
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          arguments:
+            min_value: 1
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: ADDIS_COD,DIAB_COD,DMRES_COD
+            source: UKHSA_FLU
     config:
       meta:
         indicator:
@@ -58,15 +71,6 @@ models:
               sort_order: 1
         owner:
           name: EddieDavison92
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - campaign_id
-              - person_id
-      - dbt_expectations.expect_table_row_count_to_be_between:
-          arguments:
-            min_value: 1
     columns:
       - name: campaign_id
         description: 'Flu campaign identifier (e.g., flu_2024_25, flu_2023_24)'

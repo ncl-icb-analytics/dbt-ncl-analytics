@@ -18,7 +18,8 @@ models:
     tests:
       - cluster_ids_exist:
           arguments:
-            cluster_ids: DIAB_COD,DMRES_COD,ADDIS_COD
+            cluster_ids: ADDIS_COD,DIAB_COD,DMRES_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:

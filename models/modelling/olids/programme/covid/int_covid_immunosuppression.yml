@@ -10,7 +10,8 @@ models:
     data_tests:
       - cluster_ids_exist:
           arguments:
-            cluster_ids: IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD,DXT_CHEMO_COD
+            cluster_ids: DXT_CHEMO_COD,IMMDX_COV_COD,IMMRX_COD,IMM_ADM_COD
+            source: UKHSA_COVID
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:

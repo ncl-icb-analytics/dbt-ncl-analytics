@@ -19,6 +19,7 @@ models:
       - cluster_ids_exist:
           arguments:
             cluster_ids: SEV_MENTAL_COD,SMHRES_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:

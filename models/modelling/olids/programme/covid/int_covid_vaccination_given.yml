@@ -11,6 +11,7 @@ models:
       - cluster_ids_exist:
           arguments:
             cluster_ids: COVADM_COD,COVRX_COD
+            source: UKHSA_COVID
     config:
       meta:
         indicator:
