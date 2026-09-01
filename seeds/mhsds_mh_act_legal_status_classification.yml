@@ -33,7 +33,11 @@ seeds:
           - not_null
           - unique
       - name: legal_status_definition
-        description: Specification definition of the code, quoted verbatim.
+        description: >-
+          Specification definition of the code, quoted verbatim. Held so
+          is_detained can be reviewed against the source text. It is a
+          static snapshot and is not published: consumers get the label
+          from the maintained UKHFD reference instead.
       - name: is_detained
         description: >-
           Whether the code's national definition is a detention. True for the

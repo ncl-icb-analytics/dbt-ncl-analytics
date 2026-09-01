@@ -109,23 +109,20 @@ models:
           treatment of concurrent community orders.
       - name: latest_detention_start_date
         description: >-
-          Start date of the latest detention period. Null when no detention is
-          recorded, or when the source start date was an Excel-epoch
-          missing-value sentinel.
-      - name: latest_formal_mha_status_code
+          Start date of the person's latest detained period. Null when the
+          person has never been detained, or when the source start date was an
+          Excel-epoch missing-value sentinel.
+      - name: latest_detention_code
         description: >-
-          NHSD legal-status code of the latest detention period, so the flags
-          can be audited and narrowed. Null when no detention is recorded; a
-          person whose only legal-status periods are guardianship, informal or
-          unknown has no value here.
-      - name: latest_formal_mha_status_definition
+          NHSD legal-status code of the person's latest detained period, so the
+          flags can be audited and narrowed. Null when the person has never been
+          detained, including someone whose only legal-status periods are
+          guardianship, informal or unknown.
+      - name: latest_detention_description
         description: >-
-          Specification definition of latest_formal_mha_status_code. This is the
-          text the detention flags are derived from.
-      - name: latest_formal_mha_status_description
-        description: >-
-          UKHFD dictionary description for latest_formal_mha_status_code, for
-          continuity with other UKHFD-labelled columns. Null when the code is
+          UKHFD dictionary description for latest_detention_code, taken from the
+          maintained national reference so it tracks national wording updates.
+          Null when the person has never been detained, or when the code is
           absent from the UKHFD classification. The detention rule is not
           derived from this text.
       - name: child_protection_plan_status_code

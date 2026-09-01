@@ -160,7 +160,6 @@ with latest_reporting_period as (
         , m.end_date_mh_act_legal_status_class
         , m.expiry_date_mh_act_legal_status_class
         , m.reporting_period_end_date
-        , c.legal_status_definition
         -- a code outside the national list, which is the -1 sentinel and null,
         -- is not detention
         , coalesce(c.is_detained, false) as is_detained
@@ -175,8 +174,7 @@ with latest_reporting_period as (
 , latest_detention as (
     select
         person_id
-        , nhsd_legal_status as latest_formal_mha_status_code
-        , legal_status_definition as latest_formal_mha_status_definition
+        , nhsd_legal_status as latest_detention_code
         , start_date_mh_act_legal_status_class as latest_detention_start_date
     from mha_periods
     where is_detained
@@ -263,9 +261,8 @@ select
     , coalesce(m.has_ever_been_detained, false) as has_ever_been_detained
     , coalesce(m.is_currently_detained, false) as is_currently_detained
     , ld.latest_detention_start_date
-    , ld.latest_formal_mha_status_code
-    , ld.latest_formal_mha_status_definition
-    , mha_status.legal_status_desc as latest_formal_mha_status_description
+    , ld.latest_detention_code
+    , mha_status.legal_status_desc as latest_detention_description
     , g.child_protection_plan_status_code
     , cpp.description as child_protection_plan_status_description
     , g.looked_after_child_indicator_code
@@ -297,7 +294,7 @@ left join latest_detention as ld
 -- one-row-per-person grain
 left join {{ ref('stg_ukhfd_mental_health_act_legal_status_classification') }}
     as mha_status
-    on ld.latest_formal_mha_status_code = mha_status.legal_status_code
+    on ld.latest_detention_code = mha_status.legal_status_code
 left join safeguarding_aggregates as g
     on p.person_id = g.person_id
 left join {{ ref('mhsds_profile_code_lookup') }} as cpp
