@@ -1,6 +1,14 @@
 -- Current-state fields use the active MHSDS feed, which is about six weeks
--- behind the run date. Contact windows therefore have the same lag.
-with population as (
+-- behind the run date. Contact recency and Mental Health Act currency both
+-- measure back from the latest accepted reporting period end date, so the
+-- model uses one clock rather than mixing feed dates with the run date.
+with latest_reporting_period as (
+    select
+        max(reporting_period_end_date) as latest_reporting_period_end_date
+    from {{ ref('stg_mhsds_activesubmission') }}
+)
+
+, population as (
     select person_id
     from {{ ref('fct_mhsds_referral') }}
     where person_id is not null
@@ -32,35 +40,44 @@ with population as (
 
 , contact_aggregates as (
     select
-        person_id
-        , max(care_contact_date) as latest_contact_date
-        , count_if(care_contact_date >= dateadd(month, -12, current_date)) > 0
-            as has_contact_last_12m
-        , count_if(care_contact_date >= dateadd(day, -90, current_date)) > 0
-            as has_contact_last_90d
+        c.person_id
+        , max(c.care_contact_date) as latest_contact_date
         , count_if(
-            care_contact_date >= dateadd(month, -12, current_date)
-            and lpad(attendance_status_code, 2, '0') in ('05', '06')
+            c.care_contact_date
+                >= dateadd(month, -12, p.latest_reporting_period_end_date)
+        ) > 0 as has_contact_last_12m
+        , count_if(
+            c.care_contact_date
+                >= dateadd(day, -90, p.latest_reporting_period_end_date)
+        ) > 0 as has_contact_last_90d
+        , count_if(
+            c.care_contact_date
+                >= dateadd(month, -12, p.latest_reporting_period_end_date)
+            and lpad(c.attendance_status_code, 2, '0') in ('05', '06')
         ) as n_attended_contacts_12m
         , count_if(
-            care_contact_date >= dateadd(month, -12, current_date)
-            and attendance_status_code is null
+            c.care_contact_date
+                >= dateadd(month, -12, p.latest_reporting_period_end_date)
+            and c.attendance_status_code is null
         ) as n_contacts_with_missing_attendance_status_12m
-    from {{ ref('fct_mhsds_care_contact') }}
-    where person_id is not null
-    group by person_id
+    from {{ ref('fct_mhsds_care_contact') }} as c
+    cross join latest_reporting_period as p
+    where c.person_id is not null
+    group by c.person_id
 )
 
 , crisis_contact_aggregates as (
     select
         c.person_id
         , count_if(
-            c.care_contact_date >= dateadd(month, -12, current_date)
+            c.care_contact_date
+                >= dateadd(month, -12, p.latest_reporting_period_end_date)
             and lpad(c.attendance_status_code, 2, '0') in ('05', '06')
         ) > 0 as has_crisis_contact_12m
     from {{ ref('fct_mhsds_care_contact') }} as c
     inner join {{ ref('fct_mhsds_referral_episodes') }} as r
         on c.referral_source_record_id = r.source_record_id
+    cross join latest_reporting_period as p
     where c.person_id is not null
         and r.is_crisis_referral
     group by c.person_id
@@ -113,12 +130,6 @@ with population as (
             , d.source_row_number
             , d.mhs604_uniq_id
     ) = 1
-)
-
-, latest_reporting_period as (
-    select
-        max(reporting_period_end_date) as latest_reporting_period_end_date
-    from {{ ref('stg_mhsds_activesubmission') }}
 )
 
 , mha_aggregates as (
