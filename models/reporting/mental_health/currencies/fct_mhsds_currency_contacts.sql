@@ -59,6 +59,7 @@ select
         , 0
     ) as proxy_cost
     , p.is_cyp
+    , p.has_known_age_at_contact
     , p.is_crisis_referral
     , p.winning_tier
 from priced as p

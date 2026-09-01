@@ -75,7 +75,14 @@ models:
       - name: proxy_cost
         description: Price multiplied by MFF and GDP deflator ratio, or zero for uncosted attendance.
       - name: is_cyp
-        description: Whether age at contact is under 18.
+        description: >-
+          Whether age at contact is under 18. A contact with no recorded age is
+          classified as adult, so read this with has_known_age_at_contact.
+      - name: has_known_age_at_contact
+        description: >-
+          Whether an age at the contact date was recorded. False identifies the
+          contacts classified as adult through the fallback rather than a known
+          age.
       - name: is_crisis_referral
         description: Resolved crisis referral flag.
       - name: winning_tier
