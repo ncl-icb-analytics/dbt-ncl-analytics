@@ -21,9 +21,10 @@ asthma_diagnosis AS (
         cc.campaign_id,
         obs.person_id,
         MIN(obs.clinical_effective_date) AS first_asthma_date
-    FROM ({{ get_observations("'AST_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'AST_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),
@@ -33,9 +34,10 @@ recent_asthma_prescriptions AS (
         cc.campaign_id,
         med.person_id,
         MAX(med.order_date) AS medication_date
-    FROM ({{ get_medication_orders(cluster_id='ASTRX_COD', source='UKHSA_FLU') }}) med
+    FROM ({{ get_medication_orders(cluster_id='ASTRX_COD', source='UKHSA_FLU', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date >= cc.asthma_medication_lookback_date
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date >= cc.asthma_medication_lookback_date
         AND med.order_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, med.person_id
 ),
@@ -45,9 +47,10 @@ recent_asthma_administration AS (
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS medication_date
-    FROM ({{ get_observations("'ASTMED_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'ASTMED_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date >= cc.asthma_medication_lookback_date
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date >= cc.asthma_medication_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),
@@ -81,9 +84,10 @@ asthma_admission AS (
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS qualifying_event_date
-    FROM ({{ get_observations("'ASTADM_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'ASTADM_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),

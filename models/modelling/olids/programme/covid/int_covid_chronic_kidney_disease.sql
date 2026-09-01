@@ -27,9 +27,10 @@ people_with_ckd_diagnosis AS (
         MIN(obs.clinical_effective_date) AS first_ckd_date,
         cc.audit_end_date,
         cc.campaign_reference_date
-    FROM ({{ get_observations("'CKD_COV_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'CKD_COV_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.audit_end_date,
@@ -49,9 +50,10 @@ people_with_ckd_stages AS (
             PARTITION BY cc.campaign_id, obs.person_id 
             ORDER BY obs.clinical_effective_date DESC, obs.mapped_concept_code DESC
         ) AS stage_rank
-    FROM ({{ get_observations("'CKD15_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'CKD15_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
 ),
 
@@ -68,9 +70,10 @@ people_with_ckd_stages_3_5 AS (
             PARTITION BY cc.campaign_id, obs.person_id 
             ORDER BY obs.clinical_effective_date DESC, obs.mapped_concept_code DESC
         ) AS stage_3_5_rank
-    FROM ({{ get_observations("'CKD35_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'CKD35_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
 ),
 

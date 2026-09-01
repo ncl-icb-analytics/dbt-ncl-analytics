@@ -26,9 +26,10 @@ people_with_chd_diagnosis AS (
         cc.campaign_reference_date,
         cc.run_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'CHD_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'CHD_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.campaign_reference_date, cc.run_date, cc.audit_end_date
 ),

@@ -28,9 +28,10 @@ people_with_flu_vaccination_admin AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_vaccination_admin_date,
         'Flu vaccination administration' AS vaccination_type
-    FROM ({{ get_observations("'FLUVAX_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'FLUVAX_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date > cc.flu_vaccination_after_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
@@ -43,9 +44,10 @@ people_with_flu_vaccination_medication AS (
         med.person_id,
         MAX(med.order_date) AS latest_vaccination_medication_date,
         'Flu vaccination medication' AS vaccination_type
-    FROM ({{ get_medication_orders(cluster_id='FLURX_COD', source='UKHSA_FLU') }}) med
+    FROM ({{ get_medication_orders(cluster_id='FLURX_COD', source='UKHSA_FLU', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date > cc.flu_vaccination_after_date
         AND med.order_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, med.person_id
@@ -58,9 +60,10 @@ people_with_laiv_vaccination_admin AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_laiv_admin_date,
         'LAIV vaccination administration' AS vaccination_type
-    FROM ({{ get_observations("'LAIV_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'LAIV_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date > cc.laiv_vaccination_after_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
@@ -73,9 +76,10 @@ people_with_laiv_vaccination_medication AS (
         med.person_id,
         MAX(med.order_date) AS latest_laiv_medication_date,
         'LAIV vaccination medication' AS vaccination_type
-    FROM ({{ get_medication_orders(cluster_id='LAIVRX_COD', source='UKHSA_FLU') }}) med
+    FROM ({{ get_medication_orders(cluster_id='LAIVRX_COD', source='UKHSA_FLU', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date > cc.laiv_vaccination_after_date
         AND med.order_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, med.person_id

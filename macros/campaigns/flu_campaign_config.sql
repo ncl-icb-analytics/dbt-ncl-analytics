@@ -83,6 +83,10 @@ CHILD AGE GROUPS:
             LEAST(CURRENT_DATE, '2025-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            -- UKHSA flu SCT codeclusters version this season is reported under (last release
+            -- on or before the final AUDITEND_DAT); see stg_reference_ukhsa_codecluster_versions
+            '5.6' AS terminology_version,
+
             LEAST(CURRENT_DATE, '2025-02-28'::DATE) AS audit_end_date
     {%- elif campaign_id == 'Flu 2025-26' -%}
         SELECT
@@ -120,6 +124,10 @@ CHILD AGE GROUPS:
             LEAST(CURRENT_DATE, '2026-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            -- UKHSA flu SCT codeclusters version this season is reported under (last release
+            -- on or before the final AUDITEND_DAT); see stg_reference_ukhsa_codecluster_versions
+            '6.2' AS terminology_version,
+
             LEAST(CURRENT_DATE, '2026-02-28'::DATE) AS audit_end_date
     {%- elif campaign_id == 'Flu 2026-27' -%}
         SELECT
@@ -157,6 +165,10 @@ CHILD AGE GROUPS:
             LEAST(CURRENT_DATE, '2027-02-28'::DATE) AS run_date,
 
             -- Audit end date (AUDITEND_DAT): rolls forward in season, then pins to campaign end
+            -- UKHSA flu SCT codeclusters version this season is reported under (last release
+            -- on or before the final AUDITEND_DAT); see stg_reference_ukhsa_codecluster_versions
+            '7.0' AS terminology_version,
+
             LEAST(CURRENT_DATE, '2027-02-28'::DATE) AS audit_end_date
     {%- else -%}
         -- Default to current campaign if unknown campaign_id

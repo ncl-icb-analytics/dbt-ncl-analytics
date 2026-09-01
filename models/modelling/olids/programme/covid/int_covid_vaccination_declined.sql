@@ -26,9 +26,10 @@ people_with_covid_vaccination_declined AS (
         cc.campaign_reference_date,
         cc.decline_tracking_start,
         cc.decline_tracking_end
-    FROM ({{ get_observations("'COVDECL_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'COVDECL_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.decline_tracking_start
         AND obs.clinical_effective_date <= cc.decline_tracking_end
     GROUP BY 

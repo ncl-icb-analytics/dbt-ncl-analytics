@@ -36,9 +36,10 @@ people_with_chronic_resp_diagnosis AS (
         MIN(obs.clinical_effective_date) AS first_resp_date,
         'Chronic respiratory disease diagnosis' AS eligibility_reason,
         cc.audit_end_date
-    FROM ({{ get_observations("'RESP_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'RESP_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),

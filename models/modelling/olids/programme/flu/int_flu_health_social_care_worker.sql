@@ -27,9 +27,10 @@ people_with_care_home_codes AS (
         MAX(obs.clinical_effective_date) AS latest_carehome_date,
         'Care home worker' AS worker_type,
         cc.audit_end_date
-    FROM ({{ get_observations("'CAREHOME_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'CAREHOME_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -42,9 +43,10 @@ people_with_nursing_home_codes AS (
         MAX(obs.clinical_effective_date) AS latest_nursehome_date,
         'Nursing home worker' AS worker_type,
         cc.audit_end_date
-    FROM ({{ get_observations("'NURSEHOME_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'NURSEHOME_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -57,9 +59,10 @@ people_with_domcare_codes AS (
         MAX(obs.clinical_effective_date) AS latest_domcare_date,
         'Domiciliary care worker' AS worker_type,
         cc.audit_end_date
-    FROM ({{ get_observations("'DOMCARE_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'DOMCARE_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),

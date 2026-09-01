@@ -28,9 +28,10 @@ people_with_declined_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_declined_date,
         'Vaccination declined' AS decline_type
-    FROM ({{ get_observations("'DECL_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'DECL_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         -- Restrict to current campaign period (after previous campaign's vaccination tracking date)
         AND obs.clinical_effective_date > cc.flu_vaccination_after_date
         AND obs.clinical_effective_date <= cc.audit_end_date
@@ -44,9 +45,10 @@ people_with_no_consent_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_no_consent_date,
         'No consent for vaccination' AS decline_type
-    FROM ({{ get_observations("'NOCONS_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'NOCONS_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         -- Restrict to current campaign period (after previous campaign's vaccination tracking date)
         AND obs.clinical_effective_date > cc.flu_vaccination_after_date
         AND obs.clinical_effective_date <= cc.audit_end_date

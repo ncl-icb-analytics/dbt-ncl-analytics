@@ -30,9 +30,10 @@ people_pregnant_during_campaign AS (
         MAX(obs.clinical_effective_date) AS latest_pregnancy_date,
         'Pregnant during flu campaign period' AS eligibility_reason,
         cc.audit_end_date
-    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.campaign_start_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
@@ -47,9 +48,10 @@ people_pregnant_at_campaign_start AS (
         MAX(obs.clinical_effective_date) AS pregnancy_date,
         DATEADD('month', -8, cc.campaign_start_date) AS pregnancy_eligibility_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         -- [1 January of the campaign year, campaign start)
         AND obs.clinical_effective_date >= DATEADD('month', -8, cc.campaign_start_date)
         AND obs.clinical_effective_date < cc.campaign_start_date
@@ -58,8 +60,8 @@ people_pregnant_at_campaign_start AS (
 
 -- Step 3: Create lookup of pregnancy-only codes (to identify delivery/termination codes)
 pregnancy_only_codes AS (
-    SELECT DISTINCT mapped_concept_code
-    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU') }})
+    SELECT DISTINCT spec_version, mapped_concept_code
+    FROM ({{ get_observations("'PREG_COD'", 'UKHSA_FLU', versioned=true) }})
 ),
 
 -- Step 4: Check for delivery codes after pregnancy date but before campaign start
@@ -70,10 +72,12 @@ people_with_delivery_after_pregnancy AS (
     FROM people_pregnant_at_campaign_start pp
     JOIN all_campaigns cc
         ON pp.campaign_id = cc.campaign_id
-    JOIN ({{ get_observations("'PREGDEL_COD'", 'UKHSA_FLU') }}) del_obs
+    JOIN ({{ get_observations("'PREGDEL_COD'", 'UKHSA_FLU', versioned=true) }}) del_obs
         ON pp.person_id = del_obs.person_id
+        AND del_obs.spec_version = cc.terminology_version
     LEFT JOIN pregnancy_only_codes poc
         ON del_obs.mapped_concept_code = poc.mapped_concept_code
+        AND poc.spec_version = cc.terminology_version
     WHERE del_obs.clinical_effective_date > pp.pregnancy_date
         AND del_obs.clinical_effective_date < cc.campaign_start_date  -- Only before campaign start
         -- Delivery/termination codes are in PREGDEL_COD but NOT in PREG_COD

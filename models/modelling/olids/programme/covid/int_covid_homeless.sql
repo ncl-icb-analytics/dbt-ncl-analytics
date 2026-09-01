@@ -29,9 +29,10 @@ people_with_homeless_status AS (
         MAX(obs.clinical_effective_date) AS latest_homeless_date,
         cc.audit_end_date,
         cc.campaign_reference_date
-    FROM ({{ get_observations("'HOMELESS_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'HOMELESS_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         -- Only include if this condition is eligible in the campaign
         AND cc.eligible_homeless = TRUE
@@ -48,9 +49,10 @@ people_with_residence_status AS (
         MAX(obs.clinical_effective_date) AS latest_residence_date,
         cc.audit_end_date,
         cc.campaign_reference_date
-    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_homeless = TRUE
     GROUP BY 

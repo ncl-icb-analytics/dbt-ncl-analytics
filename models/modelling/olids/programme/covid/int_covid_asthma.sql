@@ -27,9 +27,10 @@ people_with_asthma_diagnosis AS (
         obs.person_id,
         MIN(obs.clinical_effective_date) AS first_asthma_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'AST_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'AST_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -41,9 +42,10 @@ people_with_asthma_admissions AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_admission_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'ASTADM_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'ASTADM_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.asthma_admission_lookback_date  -- 2 years before campaign
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
@@ -56,9 +58,10 @@ people_with_recent_asthma_inhalers AS (
         med.person_id,
         MAX(med.order_date) AS latest_inhaler_date,
         cc.audit_end_date
-    FROM ({{ get_medication_orders(cluster_id='ASTRXM1_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='ASTRXM1_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_medication_lookback_date  -- 12 months before campaign
         AND med.order_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, med.person_id, cc.audit_end_date
@@ -73,9 +76,10 @@ oral_steroids_window_1 AS (
         MIN(med.order_date) AS earliest_steroid_w1,
         MAX(med.order_date) AS latest_steroid_w1,
         COUNT(*) AS steroid_count_w1
-    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_1_start
         AND med.order_date <= cc.asthma_steroid_window_1_end
     GROUP BY cc.campaign_id, med.person_id
@@ -89,9 +93,10 @@ oral_steroids_window_2 AS (
         MIN(med.order_date) AS earliest_steroid_w2,
         MAX(med.order_date) AS latest_steroid_w2,
         COUNT(*) AS steroid_count_w2
-    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_2_start
         AND med.order_date <= cc.asthma_steroid_window_2_end
     GROUP BY cc.campaign_id, med.person_id
@@ -105,9 +110,10 @@ oral_steroids_window_3 AS (
         MIN(med.order_date) AS earliest_steroid_w3,
         MAX(med.order_date) AS latest_steroid_w3,
         COUNT(*) AS steroid_count_w3
-    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='ASTRXM2_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.asthma_steroid_window_3_start
         AND med.order_date <= cc.asthma_steroid_window_3_end
     GROUP BY cc.campaign_id, med.person_id

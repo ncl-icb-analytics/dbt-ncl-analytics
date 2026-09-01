@@ -28,9 +28,10 @@ people_with_residence_codes AS (
         obs.clinical_effective_date AS residence_date,
         obs.mapped_concept_code AS residence_code,
         cc.audit_end_date
-    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'RESIDE_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_care_home = TRUE
 ),
@@ -43,9 +44,10 @@ people_with_longterm_care_codes AS (
         obs.clinical_effective_date AS longterm_care_date,
         obs.mapped_concept_code AS longterm_care_code,
         cc.audit_end_date
-    FROM ({{ get_observations("'LONGRES_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'LONGRES_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_care_home = TRUE
 ),

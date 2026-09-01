@@ -23,9 +23,10 @@ latest_bmi AS (
         obs.person_id,
         obs.clinical_effective_date AS bmi_date,
         TRY_CAST(obs.result_value AS FLOAT) AS bmi_value
-    FROM ({{ get_observations("'BMI_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'BMI_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND TRY_CAST(obs.result_value AS FLOAT) > 0
         AND cc.eligible_morbid_obesity = TRUE
@@ -40,9 +41,10 @@ latest_bmi_stage AS (
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS bmi_stage_date
-    FROM ({{ get_observations("'BMI_STAGE_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'BMI_STAGE_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_morbid_obesity = TRUE
     GROUP BY cc.campaign_id, obs.person_id
@@ -53,9 +55,10 @@ latest_severe_obesity AS (
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS severe_obesity_date
-    FROM ({{ get_observations("'SEV_OBESITY_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'SEV_OBESITY_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
         AND cc.eligible_morbid_obesity = TRUE
     GROUP BY cc.campaign_id, obs.person_id

@@ -26,9 +26,10 @@ people_with_smi_diagnosis AS (
         MAX(obs.clinical_effective_date) AS latest_smi_date,
         cc.audit_end_date,
         cc.campaign_reference_date
-    FROM ({{ get_observations("'SEV_MENTAL_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'SEV_MENTAL_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY
         cc.campaign_id, obs.person_id, cc.audit_end_date, cc.campaign_reference_date
@@ -42,9 +43,10 @@ people_with_smi_resolved AS (
         MAX(obs.clinical_effective_date) AS latest_resolved_date,
         cc.audit_end_date,
         cc.campaign_reference_date
-    FROM ({{ get_observations("'SMHRES_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'SMHRES_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY 
         cc.campaign_id, obs.person_id, cc.audit_end_date, cc.campaign_reference_date

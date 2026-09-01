@@ -22,9 +22,10 @@ people_with_household_immunocompromised AS (
         cc.campaign_id,
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_hhld_imdef_date
-    FROM ({{ get_observations("'HHLD_IMDEF_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'HHLD_IMDEF_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),

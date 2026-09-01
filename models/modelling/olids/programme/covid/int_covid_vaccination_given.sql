@@ -25,9 +25,10 @@ people_with_covid_vaccination_admin AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_vaccination_admin_date,
         'COVID vaccination administration' AS vaccination_type
-    FROM ({{ get_observations("'COVADM_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'COVADM_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.vaccination_tracking_start
         AND obs.clinical_effective_date <= cc.vaccination_tracking_end
     GROUP BY cc.campaign_id, obs.person_id
@@ -40,9 +41,10 @@ people_with_covid_vaccination_medication AS (
         med.person_id,
         MAX(med.order_date) AS latest_vaccination_medication_date,
         'COVID vaccination medication' AS vaccination_type
-    FROM ({{ get_medication_orders(cluster_id='COVRX_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='COVRX_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.vaccination_tracking_start
         AND med.order_date <= cc.vaccination_tracking_end
     GROUP BY cc.campaign_id, med.person_id

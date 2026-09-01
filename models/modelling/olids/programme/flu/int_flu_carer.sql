@@ -26,9 +26,10 @@ people_with_carer_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_carer_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'CARER_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'CARER_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -40,9 +41,10 @@ people_with_not_carer_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_not_carer_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'NOTCARER_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'NOTCARER_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),

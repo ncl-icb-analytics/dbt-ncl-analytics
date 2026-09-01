@@ -38,9 +38,10 @@ people_with_immuno_diagnosis AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_diagnosis_date,
         'Immunosuppression diagnosis' AS evidence_type
-    FROM ({{ get_observations("'IMMDX_COV_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'IMMDX_COV_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
 ),
@@ -52,9 +53,10 @@ people_with_recent_immuno_medications AS (
         med.person_id,
         MAX(med.order_date) AS latest_medication_date,
         'Recent immunosuppression medication' AS evidence_type
-    FROM ({{ get_medication_orders(cluster_id='IMMRX_COD', source='UKHSA_COVID') }}) med
+    FROM ({{ get_medication_orders(cluster_id='IMMRX_COD', source='UKHSA_COVID', versioned=true) }}) med
     CROSS JOIN all_campaigns cc
-    WHERE med.order_date IS NOT NULL
+    WHERE med.spec_version = cc.terminology_version
+        AND med.order_date IS NOT NULL
         AND med.order_date >= cc.recall_immuno_medication_lookback_date
         AND med.order_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, med.person_id
@@ -67,9 +69,10 @@ people_with_recent_immuno_admin AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_admin_date,
         'Recent immunosuppression administration' AS evidence_type
-    FROM ({{ get_observations("'IMM_ADM_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'IMM_ADM_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.recall_immuno_admin_lookback_date
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id
@@ -82,9 +85,10 @@ people_with_recent_chemo AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_chemo_date,
         'Recent chemotherapy/radiotherapy' AS evidence_type
-    FROM ({{ get_observations("'DXT_CHEMO_COD'", 'UKHSA_COVID') }}) obs
+    FROM ({{ get_observations("'DXT_CHEMO_COD'", 'UKHSA_COVID', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date >= cc.recall_immuno_medication_lookback_date  -- same 6-month recall window
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id

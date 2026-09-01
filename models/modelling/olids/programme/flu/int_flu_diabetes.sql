@@ -27,9 +27,10 @@ people_with_addisons AS (
         MIN(obs.clinical_effective_date) AS first_addisons_date,
         'Addisons disease' AS eligibility_reason,
         cc.audit_end_date
-    FROM ({{ get_observations("'ADDIS_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'ADDIS_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -41,9 +42,10 @@ people_with_diabetes_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_diabetes_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'DIAB_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'DIAB_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),
@@ -55,9 +57,10 @@ people_with_diabetes_resolved_codes AS (
         obs.person_id,
         MAX(obs.clinical_effective_date) AS latest_resolved_date,
         cc.audit_end_date
-    FROM ({{ get_observations("'DMRES_COD'", 'UKHSA_FLU') }}) obs
+    FROM ({{ get_observations("'DMRES_COD'", 'UKHSA_FLU', versioned=true) }}) obs
     CROSS JOIN all_campaigns cc
-    WHERE obs.clinical_effective_date IS NOT NULL
+    WHERE obs.spec_version = cc.terminology_version
+        AND obs.clinical_effective_date IS NOT NULL
         AND obs.clinical_effective_date <= cc.audit_end_date
     GROUP BY cc.campaign_id, obs.person_id, cc.audit_end_date
 ),

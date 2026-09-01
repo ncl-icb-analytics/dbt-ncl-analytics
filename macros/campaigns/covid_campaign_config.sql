@@ -132,6 +132,10 @@ the autumn and spring periods share one set.
             '2024-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2022-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
 
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '3.4' AS terminology_version,
+
             '2025-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2025' -%}
@@ -210,6 +214,10 @@ the autumn and spring periods share one set.
             '2024-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2022-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
 
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '3.4' AS terminology_version,
+
             '2025-06-30'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Spring 2026' -%}
@@ -285,6 +293,10 @@ the autumn and spring periods share one set.
             -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
             '2025-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2023-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '3.7.2' AS terminology_version,
 
             '2026-06-30'::DATE AS audit_end_date
 
@@ -364,6 +376,10 @@ the autumn and spring periods share one set.
             '2025-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2023-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
 
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '3.7.1' AS terminology_version,
+
             '2026-03-31'::DATE AS audit_end_date
 
     {%- elif campaign_id == 'COVID Autumn 2026' -%}
@@ -442,6 +458,10 @@ the autumn and spring periods share one set.
             -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
             '2026-09-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2024-03-31'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '4.1' AS terminology_version,
 
             '2027-03-31'::DATE AS audit_end_date
 
@@ -531,6 +551,10 @@ the autumn and spring periods share one set.
             -- Group M and its predecessors select the recall group, not IMMUNO_GROUP.
             '2026-12-30'::DATE AS recall_immuno_medication_lookback_date,   -- RUN_DAT - 6 months
             '2024-06-30'::DATE AS recall_immuno_admin_lookback_date,        -- RUN_DAT - 3 years
+
+            -- UKHSA COVID SCT codeclusters version this season is reported under (last release
+            -- on or before RUN_DAT); see stg_reference_ukhsa_codecluster_versions
+            '4.1' AS terminology_version,
 
             '2027-06-30'::DATE AS audit_end_date
 
