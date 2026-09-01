@@ -48,7 +48,8 @@ final_eligibility AS (
     JOIN {{ ref('dim_person_demographics') }} demo
         ON hi.person_id = demo.person_id
     WHERE 1=1
-        -- Apply age restrictions: 6 months to under 65 years
+        -- Aged 6 months or over at RUN_DAT. Spec indicator 19 reports age bands 1, 5, 6
+        -- and 7, which run to 65 and over, so there is no upper bound.
         AND DATEDIFF('month', demo.birth_date_approx, cc.run_date) >= 6
 )
 

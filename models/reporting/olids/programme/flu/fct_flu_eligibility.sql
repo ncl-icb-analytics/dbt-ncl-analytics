@@ -120,6 +120,15 @@ other_risk_eligibility AS (
         description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
         'OTHER' AS rule_type, 5 AS eligibility_priority, created_at
     FROM {{ ref('int_flu_carer') }}
+
+    UNION ALL
+
+    -- Household contact of an immunosuppressed person (spec indicator 19)
+    SELECT
+        campaign_id, 'Other Risk Group' AS campaign_category, risk_group, null as subcohort, person_id, qualifying_event_date, reference_date,
+        description, birth_date_approx, age_months_at_ref_date, age_years_at_ref_date,
+        'OTHER' AS rule_type, 5 AS eligibility_priority, created_at
+    FROM {{ ref('int_flu_household_immunocompromised') }}
     --FROM MODELLING.OLIDS_PROGRAMME.int_flu_carer
 
      UNION ALL
