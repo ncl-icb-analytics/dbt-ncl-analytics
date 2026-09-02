@@ -8,6 +8,7 @@ models:
       one. Join to int_sus_uec_encounter on visit_occurrence_id. Recorded on a
       small share of attendances (around 27,000 across the table).
     config:
+      tags: ["daily"]
       meta:
         owner:
           name: Eddie Davison
