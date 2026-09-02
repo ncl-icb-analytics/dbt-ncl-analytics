@@ -1,32 +1,45 @@
-with spells as (
+with spell_versions as (
+    select
+        s.*
+        , try_to_decimal(s.dat_set_ver::varchar, 4, 1)
+            as mhsds_specification_version
+    from {{ ref('stg_mhsds_spell') }} as s
+)
+
+, spells as (
     select
         s.*
         , case
-            when s.dat_set_ver >= 6
+            when s.mhsds_specification_version >= 5
+                then s.source_adm_mh_hosp_prov_spell
+            when s.mhsds_specification_version < 5
                 then s.source_adm_code_hosp_prov_spell
-            else s.source_adm_mh_hosp_prov_spell
         end as admission_source_code
         , case
-            when s.dat_set_ver >= 6
+            when s.mhsds_specification_version >= 5
+                then s.meth_adm_mh_hosp_prov_spell
+            when s.mhsds_specification_version < 5
                 then s.adm_meth_code_hosp_prov_spell
-            else s.meth_adm_mh_hosp_prov_spell
         end as admission_method_code
         , case
-            when s.dat_set_ver >= 6
+            when s.mhsds_specification_version >= 5
+                then s.planned_dest_disch
+            when s.mhsds_specification_version < 5
                 then s.planned_disch_dest_code
-            else s.planned_dest_disch
         end as planned_discharge_destination_code
         , case
-            when s.dat_set_ver >= 6
+            when s.mhsds_specification_version >= 5
+                then s.meth_of_disch_mh_hosp_prov_spell
+            when s.mhsds_specification_version < 5
                 then s.disch_meth_code_hosp_prov_spell
-            else s.meth_of_disch_mh_hosp_prov_spell
         end as discharge_method_code
         , case
-            when s.dat_set_ver >= 6
+            when s.mhsds_specification_version >= 5
+                then s.dest_of_disch_hosp_prov_spell
+            when s.mhsds_specification_version < 5
                 then s.disch_dest_code_hosp_prov_spell
-            else s.dest_of_disch_hosp_prov_spell
         end as discharge_destination_code
-    from {{ ref('stg_mhsds_spell') }} as s
+    from spell_versions as s
 )
 
 select
@@ -155,7 +168,7 @@ select
     , s.uniq_month_id
     , s.reporting_period_start_date
     , s.reporting_period_end_date
-    , s.dat_set_ver::number(4, 1) as mhsds_specification_version
+    , s.mhsds_specification_version
     , s.dmic_dataset as source_pipeline_dataset
     , s.effective_from as source_file_received_at
     , s.dmic_date_added as source_loaded_at

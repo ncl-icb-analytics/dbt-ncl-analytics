@@ -19,6 +19,8 @@ models:
         description: Provider-local ward-stay identifier.
       - name: ward_code
         description: Provider-local ward identifier.
+      - name: uniq_ward_code
+        description: Provider-qualified ward identifier used to link version 6 stays to MHS903 in the same submission.
       - name: uniq_hosp_prov_spell_id
         description: MHSDS derived identifier of the recorded parent spell.
         data_tests: [not_null]
@@ -57,9 +59,19 @@ models:
       - name: ward_age
         description: Ward intended age group submitted in earlier versions and derived from MHS903 in version 6.
       - name: ward_intended_sex
-        description: Ward intended sex submitted in earlier versions and derived from MHS903 in version 6.
+        description: >-
+          Source-pipeline ward intended sex field. It mirrors the submitted
+          MHS502 field before version 6 and is derived from MHS903 in version 6.
+          The reporting fact uses the specification-defined source fields.
       - name: ward_intended_clin_care_mh
-        description: Ward clinical care intensity submitted in earlier versions and derived from MHS903 in version 6.
+        description: >-
+          Source-pipeline ward clinical care intensity field. It mirrors the
+          submitted MHS502 field before version 6 and is derived from MHS903 in
+          version 6. The reporting fact uses the specification-defined fields.
+      - name: ward_sex_type_code
+        description: MHS502 sex-of-patients field submitted before version 6.
+      - name: intend_clin_care_inten_code_mh
+        description: MHS502 intended clinical care intensity field submitted before version 6.
       - name: ward_sec_level
         description: Ward security level submitted in earlier versions and derived from MHS903 in version 6.
       - name: locked_ward_ind

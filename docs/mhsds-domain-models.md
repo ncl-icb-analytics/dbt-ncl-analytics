@@ -7,8 +7,9 @@ analysis and provide inputs to cross-system event and clinical record models.
 
 Definitions follow the current
 [MHSDS v6 ETOS](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance).
-Historical records retain their submitted MHSDS version because fields and
-relationships change between versions.
+Historical field mappings are checked against the archived v4.1 and v5 ETOS.
+Records retain their submitted MHSDS version because fields and relationships
+change between versions.
 
 ## How monthly submissions and repeated rows are handled
 
@@ -170,13 +171,18 @@ Join a contact to its recorded referral using
 fct_mhsds_referral.source_record_id`. A valid contact can refer to a service
 request absent from the retained referral population, so use a left join.
 
+MHS501 renamed five admission and discharge fields in version 5. The spell fact
+uses the general hospital-provider-spell fields through version 4.1 and the
+mental-health-specific fields from version 5. The source pipeline duplicates
+the values into both field sets, so specification version decides the source.
+
 Join a ward stay to its retained spell using
 `fct_mhsds_ward_stay.hospital_provider_spell_source_record_id =
 fct_mhsds_hospital_provider_spell.source_record_id`. The ward-stay fact retains
-rows whose recorded parent is absent and reports the link state. It uses ward
-characteristics already derived into MHS502 by the source pipeline. For version
-6 site context, it joins MHS903 only within the same provider and accepted
-submission.
+rows whose recorded parent is absent and reports the link state. Before version
+6 it uses ward characteristics submitted on MHS502. From version 6 it uses the
+MHS903 record with the same specification-defined ward key in the accepted
+submission. Source-pipeline convenience fields do not decide this mapping.
 
 MHS903 is monthly ward configuration and capacity, not patient activity.
 Available and closed bed days are not copied onto ward stays because doing so

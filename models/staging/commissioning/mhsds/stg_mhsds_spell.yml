@@ -33,25 +33,25 @@ models:
       - name: disch_time_hosp_prov_spell
         description: Recorded discharge time.
       - name: source_adm_code_hosp_prov_spell
-        description: Current-specification admission source code.
+        description: MHS501 admission source field used through MHSDS version 4.1.
       - name: source_adm_mh_hosp_prov_spell
-        description: Historical admission source field retained for version-led mapping.
+        description: MHS501 admission source field used from MHSDS version 5.
       - name: adm_meth_code_hosp_prov_spell
-        description: Current-specification admission method code.
+        description: MHS501 admission method field used through MHSDS version 4.1.
       - name: meth_adm_mh_hosp_prov_spell
-        description: Historical admission method field retained for version-led mapping.
+        description: MHS501 admission method field used from MHSDS version 5.
       - name: planned_disch_dest_code
-        description: Current-specification planned discharge destination code.
+        description: MHS501 planned discharge destination field used through MHSDS version 4.1.
       - name: planned_dest_disch
-        description: Historical planned discharge destination field retained for version-led mapping.
+        description: MHS501 planned discharge destination field used from MHSDS version 5.
       - name: disch_meth_code_hosp_prov_spell
-        description: Current-specification discharge method code.
+        description: MHS501 discharge method field used through MHSDS version 4.1.
       - name: meth_of_disch_mh_hosp_prov_spell
-        description: Historical discharge method field retained for version-led mapping.
+        description: MHS501 discharge method field used from MHSDS version 5.
       - name: disch_dest_code_hosp_prov_spell
-        description: Current-specification discharge destination code.
+        description: MHS501 discharge destination field used through MHSDS version 4.1.
       - name: dest_of_disch_hosp_prov_spell
-        description: Historical discharge destination field retained for version-led mapping.
+        description: MHS501 discharge destination field used from MHSDS version 5.
       - name: dm_icb_commissioner
         description: ICB commissioner derived in the source feed.
       - name: uniq_submission_id

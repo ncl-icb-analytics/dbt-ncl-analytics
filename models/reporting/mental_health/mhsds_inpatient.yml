@@ -64,11 +64,11 @@ models:
         description: Precision of decided_to_admit_at.
         data_tests: *time_precision
       - name: admission_source_code
-        description: Admission source code selected from the field for the submission's MHSDS version.
+        description: Version-defined MHS501 admission source code recorded by the provider.
       - name: admission_source_description
         description: Published NHS Data Model and Dictionary description for the admission source.
       - name: admission_method_code
-        description: Admission method code selected from the field for the submission's MHSDS version.
+        description: Version-defined MHS501 admission method code recorded by the provider.
       - name: admission_method_description
         description: Published NHS Data Model and Dictionary description for the admission method.
       - name: estimated_discharge_date
@@ -76,7 +76,7 @@ models:
       - name: planned_discharge_date
         description: Planned discharge date recorded by the provider; it is not used to close the spell.
       - name: planned_discharge_destination_code
-        description: Planned discharge destination code selected for the submission's MHSDS version.
+        description: Version-defined MHS501 planned discharge destination code recorded by the provider.
       - name: planned_discharge_destination_description
         description: Published description for the planned discharge destination.
       - name: discharge_date
@@ -89,11 +89,11 @@ models:
         description: Precision of discharged_at.
         data_tests: *time_precision
       - name: discharge_method_code
-        description: Discharge method code selected for the submission's MHSDS version.
+        description: Version-defined MHS501 discharge method code recorded by the provider.
       - name: discharge_method_description
         description: Published NHS Data Model and Dictionary description for the discharge method.
       - name: discharge_destination_code
-        description: Discharge destination code selected for the submission's MHSDS version.
+        description: Version-defined MHS501 discharge destination code recorded by the provider.
       - name: discharge_destination_description
         description: Published NHS Data Model and Dictionary description for the discharge destination.
       - name: has_recorded_discharge
@@ -230,8 +230,18 @@ models:
         description: Whether the recorded ward-stay end date is before its start date.
       - name: has_invalid_recorded_time_order
         description: Whether complete recorded ward-stay end and start timestamps are in reverse order.
+      - name: has_ward_start_before_spell_admission
+        description: Whether the ward stay starts before its matched spell's recorded admission date.
+      - name: has_ward_end_after_spell_discharge
+        description: Whether the ward stay ends after its matched spell's recorded discharge date.
+      - name: has_open_ward_stay_in_discharged_spell
+        description: Whether the ward stay has no recorded end while its matched spell has a recorded discharge.
       - name: is_outside_recorded_spell_dates
-        description: Whether recorded ward dates fall outside the matched spell's recorded admission and discharge dates.
+        description: >-
+          Whether a recorded ward date falls outside the matched spell's
+          recorded admission and discharge dates. Null means the check was not
+          complete because a required record or date was unavailable and no
+          known boundary was breached.
       - name: admitted_patient_classification_code
         description: MHSDS mental health admitted patient classification code.
       - name: admitted_patient_classification_description
@@ -253,45 +263,53 @@ models:
       - name: ward_site_name
         description: Current organisation name for the ward site code.
       - name: ward_site_source
-        description: Source used for ward_site_code; unavailable where a version 6 ward context did not match.
+        description: >-
+          Specification-defined source used for ward_site_code. Unavailable
+          means the submitted site or same-submission MHS903 context was absent.
         data_tests:
           - accepted_values:
               arguments:
-                values: [mhs903_retained_submission, mhs502_ward_stay, unavailable]
+                values: [mhs903_retained_submission, mhs502_ward_stay, unavailable, unknown_specification_version]
       - name: reported_ward_context_link_status
-        description: Whether a version 6 stay matched MHS903 in its retained submission; earlier versions are not applicable.
+        description: >-
+          Whether a version 6 stay matched MHS903 in its retained submission.
+          Earlier versions are not applicable.
         data_tests:
           - accepted_values:
               arguments:
-                values: [matched, not_matched, not_applicable]
+                values: [matched, not_matched, not_applicable, unknown_specification_version]
       - name: ward_attribute_source
-        description: Whether ward characteristics were submitted on MHS502 or derived by the source pipeline from MHS903.
+        description: >-
+          Specification-defined source used for ward characteristics.
+          Unavailable means required MHS903 context did not match.
         data_tests:
           - accepted_values:
               arguments:
-                values: [mhs502_submission, mhs903_source_derivation]
+                values: [mhs502_ward_stay, mhs903_retained_submission, unavailable, unknown_specification_version]
       - name: ward_setting_code
-        description: Mental health ward setting code.
+        description: Mental health ward setting from MHS502 before version 6 and MHS903 from version 6.
       - name: ward_setting_description
         description: Published description for the mental health ward setting.
       - name: ward_intended_age_group_code
-        description: Intended age group code for the ward.
+        description: Intended ward age group from MHS502 before version 6 and MHS903 from version 6.
       - name: ward_intended_age_group_description
         description: Published description for the ward's intended age group.
       - name: ward_intended_sex_code
-        description: Intended sex code for patients on the ward.
+        description: Intended ward sex from MHS502 before version 6 and MHS903 from version 6.
       - name: ward_intended_sex_description
         description: Published description for the ward's intended patient sex.
       - name: ward_clinical_care_intensity_code
-        description: Intended clinical care intensity code for the ward.
+        description: Intended ward clinical care intensity from MHS502 before version 6 and MHS903 from version 6.
       - name: ward_clinical_care_intensity_description
         description: Published description for the ward's intended clinical care intensity.
       - name: ward_security_level_code
-        description: Ward security level code.
+        description: Ward security level from MHS502 before version 6 and MHS903 from version 6.
       - name: ward_security_level_description
         description: Published description for the ward security level.
       - name: locked_ward_indicator_code
-        description: Recorded locked ward indicator code; unexpected source values are retained.
+        description: >-
+          Locked ward indicator from MHS502 before version 6 and MHS903 from
+          version 6, normalised to Y or N. Unexpected source values are retained.
       - name: locked_ward_indicator_description
         description: Published description for valid locked ward indicator codes.
       - name: distance_from_home_km

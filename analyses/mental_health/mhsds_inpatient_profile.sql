@@ -164,7 +164,32 @@ with spell as (
     union all
 
     select 'quality', 'ward_stay', 'outside_recorded_spell_dates', null
-        , count_if(is_outside_recorded_spell_dates), count(*)
+        , count_if(is_outside_recorded_spell_dates)
+        , count_if(is_outside_recorded_spell_dates is not null)
+    from ward_stay
+
+    union all
+
+    select 'quality', 'ward_stay', 'recorded_spell_date_check_unavailable', null
+        , count_if(is_outside_recorded_spell_dates is null), count(*)
+    from ward_stay
+
+    union all
+
+    select 'quality', 'ward_stay', 'ward_start_before_spell_admission', null
+        , count_if(has_ward_start_before_spell_admission), count(*)
+    from ward_stay
+
+    union all
+
+    select 'quality', 'ward_stay', 'ward_end_after_spell_discharge', null
+        , count_if(has_ward_end_after_spell_discharge), count(*)
+    from ward_stay
+
+    union all
+
+    select 'quality', 'ward_stay', 'open_ward_stay_in_discharged_spell', null
+        , count_if(has_open_ward_stay_in_discharged_spell), count(*)
     from ward_stay
 
     union all
@@ -267,6 +292,30 @@ with spell as (
     group by reported_ward_context_link_status
 )
 
+, ward_sources as (
+    select
+        'relationship' as profile_section
+        , 'ward_stay' as model_name
+        , 'ward_site_source' as metric
+        , ward_site_source as dimension_value
+        , count(*) as numerator
+        , sum(count(*)) over () as denominator
+    from ward_stay
+    group by ward_site_source
+
+    union all
+
+    select
+        'relationship'
+        , 'ward_stay'
+        , 'ward_attribute_source'
+        , ward_attribute_source
+        , count(*)
+        , sum(count(*)) over ()
+    from ward_stay
+    group by ward_attribute_source
+)
+
 , ward_details_provider_submission as (
     select
         org_id_prov
@@ -287,8 +336,7 @@ with spell as (
 
 , unmatched_ward_context as (
     select
-        ward_stay.*
-        , coalesce(provider_submission.context_rows, 0)
+        coalesce(provider_submission.context_rows, 0)
             as provider_submission_context_rows
         , coalesce(provider_ward.context_rows, 0)
             as provider_ward_context_rows
@@ -387,73 +435,73 @@ with spell as (
         , count_if(admission_source_code is not null
             and admission_source_description is null) as numerator
         , count_if(admission_source_code is not null) as denominator
-    from spell where mhsds_specification_version = 6
+    from spell where mhsds_specification_version >= 6
     union all
     select 'hospital_provider_spell', 'admission_method'
         , count_if(admission_method_code is not null
             and admission_method_description is null)
         , count_if(admission_method_code is not null)
-    from spell where mhsds_specification_version = 6
+    from spell where mhsds_specification_version >= 6
     union all
     select 'hospital_provider_spell', 'discharge_method'
         , count_if(discharge_method_code is not null
             and discharge_method_description is null)
         , count_if(discharge_method_code is not null)
-    from spell where mhsds_specification_version = 6
+    from spell where mhsds_specification_version >= 6
     union all
     select 'hospital_provider_spell', 'planned_discharge_destination'
         , count_if(planned_discharge_destination_code is not null
             and planned_discharge_destination_description is null)
         , count_if(planned_discharge_destination_code is not null)
-    from spell where mhsds_specification_version = 6
+    from spell where mhsds_specification_version >= 6
     union all
     select 'hospital_provider_spell', 'discharge_destination'
         , count_if(discharge_destination_code is not null
             and discharge_destination_description is null)
         , count_if(discharge_destination_code is not null)
-    from spell where mhsds_specification_version = 6
+    from spell where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'admitted_patient_classification'
         , count_if(admitted_patient_classification_code is not null
             and admitted_patient_classification_description is null)
         , count_if(admitted_patient_classification_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'ward_setting'
         , count_if(ward_setting_code is not null
             and ward_setting_description is null)
         , count_if(ward_setting_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'ward_intended_age_group'
         , count_if(ward_intended_age_group_code is not null
             and ward_intended_age_group_description is null)
         , count_if(ward_intended_age_group_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'ward_intended_sex'
         , count_if(ward_intended_sex_code is not null
             and ward_intended_sex_description is null)
         , count_if(ward_intended_sex_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'ward_clinical_care_intensity'
         , count_if(ward_clinical_care_intensity_code is not null
             and ward_clinical_care_intensity_description is null)
         , count_if(ward_clinical_care_intensity_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'ward_security_level'
         , count_if(ward_security_level_code is not null
             and ward_security_level_description is null)
         , count_if(ward_security_level_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
     union all
     select 'ward_stay', 'locked_ward_indicator'
         , count_if(locked_ward_indicator_code is not null
             and locked_ward_indicator_description is null)
         , count_if(locked_ward_indicator_code is not null)
-    from ward_stay where mhsds_specification_version = 6
+    from ward_stay where mhsds_specification_version >= 6
 )
 
 , capacity as (
@@ -474,6 +522,8 @@ with spell as (
     from label_coverage
     union all
     select * from ward_context
+    union all
+    select * from ward_sources
     union all
     select * from ward_context_gaps
     union all

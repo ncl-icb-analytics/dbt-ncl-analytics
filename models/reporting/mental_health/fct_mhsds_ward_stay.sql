@@ -1,32 +1,96 @@
-with ward_stays as (
+with ward_stay_versions as (
     select
         w.*
-        , w.dat_set_ver::number(4, 1) as mhsds_specification_version
+        , try_to_decimal(w.dat_set_ver::varchar, 4, 1)
+            as mhsds_specification_version
+    from {{ ref('stg_mhsds_mhs502wardstay') }} as w
+)
+
+, ward_stays as (
+    select
+        w.*
         , case
-            when w.dat_set_ver >= 6 then ward_details.site_id_of_ward
-            else w.site_id_of_treat
+            when w.mhsds_specification_version >= 6
+                then ward_details.site_id_of_ward
+            when w.mhsds_specification_version < 6 then w.site_id_of_treat
         end as ward_site_code
         , case
-            when w.dat_set_ver >= 6
+            when w.mhsds_specification_version is null
+                then 'unknown_specification_version'
+            when w.mhsds_specification_version >= 6
                 and ward_details.mhs903_uniq_id is not null
                 then 'mhs903_retained_submission'
-            when w.dat_set_ver >= 6 then 'unavailable'
+            when w.mhsds_specification_version >= 6 then 'unavailable'
             when w.site_id_of_treat is not null then 'mhs502_ward_stay'
+            else 'unavailable'
         end as ward_site_source
         , case
-            when w.dat_set_ver < 6 then 'not_applicable'
+            when w.mhsds_specification_version is null
+                then 'unknown_specification_version'
+            when w.mhsds_specification_version < 6 then 'not_applicable'
             when ward_details.mhs903_uniq_id is not null then 'matched'
             else 'not_matched'
         end as reported_ward_context_link_status
         , case
-            when w.dat_set_ver >= 6 then 'mhs903_source_derivation'
-            else 'mhs502_submission'
+            when w.mhsds_specification_version is null
+                then 'unknown_specification_version'
+            when w.mhsds_specification_version >= 6
+                and ward_details.mhs903_uniq_id is not null
+                then 'mhs903_retained_submission'
+            when w.mhsds_specification_version >= 6 then 'unavailable'
+            else 'mhs502_ward_stay'
         end as ward_attribute_source
-    from {{ ref('stg_mhsds_mhs502wardstay') }} as w
+        , case
+            when w.mhsds_specification_version >= 6 then ward_details.ward_type
+            when w.mhsds_specification_version < 6 then w.ward_type
+        end as ward_setting_code
+        , case
+            when w.mhsds_specification_version >= 6 then ward_details.ward_age
+            when w.mhsds_specification_version < 6 then w.ward_age
+        end as ward_intended_age_group_code
+        , case
+            when w.mhsds_specification_version >= 6
+                then ward_details.ward_intended_sex
+            when w.mhsds_specification_version < 6 then w.ward_sex_type_code
+        end as ward_intended_sex_code
+        , case
+            when w.mhsds_specification_version >= 6
+                then ward_details.ward_intended_clin_care_mh
+            when w.mhsds_specification_version < 6
+                then w.intend_clin_care_inten_code_mh
+        end as ward_clinical_care_intensity_code
+        , case
+            when w.mhsds_specification_version >= 6
+                then ward_details.ward_sec_level
+            when w.mhsds_specification_version < 6 then w.ward_sec_level
+        end as ward_security_level_code
+        , case lower(trim(
+            case
+                when w.mhsds_specification_version >= 6
+                    then ward_details.locked_ward_ind::varchar
+                when w.mhsds_specification_version < 6
+                    then w.locked_ward_ind::varchar
+            end
+        ))
+            when 'true' then 'Y'
+            when 'false' then 'N'
+            when '1' then 'Y'
+            when '0' then 'N'
+            when 'y' then 'Y'
+            when 'n' then 'N'
+            else upper(trim(
+                case
+                    when w.mhsds_specification_version >= 6
+                        then ward_details.locked_ward_ind::varchar
+                    when w.mhsds_specification_version < 6
+                        then w.locked_ward_ind::varchar
+                end
+            ))
+        end as locked_ward_indicator_code
+    from ward_stay_versions as w
     left join {{ ref('stg_mhsds_mhs903warddetails') }} as ward_details
-        on w.org_id_prov = ward_details.org_id_prov
-        and w.uniq_submission_id = ward_details.uniq_submission_id
-        and w.ward_code = ward_details.ward_code
+        on w.uniq_submission_id = ward_details.uniq_submission_id
+        and w.uniq_ward_code = ward_details.uniq_ward_code
 )
 
 select
@@ -98,10 +162,17 @@ select
         , false
     ) as has_invalid_recorded_time_order
     , coalesce(
-        w.start_date_ward_stay < spell.admission_date
+        w.start_date_ward_stay < spell.admission_date, false
+    ) as has_ward_start_before_spell_admission
+    , coalesce(
+        w.end_date_ward_stay > spell.discharge_date, false
+    ) as has_ward_end_after_spell_discharge
+    , w.end_date_ward_stay is null
+        and spell.discharge_date is not null
+        as has_open_ward_stay_in_discharged_spell
+    , w.start_date_ward_stay < spell.admission_date
         or w.end_date_ward_stay > spell.discharge_date
-        , false
-    ) as is_outside_recorded_spell_dates
+        as is_outside_recorded_spell_dates
     , w.mh_admitted_patient_class
         as admitted_patient_classification_code
     , admitted_class.description as admitted_patient_classification_description
@@ -118,17 +189,17 @@ select
     , w.ward_site_source
     , w.reported_ward_context_link_status
     , w.ward_attribute_source
-    , w.ward_type as ward_setting_code
+    , w.ward_setting_code
     , ward_setting.description as ward_setting_description
-    , w.ward_age as ward_intended_age_group_code
+    , w.ward_intended_age_group_code
     , ward_age.description as ward_intended_age_group_description
-    , w.ward_intended_sex as ward_intended_sex_code
+    , w.ward_intended_sex_code
     , ward_sex.description as ward_intended_sex_description
-    , w.ward_intended_clin_care_mh as ward_clinical_care_intensity_code
+    , w.ward_clinical_care_intensity_code
     , care_intensity.description as ward_clinical_care_intensity_description
-    , w.ward_sec_level as ward_security_level_code
+    , w.ward_security_level_code
     , security_level.description as ward_security_level_description
-    , w.locked_ward_ind as locked_ward_indicator_code
+    , w.locked_ward_indicator_code
     , locked_ward.description as locked_ward_indicator_description
     , w.ward_loc_distance_home as distance_from_home_km
     , w.org_id_prov as provider_organisation_code
@@ -158,22 +229,22 @@ left join {{ ref('mhsds_inpatient_code_lookup') }} as admitted_class
     and admitted_class.code_set_name
         = 'mental_health_admitted_patient_classification'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as ward_setting
-    on upper(trim(w.ward_type)) = ward_setting.code
+    on upper(trim(w.ward_setting_code)) = ward_setting.code
     and ward_setting.code_set_name = 'ward_setting'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as ward_age
-    on upper(trim(w.ward_age)) = ward_age.code
+    on upper(trim(w.ward_intended_age_group_code)) = ward_age.code
     and ward_age.code_set_name = 'ward_intended_age_group'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as ward_sex
-    on upper(trim(w.ward_intended_sex)) = ward_sex.code
+    on upper(trim(w.ward_intended_sex_code)) = ward_sex.code
     and ward_sex.code_set_name = 'ward_intended_sex'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as care_intensity
-    on upper(trim(w.ward_intended_clin_care_mh)) = care_intensity.code
+    on upper(trim(w.ward_clinical_care_intensity_code)) = care_intensity.code
     and care_intensity.code_set_name = 'ward_clinical_care_intensity'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as security_level
-    on upper(trim(w.ward_sec_level)) = security_level.code
+    on upper(trim(w.ward_security_level_code)) = security_level.code
     and security_level.code_set_name = 'ward_security_level'
 left join {{ ref('mhsds_inpatient_code_lookup') }} as locked_ward
-    on upper(trim(w.locked_ward_ind)) = locked_ward.code
+    on upper(trim(w.locked_ward_indicator_code)) = locked_ward.code
     and locked_ward.code_set_name = 'locked_ward_indicator'
 left join {{ ref('int_mhsds_organisation') }} as provider
     on upper(w.org_id_prov) = upper(provider.organisation_code)
