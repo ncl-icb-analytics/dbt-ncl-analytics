@@ -215,6 +215,10 @@ it.
 - Put project-wide definitions and terminology in shared models. Keep
   programme, audience and product rules or vocabulary in the folders or schemas
   that own them, with their scope visible in model names.
+- Publish NHS Data Model and Dictionary code lists from UKHFD in
+  `REFERENCE.DATA_DICTIONARY`. Reserve `REFERENCE.TERMINOLOGY` for clinical
+  coding systems, maps and code-set definitions such as SNOMED CT, ICD-10,
+  OPCS-4, dm+d and BNF.
 
 ## Performance
 
