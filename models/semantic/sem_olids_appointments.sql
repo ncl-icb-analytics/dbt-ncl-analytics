@@ -44,9 +44,9 @@ TABLES(
     practice AS {{ ref('dim_practice') }}
         PRIMARY KEY (practice_code)
         COMMENT = 'Practice details for the appointment-owning practice (name, PCN, borough)',
-    costs AS {{ ref('pssru_unit_costs_2024') }}
+    costs AS {{ ref('pssru_unit_costs_2025') }}
         PRIMARY KEY (practitioner_role_group)
-        COMMENT = 'PSSRU unit costs per practitioner role group (2023/2024 prices)'
+        COMMENT = 'PSSRU unit costs per practitioner role group (2024/2025 prices)'
 )
 
 RELATIONSHIPS(
@@ -62,10 +62,10 @@ FACTS(
     appt.patient_wait_mins AS patient_wait_mins COMMENT = 'Minutes patient waited beyond scheduled time',
     appt.patient_delay_mins AS patient_delay_mins COMMENT = 'Minutes patient arrived late',
     appt.age_at_event AS age_at_event COMMENT = 'Patient age at appointment (event-time, stable for historical analysis)',
-    appt.pssru_cost_per_minute_gbp AS pssru_cost_per_minute_gbp COMMENT = 'PSSRU 2024 cost per minute for the appointment practitioner role group (2023/24 prices)',
-    appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2023/24) — real-terms. Use for cross-year comparisons.',
-    appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from PSSRU 2023/24 base). NULL for fiscal years outside uk_cost_indices seed coverage (pre 2000-01).',
-    costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'Legacy: PSSRU cost per minute for this role group (same as pssru_cost_per_minute_gbp on appt — retained for back-compatibility)'
+    appt.pssru_cost_per_minute_gbp AS pssru_cost_per_minute_gbp COMMENT = 'PSSRU 2025 cost per minute for the appointment practitioner role group (2024/25 prices)',
+    appt.appointment_cost_gbp_base_prices AS appointment_cost_gbp_base_prices COMMENT = 'Appointment cost in PSSRU base year prices (2024/25), in real terms. Use for cross-year comparisons.',
+    appt.appointment_cost_gbp_nominal AS appointment_cost_gbp_nominal COMMENT = 'Appointment cost in contemporaneous fiscal year prices (GDP deflator adjusted from the PSSRU 2024/25 base). NULL for fiscal years outside uk_cost_indices seed coverage (pre 2000-01).',
+    costs.cost_per_minute_gbp AS cost_per_minute_gbp COMMENT = 'Legacy: PSSRU cost per minute for this role group (same as pssru_cost_per_minute_gbp on appt, retained for backwards compatibility)'
 )
 
 DIMENSIONS(
@@ -159,5 +159,5 @@ METRICS(
 )
 
 COMMENT = 'OLIDS GP Appointments with appointment-practice attribution, core patient demographics, and PSSRU costs. Grain: one row per appointment. appointment_practice_* dimensions = the practice that delivered the appointment (may differ from the patient''s current registration, which lives in sem_olids_population as registered_practice_*). Condition cohorts come from sem_olids_population via person_id CTE joins. Supports GP contract access KPIs, DNA equity analysis, workforce mix, and appointment costing.'
-AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. This view is appointment-event grain; filter start_date before linkage. Example: SELECT contact_mode, AGG(attended_count) FROM SEM_OLIDS_APPOINTMENTS WHERE is_attended = TRUE GROUP BY contact_mode. Example linkage: reduce DNA patients here and a condition cohort in sem_olids_population to person_id before joining. Appointment practice is the delivering practice; registered practice is in population. GP contract KPIs: same-day rate = AGG(urgent_same_day_count) / AGG(urgent_attended_count); 7-day rate = AGG(routine_within_7d_count) / AGG(routine_attended_count). Cost: SUM(appointment_cost_gbp_base_prices) for real-terms comparisons (PSSRU 2023/24 prices), SUM(appointment_cost_gbp_nominal) for contemporaneous cost; never derive cost from total_duration * cost_per_minute_gbp — that ignores the per-row deflator.'
+AI_SQL_GENERATION 'LINKAGE: query each view in its own CTE, reduce to one row per person before joining on person_id, then aggregate; keep person_id out of the final output. This view is appointment-event grain; filter start_date before linkage. Example: SELECT contact_mode, AGG(attended_count) FROM SEM_OLIDS_APPOINTMENTS WHERE is_attended = TRUE GROUP BY contact_mode. Example linkage: reduce DNA patients here and a condition cohort in sem_olids_population to person_id before joining. Appointment practice is the delivering practice; registered practice is in population. GP contract KPIs: same-day rate = AGG(urgent_same_day_count) / AGG(urgent_attended_count); 7-day rate = AGG(routine_within_7d_count) / AGG(routine_attended_count). Cost: SUM(appointment_cost_gbp_base_prices) for real-terms comparisons (PSSRU 2024/25 prices), SUM(appointment_cost_gbp_nominal) for contemporaneous cost; never derive cost from total_duration * cost_per_minute_gbp because that ignores the per-row deflator.'
 AI_QUESTION_CATEGORIZATION 'Use this view for: GP appointment access, same-day urgent access, wait times, DNA rates by deprivation/ethnicity, contact mode trends, workforce mix, utilisation by condition, practice-level access comparison, and GP contract KPIs. For current population snapshots without appointment data use sem_olids_population. For clinical biomarkers use sem_olids_observations. For time-series condition trends use sem_olids_trends. Questions needing cohorts from TWO domains (e.g. DNA x biomarker control, appointment access x medication) are answerable by joining this view to the other sem_olids_* views on person_id in CTEs, with aggregate-only output.'
