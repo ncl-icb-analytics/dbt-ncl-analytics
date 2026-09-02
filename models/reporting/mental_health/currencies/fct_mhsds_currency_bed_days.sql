@@ -104,7 +104,7 @@ inner join fiscal_years as fy
         , greatest(p.start_date_hosp_prov_spell, fy.fy_range_start)
         , least(p.activity_end_date, dateadd(day, 1, fy.fy_range_end))
     ) > 0
-left join {{ ref('nhse_provider_mff_2627') }} as mff
+left join {{ ref('provider_market_forces_factor_2026_27') }} as mff
     on p.org_id_prov = mff.provider_code
 left join {{ ref('int_mhsds_organisation') }} as provider
     on upper(p.org_id_prov) = upper(provider.organisation_code)
