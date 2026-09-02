@@ -145,8 +145,10 @@ models:
       - name: reporting_period_end_date
         description: End date of the newest accepted reporting period containing the spell.
       - name: mhsds_specification_version
-        description: MHSDS specification version declared in the retained submission header.
-        data_tests: [not_null]
+        description: >-
+          MHSDS specification version declared in the retained submission
+          header. Null means the retained submission has no usable declared
+          version, so version-dependent fields report unknown provenance.
       - name: source_pipeline_dataset
         description: MHSDS dataset family assigned by the source pipeline.
       - name: source_file_received_at
@@ -337,8 +339,10 @@ models:
       - name: reporting_period_end_date
         description: End date of the newest accepted reporting period containing the ward stay.
       - name: mhsds_specification_version
-        description: MHSDS specification version declared in the retained submission header.
-        data_tests: [not_null]
+        description: >-
+          MHSDS specification version declared in the retained submission
+          header. Null means the retained submission has no usable declared
+          version, so version-dependent fields report unknown provenance.
       - name: source_pipeline_dataset
         description: MHSDS dataset family assigned by the source pipeline.
       - name: source_file_received_at
