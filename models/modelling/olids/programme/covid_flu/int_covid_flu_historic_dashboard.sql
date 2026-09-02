@@ -178,6 +178,10 @@ where analysis_month = '2026-06-30'
     -- LEFT JOIN {{ ref('dim_person_age') }} pa ON p.person_id = pa.person_id
     LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON p.person_id = hs.person_id
     LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = p.LSOA_CODE_21
+    -- Only campaigns that had closed by the 2026-06-30 population snapshot. Measuring a
+    -- later campaign against a June 2026 population would understate its uptake, and this
+    -- predicate keeps that true without an edit each time a season is added.
+    WHERE u.campaign_reference_date <= '2026-06-30'::DATE
 )
 
 SELECT distinct * FROM uptake_with_demographics

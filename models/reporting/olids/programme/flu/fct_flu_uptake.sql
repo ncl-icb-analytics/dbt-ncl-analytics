@@ -173,11 +173,10 @@ final_uptake AS (
         
     FROM combined_data cd
     LEFT JOIN (
+        -- Every flu campaign the models report on
+        -- (campaign list: macros/config/flu_campaign_selection.sql)
         SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date
-        FROM ({{ flu_current_config() }})
-        UNION ALL
-        SELECT DISTINCT campaign_id, campaign_start_date, campaign_end_date, campaign_reference_date, audit_end_date  
-        FROM ({{ flu_previous_config() }})
+        FROM ({{ flu_reported_campaigns() }})
     ) cc
         ON cd.campaign_id = cc.campaign_id
 )
