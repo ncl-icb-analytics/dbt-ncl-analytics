@@ -157,9 +157,12 @@ CHILD AGE GROUPS:
             '2026-08-31'::DATE AS flu_vaccination_after_date,
             '2026-08-31'::DATE AS laiv_vaccination_after_date,
 
-            -- Spec v15.7 removed the long-stay residential care indicator from the flu
-            -- programme, so the cohort is not reported from 2026-27.
-            FALSE AS eligible_long_term_residential_care,
+            -- Local extension. Spec v15.7 removed the long-stay residential care indicator
+            -- from the flu return, but residents remain eligible (UKHSA autumn 2026
+            -- eligibility guide) and their vaccinations are coordinated through a
+            -- provider, so the cohort is kept and drives eligibility. Not part of the
+            -- ImmForm return.
+            TRUE AS eligible_long_term_residential_care,
 
             -- RUN_DAT: the extraction date, capped at the campaign end
             LEAST(CURRENT_DATE, '2027-02-28'::DATE) AS run_date,

@@ -2,8 +2,8 @@ models:
   - name: int_flu_long_term_residential_care
     description: 'Flu vaccination eligibility for people in long-term residential care settings.
 
-      Grain: at most one row per campaign per person. Campaigns with the cohort switched
-      off produce no rows at all, so the model is empty from Flu 2026-27 onward.
+      Grain: at most one row per campaign per person, for campaigns with
+      eligible_long_term_residential_care switched on in flu_campaign_config().
 
       Key Features:
 
@@ -15,7 +15,9 @@ models:
 
       • Captures current residential status (not historical)
 
-      • Not reported from 2026-27: UKHSA removed the long-stay residential care indicator and the LONGRES_COD group from the flu specification at v15.7, so only campaigns that were reported with the cohort keep rows
+      • Local extension: UKHSA removed the long-stay residential care indicator and the LONGRES_COD group from the flu specification at v15.7, but residents remain eligible and their vaccinations are coordinated through a provider, so the cohort is kept and drives eligibility. Not part of the ImmForm return
+
+      • LONGRES_COD is read from the COVID workbook, which still publishes it, unpinned because the seven codes are identical in every published version; RESIDE_COD is read from the flu workbook pinned to the campaign version
 
       Purpose: Identify care home residents eligible for flu vaccination due to communal living infection risk.'
     data_tests:
@@ -29,9 +31,13 @@ models:
             min_value: 1
       - cluster_ids_exist:
           arguments:
-            cluster_ids: LONGRES_COD,RESIDE_COD
+            cluster_ids: LONGRES_COD
+            source: UKHSA_COVID
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: RESIDE_COD
             source: UKHSA_FLU
-            versioned: true  # LONGRES_COD was retired at spec v15.7; closed campaigns pin to 5.6 and 6.2
+            versioned: true
     config:
       meta:
         indicator:
@@ -49,8 +55,8 @@ models:
             of 6 months. Captures current residential status to identify communal
             living
             infection risks. UKHSA removed this indicator from the flu specification at
-            v15.7, so the cohort covers campaigns up to 2025-26 only and is empty from
-            2026-27.
+            v15.7; it is kept as a local extension because residents remain eligible and
+            their vaccinations are coordinated through a provider.
           is_qof: false
           source_column: "person_id"
           sort_order: "FLU_18_CARE_HOME_RESIDENT"
