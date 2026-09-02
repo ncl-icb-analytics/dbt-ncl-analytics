@@ -197,6 +197,7 @@ WITH uptake_with_demographics AS (
         ON u.person_id = hs.person_id
     LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la 
         on la.LSOA21_CD = d.LSOA_CODE_21
+    WHERE u.campaign_start_date >= '2025-09-01'::DATE
 )
 
 SELECT distinct * FROM uptake_with_demographics
