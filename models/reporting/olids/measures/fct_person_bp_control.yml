@@ -18,7 +18,7 @@ models:
 
       Monitoring Intervals:
 
-      • T2DM/CKD/HTN: 12 months
+      • T2DM/CKD/HTN/CHD/stroke or TIA/PAD: 12 months
 
       • Age ≥40 (no conditions): 5 years (60 months)
 
@@ -166,6 +166,15 @@ models:
       - name: is_diagnosed_htn
         description: Whether person is on the hypertension register
 
+      - name: has_chd
+        description: Whether person is on the coronary heart disease register
+
+      - name: has_stroke_tia
+        description: Whether person is on the stroke and TIA register
+
+      - name: has_pad
+        description: Whether person is on the peripheral arterial disease register
+
       - name: latest_acr_value
         description: Most recent albumin-to-creatinine ratio (ACR) value
 
@@ -217,7 +226,10 @@ models:
         description: Months since most recent BP measurement
 
       - name: recommended_monitoring_interval
-        description: "Recommended BP monitoring interval based on risk: '12 months' for T2DM/CKD/HTN, '5 years' for age ≥40, 'No routine screening' for age <40"
+        description: "Recommended BP monitoring interval based on risk: '12 months' for T2DM, CKD, HTN, CHD, stroke or TIA, and PAD; '5 years' for age ≥40; 'No routine screening' otherwise"
+
+      - name: recommended_monitoring_interval_months
+        description: Recommended BP monitoring interval in months; null when routine screening is not recommended
 
       - name: is_latest_bp_within_recommended_interval
-        description: "Whether BP reading is within recommended interval: 12 months for T2DM/CKD/HTN, 60 months for age ≥40, NULL for age <40"
+        description: "Whether the latest BP date falls within the recommended interval; null when routine screening is not recommended"

@@ -9,7 +9,8 @@ models:
       • Vaccination status (vaccinated, declined, no record)
       • Programme identifier (COVID/FLU) for filtering
       • Campaign details and timing metrics
-      Purpose: Single source of truth for COVID and Flu Dashboard consumption with full demographic breakdowns for equity analysis.' 
+      • Clinical risk group flags (has_ckd, is_immunosuppressed, in_clinical_risk_group and so on) from int_covid_flu_risk_group_flags, joined per programme and campaign, so they cover every age and do not carry between seasons
+      Purpose: Single source of truth for COVID and Flu Dashboard consumption with full demographic breakdowns for equity analysis.'
     config:
       meta:
         owner:

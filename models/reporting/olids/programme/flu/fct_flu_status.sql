@@ -146,6 +146,11 @@ final_status AS (
     LEFT JOIN all_eligible_people aep 
         ON avs.person_id = aep.person_id 
         AND avs.campaign_id = aep.campaign_id
+    -- Vaccination rows reach this model without passing through the eligibility fact, so
+    -- the campaign search population is applied here as well.
+    JOIN {{ ref('int_covid_flu_campaign_population') }} pop
+        ON pop.campaign_id = avs.campaign_id
+        AND pop.person_id = avs.person_id
 )
 
 SELECT * FROM final_status
