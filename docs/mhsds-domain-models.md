@@ -1,8 +1,9 @@
 # MHSDS domain models
 
-The source facts and relationships keep MHSDS records at their submitted level
-of detail. Derived models support analysis and provide inputs to cross-system
-event and clinical record models.
+The source facts and relationships preserve recorded MHSDS events and links,
+but their columns and names are designed for analysts. They do not reproduce
+every numbered source table or every source field. Derived models support
+analysis and provide inputs to cross-system event and clinical record models.
 
 Definitions follow the current
 [MHSDS v6 ETOS](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance).
@@ -64,6 +65,13 @@ first three steps directly in their SQL.
 `MHSxxxUniqID` fields identify individual submitted rows, so they cannot usually
 link versions across months. Referral, contact, spell and ward-stay identifiers
 are used where the source provides them.
+
+Spell and ward-stay identifiers are unique within an accepted submission, but
+the available history contains rare cases where a provider reuses an identifier
+for different people or start dates. The staging and fact models treat these as
+revisions and retain the newest source state. They are therefore suitable for
+analysis of the latest reported record, but they do not guarantee a complete
+lifetime event history where an identifier has been reused.
 
 ### 4. Rules applied by the current staging models
 
@@ -132,11 +140,15 @@ plausible clinical dates and are exposed as null.
 
 Reference models supply current UKHFD descriptions for submitted codes. Their
 `_history` models retain definition revisions. This includes referral, contact,
-language, safeguarding and inpatient classification codes. Descriptions remain
-null when a submitted code is absent from UKHFD; this is most common for
-historical consultation-medium codes. Specialised mental health service
-categories remain code-only because their reference list is published outside
-UKHFD and is not yet modelled in dbt.
+language, safeguarding and inpatient codes. The inpatient lookup combines
+current admission and discharge dictionaries with their retired predecessors,
+so historical MHSDS records keep useful labels. It selects the latest definition
+for each code, including a retired definition, and prefers the current dictionary
+when current and predecessor dictionaries contain the same code. Descriptions
+remain null when a submitted code is absent from UKHFD. The specialised mental
+health service reference list is published outside UKHFD, so the ward-stay fact
+exposes the source-derived name explicitly rather than presenting it as a UKHFD
+label.
 
 ## Published interfaces
 
@@ -145,6 +157,8 @@ UKHFD and is not yet modelled in dbt.
 | [`fct_mhsds_referral`](../models/reporting/mental_health/fct_mhsds_referral.sql) | One unique service request | Referral receipt, decision, discharge planning, rejection, closure, organisations and primary service context. |
 | [`rel_mhsds_referral_service_team`](../models/reporting/mental_health/rel_mhsds_referral_service_team.sql) | One referral, relationship role and service or team | Primary, referred-to and additional teams without multiplying the referral fact. |
 | [`fct_mhsds_care_contact`](../models/reporting/mental_health/fct_mhsds_care_contact.sql) | One unique service request and care contact | Patient contact timing, attendance, delivery method, location, booking, accessibility and service context. |
+| [`fct_mhsds_hospital_provider_spell`](../models/reporting/mental_health/fct_mhsds_hospital_provider_spell.sql) | One provider-qualified hospital spell | Recorded admission and discharge, route, planned discharge, provider, commissioner and referral context. Missing discharge is recorded source state, not current occupancy. |
+| [`fct_mhsds_ward_stay`](../models/reporting/mental_health/fct_mhsds_ward_stay.sql) | One provider-qualified ward stay | Recorded movement through wards, timings, site, ward characteristics, admitted-patient classification, specialised service and distance from home. |
 | [`fct_mhsds_referral_episodes`](../models/reporting/mental_health/fct_mhsds_referral_episodes.sql) | One referral | Currency-scoped summary of contacts, indirect activity and inpatient use. Use the source facts when individual records are needed. |
 | [`fct_mhsds_currency_contacts`](../models/reporting/mental_health/currencies/fct_mhsds_currency_contacts.sql) | One referral and care contact | Mental health contact currency and proxy cost. |
 | [`fct_mhsds_currency_bed_days`](../models/reporting/mental_health/currencies/fct_mhsds_currency_bed_days.sql) | One hospital spell and financial year | Mental health bed-day currency and proxy cost. |
@@ -155,6 +169,21 @@ Join a contact to its recorded referral using
 `fct_mhsds_care_contact.referral_source_record_id =
 fct_mhsds_referral.source_record_id`. A valid contact can refer to a service
 request absent from the retained referral population, so use a left join.
+
+Join a ward stay to its retained spell using
+`fct_mhsds_ward_stay.hospital_provider_spell_source_record_id =
+fct_mhsds_hospital_provider_spell.source_record_id`. The ward-stay fact retains
+rows whose recorded parent is absent and reports the link state. It uses ward
+characteristics already derived into MHS502 by the source pipeline. For version
+6 site context, it joins MHS903 only within the same provider and accepted
+submission.
+
+MHS903 is monthly ward configuration and capacity, not patient activity.
+Available and closed bed days are not copied onto ward stays because doing so
+would invite false sums. The current feed populates those measures on only a
+minority of ward snapshots, so MHS903 remains supporting staging. A future
+capacity model should have an explicit provider, ward and reporting-month
+grain and a confirmed analytical use.
 
 The referral and contact facts retain the source-derived ICB commissioner and
 publish a resolved ICB commissioner. When the source derivation is blank but
@@ -212,8 +241,9 @@ the referral or contact facts:
   indicators, care coordination, disability, care plans, social circumstances
   and fit notes. These are person context, not healthcare events.
 - MHS401–MHS405: Mental Health Act and community treatment order periods.
-- MHS501–MHS518: hospital spells, ward stays, leave, incidents and discharge
-  readiness.
+- MHS501–MHS502 are the published spell and ward-stay facts. MHS503–MHS518
+  contain care-professional assignments, discharge delays, leave, incidents
+  and discharge readiness, which need their own event or relationship models.
 - MHS601–MHS609: diagnoses, presenting complaints, assessments and prescribing.
 - MHS701–MHS702: Care Programme Approach episodes and reviews.
 - MHS901–MHS903: staff, service/team and ward reference entities.

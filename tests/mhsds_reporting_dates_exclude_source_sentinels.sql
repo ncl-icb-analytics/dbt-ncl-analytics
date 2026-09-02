@@ -1,7 +1,5 @@
--- Spell and diagnosis dates are not listed: stg_mhsds_spell and
--- stg_mhsds_primdiag still pass their source values through uncast, so the
--- sentinel contract does not yet hold for latest_admission_date,
--- latest_discharge_date or latest_diagnosis_date.
+-- Diagnosis dates are not listed: stg_mhsds_primdiag still passes source
+-- values through uncast, so the sentinel rule does not yet hold there.
 with profile_sentinel_counts as (
     select
         count_if(first_referral_date < '1901-01-01'::date) as first_referral_date,
@@ -61,6 +59,44 @@ where least_ignore_nulls(
     referral_rejection_date,
     referral_discharge_date,
     discharge_letter_issued_date,
+    record_start_date,
+    record_end_date,
+    reporting_period_start_date,
+    reporting_period_end_date
+) < '1901-01-01'::date
+having count(*) > 0
+
+union all
+
+select
+    'hospital_provider_spell' as model_name,
+    null::varchar as offending_column,
+    count(*) as sentinel_row_count
+from {{ ref('fct_mhsds_hospital_provider_spell') }}
+where least_ignore_nulls(
+    admission_date,
+    decided_to_admit_date,
+    estimated_discharge_date,
+    planned_discharge_date,
+    discharge_date,
+    record_start_date,
+    record_end_date,
+    reporting_period_start_date,
+    reporting_period_end_date
+) < '1901-01-01'::date
+having count(*) > 0
+
+union all
+
+select
+    'ward_stay' as model_name,
+    null::varchar as offending_column,
+    count(*) as sentinel_row_count
+from {{ ref('fct_mhsds_ward_stay') }}
+where least_ignore_nulls(
+    ward_stay_start_date,
+    ward_stay_end_date,
+    trial_leave_end_date,
     record_start_date,
     record_end_date,
     reporting_period_start_date,

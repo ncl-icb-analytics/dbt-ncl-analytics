@@ -1,38 +1,71 @@
 models:
   - name: stg_mhsds_spell
-    description: >
-      One row per MHSDS hospital provider spell from the newest active submission
-      in which it appears. Attributes and the referral link are the most recently
-      submitted version; superseded versions are not retained.
+    description: >-
+      One row per MHSDS hospital provider spell from the newest accepted
+      submission in which it appears. The model retains recorded source state;
+      it does not infer discharge, current occupancy or single-bed use.
     config:
       meta:
         owner:
           name: Jessica Roberts
     columns:
       - name: uniq_hosp_prov_spell_num
-        description: Unique hospital provider spell identifier within the provider.
-        data_tests:
-          - not_null
-          - unique
-
+        description: Existing source-derived spell identifier used by current downstream models.
+        data_tests: [not_null, unique]
+      - name: uniq_hosp_prov_spell_id
+        description: MHSDS derived spell identifier made from provider and submitted spell identifier.
+        data_tests: [not_null, unique]
+      - name: mhs501_uniq_id
+        description: Identifier of the retained submitted MHS501 row.
+        data_tests: [not_null]
+      - name: hosp_prov_spell_id
+        description: Provider-local hospital provider spell identifier.
+      - name: uniq_serv_req_id
+        description: MHSDS unique service request linked to the spell.
+      - name: person_id
+        description: MHSDS person identifier.
+      - name: start_date_hosp_prov_spell
+        description: Recorded admission date; source dates before 1901 are null.
+      - name: start_time_hosp_prov_spell
+        description: Recorded admission time.
+      - name: disch_date_hosp_prov_spell
+        description: Recorded discharge date; source dates before 1901 are null.
+      - name: disch_time_hosp_prov_spell
+        description: Recorded discharge time.
+      - name: source_adm_code_hosp_prov_spell
+        description: Current-specification admission source code.
+      - name: source_adm_mh_hosp_prov_spell
+        description: Historical admission source field retained for version-led mapping.
+      - name: adm_meth_code_hosp_prov_spell
+        description: Current-specification admission method code.
+      - name: meth_adm_mh_hosp_prov_spell
+        description: Historical admission method field retained for version-led mapping.
+      - name: planned_disch_dest_code
+        description: Current-specification planned discharge destination code.
+      - name: planned_dest_disch
+        description: Historical planned discharge destination field retained for version-led mapping.
+      - name: disch_meth_code_hosp_prov_spell
+        description: Current-specification discharge method code.
+      - name: meth_of_disch_mh_hosp_prov_spell
+        description: Historical discharge method field retained for version-led mapping.
+      - name: disch_dest_code_hosp_prov_spell
+        description: Current-specification discharge destination code.
+      - name: dest_of_disch_hosp_prov_spell
+        description: Historical discharge destination field retained for version-led mapping.
       - name: dm_icb_commissioner
         description: ICB commissioner derived in the source feed.
-
+      - name: uniq_submission_id
+        description: Accepted submission supplying the retained spell version.
+        data_tests: [not_null]
       - name: reporting_period_end_date
-        description: >
-          Reporting period recorded on the retained spell record, which is the
-          one from the newest accepted submission containing the spell. A
-          historic value with no discharge date can indicate a spell that stopped
-          being submitted without a recorded discharge.
-        data_tests:
-          - not_null
-
-      - name: uniq_serv_req_id
-        description: Service request identifier recorded for the spell in its newest submission.
-
-      - name: age_hosp_start_date
-        description: Age at admission derived in the MHSDS feed.
-
+        description: >-
+          End of the newest accepted reporting period containing the spell. A
+          historic value with no discharge does not prove current occupancy.
+        data_tests: [not_null]
+      - name: dat_set_ver
+        description: MHSDS specification version declared in the retained submission header.
+      - name: dmic_dataset
+        description: MHSDS dataset family assigned by the source pipeline.
     data_tests:
       - dbt_expectations.expect_table_row_count_to_be_between:
           arguments:

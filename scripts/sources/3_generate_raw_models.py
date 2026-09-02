@@ -173,7 +173,8 @@ def main():
     # over auto-generated (auto_*.yml) definitions for the same source name.
     all_sources = []
     source_files = {}  # Track which file each source came from
-    manual_sources = {}  # Track manual sources by name
+    manual_sources = []  # Preserve source blocks and their separate raw routing
+    manual_source_names = set()
     auto_sources = {}  # Track auto-generated sources by name
 
     def _is_manual_file(name):
@@ -190,7 +191,7 @@ def main():
         if sources_data and 'sources' in sources_data:
             for source in sources_data['sources']:
                 source_name = source['name']
-                if source_name in manual_sources:
+                if source_name in source_files and source_files[source_name] != filename:
                     existing_file = source_files[source_name]
                     print(
                         f"Error: source '{source_name}' is declared in both "
@@ -199,8 +200,9 @@ def main():
                         file=sys.stderr,
                     )
                     sys.exit(1)
-                manual_sources[source_name] = source
-                source_files[source_name] = filename
+                manual_sources.append(source)
+                manual_source_names.add(source_name)
+                source_files.setdefault(source_name, filename)
 
     # Then load auto-generated files, but skip if already in a manual file
     for filename in sorted(os.listdir(SOURCES_DIR)):
@@ -212,13 +214,12 @@ def main():
         if sources_data and 'sources' in sources_data:
             for source in sources_data['sources']:
                 source_name = source['name']
-                if source_name not in manual_sources:
+                if source_name not in manual_source_names:
                     auto_sources[source_name] = source
                     source_files[source_name] = filename
     
     # Combine all sources: manual sources (from sources.yml) take precedence, then auto-generated
-    for source_name, source in manual_sources.items():
-        all_sources.append(source)
+    all_sources.extend(manual_sources)
     for source_name, source in auto_sources.items():
         all_sources.append(source)
 
