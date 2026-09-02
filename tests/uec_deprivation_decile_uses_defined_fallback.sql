@@ -1,6 +1,6 @@
 -- The reporting decile uses an unambiguous IMD 2025 result first, then a valid
--- submitted ECDS decile. This aggregate test also covers missing and ambiguous
--- LSOA mappings without exposing attendance records on failure.
+-- submitted ECDS decile. This test also covers missing and ambiguous LSOA
+-- mappings.
 with lsoa_imd_2025 as (
     select
         bridge.old_lsoa_code
@@ -17,7 +17,8 @@ with lsoa_imd_2025 as (
 
 comparison as (
     select
-        encounter.deprivation_decile_at_event
+        encounter.visit_occurrence_id
+        , encounter.deprivation_decile_at_event
         , case
             when lsoa.unambiguous_imd_2025_decile is not null
                 then lsoa.unambiguous_imd_2025_decile
@@ -29,7 +30,9 @@ comparison as (
         on encounter.lsoa_11_at_event = lsoa.old_lsoa_code
 )
 
-select count(*) as mismatched_attendances
+select
+    visit_occurrence_id
+    , deprivation_decile_at_event
+    , expected_decile
 from comparison
 where not equal_null(deprivation_decile_at_event, expected_decile)
-having mismatched_attendances > 0

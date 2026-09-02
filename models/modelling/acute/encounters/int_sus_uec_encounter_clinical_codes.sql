@@ -97,7 +97,7 @@ findings as (
     select
         c.primarykey_id
         , array_agg(c.code) within group (order by c.coded_findings_id) as finding_codes
-        , array_agg(object_construct(
+        , array_agg(object_construct_keep_null(
                 'seq', c.coded_findings_id,
                 'code', c.code,
                 'desc', coalesce(d.snomed_uk_preferred_term, s.preferred_term)

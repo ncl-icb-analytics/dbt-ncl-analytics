@@ -1,6 +1,8 @@
 models:
   - name: stg_ukhfd_emergency_care_department_type
-    description: Current UKHFD emergency care department type code descriptions.
+    description: >
+      Current UKHFD emergency care department type descriptions. One row per
+      department type code.
     config:
       meta:
         owner:
