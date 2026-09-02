@@ -28,6 +28,12 @@ uec_activity_type_codes as (
         , uec_activity_type_desc
     from {{ ref('stg_ukhfd_uec_activity_type') }}
     ),
+department_type_codes as (
+    select
+        department_type
+        , department_type_desc
+    from {{ ref('stg_ukhfd_emergency_care_department_type') }}
+    ),
 ethnicity_codes as (
     select distinct bk_ethnicity_code, ethnicity_desc
     from {{ref('stg_dictionary_dbo_ethnicity')}}
@@ -61,6 +67,19 @@ first_expected_treatment as (
         partition by primarykey_id
         order by expected_treatment_times_id, rownumber_id
     ) = 1
+    ),
+lsoa_imd_2025 as (
+    select
+        bridge.old_lsoa_code
+        , case
+            when count(*) = count(imd.index_of_multiple_deprivation_decile)
+              and count(distinct imd.index_of_multiple_deprivation_decile) = 1
+                then min(imd.index_of_multiple_deprivation_decile)
+          end as unambiguous_imd_2025_decile
+    from {{ ref('stg_ukhfd_old_lsoa_to_new_lsoa_map') }} as bridge
+    left join {{ ref('stg_reference_imd2025') }} as imd
+        on bridge.new_lsoa_code = imd.lsoa_code_2021
+    group by bridge.old_lsoa_code
     )
 
 select
@@ -85,6 +104,7 @@ select
         when core.attendance_location_department_type = '05' then 'SDEC'
         else 'Others' end as pod
     , core.attendance_location_department_type as department_type
+    , department_type.department_type_desc
     , core.attendance_location_activity_type as uec_activity_type_code
     , uec_activity_type.uec_activity_type_desc
     , uec_site.uec_site_label
@@ -94,6 +114,8 @@ select
     , core.attendance_arrival_time as start_time
     , {{ fin_year_from_date('core.attendance_arrival_date') }} as financial_year
     , {{ fin_month_from_date('core.attendance_arrival_date') }} as financial_month
+    , date_details.fiscal_calendar_month_name as financial_month_name
+    , date_details.end_of_iso_week_date as week_end_date
     , core.attendance_departure_date as end_date
     , core.attendance_departure_time as end_time
     , core.attendance_departure_time_since_arrival as duration
@@ -229,11 +251,20 @@ select
     , gen.gender as gender_desc_at_event
     , core.patient_ethnic_category as ethnicity_at_event
     , eth.ethnicity_desc as ethnicity_desc_at_event
+    , core.patient_usual_address_postcode_pseudo as postcode_id
     , core.patient_usual_address_postcode_district as postcode_district_at_event
     , core.patient_usual_address_lsoa_11 as lsoa_11_at_event
     , core.patient_usual_address_local_authority_district as lad_at_event
     , core.patient_usual_address_index_of_multiple_deprivation_decile as imd_at_event
+    , case
+        when lsoa_imd.unambiguous_imd_2025_decile is not null
+            then lsoa_imd.unambiguous_imd_2025_decile
+        when try_to_number(core.patient_usual_address_index_of_multiple_deprivation_decile)
+             between 1 and 10
+            then try_to_number(core.patient_usual_address_index_of_multiple_deprivation_decile)
+      end as deprivation_decile_at_event
     , core.patient_gp_registration_general_practice as reg_practice_at_event
+    , registered_practice.organisation_name as reg_practice_name_latest
     , core.patient_gp_registration_general_practitioner as general_practitioner_code
     , general_practitioner.gp_name as general_practitioner_name
     , 'AE_ATTENDANCE' as visit_occurrence_type
@@ -285,6 +316,12 @@ left join attendance_category_codes as attendance_category
 
 left join uec_activity_type_codes as uec_activity_type
     on core.attendance_location_activity_type = uec_activity_type.uec_activity_type_code
+
+left join department_type_codes as department_type
+    on core.attendance_location_department_type = department_type.department_type
+
+left join {{ ref('stg_dictionary_dbo_dates') }} as date_details
+    on core.attendance_arrival_date = date_details.full_date
 
 left join
     {{ref('stg_dictionary_ecds_dischargedestination')}} as dict_dist
@@ -395,3 +432,10 @@ left join treatment_function_codes as treatment_function
 
 left join {{ ref('stg_dictionary_dbo_gp') }} as general_practitioner
     on core.patient_gp_registration_general_practitioner = general_practitioner.gp_code
+
+left join {{ ref('stg_ukhfd_all_gp_and_gdp_practices') }} as registered_practice
+    on nullif(upper(trim(core.patient_gp_registration_general_practice)), '')
+    = registered_practice.organisation_code
+
+left join lsoa_imd_2025 as lsoa_imd
+    on core.patient_usual_address_lsoa_11 = lsoa_imd.old_lsoa_code

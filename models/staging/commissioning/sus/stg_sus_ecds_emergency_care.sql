@@ -98,6 +98,7 @@ select primarykey_id
     , patient_age_at_arrival
     , patient_stated_gender
     , patient_ethnic_category
+    , patient_usual_address_postcode_pseudo
     , patient_usual_address_postcode_district
     , patient_usual_address_lsoa_11
     , patient_usual_address_local_authority_district

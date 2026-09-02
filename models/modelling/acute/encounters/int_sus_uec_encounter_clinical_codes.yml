@@ -5,7 +5,8 @@ models:
     description: >
       ECDS clinical codes per A&E attendance as ordered arrays. One row per
       attendance (visit_occurrence_id) that has at least one coded secondary
-      diagnosis, investigation, treatment or comorbidity. Each feed has a plain
+      diagnosis, investigation, treatment, comorbidity or Coded Clinical
+      Finding. Each feed has a plain
       code array for filtering (array_contains) and an array of objects for
       reading, both in source sequence order; nothing is truncated. Objects
       carry seq, code and desc, plus at (recorded timestamp) for investigations
@@ -63,3 +64,11 @@ models:
         description: Array of objects {seq, code, desc} for each comorbidity code in source sequence order.
       - name: n_comorbidities
         description: Number of comorbidity codes; 0 when none.
+      - name: finding_codes
+        description: >-
+          All SNOMED CT codes from the separate ECDS Coded Clinical Findings
+          list, in source sequence order. These are not diagnosis records.
+      - name: findings
+        description: Array of objects {seq, code, desc} for each ECDS Coded Clinical Finding in source sequence order.
+      - name: n_findings
+        description: Number of Coded Clinical Finding records; 0 when none.

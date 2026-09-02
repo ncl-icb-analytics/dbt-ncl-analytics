@@ -1,6 +1,7 @@
 -- int_sus_uec_encounter_clinical_codes must hold every coded child record: for
 -- each collection the count column and both array sizes equal the number of
--- non-null codes in its staging feed. Secondary diagnoses exclude source
+-- non-null codes in its staging feed, including the separate Coded Clinical
+-- Findings list. Secondary diagnoses exclude source
 -- position 1, matching the model, because this test reconciles what the model
 -- kept against what it selected. That the excluded row is the primary diagnosis
 -- carried on int_sus_uec_encounter is a separate promise, asserted by
@@ -34,6 +35,13 @@ with staging_counts as (
     from {{ ref('stg_sus_ecds_clinical_comorbidities') }}
     where code is not null
     group by primarykey_id
+
+    union all
+
+    select 'findings', primarykey_id, count(*)
+    from {{ ref('stg_sus_ecds_clinical_coded_findings') }}
+    where code is not null
+    group by primarykey_id
 ),
 
 model_counts as (
@@ -61,6 +69,12 @@ model_counts as (
 
     select 'comorbidities', visit_occurrence_id, n_comorbidities
         , array_size(comorbidity_codes), array_size(comorbidities)
+    from {{ ref('int_sus_uec_encounter_clinical_codes') }}
+
+    union all
+
+    select 'findings', visit_occurrence_id, n_findings
+        , array_size(finding_codes), array_size(findings)
     from {{ ref('int_sus_uec_encounter_clinical_codes') }}
 )
 
