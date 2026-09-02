@@ -49,7 +49,12 @@ patient_characteristics AS (
         COALESCE(ckd.person_id IS NOT NULL, FALSE) AS has_ckd,
 
         -- Hypertension diagnosis status
-        COALESCE(htn.is_on_register, FALSE) AS is_diagnosed_htn
+        COALESCE(htn.is_on_register, FALSE) AS is_diagnosed_htn,
+
+        -- Other CVD registers requiring annual BP monitoring
+        COALESCE(chd.is_on_register, FALSE) AS has_chd,
+        COALESCE(stroke_tia.is_on_register, FALSE) AS has_stroke_tia,
+        COALESCE(pad.is_on_register, FALSE) AS has_pad
 
     FROM latest_bp AS bp
     INNER JOIN
@@ -64,6 +69,15 @@ patient_characteristics AS (
     LEFT JOIN
         {{ ref('fct_person_hypertension_register') }} AS htn
         ON bp.person_id = htn.person_id
+    LEFT JOIN
+        {{ ref('fct_person_chd_register') }} AS chd
+        ON bp.person_id = chd.person_id
+    LEFT JOIN
+        {{ ref('fct_person_stroke_tia_register') }} AS stroke_tia
+        ON bp.person_id = stroke_tia.person_id
+    LEFT JOIN
+        {{ ref('fct_person_pad_register') }} AS pad
+        ON bp.person_id = pad.person_id
     LEFT JOIN
         {{ ref('int_urine_acr_latest') }} AS acr
         ON bp.person_id = acr.person_id
@@ -173,6 +187,23 @@ with_staging AS (
         END AS diastolic_stage
 
     FROM ranked_thresholds AS rt
+),
+
+with_monitoring_interval AS (
+    SELECT
+        *,
+        CASE
+            WHEN
+                (is_on_dm_register AND diabetes_type = 'Type 2')
+                OR has_ckd
+                OR is_diagnosed_htn
+                OR has_chd
+                OR has_stroke_tia
+                OR has_pad
+                THEN 12
+            WHEN age >= 40 THEN 60
+        END AS recommended_monitoring_interval_months
+    FROM with_staging
 )
 
 -- Final output: BP control status with applied thresholds, staging, and timeliness
@@ -190,6 +221,9 @@ SELECT
     ws.age,
     ws.has_ckd,
     ws.is_diagnosed_htn,
+    ws.has_chd,
+    ws.has_stroke_tia,
+    ws.has_pad,
     ws.latest_acr_value,
     ws.threshold_rule_id AS applied_threshold_rule_id,
 
@@ -254,47 +288,25 @@ SELECT
         AS latest_bp_reading_age_months,
 
     -- Recommended monitoring interval with description
-    CASE
-        WHEN (
-            (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
-            OR ws.has_ckd
-            OR ws.is_diagnosed_htn
-        ) THEN '12 months'
-        WHEN ws.age >= 40 THEN '5 years'
+    ws.recommended_monitoring_interval_months,
+    CASE ws.recommended_monitoring_interval_months
+        WHEN 12 THEN '12 months'
+        WHEN 60 THEN '5 years'
         ELSE 'No routine screening'
     END AS recommended_monitoring_interval,
 
-    -- Risk-based timeliness: higher risk = more frequent monitoring
+    -- Risk-based timeliness using the shared recommended interval
     CASE
-        -- High risk (T2DM OR CKD OR diagnosed HTN) - check within 12 months
-        WHEN
-            (
-                (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
-                OR ws.has_ckd
-                OR ws.is_diagnosed_htn
-            )
-            THEN
-                COALESCE(
-                    DATEDIFF(MONTH, ws.latest_bp_date, CURRENT_DATE())
-                    <= 12,
-                    FALSE
-                )
-
-        -- Standard monitoring (age ≥40, no high-risk conditions) - check within 5 years
-        WHEN (
-            NOT (ws.is_on_dm_register AND ws.diabetes_type = 'Type 2')
-            AND NOT ws.has_ckd AND NOT ws.is_diagnosed_htn AND ws.age >= 40
+        WHEN ws.recommended_monitoring_interval_months IS NULL THEN NULL
+        ELSE COALESCE(
+            ws.latest_bp_date >= DATEADD(
+                MONTH,
+                -ws.recommended_monitoring_interval_months,
+                CURRENT_DATE()
+            ),
+            FALSE
         )
-            THEN
-                COALESCE(
-                    DATEDIFF(MONTH, ws.latest_bp_date, CURRENT_DATE())
-                    <= 60,
-                    FALSE
-                )
-
-        -- Age <40 with no high-risk conditions - no routine screening recommended
-        ELSE NULL
     END AS is_latest_bp_within_recommended_interval
 
-FROM with_staging AS ws
+FROM with_monitoring_interval AS ws
 ORDER BY ws.person_id
