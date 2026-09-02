@@ -6,7 +6,7 @@
     )
 }}
 /*
-COVID and Flu Dashboard Base Table
+COVID and Flu Dashboard Base Table CURRENT CAMPAIGN 2025/26 and 2026/27
 
 This model provides dashboard-ready data by combining the pure uptake facts
 with demographics and practice information for the COVID and Flu Dashboard.
@@ -84,6 +84,7 @@ SELECT
     cf.campaign_start_date,
     cf.campaign_reference_date,
    cf.risk_group,
+   cf.subcohort,
    -- Clinical risk group flags for dashboard filtering, any age, per campaign
    COALESCE(f.has_asthma, 0) AS has_asthma,
    COALESCE(f.has_asplenia, 0) AS has_asplenia,
@@ -199,4 +200,5 @@ LEFT JOIN {{ ref('dim_person_age') }} pa ON d.person_id = pa.person_id
 LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON d.person_id = hs.person_id
 --LEFT JOIN STAGING.REFERENCE.STG_REFERENCE_LSOA21_WARD25_LAD25 la on la.LSOA21_CD = d.LSOA_CODE_21
 LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = d.LSOA_CODE_21
+WHERE v.campaign_start_date >= '2025-09-01'::DATE
 
