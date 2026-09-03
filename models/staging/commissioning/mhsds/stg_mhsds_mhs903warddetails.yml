@@ -1,9 +1,9 @@
 models:
   - name: stg_mhsds_mhs903warddetails
     description: >-
-      MHSDS ward-detail snapshots. Grain: one row per provider, accepted
-      submission and ward code. Duplicate definitions within a file use the
-      last source row.
+      MHSDS ward-detail snapshots. Grain: one row per accepted submission and
+      provider-qualified ward. Duplicate definitions within a file use the last
+      source row.
     config:
       meta:
         owner:
@@ -11,7 +11,7 @@ models:
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
-            combination_of_columns: [org_id_prov, uniq_submission_id, ward_code]
+            combination_of_columns: [uniq_submission_id, uniq_ward_code]
     columns:
       - name: mhs903_uniq_id
         description: Identifier of the submitted ward-detail row.
@@ -20,6 +20,11 @@ models:
 
       - name: ward_code
         description: Provider-local ward identifier.
+        data_tests:
+          - not_null
+
+      - name: uniq_ward_code
+        description: Provider-qualified ward identifier used by the MHS502 version 6 derivation.
         data_tests:
           - not_null
 

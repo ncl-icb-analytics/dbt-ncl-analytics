@@ -436,6 +436,50 @@ sources:
         identifier: '"dim_Mental_Health_Admitted_Patient_Classification_Type_SCD"'
         description: Mental health admitted patient classification type definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: admission_source
+        identifier: '"dim_Admission_Source_SCD"'
+        description: Admission source definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: source_of_admission_legacy
+        identifier: '"dim_Source_Of_Admission_SCD"'
+        description: Retired source of admission definitions used by historical MHSDS records.
+        columns: *ukhfd_data_dictionary_columns
+      - name: admission_method
+        identifier: '"dim_Admission_Method_SCD"'
+        description: Admission method definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: planned_destination_of_discharge
+        identifier: '"dim_Planned_Destination_Of_Discharge_SCD"'
+        description: Planned discharge destination definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: discharge_method
+        identifier: '"dim_Discharge_Method_SCD"'
+        description: Discharge method definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: ward_intended_sex_of_patients
+        identifier: '"dim_Ward_Intended_Sex_Of_Patients_SCD"'
+        description: Ward intended sex definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: ward_intended_clinical_care_intensity
+        identifier: '"dim_Ward_Intended_Clinical_Care_Intensity_SCD"'
+        description: Ward intended clinical care intensity definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: ward_intended_age_group_for_mental_health
+        identifier: '"dim_Ward_Intended_Age_Group_For_Mental_Health_SCD"'
+        description: Mental health ward intended age group definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: ward_setting_type_for_mental_health
+        identifier: '"dim_Ward_Setting_Type_For_Mental_Health_SCD"'
+        description: Mental health ward setting definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: ward_security_level
+        identifier: '"dim_Ward_Security_Level_SCD"'
+        description: Ward security level definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: locked_ward_indicator
+        identifier: '"dim_Locked_Ward_Indicator_SCD"'
+        description: Locked ward indicator definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
 
   - name: ukhfd_other
     database: '"UKHFD"'
