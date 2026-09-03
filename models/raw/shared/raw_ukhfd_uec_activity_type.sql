@@ -1,6 +1,6 @@
 {{
     config(
-        description="Raw layer: Urgent and emergency care activity type codes and descriptions; Is_Latest marks the current row per code.. 1:1 passthrough with cleaned column names. \nSource: UKHFD.Data_Dictionary.dim_Urgent_And_Emergency_Care_Activity_Type_SCD \ndbt: source(''ukhfd_data_dictionary'', ''uec_activity_type'') \nColumns:\n  Main_Code_Text -> main_code_text\n  Main_Description -> main_description\n  Is_Latest -> is_latest\n  Effective_From -> effective_from"
+        description="Raw layer: Urgent and emergency care activity type codes and descriptions; Is_Latest marks the current row per code.. 1:1 passthrough with cleaned column names. \nSource: UKHFD.Data_Dictionary.dim_Urgent_And_Emergency_Care_Activity_Type_SCD \ndbt: source(''ukhfd_ecds_data_dictionary'', ''uec_activity_type'') \nColumns:\n  Main_Code_Text -> main_code_text\n  Main_Description -> main_description\n  Is_Latest -> is_latest\n  Effective_From -> effective_from"
     )
 }}
 select
@@ -8,4 +8,4 @@ select
     "Main_Description" as main_description,
     "Is_Latest" as is_latest,
     "Effective_From" as effective_from
-from {{ source('ukhfd_data_dictionary', 'uec_activity_type') }}
+from {{ source('ukhfd_ecds_data_dictionary', 'uec_activity_type') }}

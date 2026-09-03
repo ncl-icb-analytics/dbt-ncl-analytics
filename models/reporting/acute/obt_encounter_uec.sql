@@ -17,6 +17,7 @@ select
     , site_name
     , pod
     , department_type
+    , department_type_desc
     , uec_activity_type_code
     , uec_activity_type_desc
     , uec_site_label
@@ -24,6 +25,8 @@ select
     , start_time
     , financial_year
     , financial_month
+    , financial_month_name
+    , week_end_date
     , end_date
     , end_time
     , duration
@@ -116,11 +119,14 @@ select
     , gender_desc_at_event
     , ethnicity_at_event
     , ethnicity_desc_at_event
+    , postcode_id
     , postcode_district_at_event
     , lsoa_11_at_event
     , lad_at_event
     , imd_at_event
+    , deprivation_decile_at_event
     , reg_practice_at_event
+    , reg_practice_name_latest
     , general_practitioner_code
     , general_practitioner_name
     , visit_occurrence_type

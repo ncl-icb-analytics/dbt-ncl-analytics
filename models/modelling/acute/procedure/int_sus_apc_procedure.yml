@@ -3,6 +3,7 @@ models:
   - name: int_sus_apc_procedure
     description: "All admitted patient procedures from SUS data"
     config:
+      tags: ["daily"]
       meta:
         owner:
           name: Emily Baldwin

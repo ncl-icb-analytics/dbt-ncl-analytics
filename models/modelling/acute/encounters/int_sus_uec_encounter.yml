@@ -65,7 +65,11 @@ models:
 
       - name: department_type
         data_type: varchar
-        description: "Point of delivery code of the provider e.g. A&E, SDEC etc."
+        description: "Submitted ECDS Emergency Care Department Type code. This is separate from Attendance Category."
+
+      - name: department_type_desc
+        data_type: varchar
+        description: "Current UKHFD description of the submitted Emergency Care Department Type code."
 
       - name: start_date
         data_type: date
@@ -381,11 +385,11 @@ models:
 
       - name: assigned_commissioner_code_at_event
         data_type: varchar
-        description: "Commissioner assigned expected payment responsibility under the Commissioner Assignment Method, using the emergency-care arrival date."
+        description: "Service-agreement commissioner code submitted for the attendance. This is not the ECDS Commissioner Assignment Method field."
 
       - name: assigned_commissioner_name_at_event
         data_type: varchar
-        description: "Human-readable name of the commissioner assigned expected payment responsibility."
+        description: "Latest dictionary name for the submitted service-agreement commissioner code."
 
       - name: age_at_event
         data_type: number
@@ -415,6 +419,10 @@ models:
         data_type: varchar
         description: "Patient ethnicity description at time of event"
 
+      - name: postcode_id
+        data_type: varchar
+        description: "Pseudonymised postcode value supplied by SUS. It is usually partial and can contain a special pseudo postcode; it is not a postcode dictionary key."
+
       - name: postcode_district_at_event
         data_type: varchar
         description: "Patient postcode district at time of event"
@@ -429,11 +437,29 @@ models:
 
       - name: imd_at_event
         data_type: varchar
-        description: "Patient index of multiple deprivation decile at time of event"
+        description: "Deprivation decile supplied on the ECDS attendance. The source IMD release is not documented."
+
+      - name: deprivation_decile_at_event
+        data_type: number
+        description: >-
+          Numeric deprivation decile for reporting, where 1 is most deprived
+          and 10 is least deprived. Uses IMD 2025 where every 2021 successor
+          of the attendance LSOA 2011 has the same decile, then falls back to a
+          valid decile supplied on the ECDS attendance. A fallback value is not
+          necessarily from IMD 2025.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                quote: false
 
       - name: reg_practice_at_event
         data_type: varchar
-        description: "Patient registered GP practice at time of event"
+        description: "Registered GP practice code recorded on the attendance."
+
+      - name: reg_practice_name_latest
+        data_type: varchar
+        description: "Latest national UKHFD name for reg_practice_at_event. The name is not effective-dated to the attendance."
 
       - name: general_practitioner_code
         data_type: varchar
@@ -450,6 +476,14 @@ models:
       - name: financial_month
         data_type: number
         description: "NHS financial month derived from start_date, where April is 1 and March is 12."
+
+      - name: financial_month_name
+        data_type: varchar
+        description: "Calendar month name for start_date, paired with the NHS financial month number."
+
+      - name: week_end_date
+        data_type: date
+        description: "Sunday at the end of the ISO week containing start_date."
 
       - name: expected_treatment_at
         data_type: timestamp_tz

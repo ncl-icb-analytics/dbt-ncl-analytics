@@ -4,13 +4,14 @@
 ECDS clinical codes per attendance, as ordered arrays.
 
 One row per attendance that has at least one coded diagnosis, investigation,
-treatment or comorbidity. Each feed has a plain code array (for filtering)
-and an array of objects (for reading), both in source sequence order;
-nothing is truncated. Objects carry seq, code and desc, plus the recorded
-timestamp (at) for investigations and treatments and the SNOMED qualifier
-(confirmed/suspected) for diagnoses. ECDS holds no investigation results. For one-row-per-code
-analysis use int_sus_uec_diagnosis (diagnoses) and int_sus_uec_procedure
-(investigations, treatments, comorbidities via observation_type).
+treatment, comorbidity or Coded Clinical Finding. Each feed has a plain code
+array for filtering and an array of objects for reading. Both retain source
+sequence order and nothing is truncated. Objects carry seq, code and desc,
+plus the recorded timestamp (at) for investigations and treatments and the
+SNOMED qualifier (confirmed/suspected) for diagnoses. ECDS holds no
+investigation results. For one-row-per-code analysis use int_sus_uec_diagnosis
+(diagnoses) and int_sus_uec_procedure (investigations, treatments,
+comorbidities and Coded Clinical Findings via observation_type).
 */
 
 with snomed as (
@@ -92,6 +93,24 @@ comorbidities as (
     group by c.primarykey_id
 ),
 
+findings as (
+    select
+        c.primarykey_id
+        , array_agg(c.code) within group (order by c.coded_findings_id) as finding_codes
+        , array_agg(object_construct_keep_null(
+                'seq', c.coded_findings_id,
+                'code', c.code,
+                'desc', coalesce(d.snomed_uk_preferred_term, s.preferred_term)
+            )) within group (order by c.coded_findings_id) as findings
+        , count(*) as n_findings
+    from {{ ref('stg_sus_ecds_clinical_coded_findings') }} as c
+    left join {{ ref('stg_dictionary_ecds_codedfinding') }} as d
+        on c.code = d.snomed_code
+    left join snomed as s on c.code = s.snomed_code
+    where c.code is not null
+    group by c.primarykey_id
+),
+
 attendances as (
     select primarykey_id from diagnoses
     union
@@ -100,6 +119,8 @@ attendances as (
     select primarykey_id from treatments
     union
     select primarykey_id from comorbidities
+    union
+    select primarykey_id from findings
 )
 
 select
@@ -116,8 +137,12 @@ select
     , c.comorbidity_codes
     , c.comorbidities
     , coalesce(c.n_comorbidities, 0) as n_comorbidities
+    , f.finding_codes
+    , f.findings
+    , coalesce(f.n_findings, 0) as n_findings
 from attendances as a
 left join diagnoses as d on a.primarykey_id = d.primarykey_id
 left join investigations as i on a.primarykey_id = i.primarykey_id
 left join treatments as t on a.primarykey_id = t.primarykey_id
 left join comorbidities as c on a.primarykey_id = c.primarykey_id
+left join findings as f on a.primarykey_id = f.primarykey_id
