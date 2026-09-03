@@ -38,6 +38,7 @@ left join {{ ref('stg_cltcs_emis_cltcs_local_mapping_nh_gp') }} nh
 where (reg.is_deceased = false or reg.is_deceased is null or db.date_of_death is null) -- living patients only
     and db.date_of_birth < date_trunc('month', dateadd(year, -18, current_date)) -- adults only
     and db.sk_patient_id is not null
+    and db.sk_patient_id != '1'
     and pp.person_id is not null
     and nh.neighbourhood_code is not null
     and (reg.is_active=true and flag_current_registered = true) -- must be active registrant
