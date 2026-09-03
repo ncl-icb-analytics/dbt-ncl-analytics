@@ -81,10 +81,11 @@ select
     
     /* Discharge information */
     , core.spell_discharge_destination as discharge_destination_code
-    , dict_discharge_destination.discharge_destination_name
+    , dict_discharge_destination.description as discharge_destination_name
     , core.spell_discharge_method as discharge_method_code
-    , dict_discharge_method.discharge_method_name
-    -- Supplied length-of-stay adjustment; do not subtract it again from duration.
+    , dict_discharge_method.description as discharge_method_name
+    -- SUS+ derives these days from submitted critical-care activity; dbt passes them through.
+    -- Do not subtract the length-of-stay adjustment again from duration.
     , core.spell_length_of_stay_critical_care_days as critical_care_days_for_length_of_stay
     
     /* Clinical information */
@@ -128,11 +129,11 @@ from {{ ref('stg_sus_apc_spell')}} as core
 left join {{ ref('stg_dictionary_ip_admissionmethods')}} as dict_adm_method
     ON core.spell_admission_method = dict_adm_method.bk_admission_method_code
 
-left join {{ ref('stg_dictionary_ip_dischargedestination') }} as dict_discharge_destination
-    on core.spell_discharge_destination = dict_discharge_destination.bk_discharge_destination_code
+left join {{ ref('discharge_destination') }} as dict_discharge_destination
+    on core.spell_discharge_destination = dict_discharge_destination.code
 
-left join {{ ref('stg_dictionary_ip_dischargemethod') }} as dict_discharge_method
-    on core.spell_discharge_method = dict_discharge_method.bk_discharge_method_code
+left join {{ ref('discharge_method') }} as dict_discharge_method
+    on core.spell_discharge_method = dict_discharge_method.code
 
 left join {{ ref('stg_dictionary_dbo_patientclassification')}} as dict_patient_class
     ON core.spell_admission_patient_classification = dict_patient_class.bk_patient_classification_code
