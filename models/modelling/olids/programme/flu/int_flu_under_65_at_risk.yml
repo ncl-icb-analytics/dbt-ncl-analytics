@@ -55,7 +55,7 @@ models:
                   - 'Chronic Liver Disease'
                   - 'Chronic Neurological Disease'
                   - 'Asplenia'
-                  - 'Chronic Kidney Disease (Stage 3-5)'
+                  - 'Chronic Kidney Disease'
                   - 'Diabetes'
                   - 'Immunosuppression'
                   - 'Chronic Respiratory Disease'

@@ -5,7 +5,6 @@
         cluster_by=['programme_type', 'campaign_id', 'practice_code', 'person_id']
     )
 }}
-
 /*
 COVID and Flu Dashboard Base Table CURRENT CAMPAIGN 2025/26 and 2026/27
 
@@ -20,10 +19,11 @@ Key features:
 
 Multi-Programme Support:
 COVID Campaigns:
--  COVID Autumn 2025, COVID Spring 2026, COVID Autumn 2026
+- COVID Autumn 2024, COVID Spring 2025, COVID Autumn 2025, COVID Spring 2026,
+  COVID Autumn 2026
 
 Flu Campaigns: 
-- Flu 2025-26, Flu 2026-27
+- Flu 2024-25, Flu 2025-26, Flu 2026-27
 
 Usage:
 - Primary table for COVID and Flu Dashboard in PowerBI/Tableau
@@ -32,37 +32,87 @@ Usage:
 - Demographic breakdowns for equity analysis
 
 PowerBI
-eligible reason not required for dashboard. Reduce repeating rows
+Testing WIDE FORMAT for RISK GROUP using columns and flags. 
 */
+-- Clinical risk group flags come from int_covid_flu_risk_group_flags, joined per
+-- programme and campaign. They cover every age, so a person aged 65 or over with CKD
+-- carries has_ckd = 1 on their age-based row, and they are bounded to the campaign's
+-- own evidence window rather than carried between seasons.
 
-WITH uptake_with_demographics AS (
-    SELECT 
-        -- Programme and campaign identifiers
-        u.programme_type,
-        CASE 
-        WHEN u.campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
-         WHEN u.campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
-         WHEN u.campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
-         WHEN u.campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
-         WHEN u.campaign_id = 'COVID Autumn 2026' THEN 'CV Autumn 2026'
-         WHEN u.campaign_id = 'COVID Spring 2027' THEN 'CV Spring 2027'
-         ELSE u.campaign_id END AS campaign_id,
-        CASE 
-        WHEN u.campaign_id = 'Flu 2024-25' THEN 1
-        WHEN u.campaign_id = 'COVID Autumn 2024' THEN 2
-        WHEN u.campaign_id = 'COVID Spring 2025' THEN 3
-        WHEN u.campaign_id = 'Flu 2025-26' THEN 4
-        WHEN u.campaign_id = 'COVID Autumn 2025' THEN 5
-        WHEN u.campaign_id = 'COVID Spring 2026' THEN 6
-        WHEN u.campaign_id = 'Flu 2026-27' THEN 7
-        WHEN u.campaign_id = 'COVID Autumn 2026' THEN 8
-        WHEN u.campaign_id = 'COVID Spring 2027' THEN 9
+with VACC_POP as (
+SELECT
+    cf.person_id,
+    -- Eligibility information from uptake facts
+    cf.is_eligible,
+    CASE WHEN cf.campaign_id = 'COVID Autumn 2024' THEN 'CV Autumn 2024'
+         WHEN cf.campaign_id = 'COVID Spring 2025' THEN 'CV Spring 2025'
+         WHEN cf.campaign_id = 'COVID Autumn 2025' THEN 'CV Autumn 2025'
+         WHEN cf.campaign_id = 'COVID Spring 2026' THEN 'CV Spring 2026'
+         WHEN cf.campaign_id = 'COVID Autumn 2026' THEN 'CV Autumn 2026'
+         WHEN cf.campaign_id = 'COVID Spring 2027' THEN 'CV Spring 2027'
+         ELSE cf.campaign_id END AS campaign_id,
+    CASE 
+        WHEN cf.campaign_id = 'Flu 2024-25' THEN 1
+        WHEN cf.campaign_id = 'COVID Autumn 2024' THEN 2
+        WHEN cf.campaign_id = 'COVID Spring 2025' THEN 3
+        WHEN cf.campaign_id = 'Flu 2025-26' THEN 4
+        WHEN cf.campaign_id = 'COVID Autumn 2025' THEN 5
+        WHEN cf.campaign_id = 'COVID Spring 2026' THEN 6
+        WHEN cf.campaign_id = 'Flu 2026-27' THEN 7
+        WHEN cf.campaign_id = 'COVID Autumn 2026' THEN 8
+        WHEN cf.campaign_id = 'COVID Spring 2027' THEN 9
         END AS campaign_sort,
-        u.campaign_year,
-        u.campaign_season,
-        u.person_id,
+    cf.programme_type,
+    cf.campaign_year,
+    cf.campaign_season,
+     -- Vaccination information from uptake facts
+    cf.vaccination_status,
+    DATE(cf.vaccination_date) AS vaccination_date,
+    TO_CHAR(TO_DATE(cf.vaccination_date), 'MMMM') as vaccination_month,
+    YEAR(cf.vaccination_date) AS vaccination_year,
+    cf.vaccination_status_reason,
+    cf.vaccinated_despite_ineligible,
+    -- Uptake flags and metrics from uptake facts
+    cf.vaccinated,
+    cf.declined,
+    cf.eligible_no_record,
+    cf.uptake_category,
+    cf.days_to_vaccination,
+    -- Programme-specific fields
+    -- cf.laiv_given, 
+    -- Campaign dates
+    cf.campaign_start_date,
+    cf.campaign_reference_date,
+   cf.risk_group,
+   cf.subcohort,
+   -- Clinical risk group flags for dashboard filtering, any age, per campaign
+   COALESCE(f.has_asthma, 0) AS has_asthma,
+   COALESCE(f.has_asplenia, 0) AS has_asplenia,
+   COALESCE(f.has_chd, 0) AS has_chd,
+   COALESCE(f.has_ckd, 0) AS has_ckd,
+   COALESCE(f.has_cld, 0) AS has_cld,
+   COALESCE(f.has_cnd, 0) AS has_cnd,
+   COALESCE(f.has_crd, 0) AS has_crd,
+   COALESCE(f.has_diabetes, 0) AS has_diabetes,
+   COALESCE(f.is_immunosuppressed, 0) AS is_immunosuppressed,
+   COALESCE(f.has_ld, 0) AS has_ld,
+   COALESCE(f.has_smi, 0) AS has_smi,
+   --COALESCE(f.in_clinical_risk_group, 0) AS in_clinical_risk_group
+   COALESCE(f.in_clinical_risk_group = 1, FALSE) AS in_clinical_risk_group
+
+FROM {{ ref('fct_covid_flu_uptake') }} cf
+LEFT JOIN {{ ref('int_covid_flu_risk_group_flags') }} f
+    ON f.programme_type = cf.programme_type
+    AND f.campaign_id = cf.campaign_id
+    AND f.person_id = cf.person_id
+-- subcohort is not selected, so the one-row-per-condition rows of the under-65
+-- at-risk cohort collapse to one row per person, campaign and risk group.
+ group by all
+)
+--add in demographics.
+SELECT 
+        v.*,
         id.hx_flake,
-        
         -- Demographics from dim_person_demographics
         d.is_active,
         d.gender,
@@ -121,8 +171,8 @@ WITH uptake_with_demographics AS (
         CASE WHEN la.RESIDENT_FLAG IS NULL THEN 'Unknown'
         ELSE la.RESIDENT_FLAG END as residential_loc,
         d.neighbourhood_resident,
-        d.icb_code_resident,
-        d.icb_resident,
+        -- d.icb_code_resident,
+        -- d.icb_resident,
 
         -- Practice information (registration-based)
         d.practice_code,
@@ -137,68 +187,19 @@ WITH uptake_with_demographics AS (
         pa.is_early_years_age,
         pa.is_primary_school_age,
         pa.is_secondary_school_age,
-
-        -- Flu vaccination setting (Early Years at GP for ages 2-3, School-based for Reception-Year 11)
-        CASE
-            WHEN u.programme_type = 'FLU' THEN
-                CASE
-                    WHEN pa.age >= 2 AND pa.age < 4 THEN 'Early Years (GP)'  -- Ages 2-3
-                    WHEN pa.age_school_stage IN ('Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4',
-                                                  'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9',
-                                                  'Year 10', 'Year 11') THEN 'School-based'
-                    ELSE NULL  -- Year 12, Year 13, and older
-                END
-            ELSE NULL
-        END AS flu_vaccination_setting,
-
+    
         -- Housebound status from dim_person_housebound_status
-        COALESCE(hs.is_housebound, FALSE) AS is_housebound,
-        
-        -- Eligibility information from uptake facts
-        u.is_eligible,
-        u.campaign_category,
-        u.risk_group,
-        u.subcohort,
-        --u.eligibility_reason,
-        --u.rule_type,
-        
-        -- Vaccination information from uptake facts
-        u.vaccination_status,
-        DATE(u.vaccination_date) AS vaccination_date,
-        TO_CHAR(TO_DATE(vaccination_date), 'MMMM') as vaccination_month,
-        YEAR(vaccination_date) AS vaccination_year,
-        u.vaccination_status_reason,
-        u.vaccinated_despite_ineligible,
-        
-        -- Uptake flags and metrics from uptake facts
-        u.vaccinated,
-        u.declined,
-        u.eligible_no_record,
-        u.uptake_category,
-        u.days_to_vaccination,
-        
-        -- Programme-specific fields
-        u.laiv_given,
-        
-        -- Campaign dates
-        u.campaign_start_date,
-        u.campaign_reference_date,
-        u.audit_end_date,
-        u.created_at
-        
-    FROM {{ ref('fct_covid_flu_uptake') }} u
-    LEFT JOIN {{ ref('dim_person_demographics') }} d
-        ON u.person_id = d.person_id
-    LEFT JOIN {{ ref('person_pseudo') }} id  
-        ON u.person_id = id.person_id
-    LEFT JOIN {{ ref('dim_person_age') }} pa
-        ON u.person_id = pa.person_id
-    LEFT JOIN {{ ref('dim_person_housebound_status') }} hs
-        ON u.person_id = hs.person_id
-    LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la 
-        on la.LSOA21_CD = d.LSOA_CODE_21
-    WHERE u.campaign_start_date >= '2025-09-01'::DATE
-)
+        COALESCE(hs.is_housebound, FALSE) AS is_housebound
+FROM vacc_pop v
+--LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_DEMOGRAPHICS d ON d.person_id = v.person_id
+LEFT JOIN {{ ref('dim_person_demographics') }} d ON d.person_id = v.person_id
+--LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_PSEUDO id  ON d.person_id = id.person_id
+LEFT JOIN {{ ref('person_pseudo') }} id  ON d.person_id = id.person_id      
+--LEFT JOIN REPORTING.OLIDS_PERSON_DEMOGRAPHICS.DIM_PERSON_AGE pa ON d.person_id = pa.person_id
+LEFT JOIN {{ ref('dim_person_age') }} pa ON d.person_id = pa.person_id
+--LEFT JOIN REPORTING.OLIDS_PERSON_STATUS.DIM_PERSON_HOUSEBOUND_STATUS hs ON d.person_id = hs.person_id
+LEFT JOIN {{ ref('dim_person_housebound_status') }} hs ON d.person_id = hs.person_id
+--LEFT JOIN STAGING.REFERENCE.STG_REFERENCE_LSOA21_WARD25_LAD25 la on la.LSOA21_CD = d.LSOA_CODE_21
+LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la on la.LSOA21_CD = d.LSOA_CODE_21
+WHERE v.campaign_start_date >= '2025-09-01'::DATE
 
-SELECT distinct * FROM uptake_with_demographics
-ORDER BY programme_type, campaign_id, practice_code, person_id

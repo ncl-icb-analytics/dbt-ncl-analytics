@@ -7,7 +7,7 @@
 }}
 
 /*
-COVID and Flu Dashboard Base Table
+COVID and Flu Dashboard Base Table - LEGACY VIEW - TO BE REPLACED WITH A WIDE FORMAT
 
 This model provides dashboard-ready data by combining the pure uptake facts
 with demographics and practice information for the COVID and Flu Dashboard.
@@ -217,6 +217,10 @@ WITH uptake_with_demographics AS (
         ON u.person_id = hs.person_id
     LEFT JOIN {{ ref('stg_reference_lsoa21_ward25_lad25') }} la 
         on la.LSOA21_CD = d.LSOA_CODE_21
+    -- Only campaigns that had closed by the 2026-06-30 population snapshot. Measuring a
+    -- later campaign against a June 2026 population would understate its uptake, and this
+    -- predicate keeps that true without an edit each time a season is added.
+    WHERE u.campaign_reference_date <= '2026-06-30'::DATE
 )
 
 SELECT distinct * FROM uptake_with_demographics
