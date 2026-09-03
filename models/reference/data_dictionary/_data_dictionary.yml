@@ -184,6 +184,55 @@ models:
     data_tests: *history_grain_test
     columns: *history_columns
 
+  - name: mhsds_inpatient_code_lookup
+    description: >-
+      One row per MHSDS inpatient code set and code ever published. Uses the
+      newest UKHFD definition and retains retired codes for historical joins.
+    config: *owner
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code_set_name, code]
+    columns:
+      - name: code_set_name
+        description: Inpatient concept represented by the code.
+        data_tests: [not_null]
+      - name: code
+        description: National code.
+        data_tests: [not_null]
+      - name: description
+        description: Newest published description for the code.
+      - name: source_code_set_name
+        description: NHS Data Model and Dictionary attribute used for the definition.
+
+  - name: mhsds_inpatient_code_lookup_history
+    description: >-
+      MHSDS inpatient code definition revisions from UKHFD. One row per code
+      set, source code set, code and UKHFD revision.
+    config: *owner
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - code_set_name
+              - source_code_set_name
+              - code
+              - source_effective_from_at
+    columns:
+      - name: code_set_name
+        description: Inpatient concept represented by the code.
+        data_tests: [not_null]
+      - name: source_code_set_name
+        description: NHS Data Model and Dictionary attribute name.
+        data_tests: [not_null]
+      - name: code
+        description: National code.
+        data_tests: [not_null]
+      - name: description
+        description: Description in this definition revision.
+      - name: source_effective_from_at
+        description: Timestamp from which the UKHFD definition revision applies.
+
   - name: csds_source_of_referral
     description: >-
       One row per community source-of-referral code ever published. Uses the

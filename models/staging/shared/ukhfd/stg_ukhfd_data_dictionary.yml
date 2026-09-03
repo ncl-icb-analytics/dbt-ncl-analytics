@@ -191,6 +191,37 @@ models:
       - name: source_effective_from_at
         description: Timestamp from which the UKHFD definition revision applies.
 
+  - name: stg_ukhfd_data_dictionary_mhsds_inpatient_code_lookup
+    description: >-
+      UKHFD definitions for MHSDS inpatient code sets. One row per code set,
+      source code set, code and UKHFD definition revision.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - code_set_name
+              - source_code_set_name
+              - code
+              - source_effective_from_at
+    columns:
+      - name: code_set_name
+        description: Code-set name used by the inpatient facts.
+        data_tests: [not_null]
+      - name: source_code_set_name
+        description: NHS Data Model and Dictionary attribute name.
+        data_tests: [not_null]
+      - name: code
+        description: National code, upper-cased and trimmed.
+        data_tests: [not_null]
+      - name: description
+        description: Published code description.
+      - name: source_effective_from_at
+        description: Timestamp from which the UKHFD definition revision applies.
+
   - name: stg_ukhfd_data_dictionary_mhsds_service_or_team_intended_age_group
     description: >-
       UKHFD mental health service or team intended-age definitions. One row per
