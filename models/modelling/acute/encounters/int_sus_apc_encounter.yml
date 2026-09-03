@@ -1,7 +1,11 @@
 
 models:
   - name: int_sus_apc_encounter
-    description: "Event history for admitted patient care encounters from SUS data"
+    description: >-
+      Admitted patient care from SUS, with one row per staged hospital spell,
+      including open spells. Retains the staged spell population without an
+      additional date or patient-status filter. Missing dictionary matches leave
+      labels null without removing the spell or its supplied codes.
     config:
       meta:
         owner:
@@ -77,6 +81,39 @@ models:
       - name: pod
         data_type: varchar
         description: "Point of delivery, based on admission method, patient classification and length of stay"
+
+      - name: discharge_destination_code
+        data_type: varchar
+        description: >-
+          Supplied inpatient discharge destination code. Retained even when no
+          dictionary label matches; null means no code was supplied.
+
+      - name: discharge_destination_name
+        data_type: varchar
+        description: >-
+          Discharge destination label from the shared inpatient dictionary.
+          Null when the supplied code is missing or has no matching label.
+
+      - name: discharge_method_code
+        data_type: varchar
+        description: >-
+          Supplied inpatient discharge method code. Retained even when no
+          dictionary label matches; null means no code was supplied.
+
+      - name: discharge_method_name
+        data_type: varchar
+        description: >-
+          Discharge method label from the shared inpatient dictionary.
+          Null when the supplied code is missing or has no matching label.
+
+      - name: critical_care_days_for_length_of_stay
+        data_type: number(38,0)
+        description: >-
+          Source-reported critical-care days used in the SUS+ length-of-stay
+          adjustment, which subtracts distinct critical-care days from episode
+          duration. Retains the supplied spell-level value without recalculation
+          or further subtraction from duration. This is not a financial amount
+          or a measure of critical-care occupancy. Null means no value was supplied.
 
       - name: primary_diagnosis_code
         data_type: varchar

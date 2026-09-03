@@ -6,7 +6,7 @@ Clinical Purpose:
 - Understanding patient service preference
 - Care coordination management across providers
 
-Includes ALL persons (active, inactive, deceased) within 5 years following intermediate layer principles.
+One row per staged spell, including open spells. No additional date or patient-status filter.
 
 */
 with ethnicity_codes as (
@@ -80,6 +80,12 @@ select
         else 'OTHER' end as pod
     
     /* Discharge information */
+    , core.spell_discharge_destination as discharge_destination_code
+    , dict_discharge_destination.discharge_destination_name
+    , core.spell_discharge_method as discharge_method_code
+    , dict_discharge_method.discharge_method_name
+    -- Supplied length-of-stay adjustment; do not subtract it again from duration.
+    , core.spell_length_of_stay_critical_care_days as critical_care_days_for_length_of_stay
     
     /* Clinical information */
     , core.spell_clinical_coding_grouper_derived_primary_diagnosis  as primary_diagnosis_code
@@ -122,6 +128,12 @@ from {{ ref('stg_sus_apc_spell')}} as core
 left join {{ ref('stg_dictionary_ip_admissionmethods')}} as dict_adm_method
     ON core.spell_admission_method = dict_adm_method.bk_admission_method_code
 
+left join {{ ref('stg_dictionary_ip_dischargedestination') }} as dict_discharge_destination
+    on core.spell_discharge_destination = dict_discharge_destination.bk_discharge_destination_code
+
+left join {{ ref('stg_dictionary_ip_dischargemethod') }} as dict_discharge_method
+    on core.spell_discharge_method = dict_discharge_method.bk_discharge_method_code
+
 left join {{ ref('stg_dictionary_dbo_patientclassification')}} as dict_patient_class
     ON core.spell_admission_patient_classification = dict_patient_class.bk_patient_classification_code
 
@@ -154,5 +166,3 @@ left join {{ref('stg_dictionary_dbo_specialties')}} as dict_treat
 left join
     {{ ref('stg_dictionary_dbo_hrg') }} as dict_hrg 
     on core.spell_commissioning_grouping_core_hrg = dict_hrg.hrg_code
-
-
