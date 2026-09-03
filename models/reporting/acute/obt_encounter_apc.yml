@@ -99,7 +99,9 @@ models:
       - name: discharge_destination_name
         data_type: varchar
         description: >-
-          Discharge destination label from the shared inpatient dictionary.
+          Latest UKHFD discharge destination label, including retired codes.
+          The modern Destination Of Discharge definition takes precedence over
+          the legacy code set; this is not the wording as at the discharge date.
           Null when the supplied code is missing or has no matching label.
 
       - name: discharge_method_code
@@ -111,15 +113,18 @@ models:
       - name: discharge_method_name
         data_type: varchar
         description: >-
-          Discharge method label from the shared inpatient dictionary.
+          Latest UKHFD discharge method label, including retired codes.
+          The modern Method Of Discharge definition takes precedence over
+          the legacy code set; this is not the wording as at the discharge date.
           Null when the supplied code is missing or has no matching label.
 
       - name: critical_care_days_for_length_of_stay
         data_type: number(38,0)
         description: >-
-          Source-reported critical-care days used in the SUS+ length-of-stay
-          adjustment, which subtracts distinct critical-care days from episode
-          duration. Retains the supplied spell-level value without recalculation
+          SUS+-derived critical-care days, calculated by SUS+ from submitted
+          critical-care activity for its length-of-stay adjustment. SUS+ subtracts
+          distinct critical-care days from episode duration. dbt passes through
+          the supplied spell-level value unchanged, without recalculation
           or further subtraction from duration. This is not a financial amount
           or a measure of critical-care occupancy. Null means no value was supplied.
 
