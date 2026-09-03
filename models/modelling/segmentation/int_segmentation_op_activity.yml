@@ -10,6 +10,10 @@ models:
       seed). outpatient_specialties_12mo counts distinct main specialties,
       excluding trauma & orthopaedics (110), ENT (120), ophthalmology (130)
       and A&E (180), aligned to the previously clinically agreed NWL cohort.
+      outpatient_specialties_excluding_maternity_12mo additionally excludes
+      records coded to obstetrics (501) or midwifery (560) in either main
+      specialty or treatment function for use by the child complexity
+      criterion.
     config:
       meta:
         owner:
@@ -27,5 +31,11 @@ models:
       - name: outpatient_specialties_12mo
         description: Distinct main specialties with an attended appointment in
           the window, after exclusions
+        data_tests:
+          - not_null
+      - name: outpatient_specialties_excluding_maternity_12mo
+        description: Distinct main specialties after also excluding records
+          coded to obstetrics (501) or midwifery (560) in either main specialty
+          or treatment function
         data_tests:
           - not_null

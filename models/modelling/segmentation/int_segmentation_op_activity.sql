@@ -25,6 +25,11 @@
 -- cohort, and the paediatric criterion still counts paediatric treatment
 -- functions. On this population the two codings differ by under 1% once
 -- the exclusions are applied.
+--
+-- outpatient_specialties_excluding_maternity_12mo also excludes records
+-- coded to obstetrics (501) or midwifery (560) in either main specialty or
+-- treatment function. This adjusted count supports the child complexity
+-- criterion without changing the general outpatient activity measure.
 
 WITH op_max_date AS (
     SELECT MAX(start_date) AS max_date
@@ -53,7 +58,14 @@ paediatric_op AS (
 op_specialties AS (
     SELECT
         op.sk_patient_id,
-        COUNT(DISTINCT op.main_specialty_code) AS outpatient_specialties_12mo
+        COUNT(DISTINCT op.main_specialty_code) AS outpatient_specialties_12mo,
+        COUNT(DISTINCT CASE
+            WHEN
+                COALESCE(op.main_specialty_code, '') NOT IN ('501', '560')
+                AND COALESCE(op.treatment_function_code, '')
+                NOT IN ('501', '560')
+                THEN op.main_specialty_code
+        END) AS outpatient_specialties_excluding_maternity_12mo
     FROM {{ ref('int_sus_op_appointment') }} AS op
     CROSS JOIN op_max_date AS m
     WHERE
@@ -71,7 +83,9 @@ SELECT
     COALESCE(p.sk_patient_id, s.sk_patient_id) AS sk_patient_id,
     ZEROIFNULL(p.paediatric_op_appointments_12mo)
         AS paediatric_op_appointments_12mo,
-    ZEROIFNULL(s.outpatient_specialties_12mo) AS outpatient_specialties_12mo
+    ZEROIFNULL(s.outpatient_specialties_12mo) AS outpatient_specialties_12mo,
+    ZEROIFNULL(s.outpatient_specialties_excluding_maternity_12mo)
+        AS outpatient_specialties_excluding_maternity_12mo
 FROM paediatric_op AS p
 FULL OUTER JOIN op_specialties AS s
     ON p.sk_patient_id = s.sk_patient_id
