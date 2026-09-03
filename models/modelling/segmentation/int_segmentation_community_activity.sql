@@ -15,9 +15,13 @@
 -- shared junk key and is excluded.
 
 WITH cc_max_date AS (
-    SELECT MAX(start_date) AS max_date
-    FROM {{ ref('int_csds_encounters') }}
-    WHERE start_date <= CURRENT_DATE()
+    SELECT MAX(care_contact_date) AS max_date
+    FROM {{ ref('int_csds_contact_currency') }}
+    WHERE
+        care_contact_date <= CURRENT_DATE()
+        AND attendance_status IN ('5', '6')
+        AND sk_patient_id IS NOT NULL
+        AND sk_patient_id != '1'
 )
 
 SELECT

@@ -37,6 +37,8 @@ WITH op_max_date AS (
     WHERE
         appointment_attended_or_dna IN ('5', '6')
         AND start_date <= CURRENT_DATE()
+        AND sk_patient_id IS NOT NULL
+        AND sk_patient_id != '1'
 ),
 
 paediatric_op AS (

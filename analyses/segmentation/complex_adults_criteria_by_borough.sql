@@ -138,7 +138,11 @@ reasons AS (
 -- Borough rows plus an NCL total row.
 by_area AS (
     SELECT
-        COALESCE(borough, 'NCL') AS area,
+        IFF(
+            GROUPING(borough) = 1,
+            'NCL',
+            COALESCE(borough, 'Unknown')
+        ) AS area,
         ord, limb, reason,
         COUNT(*) AS people,
         COUNT_IF(is_sole) AS sole_reason
@@ -151,7 +155,11 @@ by_area AS (
 
 denominator AS (
     SELECT
-        COALESCE(borough_registered, 'NCL') AS area,
+        IFF(
+            GROUPING(borough_registered) = 1,
+            'NCL',
+            COALESCE(borough_registered, 'Unknown')
+        ) AS area,
         COUNT(*) AS adults
     FROM {{ ref('dim_person_demographics') }}
     WHERE is_active AND age >= 18
@@ -160,7 +168,11 @@ denominator AS (
 
 cohort_size AS (
     SELECT
-        COALESCE(borough, 'NCL') AS area,
+        IFF(
+            GROUPING(borough) = 1,
+            'NCL',
+            COALESCE(borough, 'Unknown')
+        ) AS area,
         COUNT(*) AS cohort
     FROM cohort
     GROUP BY ROLLUP(borough)
@@ -196,7 +208,11 @@ ORDER BY IFF(b.area = 'NCL', 0, 1), b.area, b.ord;
 -- complexity_1 counts people meeting exactly one complexity criterion, i.e.
 -- the part of the cohort sitting on the threshold.
 SELECT
-    COALESCE(d.borough_registered, 'NCL') AS borough,
+    IFF(
+        GROUPING(d.borough_registered) = 1,
+        'NCL',
+        COALESCE(d.borough_registered, 'Unknown')
+    ) AS borough,
     COUNT(*) AS registered_adults,
     COUNT(c.person_id) AS cohort,
     ROUND(COUNT(c.person_id) * 1000.0 / COUNT(*), 1) AS per_1000_adults,
@@ -209,4 +225,4 @@ LEFT JOIN {{ ref('fct_person_complex_adults') }} AS c
     AND c.is_active
 WHERE d.is_active AND d.age >= 18
 GROUP BY ROLLUP(d.borough_registered)
-ORDER BY IFF(d.borough_registered IS NULL, 0, 1), 1;
+ORDER BY IFF(GROUPING(d.borough_registered) = 1, 0, 1), 1;
