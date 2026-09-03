@@ -7,4 +7,4 @@
 
 
 select * 
-FROM {{ ref('int_covid_flu_dashboard_wide') }}
+FROM {{ ref('int_covid_flu_dashboard_current') }}

@@ -1,6 +1,6 @@
 models:
-  - name: int_covid_flu_dashboard_wide
-    description: 'Dashboard-ready COVID and flu vaccination data with demographics. WIDE format for risk group. Multiple lines 
+  - name: covid_flu_dashboard_current_dm
+    description: 'Dashboard-ready COVID and flu vaccination data with demographics. WIDE format for in a risk group. Multiple lines 
       per person
       Grain: One row per person per campaign per risk group they qualify for
       Contains:
@@ -9,8 +9,7 @@ models:
       • Vaccination status (vaccinated, declined, no record)
       • Programme identifier (COVID/FLU) for filtering
       • Campaign details and timing metrics
-      • Clinical risk group flags (has_ckd, is_immunosuppressed, in_clinical_risk_group and so on) from int_covid_flu_risk_group_flags, joined per programme and campaign, so they cover every age and do not carry between seasons
-      Purpose: Single source of truth for COVID and Flu Dashboard consumption with full demographic breakdowns for equity analysis.'
+      Purpose: Single source of truth for COVID and Flu Dashboard consumption with full demographic breakdowns for equity analysis.' 
     config:
       meta:
         owner:
