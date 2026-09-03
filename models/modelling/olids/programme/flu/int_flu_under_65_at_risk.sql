@@ -42,7 +42,7 @@ WITH clinical_risk_groups AS (
     UNION ALL
 
     SELECT
-        campaign_id, campaign_category, risk_group, person_id, qualifying_event_date,
+        campaign_id, campaign_category, 'Chronic Kidney Disease' AS risk_group, person_id, qualifying_event_date,
         reference_date, description, birth_date_approx, age_months_at_ref_date,
         age_years_at_ref_date, created_at
     FROM {{ ref('int_flu_chronic_kidney_disease') }}
