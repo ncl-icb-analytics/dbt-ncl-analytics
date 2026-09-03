@@ -1,3 +1,8 @@
+{{
+    config(
+        materialized='view',
+        enabled = false)
+}}
 with specialty_filters as (
     -- Combine filter conditions to avoid repetition
     select distinct visit_occurrence_id
