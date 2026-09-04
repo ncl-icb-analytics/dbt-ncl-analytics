@@ -137,15 +137,31 @@ final_uptake AS (
         cd.laiv_given,
         cd.vaccinated_despite_ineligible,
         
-        -- Uptake flags
-        cd.vaccinated,
-        cd.declined,
+       -- Uptake flags -- make sure vaccinations are after the campaign start date
+        CASE
+        WHEN cd.vaccination_date >= cc.campaign_start_date
+        AND cd.vaccination_status IN ('VACCINATION_ADMINISTERED', 'LAIV_ADMINISTERED')
+        THEN TRUE ELSE FALSE END AS vaccinated,
+        CASE
+        WHEN cd.vaccination_date >= cc.campaign_start_date
+        AND cd.vaccination_status = 'VACCINATION_DECLINED'
+        THEN TRUE ELSE FALSE END AS declined,
         cd.eligible_no_record,
         
-        -- Uptake category
+        -- Uptake category -- make sure vaccinations are after the campaign start date
         CASE
-            WHEN cd.is_eligible AND cd.vaccinated THEN 'Eligible - Vaccinated'
-            WHEN cd.is_eligible AND cd.declined THEN 'Eligible - Declined'
+            WHEN cd.is_eligible
+            AND cd.vaccination_date >= cc.campaign_start_date AND cd.vaccination_status IN ('VACCINATION_ADMINISTERED', 'LAIV_ADMINISTERED')
+            THEN 'Eligible - Vaccinated'
+            WHEN cd.is_eligible
+            AND cd.vaccination_date < cc.campaign_start_date AND cd.vaccination_status IN ('VACCINATION_ADMINISTERED', 'LAIV_ADMINISTERED')
+            THEN 'Eligible - Vaccinated - Pre-Campaign'
+            WHEN cd.is_eligible
+            AND cd.vaccination_date >= cc.campaign_start_date AND cd.vaccination_status = 'VACCINATION_DECLINED'
+            THEN 'Eligible - Declined'
+            WHEN cd.is_eligible
+            AND cd.vaccination_date < cc.campaign_start_date AND cd.vaccination_status = 'VACCINATION_DECLINED'
+            THEN 'Eligible - Declined - Pre-Campaign'
             WHEN cd.is_eligible AND cd.eligible_no_record THEN 'Eligible - No Record'
             WHEN NOT cd.is_eligible AND cd.vaccinated THEN 'Not Eligible - Vaccinated'
             WHEN NOT cd.is_eligible AND cd.declined THEN 'Not Eligible - Declined'
