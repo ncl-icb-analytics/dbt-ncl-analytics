@@ -39,6 +39,8 @@ models:
 
       - name: sk_patient_id
         description: 'Surrogate key for patient record'
+        tests:
+          - is_canonical_numeric_key
 
       - name: is_active
         description: 'Current registration status'
