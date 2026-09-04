@@ -1,7 +1,7 @@
 with eligible_contacts as (
     select
         c.*
-    from {{ ref('stg_mhsds_carecontact') }} as c
+    from {{ ref('int_mhsds_latest_care_contact') }} as c
     where not exists (
         select 1
         from {{ ref('stg_mhsds_spell') }} as s
