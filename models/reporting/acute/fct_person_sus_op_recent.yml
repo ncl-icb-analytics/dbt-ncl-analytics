@@ -73,30 +73,13 @@ models:
       - name: op_dna_rate_shrunk_12mo
         data_type: float
         description: >
-          Empirical-Bayes estimate of the patient's underlying DNA rate,
+          Estimate of the patient's underlying DNA rate (emperical bayes),
           shrunk towards the population rate for their age band. Null where
           the patient had no DNA opportunity. The recommended rate for
           comparing patients, but a best estimate rather than a confidence
-          measure: do not build a worklist by sorting on it alone, because a
-          patient who missed their only appointment scores above one who
-          missed two of five. Read it with op_dna_evidence_weight_12mo. See
-          int_person_sus_op_dna_rate for the prior parameters applied.
-
-      - name: op_dna_rate_shrunk_age_neutral_12mo
-        data_type: float
-        description: >
-          As op_dna_rate_shrunk_12mo but shrunk towards the single
-          population DNA rate rather than the patient's age band rate. The
-          difference between the two columns is the contribution of age.
-          Use where scoring a patient partly on their age would be
-          inappropriate.
-
-      - name: op_dna_rate_posterior_sd_12mo
-        data_type: float
-        description: >
-          Standard deviation of the posterior distribution behind
-          op_dna_rate_shrunk_12mo, on the same proportion scale. Larger
-          values mean a less certain estimate.
+          measure to adjust for low appointments. Read it with 
+          op_dna_evidence_weight_12mo. See int_person_sus_op_dna_rate for 
+          the prior parameters applied.
 
       - name: op_dna_evidence_weight_12mo
         data_type: float
