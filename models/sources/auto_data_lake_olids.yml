@@ -117,6 +117,8 @@ sources:
       data_type: NUMBER(38,0)
     - name: APPOINTMENT_STATUS_SOURCE_CONCEPT_ID
       data_type: UUID
+    - name: APPOINTMENT_STATUS_DERIVED
+      data_type: TEXT
     - name: APPOINTMENT_STATUS_SOURCE_CODE
       data_type: TEXT
     - name: APPOINTMENT_STATUS_SOURCE_DISPLAY
@@ -1058,6 +1060,10 @@ sources:
       data_type: TEXT
     - name: SK_PATIENT_ID
       data_type: NUMBER(38,0)
+    - name: PDS_TRACE_STATUS
+      data_type: TEXT
+    - name: SK_LINKAGE_STATUS
+      data_type: TEXT
     - name: TITLE
       data_type: TEXT
     - name: GENDER_SOURCE_CONCEPT_ID
@@ -1290,6 +1296,8 @@ sources:
   - name: POSTCODE_HASH
     identifier: '"POSTCODE_HASH"'
     columns:
+    - name: POSTCODE
+      data_type: TEXT
     - name: POSTCODE_HASH
       data_type: TEXT
     - name: OUTCODE
@@ -1311,7 +1319,7 @@ sources:
     - name: VERSION
       data_type: TEXT
     - name: LAST_UPDATED
-      data_type: TIMESTAMP_LTZ
+      data_type: TIMESTAMP_NTZ
   - name: PRACTITIONER
     identifier: '"PRACTITIONER"'
     columns:
