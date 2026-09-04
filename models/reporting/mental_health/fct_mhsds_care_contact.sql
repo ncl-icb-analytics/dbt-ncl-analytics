@@ -122,7 +122,7 @@ select
     , c.dmic_dataset as mhsds_version
     , c.effective_from as source_file_received_at
     , c.dmic_date_added as source_loaded_at
-from {{ ref('stg_mhsds_carecontact') }} as c
+from {{ ref('int_mhsds_latest_care_contact') }} as c
 left join {{ ref('stg_mhsds_bridging') }} as b
     on c.person_id = b.person_id
 left join {{ ref('stg_mhsds_service_or_team_details') }} as td
