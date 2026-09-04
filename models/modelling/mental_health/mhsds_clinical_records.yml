@@ -6,7 +6,9 @@ models:
       Recorded MHSDS diagnoses, one row per source table, provider-local
       patient or referral, person, scheme, code and clinical time/precision.
       Retains the latest accepted row for each fully identified diagnosis.
-      Incomplete keys retain individual source rows. Different codes and
+      Missing parent, scheme, code or time retains individual source rows.
+      A missing national person identifier does not disable revision selection
+      within a complete provider-local key. Different codes and
       person identifiers survive; this does not decide which diagnosis is
       clinically current. First/last periods record submission evidence.
     config: &owner

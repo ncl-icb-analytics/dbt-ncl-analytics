@@ -76,7 +76,10 @@ select
         as standardised_snomed_observation_description
     , a.observation_value
     , a.unit_of_measurement_code
-    , unit_of_measurement.unit_name as unit_of_measurement_description
+    , unit_of_measurement.description as unit_of_measurement_description
+    , unit_of_measurement.unit_symbol as unit_of_measurement_symbol
+    , unit_of_measurement.match_type as unit_of_measurement_match_type
+    , unit_of_measurement.definition_source as unit_of_measurement_definition_source
     , case
         when a.unit_of_measurement_code is null then 'code_missing'
         when unit_of_measurement.code is null then 'code_unmatched'
@@ -154,8 +157,8 @@ left join {{ ref('stg_dictionary_snomed_concept') }} as observation
 left join {{ ref('stg_dictionary_snomed_concept') }} as mapped_snomed_observation
     on trim(a.standardised_snomed_observation_code)
         = mapped_snomed_observation.snomed_code
-left join {{ ref('unit_of_measurement') }} as unit_of_measurement
-    on upper(trim(a.unit_of_measurement_code)) = unit_of_measurement.code
+left join {{ ref('clinical_unit_of_measurement') }} as unit_of_measurement
+    on trim(a.unit_of_measurement_code) = unit_of_measurement.code
 left join {{ ref('stg_mhsds_service_or_team_details') }} as td
     on coalesce(c.other_care_prof_team_local_id, c.care_prof_team_local_id)
         = td.care_prof_team_local_id

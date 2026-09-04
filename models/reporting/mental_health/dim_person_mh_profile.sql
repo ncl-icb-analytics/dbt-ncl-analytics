@@ -106,11 +106,11 @@ with latest_reporting_period as (
 )
 
 -- Ranking is by coding timestamp alone, so the retained row is the person's
--- latest diagnosis record rather than their latest ICD-10-coded one.
+-- latest dated primary diagnosis rather than their latest ICD-10-coded one.
 -- int_mhsds_currency_primary_diagnosis leaves icd10_3 null for an ICD-10 code outside F, G, Q
 -- and R and for a SNOMED code with no map, so the published diagnosis columns
 -- are null whenever that latest record did not resolve. has_diagnosis_record
--- separates that from a person with no diagnosis record at all.
+-- separates that from a person with no dated primary diagnosis on a retained referral.
 , latest_diagnosis as (
     select
         r.person_id

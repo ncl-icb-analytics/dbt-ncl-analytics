@@ -45,6 +45,7 @@ select
     , null::boolean as is_care_activity_person_consistent
     , null::boolean as is_care_activity_referral_consistent
     , null::boolean as is_care_activity_contact_consistent
+    , null::boolean as is_care_contact_person_consistent
 from {{ ref('int_mhsds_diagnosis') }} as d
 
 union all
@@ -103,6 +104,7 @@ select
     , null::boolean as is_care_activity_person_consistent
     , null::boolean as is_care_activity_referral_consistent
     , null::boolean as is_care_activity_contact_consistent
+    , null::boolean as is_care_contact_person_consistent
 from {{ ref('stg_mhsds_referral_assessment') }} as a
 
 union all
@@ -169,6 +171,7 @@ select
     , iff(c.source_record_id is null, null, a.person_id is not distinct from c.person_id) as is_care_activity_person_consistent
     , iff(c.source_record_id is null, null, a.uniq_serv_req_id is not distinct from c.referral_source_record_id) as is_care_activity_referral_consistent
     , iff(c.source_record_id is null, null, a.uniq_care_cont_id is not distinct from c.uniq_care_cont_id) as is_care_activity_contact_consistent
+    , c.is_care_contact_person_consistent as is_care_contact_person_consistent
 from {{ ref('stg_mhsds_activity_assessment') }} as a
 left join {{ ref('fct_mhsds_care_activity') }} as c
     on a.uniq_submission_id = c.uniq_submission_id
@@ -225,6 +228,7 @@ select
     , true as is_care_activity_person_consistent
     , true as is_care_activity_referral_consistent
     , true as is_care_activity_contact_consistent
+    , a.is_care_contact_person_consistent as is_care_contact_person_consistent
 from {{ ref('fct_mhsds_care_activity') }} as a
 where a.has_procedure
 
@@ -277,6 +281,7 @@ select
     , true as is_care_activity_person_consistent
     , true as is_care_activity_referral_consistent
     , true as is_care_activity_contact_consistent
+    , a.is_care_contact_person_consistent as is_care_contact_person_consistent
 from {{ ref('fct_mhsds_care_activity') }} as a
 where a.has_finding
 
@@ -329,5 +334,6 @@ select
     , true as is_care_activity_person_consistent
     , true as is_care_activity_referral_consistent
     , true as is_care_activity_contact_consistent
+    , a.is_care_contact_person_consistent as is_care_contact_person_consistent
 from {{ ref('fct_mhsds_care_activity') }} as a
 where a.has_observation

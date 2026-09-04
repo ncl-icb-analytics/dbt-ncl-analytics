@@ -64,15 +64,35 @@ models:
       - name: clinical_code
         description: "Original diagnosis, assessment observable, procedure, finding or observation code."
       - name: standardised_snomed_code
-        description: "Source-pipeline SNOMED CT mapping, kept separately from the submitted code."
+        description: "Source-pipeline master SNOMED CT code, submitted or mapped. Kept separately from the original code."
       - name: clinical_value
         description: "Submitted assessment score or observation value as text. Null for records without a measured value."
       - name: unit_of_measurement_code
         description: "Recorded observation unit code. Assessment scores do not acquire an invented unit."
       - name: unit_of_measurement_description
-        description: "Existing care-activity unit label from the warehouse dictionary."
+        description: "Exact-case unit label from UKHFD UCUM or a recognised warehouse dictionary symbol or alias."
       - name: unit_of_measurement_label_status
         description: "Existing care-activity unit lookup status. Null when no observation unit applies."
+      - name: unit_of_measurement_symbol
+        description: "Reference symbol for the recorded unit. No value conversion is applied."
+      - name: unit_of_measurement_match_type
+        description: "ucum_code, dictionary_symbol or known_alias. A dictionary or alias match is not proof of UCUM conformance."
+      - name: unit_of_measurement_definition_source
+        description: "UKHFD UCUM or the warehouse dictionary supplying the unit definition."
+      - name: assessment_tool_name
+        description: "Specification tool grouping for an assessment observable. Do not sum its different questions or dimensions without the tool's scoring method."
+      - name: assessment_definition_version
+        description: "Latest available ETOS version supplying the observable definition, including historical concepts. Not a retrospective validity assertion."
+      - name: clinical_value_description
+        description: "Published meaning of this assessment concept and enumerated response pair. Null for numeric ranges, observations or responses absent from the reference."
+      - name: assessment_response_definition_version
+        description: "Latest available ETOS version defining this enumerated response for the concept."
+      - name: is_assessment_response_non_score
+        description: "True for explicitly missing, unknown or not-applicable responses. False for other enumerated responses; null without an enumerated definition. Never infer this from a number alone."
+      - name: assessment_response_status
+        description: "value_missing, known_non_score, enumerated_response, within_published_range, response_unmatched or reference_not_available. Null outside assessments. This describes the latest available reference, not historic submission validity."
+      - name: assessment_score_numeric
+        description: "Numeric assessment response only when enumerated or within the published range and decimal precision, excluding known non-score responses. Null otherwise. Compare the same observable and scoring method; this does not derive questionnaire totals."
       - name: provider_organisation_code
         description: "Organisation submitting the clinical record."
       - name: uniq_submission_id
@@ -105,14 +125,20 @@ models:
         description: "Whether the activity assessment and its parent record the same referral; null if no applicable parent."
       - name: is_care_activity_contact_consistent
         description: "Whether the activity assessment and its parent record the same contact. Submitted links are retained when they differ."
+      - name: is_care_contact_person_consistent
+        description: "Whether the activity and the same-submission contact supplying its time have matching person identifiers. Null without an applicable contact. This is separate from assessment-to-activity consistency."
       - name: coding_scheme_description
         description: "Authoritative label for the applicable coding scheme."
       - name: standardised_snomed_description
-        description: "Description of the separately recorded source-pipeline SNOMED CT mapping."
+        description: "Description of the separately recorded source-pipeline master SNOMED CT code, submitted or mapped."
       - name: clinical_description
         description: "Authoritative submitted-code label, or a mapped SNOMED CT label for legacy Read codes. Interpret with clinical_label_status."
       - name: clinical_label_status
         description: "Distinguishes labelled codes, mapped legacy codes, missing codes, unrecognised schemes, unmatched codes or expressions, and coding systems without a local reference. Labels do not establish scheme validity for a submitted MHSDS version."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [labelled, mapped_to_snomed, code_missing, coding_scheme_unrecognised, reference_not_available, code_or_expression_unmatched]
       - name: sk_patient_id
         description: "Warehouse patient key from the established MHSDS bridge; null when no mapping exists."
       - name: provider_organisation_name
@@ -124,7 +150,7 @@ models:
       - name: clinical_time
         description: "Stored unzoned time; null when only date precision is known."
       - name: clinical_value_numeric
-        description: "Parsed NUMBER(38,9) value. Source text remains available. Parse status identifies non-numeric values, overflow and rounding."
+        description: "Technical NUMBER(38,9) parse, including numeric missing-response codes. Use assessment_score_numeric for interpreted assessment values. Source text remains available; parsing alone does not establish a valid score."
       - name: clinical_value_parse_status
         description: "value_missing, numeric, numeric_rounded, or not_numeric_or_out_of_range. Non-numeric does not necessarily mean an invalid assessment response."
       - name: is_clinical_date_after_reporting_period

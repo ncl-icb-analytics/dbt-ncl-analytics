@@ -118,7 +118,7 @@ with diagnosis_records as (
         , coalesce(source_timestamp::date <> source_derived_date, false)
             as is_source_date_inconsistent
         , iff(
-            clinical_at is null or source_parent_id is null or person_id is null
+            clinical_at is null or source_parent_id is null
                 or clinical_code is null or diagnosis_scheme_code is null
             , source_row_id, null
         ) as incomplete_key_source_row_id

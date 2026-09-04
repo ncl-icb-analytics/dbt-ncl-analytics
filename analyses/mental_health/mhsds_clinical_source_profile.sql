@@ -10,7 +10,8 @@
 {% for number, model, code, timestamp, date, parent in sources %}
 select
     'MHS{{ number }}' as source_table
-    , coalesce(a.dmic_dataset, 'all_versions') as source_version
+    , iff(grouping(a.dmic_dataset) = 1, 'all_versions',
+        coalesce(a.dmic_dataset, 'unknown_version')) as source_version
     , count(*) as accepted_rows
     , count(distinct a.mhs{{ number }}_uniq_id) as distinct_source_ids
     , count_if(a.{{ code }} is null) as missing_codes

@@ -1,5 +1,9 @@
 # Clinical records (#1017)
 
+The [5 September method review](mhsds-clinical-method-review.md) records the
+latest fixes and aggregate results. Earlier counts below describe the successive
+review snapshots.
+
 ## Intent
 
 Publish one analyst-facing clinical-item fact for recorded diagnoses, care-activity
@@ -38,6 +42,9 @@ key. The profile found 206 primary-diagnosis keys spanning different warehouse
 patient keys. Preserve these identity boundaries and flag changing person IDs.
 This deliberately retains possible duplicates after national identifier changes;
 it does not combine potentially different people's clinical histories.
+Missing national person IDs form their own group within a complete provider-local
+key. They do not force one diagnosis per reporting period. Missing parent, code,
+scheme or usable time still retains individual source rows.
 
 Diagnosis IDs hash the guarded logical key. MHS202 component IDs hash the
 established activity key and component type. Assessment IDs hash the accepted
@@ -65,8 +72,11 @@ value and unit, provider code/name, accepted period and submission provenance.
 Retain MHS601's provider-local patient identifier as its direct patient link.
 Use a label-status field to distinguish missing, unmatched, mapped and
 unavailable-reference cases. Keep the submitted assessment score as text and
-offer a NUMBER(38,9) parsed score with parse status, without imposing unverified
-score ranges. Retain the directly supplied MHS606 local and derived assessor
+offer a NUMBER(38,9) technical parse with parse status. Separate specification
+response labels, tool grouping and interpreted scores from that technical parse.
+`assessment_score_numeric` excludes known non-score responses and requires an
+enumerated numeric response or the published range and precision. It does not
+derive a whole-questionnaire score. Retain the directly supplied MHS606 local and derived assessor
 identifiers. Do not join the one-to-many activity staff relation to clinical items.
 
 Use the existing ICD-10 and SNOMED references. Add the UKHFD diagnosis-scheme
@@ -240,8 +250,8 @@ new person relationship. A regression test checks this time inheritance.
 No clinical codes or scheme codes are blank strings. Observation units are
 recorded on 559,346 items; 118,800 have no label in the existing unit dictionary.
 Of those, 74,894 use BMI-style unit notation. Both v5 and v6 specify UCUM, so
-this is not a new v6 rule. Units and unmatched statuses remain visible; extending
-the shared unit reference is a separate scope decision. Authoritative UCUM
+this is not a new v6 rule. The September method review below supersedes this
+initial profile with a case-sensitive UKHFD UCUM lookup. Authoritative UCUM
 examples include [BMI units](https://hl7.org/fhir/valueset-ucum-vitals-common.html)
 and [compound laboratory units](https://ucum.org/ucum).
 

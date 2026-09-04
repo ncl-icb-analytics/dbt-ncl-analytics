@@ -25,7 +25,13 @@ with labelled as (
                 then mapped.preferred_term
         end as clinical_description
         , case
-            when r.source_table = 'MHS202' then r.source_clinical_label_status
+            when r.source_table = 'MHS202' then case
+                when r.source_clinical_label_status = 'code_unmatched'
+                    then 'code_or_expression_unmatched'
+                when r.source_clinical_label_status = 'labelled_snomed_scheme_missing'
+                    then 'labelled'
+                else r.source_clinical_label_status
+            end
             when r.clinical_code is null then 'code_missing'
             when r.coding_scheme_kind = 'diagnosis' and scheme.code is null
                 then 'coding_scheme_unrecognised'
@@ -40,6 +46,28 @@ with labelled as (
         end as clinical_label_status
         , b.sk_patient_id
         , provider.organisation_name as provider_organisation_name
+        , unit.unit_symbol as unit_of_measurement_symbol
+        , unit.match_type as unit_of_measurement_match_type
+        , unit.definition_source as unit_of_measurement_definition_source
+        , scale.assessment_tool_name
+        , scale.specification_version as assessment_definition_version
+        , response.response_description as clinical_value_description
+        , response.specification_version as assessment_response_definition_version
+        , response.is_non_score_response as is_assessment_response_non_score
+        , case
+            when r.source_table not in ('MHS606', 'MHS607') then null
+            when r.clinical_value is null then 'value_missing'
+            when response.is_non_score_response then 'known_non_score'
+            when response.response_code is not null then 'enumerated_response'
+            when scale.numeric_range_count = 1
+                and try_to_decimal(r.clinical_value, 38, 9)
+                    between scale.minimum_numeric_value and scale.maximum_numeric_value
+                and try_to_double(r.clinical_value)
+                    = round(try_to_decimal(r.clinical_value, 38, 9), scale.decimal_places)::double
+                then 'within_published_range'
+            when scale.concept_code is null then 'reference_not_available'
+            else 'response_unmatched'
+        end as assessment_response_status
     from {{ ref('int_mhsds_clinical_record') }} as r
     left join {{ ref('mhsds_diagnosis_scheme') }} as scheme
         on r.coding_scheme_kind = 'diagnosis'
@@ -59,6 +87,16 @@ with labelled as (
         on r.person_id = b.person_id
     left join {{ ref('int_mhsds_organisation') }} as provider
         on upper(r.provider_organisation_code) = upper(provider.organisation_code)
+    left join {{ ref('clinical_unit_of_measurement') }} as unit
+        on trim(r.unit_of_measurement_code) = unit.code
+    left join {{ ref('mhsds_assessment_scale') }} as scale
+        on r.source_table in ('MHS606', 'MHS607')
+        and trim(r.clinical_code) = scale.concept_code
+    left join {{ ref('mhsds_assessment_response') }} as response
+        on r.source_table in ('MHS606', 'MHS607')
+        and trim(r.clinical_code) = response.concept_code
+        and (trim(r.clinical_value) = response.response_code
+            or try_to_double(r.clinical_value) = response.numeric_response_value::double)
 )
 
 select
@@ -79,6 +117,8 @@ select
             then 'numeric_rounded'
         else 'numeric'
     end as clinical_value_parse_status
+    , iff(assessment_response_status in ('enumerated_response', 'within_published_range'),
+        clinical_value_numeric, null) as assessment_score_numeric
     , coalesce(clinical_at::date > reporting_period_end_date, false)
         as is_clinical_date_after_reporting_period
     , iff(
