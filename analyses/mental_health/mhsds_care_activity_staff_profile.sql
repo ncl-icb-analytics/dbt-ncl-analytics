@@ -33,13 +33,23 @@ with activity as (
 )
 
 , accepted_activity_identifiers as (
-    select distinct uniq_care_act_id
+    select
+        org_id_prov
+        , uniq_care_act_id
+        , min(reporting_period_end_date) as first_reporting_period_end_date
+        , max(reporting_period_end_date) as last_reporting_period_end_date
     from {{ ref('stg_mhsds_care_activity') }}
+    group by org_id_prov, uniq_care_act_id
 )
 
 , accepted_professional_identifiers as (
-    select distinct uniq_care_prof_local_id
+    select
+        org_id_prov
+        , uniq_care_prof_local_id
+        , min(reporting_period_end_date) as first_reporting_period_end_date
+        , max(reporting_period_end_date) as last_reporting_period_end_date
     from {{ ref('stg_mhsds_staff_details') }}
+    group by org_id_prov, uniq_care_prof_local_id
 )
 
 , missing_relationship_parent_history as (
@@ -47,14 +57,23 @@ with activity as (
         r.source_table
         , r.is_care_activity_linked
         , r.is_professional_detail_linked
-        , ai.uniq_care_act_id is not null as is_activity_seen_in_another_period
-        , pi.uniq_care_prof_local_id is not null
-            as is_professional_seen_in_another_period
+        , coalesce(
+            ai.first_reporting_period_end_date <> r.reporting_period_end_date
+            or ai.last_reporting_period_end_date <> r.reporting_period_end_date
+            , false
+        ) as is_activity_seen_in_another_period
+        , coalesce(
+            pi.first_reporting_period_end_date <> r.reporting_period_end_date
+            or pi.last_reporting_period_end_date <> r.reporting_period_end_date
+            , false
+        ) as is_professional_seen_in_another_period
     from relationship as r
     left join accepted_activity_identifiers as ai
         on r.uniq_care_act_id = ai.uniq_care_act_id
+        and upper(r.provider_organisation_code) = upper(ai.org_id_prov)
     left join accepted_professional_identifiers as pi
         on r.uniq_care_prof_local_id = pi.uniq_care_prof_local_id
+        and upper(r.provider_organisation_code) = upper(pi.org_id_prov)
     where not r.is_care_activity_linked
         or not r.is_professional_detail_linked
 )

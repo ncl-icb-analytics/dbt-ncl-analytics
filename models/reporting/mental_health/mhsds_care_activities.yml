@@ -28,8 +28,6 @@ models:
         description: Provider-local care activity identifier.
       - name: referral_source_record_id
         description: MHSDS unique service request identifier; joins to fct_mhsds_referral.
-      - name: care_contact_source_record_id
-        description: Expected fct_mhsds_care_contact identifier, retained when the parent is missing.
       - name: uniq_care_cont_id
         description: MHSDS-derived care contact identifier.
       - name: care_contact_id
@@ -81,8 +79,9 @@ models:
         description: SNOMED CT preferred term for the standardised finding code.
       - name: observation_scheme_code
         description: >-
-          Submitted observation coding scheme before v6; 03 (SNOMED CT) for
-          v6, where the specification fixes the coding system.
+          Submitted observation coding scheme through v4.0; 03 (SNOMED CT)
+          for a populated observation code from v4.1, where the specification
+          fixes the coding system.
       - name: observation_scheme_description
         description: Published description for the observation coding scheme, including retired schemes.
       - name: observation_code

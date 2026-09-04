@@ -33,8 +33,9 @@ models:
         description: Source-pipeline SNOMED CT code derived from the submitted finding where available.
       - name: observation_scheme_code
         description: >-
-          Submitted observation scheme before v6; 03 (SNOMED CT) for v6,
-          where the specification fixes the coding system.
+          Submitted observation scheme through v4.0; 03 (SNOMED CT) for a
+          populated observation code from v4.1, where the specification fixes
+          the coding system and removes the field.
       - name: observation_code
         description: Observation code from CodeObs before v6 and Observation from v6.
       - name: standardised_snomed_observation_code

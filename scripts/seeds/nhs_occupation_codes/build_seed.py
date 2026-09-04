@@ -37,7 +37,7 @@ RELATIONSHIP_NS = (
 def read_source(path: Path | None) -> bytes:
     if path:
         return path.read_bytes()
-    with urllib.request.urlopen(SOURCE_URL) as response:
+    with urllib.request.urlopen(SOURCE_URL, timeout=60) as response:
         return response.read()
 
 

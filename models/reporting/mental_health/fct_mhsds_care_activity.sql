@@ -9,10 +9,6 @@ select
     , a.uniq_care_act_id
     , a.care_act_id
     , a.uniq_serv_req_id as referral_source_record_id
-    , {{ dbt_utils.generate_surrogate_key([
-        'a.uniq_serv_req_id',
-        'a.uniq_care_cont_id'
-    ]) }} as care_contact_source_record_id
     , a.uniq_care_cont_id
     , a.care_contact_id
     , a.person_id
