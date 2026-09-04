@@ -8,7 +8,7 @@ models:
           name: Emily Baldwin
     columns:
       - name: sk_patient_id
-        data_type: number
+        data_type: varchar
         description: "Unique patient identifier"
         tests:
           - not_null
