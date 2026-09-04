@@ -1,4 +1,4 @@
--- Diagnosis dates are not listed: stg_mhsds_primdiag still passes source
+-- Diagnosis dates are not listed: the currency diagnosis model still passes source
 -- values through uncast, so the sentinel rule does not yet hold there.
 with profile_sentinel_counts as (
     select

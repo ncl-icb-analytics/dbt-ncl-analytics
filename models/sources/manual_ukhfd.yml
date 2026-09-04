@@ -288,6 +288,10 @@ sources:
         identifier: '"dim_Activity_Location_Type_Code_SCD"'
         description: Activity location type code definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: diagnosis_scheme_in_use
+        identifier: '"dim_Diagnosis_Scheme_In_Use_SCD"'
+        description: Diagnosis coding schemes, including retired definitions.
+        columns: *ukhfd_data_dictionary_columns
       - name: consultation_mechanism
         identifier: '"dim_Consultation_Mechanism_SCD"'
         description: Consultation mechanism code definitions and their UKHFD history.

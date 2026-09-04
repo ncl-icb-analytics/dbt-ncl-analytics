@@ -1,17 +1,16 @@
 {{ config(materialized='table', tags=['mhsds']) }}
 
 with accepted_records as (
-    {{ select_accepted_mhsds_period_records(ref('raw_mhsds_mhs604primdiag')) }}
+    {{ select_accepted_mhsds_period_records(ref('raw_mhsds_mhs607codedscoreassessmentact')) }}
 )
 
 select
-    mhs604_uniq_id
+    mhs607_uniq_id
     , uniq_serv_req_id
-    , diag_scheme_in_use
-    , prim_diag
-    , coded_diag_timestamp
-    , diag_date
-    , master_snomed_ct_prim_diag_code
+    , uniq_care_cont_id
+    , uniq_care_act_id
+    , coded_ass_tool_type
+    , pers_score
     , org_id_prov
     , person_id
     , uniq_submission_id

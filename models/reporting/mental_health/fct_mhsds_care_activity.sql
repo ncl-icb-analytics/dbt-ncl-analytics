@@ -138,7 +138,7 @@ left join {{ ref('mhsds_care_activity_code_lookup') }} as finding_scheme
     on upper(trim(a.finding_scheme_code)) = finding_scheme.code
     and finding_scheme.code_set_name = 'finding_scheme'
 left join {{ ref('stg_dictionary_dbo_diagnosis') }} as icd10_finding
-    on upper(replace(trim(a.finding_code), '.', '')) = upper(icd10_finding.code)
+    on {{ clean_icd10_code('upper(trim(a.finding_code))') }} = upper(icd10_finding.code)
     and a.finding_scheme_code = '01'
 left join {{ ref('stg_dictionary_snomed_concept') }} as snomed_finding
     on trim(a.finding_code) = snomed_finding.snomed_code
