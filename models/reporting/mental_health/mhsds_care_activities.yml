@@ -77,6 +77,8 @@ models:
         description: Source-pipeline SNOMED CT code derived from the submitted finding where available.
       - name: standardised_snomed_finding_description
         description: SNOMED CT preferred term for the standardised finding code.
+      - name: is_observation_scheme_inferred
+        description: TRUE when the observation scheme comes from the SNOMED-only specification rule rather than a submitted scheme field.
       - name: observation_scheme_code
         description: >-
           Submitted observation coding scheme through v4.0; 03 (SNOMED CT)

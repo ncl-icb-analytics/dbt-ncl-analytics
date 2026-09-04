@@ -27,10 +27,14 @@ with labelled as (
         , case
             when r.source_table = 'MHS202' then r.source_clinical_label_status
             when r.clinical_code is null then 'code_missing'
+            when r.coding_scheme_kind = 'diagnosis' and scheme.code is null
+                then 'coding_scheme_unrecognised'
             when r.coding_scheme_kind = 'diagnosis' and r.coding_scheme_code = '07'
                 then 'reference_not_available'
             when r.coding_scheme_kind = 'diagnosis' and r.coding_scheme_code in ('03', '04', '05')
                 then iff(mapped.snomed_code is null, 'reference_not_available', 'mapped_to_snomed')
+            when r.coding_scheme_kind = 'diagnosis' and r.coding_scheme_code not in ('02', '06')
+                then 'reference_not_available'
             when clinical_description is not null then 'labelled'
             else 'code_or_expression_unmatched'
         end as clinical_label_status
@@ -64,6 +68,8 @@ select
     , 'MHSDS' as source_dataset
     , *
     , clinical_at::date as clinical_date
+    , coalesce(source_timestamp::date < '1901-01-01'::date, false)
+        or coalesce(source_derived_date < '1901-01-01'::date, false) as has_source_date_sentinel
     , iff(clinical_time_precision = 'date', null, clinical_at::time) as clinical_time
     , try_to_decimal(clinical_value, 38, 9) as clinical_value_numeric
     , case

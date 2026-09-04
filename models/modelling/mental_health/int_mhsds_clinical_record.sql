@@ -4,6 +4,7 @@ select
     , d.source_table as source_table
     , d.clinical_record_type as clinical_record_type
     , d.person_id as person_id
+    , d.local_patient_id as local_patient_id
     , d.referral_source_record_id as referral_source_record_id
     , null::varchar as uniq_care_cont_id
     , null::varchar as care_activity_source_record_id
@@ -54,14 +55,22 @@ select
     , 'MHS606' as source_table
     , 'referral_assessment' as clinical_record_type
     , a.person_id as person_id
+    , null::varchar as local_patient_id
     , a.uniq_serv_req_id as referral_source_record_id
     , null::varchar as uniq_care_cont_id
     , null::varchar as care_activity_source_record_id
     , null::varchar as uniq_care_act_id
     , a.care_prof_local_id as care_prof_local_id
     , a.uniq_care_prof_local_id as uniq_care_prof_local_id
-    , coalesce(a.ass_tool_comp_timestamp, a.ass_tool_comp_date::date::timestamp_ntz) as clinical_at
-    , case when a.ass_tool_comp_timestamp is not null then 'stored_timestamp_precision_unknown' when a.ass_tool_comp_date is not null then 'date' end as clinical_time_precision
+    , coalesce(
+        iff(a.ass_tool_comp_timestamp::date >= '1901-01-01'::date, a.ass_tool_comp_timestamp, null)
+        , iff(a.ass_tool_comp_date::date >= '1901-01-01'::date, a.ass_tool_comp_date::date::timestamp_ntz, null)
+    ) as clinical_at
+    , case
+        when a.ass_tool_comp_timestamp::date >= '1901-01-01'::date
+            then 'stored_timestamp_precision_unknown'
+        when a.ass_tool_comp_date::date >= '1901-01-01'::date then 'date'
+    end as clinical_time_precision
     , 'assessment_completion' as clinical_time_basis
     , a.ass_tool_comp_timestamp as source_timestamp
     , a.ass_tool_comp_date::date as source_derived_date
@@ -104,15 +113,31 @@ select
     , 'MHS607' as source_table
     , 'activity_assessment' as clinical_record_type
     , a.person_id as person_id
+    , null::varchar as local_patient_id
     , a.uniq_serv_req_id as referral_source_record_id
     , a.uniq_care_cont_id as uniq_care_cont_id
     , {{ dbt_utils.generate_surrogate_key(['a.org_id_prov', 'a.reporting_period_end_date::date', 'a.uniq_care_act_id']) }} as care_activity_source_record_id
     , a.uniq_care_act_id as uniq_care_act_id
     , null::varchar as care_prof_local_id
     , null::varchar as uniq_care_prof_local_id
-    , iff(c.source_record_id is not null and a.person_id = c.person_id and a.uniq_serv_req_id = c.referral_source_record_id, c.care_activity_at, null) as clinical_at
-    , iff(c.source_record_id is not null and a.person_id = c.person_id and a.uniq_serv_req_id = c.referral_source_record_id, c.care_activity_time_precision, null) as clinical_time_precision
-    , iff(c.source_record_id is not null and a.person_id = c.person_id and a.uniq_serv_req_id = c.referral_source_record_id, 'same_submission_care_activity_contact', null) as clinical_time_basis
+    , iff(
+        c.source_record_id is not null
+            and a.person_id is not distinct from c.person_id
+            and a.uniq_serv_req_id is not distinct from c.referral_source_record_id
+        , c.care_activity_at, null
+    ) as clinical_at
+    , iff(
+        c.source_record_id is not null
+            and a.person_id is not distinct from c.person_id
+            and a.uniq_serv_req_id is not distinct from c.referral_source_record_id
+        , c.care_activity_time_precision, null
+    ) as clinical_time_precision
+    , iff(
+        c.source_record_id is not null
+            and a.person_id is not distinct from c.person_id
+            and a.uniq_serv_req_id is not distinct from c.referral_source_record_id
+        , 'same_submission_care_activity_contact', null
+    ) as clinical_time_basis
     , null::timestamp_ntz as source_timestamp
     , null::date as source_derived_date
     , false as is_source_date_inconsistent
@@ -159,6 +184,7 @@ select
     , 'MHS202' as source_table
     , 'procedure' as clinical_record_type
     , a.person_id as person_id
+    , null::varchar as local_patient_id
     , a.referral_source_record_id as referral_source_record_id
     , a.uniq_care_cont_id as uniq_care_cont_id
     , a.source_record_id as care_activity_source_record_id
@@ -210,6 +236,7 @@ select
     , 'MHS202' as source_table
     , 'finding' as clinical_record_type
     , a.person_id as person_id
+    , null::varchar as local_patient_id
     , a.referral_source_record_id as referral_source_record_id
     , a.uniq_care_cont_id as uniq_care_cont_id
     , a.source_record_id as care_activity_source_record_id
@@ -261,6 +288,7 @@ select
     , 'MHS202' as source_table
     , 'observation' as clinical_record_type
     , a.person_id as person_id
+    , null::varchar as local_patient_id
     , a.referral_source_record_id as referral_source_record_id
     , a.uniq_care_cont_id as uniq_care_cont_id
     , a.source_record_id as care_activity_source_record_id
@@ -273,8 +301,8 @@ select
     , null::timestamp_ntz as source_timestamp
     , null::date as source_derived_date
     , false as is_source_date_inconsistent
-    , a.observation_scheme_code as coding_scheme_code
-    , 'observation' as coding_scheme_kind
+    , iff(a.is_observation_scheme_inferred, null, a.observation_scheme_code) as coding_scheme_code
+    , iff(a.is_observation_scheme_inferred, 'fixed_snomed', 'observation') as coding_scheme_kind
     , a.observation_scheme_description as source_coding_scheme_description
     , a.observation_code as clinical_code
     , a.observation_description as source_clinical_description

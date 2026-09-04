@@ -101,10 +101,15 @@ with diagnosis_records as (
 , dated as (
     select
         *
-        , coalesce(source_timestamp, source_derived_date::timestamp_ntz) as clinical_at
+        -- Keep source epochs as evidence, not a usable diagnosis time or revision key.
+        , coalesce(
+            iff(source_timestamp::date >= '1901-01-01'::date, source_timestamp, null)
+            , iff(source_derived_date >= '1901-01-01'::date,
+                source_derived_date::timestamp_ntz, null)
+        ) as clinical_at
         , case
-            when source_timestamp is not null then 'stored_timestamp_precision_unknown'
-            when source_derived_date is not null then 'date'
+            when source_timestamp::date >= '1901-01-01'::date then 'stored_timestamp_precision_unknown'
+            when source_derived_date >= '1901-01-01'::date then 'date'
         end as clinical_time_precision
         , case
             when source_table = 'MHS601' then 'previous_diagnosis_discussion'
@@ -137,6 +142,7 @@ with diagnosis_records as (
 
 select
     * exclude (source_parent_id, incomplete_key_source_row_id, record_number, source_row_number)
+    , iff(source_table = 'MHS601', source_parent_id, null) as local_patient_id
     , min(reporting_period_end_date) over (partition by source_record_id)
         as first_reported_period_end_date
     , max(reporting_period_end_date) over (partition by source_record_id)

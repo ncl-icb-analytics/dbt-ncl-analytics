@@ -30,6 +30,8 @@ Use the stored timestamp first, then the separate source date with date precisio
 Keep both fields and flag disagreements. Do not infer original precision from
 midnight. When both are absent, retain the source row without cross-period
 collapse. Different diagnosis codes at the same referral and timestamp survive.
+Dates before 1901 follow the project's existing source-epoch rule: preserve the
+source values and flag them, but do not use them as clinical time or revision keys.
 
 Include the source person identifier alongside the specification's diagnosis
 key. The profile found 206 primary-diagnosis keys spanning different warehouse
@@ -60,6 +62,7 @@ type, direct referral/contact/activity identifiers, source person and patient
 key, clinical date/time and precision/basis, submitted coding scheme and code,
 authoritative description, source-supplied SNOMED mapping and description,
 value and unit, provider code/name, accepted period and submission provenance.
+Retain MHS601's provider-local patient identifier as its direct patient link.
 Use a label-status field to distinguish missing, unmatched, mapped and
 unavailable-reference cases. Keep the submitted assessment score as text and
 offer a NUMBER(38,9) parsed score with parse status, without imposing unverified
@@ -189,7 +192,7 @@ source, candidate-key and final-fact checks without returning identifiers.
 
 | Clinical item | Final rows | Without a description |
 |---|---:|---:|
-| Previous diagnosis | 776,179 | 23,678 |
+| Previous diagnosis | 776,297 | 23,680 |
 | Provisional diagnosis | 211,142 | 939 |
 | Primary diagnosis | 640,302 | 1,449 |
 | Secondary diagnosis | 546,682 | 585 |
@@ -217,9 +220,30 @@ retained as text, not classified automatically as invalid scores.
 
 All 7,995,810 MHS607 rows link to their same-submission activity, with no person
 or referral differences. There are 79 conflicting recorded contact IDs and
-111 rows without inherited clinical time. Source links and quality flags stay
+13 rows without inherited clinical time. Source links and quality flags stay
 visible. MHS606 has 200 stored completion dates before the reporting period
 and two after it; these records remain in the fact.
+
+The final fact has 26,278,513 records. Post-review profiling found 122 MHS601
+source rows with known Excel-epoch dates. Treating those dates as unknown keeps
+all 122 source occurrences instead of collapsing them into four dated diagnoses.
+Their original dates and a sentinel flag remain available. No published clinical
+date precedes 1901. An aggregate reconciliation test proves that every accepted
+diagnosis source row is represented in the retained rows' source counts.
+
+The activity-time review found 98 MHS607 records with missing national person
+identifiers on both the assessment and its directly linked activity. Their
+provider, submission, activity and referral links agree. Null-safe consistency
+now permits that recorded activity time to be inherited. It does not infer a
+new person relationship. A regression test checks this time inheritance.
+
+No clinical codes or scheme codes are blank strings. Observation units are
+recorded on 559,346 items; 118,800 have no label in the existing unit dictionary.
+Of those, 74,894 use BMI-style unit notation. Both v5 and v6 specify UCUM, so
+this is not a new v6 rule. Units and unmatched statuses remain visible; extending
+the shared unit reference is a separate scope decision. Authoritative UCUM
+examples include [BMI units](https://hl7.org/fhir/valueset-ucum-vitals-common.html)
+and [compound laboratory units](https://ucum.org/ucum).
 
 The currency diagnosis move has the same 589,243 rows and full-row aggregate
 checksum as the original staging output. Its 12 downstream models built in
@@ -232,3 +256,81 @@ and clinical facts passed all 16 selected grain, reconciliation and label tests.
 The diagnosis-scheme source/reference build passed 13 tests. Validation used
 the `MHSDS1017__` databases with unchanged dependencies deferred to the existing
 development relations. No shared development models were replaced.
+The hardening build then passed 18 tests across six models, including source
+reconciliation, inherited times and source-epoch exclusion.
+The final link/provenance build passed all 40 tests across six models, including
+the affected activity-staff relationship model. All 18,043,704 existing activity
+staging rows and their full-row checksum match the baseline when the new
+provenance flag is excluded. The clinical fact retains every MHS601 local patient
+link, including 10,861 rows without a warehouse patient key. It identifies
+636,451 observation schemes as specification-fixed rather than submitted.
+The final clinical-record count and unique-key count both remain 26,278,513.
+
+## Implementation interrogate verdict
+
+### Intent
+
+Check the implemented clinical-item fact against the MHSDS specifications,
+accepted-source profiles, direct relationships and unchanged currency outputs.
+
+### Reviewers
+
+- Claude Fable, high: seven findings.
+- GPT-5.6 Sol, xhigh: two findings.
+
+### Act on
+
+- Claude: make activity-time inheritance and consistency flags agree on missing
+  person identifiers. Aggregate verification found 98 affected assessments;
+  their direct activity and referral links agree. Fixed and regression-tested.
+- Claude: distinguish unrecognised diagnosis schemes and unavailable references
+  from an unmatched clinical code. Fixed without guessing a coding system.
+- GPT: retain MHS601's provider-local patient link after diagnosis selection.
+  `local_patient_id` now reaches the fact alongside the provider code. It is not
+  replaced by a time-based or inferred person relationship.
+- GPT: distinguish the observation scheme fixed by the specification from a
+  submitted scheme. The activity stage and fact now expose its origin; the
+  clinical fact uses `fixed_snomed` and a null submitted scheme for those rows.
+  V4.1, v5 and v6 MHS202 field definitions confirm the rule. Existing activity
+  scheme values remain unchanged.
+- Lead profile: preserve source epochs without using them as diagnosis times
+  or revision keys. Retaining individual incomplete-key rows corrects the
+  unsupported collapse described above.
+
+### Consider
+
+- Lead profile: extend the shared observation-unit reference, or handle that
+  as a follow-up. The current unmatched-unit counts and statuses are explicit;
+  no unit meaning or conversion is guessed.
+
+### Noted
+
+- Claude: align diagnosis-scheme references with their family. Applied the
+  existing history/latest-definition macros and column documentation. All six
+  UKHFD codes, including two retired codes, remain available with unique keys.
+- Claude: the assembly table duplicates storage before the reporting fact.
+  Keep the project materialisation default for now. The measured hardening
+  build took 56 seconds across six models; no performance problem was found.
+- Claude: rename the legacy `stg_mhsds_primdiag` to match the newer names.
+  The responsibility change is documented; another rename is not needed here.
+
+### Dismissed
+
+- Claude's proposal to remove legacy Read handling lacks historical-data
+  support. The profile contains a legacy scheme, and a labelled code is not a
+  claim that the scheme was valid for every MHSDS version. Keep source mappings
+  explicit and preserve unmatched values.
+- Claude's objection that the ICD-10 label test repeats a lookup does not make
+  it redundant. It protects against the demonstrated asymmetric-normalisation
+  regression and passed in about a second in the hardening build.
+- Claude's proposed rounding of every small count is not a project rule.
+  These are non-identifying, whole-dataset quality aggregates, without patient,
+  provider, demographic or narrow-period breakdowns.
+
+### Agreement map
+
+The implementation findings were complementary rather than independently
+repeated. Claude found null and label-status semantics; GPT found lost link
+and scheme provenance. Both inspected the specification and surrounding
+models. Each accepted finding was checked against source logic and safe
+aggregate evidence; reviewer agreement alone was not treated as proof.

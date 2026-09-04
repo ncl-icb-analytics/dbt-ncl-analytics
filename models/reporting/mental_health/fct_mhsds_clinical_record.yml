@@ -31,6 +31,8 @@ models:
         description: "Previous, provisional, primary or secondary diagnosis; referral or activity assessment; procedure, finding or observation."
       - name: person_id
         description: "MHSDS national person identifier of the retained record."
+      - name: local_patient_id
+        description: "MHS601's directly recorded provider-local patient identifier. Use with provider_organisation_code; null for other clinical types, which retain their referral or activity links."
       - name: referral_source_record_id
         description: "Directly recorded provider-qualified service request identifier. Null for previous diagnoses without a referral link."
       - name: uniq_care_cont_id
@@ -110,13 +112,15 @@ models:
       - name: clinical_description
         description: "Authoritative submitted-code label, or a mapped SNOMED CT label for legacy Read codes. Interpret with clinical_label_status."
       - name: clinical_label_status
-        description: "Distinguishes labelled codes, mapped legacy codes, missing codes, unmatched codes or expressions, and coding systems without a local reference."
+        description: "Distinguishes labelled codes, mapped legacy codes, missing codes, unrecognised schemes, unmatched codes or expressions, and coding systems without a local reference. Labels do not establish scheme validity for a submitted MHSDS version."
       - name: sk_patient_id
         description: "Warehouse patient key from the established MHSDS bridge; null when no mapping exists."
       - name: provider_organisation_name
         description: "Organisation name from the established MHSDS organisation reference."
       - name: clinical_date
         description: "Calendar date of clinical_at. It is not an onset date."
+      - name: has_source_date_sentinel
+        description: "TRUE when a source timestamp or derived date precedes 1901, following the project's source-epoch rule. Source values remain visible but are not used as clinical time or a diagnosis revision key."
       - name: clinical_time
         description: "Stored unzoned time; null when only date precision is known."
       - name: clinical_value_numeric

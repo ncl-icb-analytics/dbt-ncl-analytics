@@ -111,3 +111,13 @@ select
     offending_column,
     sentinel_row_count
 from profile_sentinels
+
+union all
+
+select
+    'clinical_record' as model_name,
+    'clinical_date' as offending_column,
+    count(*) as sentinel_row_count
+from {{ ref('fct_mhsds_clinical_record') }}
+where clinical_date < '1901-01-01'::date
+having count(*) > 0

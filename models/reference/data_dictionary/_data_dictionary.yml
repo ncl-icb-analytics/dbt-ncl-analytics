@@ -96,22 +96,7 @@ models:
       One row per diagnosis coding-scheme code ever published in UKHFD, using
       its latest definition. Retired codes remain available for historical joins.
     config: *owner
-    columns:
-      - name: code
-        description: National diagnosis coding-scheme code.
-        data_tests: [not_null, unique]
-      - name: description
-        description: Latest authoritative label, including retired schemes.
-      - name: valid_from_date
-        description: Start of the selected definition's validity period.
-      - name: valid_to_date
-        description: End of validity; null when open-ended.
-      - name: is_currently_valid
-        description: Whether the code is present in the current source code set.
-      - name: source_code_set_name
-        description: NHS Data Dictionary attribute name.
-      - name: definition_updated_at
-        description: Time the selected UKHFD definition took effect.
+    columns: *default_columns
 
   - name: mhsds_diagnosis_scheme
     description: >-

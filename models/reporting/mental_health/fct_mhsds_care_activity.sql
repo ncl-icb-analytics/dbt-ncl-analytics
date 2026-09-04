@@ -57,6 +57,7 @@ select
     , a.standardised_snomed_finding_code
     , mapped_snomed_finding.preferred_term as standardised_snomed_finding_description
     , a.observation_scheme_code
+    , a.is_observation_scheme_inferred
     , observation_scheme.description as observation_scheme_description
     , a.observation_code
     , observation.preferred_term as observation_description

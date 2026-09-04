@@ -30,7 +30,9 @@ models:
       One row per source occurrence and clinical record type. Expands the
       established care-activity fact without staff joins. MHS606 and MHS607
       retain every accepted source row, including repeated assessment scores.
-      Only an identity-consistent same-submission activity supplies MHS607 time.
+      Only a same-submission activity without conflicting person or referral
+      identifiers supplies MHS607 time. Both person identifiers may be missing
+      when the recorded activity and referral links agree.
     config: *owner
     data_tests:
       - dbt_utils.unique_combination_of_columns:
