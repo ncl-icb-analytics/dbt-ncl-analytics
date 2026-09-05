@@ -1,9 +1,10 @@
 with labelled as (
     select
         r.* exclude (
-            source_coding_scheme_description, source_clinical_description,
+            source_record_id, source_coding_scheme_description, source_clinical_description,
             source_clinical_label_status, source_standardised_snomed_description
         )
+        , r.source_record_id as originating_source_record_id
         , case
             when r.coding_scheme_kind = 'diagnosis' then scheme.description
             else r.source_coding_scheme_description
@@ -102,8 +103,9 @@ with labelled as (
 select
     sk_patient_id
     , {{ dbt_utils.generate_surrogate_key([
-        'source_table', 'source_record_id', 'clinical_record_type'
+        'source_table', 'originating_source_record_id', 'clinical_record_type'
     ]) }} as clinical_record_id
+    , clinical_record_id as source_record_id
     , clinical_record_type
 
     , clinical_code
@@ -184,7 +186,7 @@ select
     , accepted_source_record_count
     , 'MHSDS' as source_dataset
     , source_table
-    , source_record_id
+    , originating_source_record_id
     , source_row_id
     , uniq_submission_id
     , mhsds_version

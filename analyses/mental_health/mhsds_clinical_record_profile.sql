@@ -2,6 +2,9 @@ select
     clinical_record_type
     , count(*) as row_count
     , count(distinct clinical_record_id) as distinct_clinical_records
+    , count(distinct source_record_id) as distinct_drill_down_keys
+    , count(distinct originating_source_record_id) as distinct_originating_source_keys
+    , count_if(source_record_id is distinct from clinical_record_id) as drill_down_key_mismatches
     , count_if(sk_patient_id is null) as missing_patient_keys
     , count_if(clinical_code is null) as missing_codes
     , count_if(clinical_description is null) as missing_descriptions

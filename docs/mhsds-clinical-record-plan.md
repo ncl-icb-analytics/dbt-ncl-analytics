@@ -24,20 +24,22 @@ attributes belong in the established person models, not repeated here.
 
 The column order puts the warehouse patient key and clinical concepts first,
 then clinical time, values, units, organisations and recorded relationships.
-Source quality and submission audit fields follow. All 68 fields retain their
-existing names and meanings.
+Source quality and submission audit fields follow.
 
-There is a key-naming decision to resolve before #1019: #1006 specifies drill-down
-through a standard `source_record_id`, while #1017 explicitly retains the parent
-source key there. Several activity components can therefore share that value.
-Use `clinical_record_id` for a unique clinical-item join today. Do not join this
-fact on `source_record_id` alone or silently change its meaning in an adapter.
+For #1006 and #1019, `source_record_id` now identifies one clinical item and is
+equal to the unchanged `clinical_record_id`. Cross-source adapters can use it
+for a one-row drill-down join to this fact. The previous `source_record_id` is
+preserved as `originating_source_record_id`; it may repeat across components of
+one care activity. Existing referral and care-activity parent keys are unchanged.
+Consumers of the former source-occurrence key must use the new column name.
 
-The reordered DEV fact retains 26,278,485 unique clinical items across 24,715,018
-source keys. It retains 146,136 items without a warehouse patient key and 11,148
-without clinical time. The cross-source model must report those coverage gaps
-rather than infer patient identity or time. All eight selected tests passed;
-the full-row aggregate checksum is unchanged after reordering.
+The DEV fact retains 26,278,485 unique clinical items and standard drill-down
+keys across 24,715,018 originating source keys. It retains 146,136 items without
+a warehouse patient key and 11,148 without clinical time. The cross-source model
+must report those coverage gaps rather than infer patient identity or time.
+All nine selected tests passed. The pre-existing content checksum is unchanged
+when the renamed originating key is compared in place of the former source key.
+No activity-parent keys changed.
 
 ### Grain and population
 
