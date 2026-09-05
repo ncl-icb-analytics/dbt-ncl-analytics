@@ -2,11 +2,11 @@
 
 ## Shared models and repeated view work
 
-Export `analyses/performance/model_storage.sql` with the Snowflake CLI using
+Export `scripts/performance/model_storage.sql` with the Snowflake CLI using
 `DBT_ADMIN` and JSON output. Then combine it with a current dbt manifest:
 
 ```powershell
-snow sql -f analyses/performance/model_storage.sql -c dbt-admin --format json > tmp/model-storage.json
+snow sql -f scripts/performance/model_storage.sql -c dbt-admin --format json > tmp/model-storage.json
 python scripts/performance/audit_model_reuse.py --tables tmp/model-storage.json > tmp/model-reuse.json
 ```
 
