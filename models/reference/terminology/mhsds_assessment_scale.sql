@@ -13,11 +13,9 @@ select
     , min(try_to_number(decimal_places)) as decimal_places
     , count_if(regexp_like(published_value, '-?[0-9]+([.][0-9]+)? *- *-?[0-9]+([.][0-9]+)?'))
         as numeric_range_count
-    , min(iff(regexp_like(published_value, '-?[0-9]+([.][0-9]+)? *- *-?[0-9]+([.][0-9]+)?'),
-        try_to_decimal(regexp_substr(published_value, '^-?[0-9]+([.][0-9]+)?'), 38, 9), null))
+    , min({{ mhsds_assessment_range_bound('published_value', 'minimum') }})
         as minimum_numeric_value
-    , max(iff(regexp_like(published_value, '-?[0-9]+([.][0-9]+)? *- *-?[0-9]+([.][0-9]+)?'),
-        try_to_decimal(regexp_substr(published_value, '[0-9]+([.][0-9]+)?$'), 38, 9), null))
+    , max({{ mhsds_assessment_range_bound('published_value', 'maximum') }})
         as maximum_numeric_value
     , min(collection_start_date) as collection_start_date
     , max(specification_version) as specification_version

@@ -144,3 +144,25 @@ The [seed workflow](../scripts/reference/README.md) records the source workbooks
 and extraction method. Unit semantics follow the [UCUM specification, sections 2-3](https://ucum.org/ucum).
 MHSDS definitions are in the [current ETOS and guidance](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance)
 and [archived specifications](https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-sets/mental-health-services-data-set/tools-and-guidance/mental-health-services-data-set-archived-specification).
+
+## CodeRabbit follow-up
+
+The review of `272ec66e` identified a signed-upper-bound parsing gap. The parser
+now extracts each bound from the complete range. Merely adding an optional minus
+sign to the suffix would misread the separator in `0-40` as a negative sign.
+Synthetic tests cover positive, mixed-sign, negative and decimal ranges, plus
+non-range responses. Capture-group behaviour follows the
+[Snowflake REGEXP_SUBSTR definition](https://docs.snowflake.com/en/sql-reference/functions/regexp_substr).
+
+All 11 selected tests passed after rebuilding the reference and clinical fact.
+The 525 current observable definitions have unchanged bounds. The fact still has
+26,278,485 unique clinical items and excludes all 251,118 explicit non-score
+responses from its interpreted score field.
+
+Public reference-example failures now show expected and actual meanings.
+Patient-linked checks still return aggregate diagnostics. The ownership warning
+was dismissed: named business-owner metadata is required by project conventions
+and is not a patient record. The review date uses Europe/London; the commit's
+5 September local date is consistent with its 4 September UTC timestamp.
+Separate ad-hoc aggregate queries remain a non-blocking cost consideration,
+not a reason to add a routinely materialised profiling model.
