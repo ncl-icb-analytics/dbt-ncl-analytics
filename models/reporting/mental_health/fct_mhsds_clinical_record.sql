@@ -100,15 +100,30 @@ with labelled as (
 )
 
 select
-    {{ dbt_utils.generate_surrogate_key([
+    sk_patient_id
+    , {{ dbt_utils.generate_surrogate_key([
         'source_table', 'source_record_id', 'clinical_record_type'
     ]) }} as clinical_record_id
-    , 'MHSDS' as source_dataset
-    , *
+    , clinical_record_type
+
+    , clinical_code
+    , clinical_description
+    , standardised_snomed_code
+    , standardised_snomed_description
+    , coding_scheme_code
+    , coding_scheme_description
+    , coding_scheme_kind
+    , clinical_label_status
+
+    , clinical_at
     , clinical_at::date as clinical_date
-    , coalesce(source_timestamp::date < '1901-01-01'::date, false)
-        or coalesce(source_derived_date < '1901-01-01'::date, false) as has_source_date_sentinel
     , iff(clinical_time_precision = 'date', null, clinical_at::time) as clinical_time
+    , clinical_time_basis
+    , clinical_time_precision
+
+    , assessment_tool_name
+    , clinical_value
+    , clinical_value_description
     , try_to_decimal(clinical_value, 38, 9) as clinical_value_numeric
     , case
         when clinical_value is null then 'value_missing'
@@ -119,6 +134,40 @@ select
     end as clinical_value_parse_status
     , iff(assessment_response_status in ('enumerated_response', 'within_published_range'),
         clinical_value_numeric, null) as assessment_score_numeric
+    , is_assessment_response_non_score
+    , assessment_response_status
+    , assessment_definition_version
+    , assessment_response_definition_version
+
+    , unit_of_measurement_code
+    , unit_of_measurement_description
+    , unit_of_measurement_symbol
+    , unit_of_measurement_label_status
+    , unit_of_measurement_match_type
+    , unit_of_measurement_definition_source
+
+    , provider_organisation_code
+    , provider_organisation_name
+    , person_id
+    , local_patient_id
+    , referral_source_record_id
+    , uniq_care_cont_id
+    , care_activity_source_record_id
+    , uniq_care_act_id
+    , uniq_care_prof_local_id
+    , care_prof_local_id
+    , is_care_activity_linked
+    , is_care_activity_person_consistent
+    , is_care_activity_referral_consistent
+    , is_care_activity_contact_consistent
+    , is_care_contact_person_consistent
+    , has_person_identifier_changed
+
+    , source_timestamp
+    , source_derived_date
+    , is_source_date_inconsistent
+    , coalesce(source_timestamp::date < '1901-01-01'::date, false)
+        or coalesce(source_derived_date < '1901-01-01'::date, false) as has_source_date_sentinel
     , coalesce(clinical_at::date > reporting_period_end_date, false)
         as is_clinical_date_after_reporting_period
     , iff(
@@ -126,4 +175,19 @@ select
         , coalesce(clinical_at::date < reporting_period_start_date, false)
         , null
     ) as is_assessment_before_reporting_period
+
+    , reporting_period_start_date
+    , reporting_period_end_date
+    , first_reported_period_end_date
+    , last_reported_period_end_date
+    , reported_period_count
+    , accepted_source_record_count
+    , 'MHSDS' as source_dataset
+    , source_table
+    , source_record_id
+    , source_row_id
+    , uniq_submission_id
+    , mhsds_version
+    , source_file_received_at
+    , source_loaded_at
 from labelled

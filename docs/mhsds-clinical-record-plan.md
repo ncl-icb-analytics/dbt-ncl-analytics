@@ -13,6 +13,34 @@ present clinical items as encounters, disease onset or whole questionnaires.
 
 ## Proposed model
 
+### Role in the cross-source plan
+
+This is the MHSDS clinical-detail input to [#1006](https://github.com/wnl-icb-analytics/dbt-analytics/issues/1006)
+and the later cross-source clinical-record model in #1019. It is not an event
+timeline. Use `sk_patient_id` for cross-source person joins and keep clinical
+codes, descriptions, values, units and time precision together. Recorded referral
+and activity links remain separate from person-and-time association. Demographic
+attributes belong in the established person models, not repeated here.
+
+The column order puts the warehouse patient key and clinical concepts first,
+then clinical time, values, units, organisations and recorded relationships.
+Source quality and submission audit fields follow. All 68 fields retain their
+existing names and meanings.
+
+There is a key-naming decision to resolve before #1019: #1006 specifies drill-down
+through a standard `source_record_id`, while #1017 explicitly retains the parent
+source key there. Several activity components can therefore share that value.
+Use `clinical_record_id` for a unique clinical-item join today. Do not join this
+fact on `source_record_id` alone or silently change its meaning in an adapter.
+
+The reordered DEV fact retains 26,278,485 unique clinical items across 24,715,018
+source keys. It retains 146,136 items without a warehouse patient key and 11,148
+without clinical time. The cross-source model must report those coverage gaps
+rather than infer patient identity or time. All eight selected tests passed;
+the full-row aggregate checksum is unchanged after reordering.
+
+### Grain and population
+
 `fct_mhsds_clinical_record` has one row per retained source clinical item and
 component type. It includes accepted MHS601, MHS603, MHS604, MHS605, MHS606 and
 MHS607 records, plus populated procedure, finding and observation components
