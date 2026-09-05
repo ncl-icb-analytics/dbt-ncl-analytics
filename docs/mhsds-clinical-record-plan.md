@@ -123,13 +123,13 @@ alone, define revision keys.
 1. Profile candidate revision keys, exact duplicates, conflicting person/code/
    score values, null times, timestamp/date disagreement and repeated periods.
 2. Challenge this design with the interrogate panel before implementation.
-3. Build in an isolated target, deferring unchanged parents to established
-   relations. Do not overwrite another worktree's development models.
+3. Build with the tracked `dev` target in the existing `DEV__` layers. Follow
+   the established dependency and deferral workflow; DEV is intentionally shared.
 4. Test each model's grain and documented component rules. Reconcile source
    survival and output counts by type. Profile labels, numeric parsing, direct
    parent links, patient mapping, date quality and join multiplication.
 5. Compare preserved currency selection with the baseline and build affected
-   downstream models in isolation. Inspect lineage with `dbt ls`.
+   downstream models in DEV. Inspect lineage with `dbt ls`.
 6. Open a draft PR, check its rendered description, run implementation
    interrogate and verify CodeRabbit findings against the specifications and
    safe aggregates. Do not merge as part of this work.
@@ -263,9 +263,10 @@ missing prescribing coverage. No currency logic or prescribing inputs changed.
 
 The initial core build passed 24 tests across 11 models. The corrected activity
 and clinical facts passed all 16 selected grain, reconciliation and label tests.
-The diagnosis-scheme source/reference build passed 13 tests. Validation used
-the `MHSDS1017__` databases with unchanged dependencies deferred to the existing
-development relations. No shared development models were replaced.
+The diagnosis-scheme source/reference build passed 13 tests. Initial validation
+used task-specific databases, contrary to the established shared-DEV workflow.
+Those four databases have been dropped and the custom profile removed. The
+models now use the tracked `dev` target in the existing `DEV__` layers.
 The hardening build then passed 18 tests across six models, including source
 reconciliation, inherited times and source-epoch exclusion.
 The final link/provenance build passed all 40 tests across six models, including
@@ -275,6 +276,17 @@ provenance flag is excluded. The clinical fact retains every MHS601 local patien
 link, including 10,861 rows without a warehouse patient key. It identifies
 636,451 observation schemes as specification-fixed rather than submitted.
 The final clinical-record count and unique-key count both remain 26,278,513.
+
+### Shared DEV rebuild
+
+The 5 September rebuild used the tracked profile and `dev` target. All 37 models
+and two seeds succeeded. Of 148 tests, 147 passed and the existing
+`epd_covers_slam_cost_window` test warned. Models use the existing DEV staging,
+reference, modelling and reporting layers; seeds retain their configured shared
+location. The final hardened fact has 26,278,485 unique clinical items, matching
+the pre-cleanup aggregate. The currency selection retains 589,243 rows and its
+full-row checksum. All 251,118 explicit non-score responses remain excluded from
+the interpreted score field.
 
 ## Implementation interrogate verdict
 
