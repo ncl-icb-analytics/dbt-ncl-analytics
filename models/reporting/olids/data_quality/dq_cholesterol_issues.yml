@@ -3,8 +3,9 @@ models:
     description: >
       One row per total cholesterol observation failing the shared validity rule.
       Includes concentrations outside 0.5 to 20 mmol/L, missing numeric results,
-      and missing or unsupported units. Source observations with missing or future
-      clinical dates are excluded upstream. Includes all people.
+      and unsupported units. Results with no recorded unit are kept as mmol/L upstream and
+      appear here only when the value fails the rule. Source observations with missing or
+      future clinical dates are excluded upstream. Includes all people.
     config:
       meta:
         owner:
@@ -55,7 +56,7 @@ models:
       - name: is_extreme_outlier
         description: Whether cholesterol is an extreme outlier (>15 mmol/L)
 
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: CHOL2_COD

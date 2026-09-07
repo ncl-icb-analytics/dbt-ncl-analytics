@@ -43,7 +43,7 @@ SELECT
     
     -- Cholesterol category with valid ranges
     CASE
-        WHEN unit_status IN ('Missing unit', 'Unsupported unit') THEN unit_status
+        WHEN unit_status = 'Unsupported unit' THEN unit_status
         WHEN cholesterol_value IS NULL THEN 'Missing numeric result'
         WHEN cholesterol_value < 0.5 THEN 'Below Valid Range (< 0.5)'
         WHEN cholesterol_value > 20 THEN 'Above Valid Range (> 20)'

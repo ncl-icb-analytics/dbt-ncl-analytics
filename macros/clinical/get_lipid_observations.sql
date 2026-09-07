@@ -8,6 +8,9 @@
     'TCHOLHDL_COD': [1, 50]
 } -%}
 {%- set review_range = review_ranges[cluster_id] -%}
+{#- Labels that mean "no unit supplied" rather than a unit. -#}
+{%- set unknown_unit_labels = "'.', 'unknown', '(unknown)', 'unknownunits', 'unkuom', 'n/a', '(nouom)'" -%}
+{%- set ratio_unit_labels = "'ratio', '1', ':1', '1/1', 'mmol/mmol', 'mol/mol', 'totalcholesterol:hdlratio'" -%}
 WITH observations AS (
     {{ get_observations("'" ~ cluster_id ~ "'", source='PCD') }}
 ),
@@ -24,33 +27,28 @@ recorded AS (
         NULLIF(TRIM(units.display), '') AS source_result_unit_display,
         NULLIF(TRIM(obs.result_unit_code), '') AS mapped_result_unit_code,
         NULLIF(TRIM(obs.result_unit_display), '') AS mapped_result_unit_display,
-        CASE
-            WHEN COALESCE(mapped_result_unit_display, mapped_result_unit_code) IS NOT NULL THEN 'Mapped unit'
-            WHEN COALESCE(source_result_unit_display, source_result_unit_code) IS NOT NULL THEN 'Source unit'
-            ELSE 'No recorded unit'
-        END AS conversion_unit_basis,
         {% for prefix in ['source', 'mapped'] %}
         LOWER(REPLACE(COALESCE({{ prefix }}_result_unit_display, {{ prefix }}_result_unit_code), ' ', '')) AS {{ prefix }}_unit_label,
         CASE
-            WHEN {{ prefix }}_unit_label IN ('.', 'unknown', '(unknown)', 'unknownunits', 'unkuom', 'n/a', '(nouom)') THEN NULL
+            WHEN {{ prefix }}_unit_label IN ({{ unknown_unit_labels }}) THEN NULL
             WHEN {{ prefix }}_unit_label = 'mg/100ml' THEN 'mg/dl'
             WHEN {{ prefix }}_unit_label IN ('µmol/l', 'μmol/l') THEN 'umol/l'
-            WHEN {{ prefix }}_unit_label IN ('ratio', '1', ':1', '1/1', 'mmol/mmol', 'mol/mol', 'totalcholesterol:hdlratio') THEN 'ratio'
+            WHEN {{ prefix }}_unit_label IN ({{ ratio_unit_labels }}) THEN 'ratio'
             ELSE {{ prefix }}_unit_label
         END AS {{ prefix }}_canonical_unit,
         {% endfor %}
         COALESCE(source_canonical_unit <> mapped_canonical_unit, FALSE) AS is_unit_metadata_conflict,
+        -- The mapped unit takes precedence. An unknown-unit placeholder in the mapped
+        -- field falls through to the source unit concept, which OLIDS often retains
+        -- without a mapped unit.
+        COALESCE(mapped_canonical_unit, source_canonical_unit) AS recorded_unit,
+        CASE
+            WHEN mapped_canonical_unit IS NOT NULL THEN 'Mapped unit'
+            WHEN source_canonical_unit IS NOT NULL THEN 'Source unit'
+            ELSE 'No recorded unit'
+        END AS conversion_unit_basis,
         COALESCE(NULLIF(TRIM(obs.result_unit_code), ''), NULLIF(TRIM(units.code), '')) AS original_result_unit_code,
         COALESCE(NULLIF(TRIM(obs.result_unit_display), ''), NULLIF(TRIM(units.display), '')) AS original_result_unit_display,
-        -- OLIDS often retains the source unit concept without a mapped unit.
-        LOWER(REPLACE(COALESCE(
-            NULLIF(TRIM(obs.result_unit_display), ''),
-            NULLIF(TRIM(obs.result_unit_code), ''),
-            NULLIF(TRIM(units.display), ''),
-            NULLIF(TRIM(units.code), '')
-        ), ' ', '')) AS unit_label,
-        IFF(unit_label IN ('.', 'unknown', '(unknown)', 'unknownunits', 'unkuom', 'n/a', '(nouom)'),
-            NULL, unit_label) AS recorded_unit,
         obs.mapped_concept_code AS concept_code,
         obs.mapped_concept_display AS concept_display,
         obs.cluster_id AS source_cluster_id,
@@ -73,15 +71,18 @@ conversion AS (
         *,
         CASE
             {% if ratio %}
-            WHEN recorded_unit IN ('ratio', '1', ':1', '1/1', 'mmol/mmol', 'mol/mol', 'totalcholesterol:hdlratio') THEN 1.0
+            WHEN recorded_unit = 'ratio' THEN 1.0
             -- The PCD observable defines a dimensionless ratio when no unit is supplied.
             WHEN recorded_unit IS NULL THEN 1.0
             {% else %}
             WHEN recorded_unit = 'mmol/l' THEN 1.0
-            WHEN recorded_unit IN ('umol/l', 'µmol/l', 'μmol/l') THEN 0.001
+            -- A result with no recorded unit is retained as mmol/L, the UK reporting
+            -- standard for lipids, and flagged for review rather than discarded.
+            WHEN recorded_unit IS NULL THEN 1.0
+            WHEN recorded_unit = 'umol/l' THEN 0.001
             -- Labcorp SI factors: cholesterol 0.0259; triglycerides 0.0113 per mg/dL.
             -- https://www.labcorp.com/test-menu/resources/si-unit-conversion-table
-            WHEN recorded_unit IN ('mg/dl', 'mg/100ml') THEN {{ 0.0113 if triglycerides else 0.0259 }}
+            WHEN recorded_unit = 'mg/dl' THEN {{ 0.0113 if triglycerides else 0.0259 }}
             WHEN recorded_unit = 'mg/l' THEN {{ 0.00113 if triglycerides else 0.00259 }}
             WHEN recorded_unit = 'g/l' THEN {{ 1.13 if triglycerides else 2.59 }}
             {% endif %}

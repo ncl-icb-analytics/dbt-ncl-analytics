@@ -13,9 +13,12 @@ macros:
 
       Concentrations use mmol/L and ratios are dimensionless. Original unit
       fields prefer observation units and fall back to source concept units;
-      blank values are null. Missing or unsupported concentration units produce
-      a null standardised value. Missing ratio units can be inferred from the
-      PCD observable; incompatible recorded units cannot. Values are not rounded.
+      blank values are null. The mapped unit takes precedence; an unknown-unit
+      placeholder in the mapped field falls through to the source unit concept.
+      A concentration with no recorded unit is kept as mmol/L and flagged for
+      review; only an unsupported unit produces a null standardised value.
+      Missing ratio units are inferred from the PCD observable; incompatible
+      recorded units cannot be. Values are not rounded.
       Also returns recorded_value, converted_value_mmol_l for concentrations,
       source_result_unit_code, source_result_unit_display, mapped_result_unit_code,
       mapped_result_unit_display, conversion_unit_basis, conversion_factor,

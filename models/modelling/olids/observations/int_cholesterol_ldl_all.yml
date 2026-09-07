@@ -16,7 +16,7 @@ models:
       - name: id
         description: Source observation identifier. Used to break ties deterministically; it does not
           imply clinical priority.
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: person_id
@@ -45,9 +45,9 @@ models:
       - name: mapped_result_unit_display
         description: Mapped unit label supplied by OLIDS. Null if unavailable.
       - name: conversion_unit_basis
-        description: Whether the calculation selected the mapped unit, source unit or no recorded unit. Missing ratio units are inferred from the PCD observable.
+        description: Whether the calculation selected the mapped unit, source unit or no recorded unit. An unknown-unit placeholder in the mapped field falls through to the source unit. Missing ratio units are inferred from the PCD observable; missing concentration units are assumed to be mmol/L.
       - name: conversion_factor
-        description: Multiplier applied to recorded_value. One for recognised standard units and inferred dimensionless ratios. Null when the unit cannot be converted.
+        description: Multiplier applied to recorded_value. One for recognised standard units, results with no recorded unit, and inferred dimensionless ratios. Null when the unit cannot be converted.
       - name: is_unit_metadata_conflict
         description: True when populated source and mapped unit labels disagree after recognised aliases are normalised. Unknown labels are treated as absent. Does not identify which unit is correct.
       - name: plausibility_status
@@ -72,7 +72,8 @@ models:
           neither is available.
       - name: unit_status
         description: Whether the unit was recorded in standard form, converted, missing or unsupported.
-          Missing concentration units are not inferred from the value.
+          A result with no recorded unit is kept as mmol/L and flagged for review; only an
+          unsupported unit produces a null standardised value.
       - name: concept_code
         description: Recorded mapped clinical concept code matched to the PCD cluster.
       - name: concept_display
@@ -91,7 +92,7 @@ models:
       - name: ldl_cvd_target_met
         description: 'Legacy numeric flag: Met for valid LDL at or below 2 mmol/L, Not Met above 2, Unknown
           for invalid results. Does not apply a CVD population, exclusions or a reporting period.'
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: LDLCCHOL_COD
