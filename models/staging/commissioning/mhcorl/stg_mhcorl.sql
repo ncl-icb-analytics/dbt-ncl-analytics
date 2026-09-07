@@ -1,6 +1,8 @@
 {{
     config(
-        materialized = 'table',
+        materialized = 'incremental',
+        incremental_strategy = 'append',
+        on_schema_change = 'append_new_columns',
         tags = ['mhcorl', 'sdl', 'mh']
     )
 }}
@@ -37,8 +39,16 @@
 -- file name.
 --
 -- Cumulative Flex/Freeze restatement feed (RAT00 resubmissions, RKL00 LPS
--- year-to-date files): summing across files double-counts. There is no
--- *_latest view yet; pick the latest file per (provider, period) downstream.
+-- year-to-date files, per-commissioner RNK00 / RV300 files): summing across
+-- files double-counts. Report from stg_mhcorl_latest, which keeps the winning
+-- file per (dataset, provider, commissioner, FY, month) slice via
+-- stg_mhcorl_latest_submission.
+--
+-- Incremental, pure append: new (file, batch) pairs only, mirroring the
+-- upstream SDL loader's NOT EXISTS mechanics (meta_file_id is not monotonic
+-- with load time, so a high-water mark would miss back-dated files). Nothing
+-- here is mutable; latest-submission resolution is rebuilt fully each run in
+-- stg_mhcorl_latest_submission. Full-refresh after an upstream SDL rebuild.
 --
 -- Scope: FY2022/23 onwards. Earlier submissions have major DQ gaps (2017 has
 -- no contact dates, 2020-21 is COVID-degraded, 2021 has no RRP00) and every
@@ -49,6 +59,18 @@
 -- cutoff of 2022-04-01 silently dropped April-June 2022.
 
 with {{ community_pld_registry('MHCORL') }},
+
+{% if is_incremental() %}
+-- (file, batch) pairs in the raw feed but not yet in this table
+new_files as (
+    select meta_file_id, meta_batch_id
+    from {{ ref('raw_sdl_wnl_mhcorl') }}
+    group by all
+    minus
+    select distinct meta_file_id, meta_batch_id
+    from {{ this }}
+),
+{% endif %}
 
 -- Sibling columns coalesced once so the parsers below are applied to a single
 -- expression per field.
@@ -70,10 +92,18 @@ src as (
         coalesce(gp_practice_code, general_practice_code, registered_gp)
                                                 as gp_practice_code_any,
         coalesce(ethnicity_code, ethnic_code)   as ethnicity_code_any
-    from {{ ref('raw_sdl_wnl_mhcorl') }}
+    from {{ ref('raw_sdl_wnl_mhcorl') }} as r
     where meta_partition_date >= '2022-01-01'
       -- a spreadsheet header row re-ingested as data
       and coalesce(upper(trim(financial_year)), '') <> 'FINANCIAL YEAR'
+{% if is_incremental() %}
+      and exists (
+          select 1
+          from new_files as nf
+          where nf.meta_file_id = r.meta_file_id
+            and nf.meta_batch_id = r.meta_batch_id
+      )
+{% endif %}
 ),
 
 prep as (

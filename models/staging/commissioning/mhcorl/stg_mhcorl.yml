@@ -29,9 +29,13 @@ models:
       DLP or reporting value, else the stated activity month or the contact
       date, else the file name.
 
-      Cumulative Flex/Freeze restatement feed (RAT00 resubmissions, RKL00 LPS
-      year-to-date files): summing across files double-counts. There is no
-      latest-submission view for this feed yet.
+      Cumulative restatement feed (RAT00 Flex/Freeze resubmissions, RKL00 LPS
+      year-to-date files, per-commissioner RNK00 / RV300 files): summing
+      across files double-counts. Report from stg_mhcorl_latest for the
+      current statement per (dataset, provider, commissioner, FY, month).
+
+      Incremental (pure append of new files); full-refresh after an upstream
+      SDL rebuild.
     config:
       meta:
         owner:
