@@ -185,7 +185,8 @@ prep as (
         -- cross-dataset key; the bare SK_PATIENT_ID is a locally derived hash
         -- with no overlap, kept only for within-provider linking.
         coalesce(hospital_number, patient_key)  as local_patient_id,
-        sk_patient_id_nhs_number                as sk_patient_id,
+        {{ consistent_sk_patient_id_format('sk_patient_id_nhs_number') }}
+                                                as sk_patient_id,
         sk_patient_id                           as sk_patient_id_local_hash,
         try_to_number(dv_yearof_birth)          as dv_year_of_birth,
         dv_partial_post_code                    as partial_postcode,
