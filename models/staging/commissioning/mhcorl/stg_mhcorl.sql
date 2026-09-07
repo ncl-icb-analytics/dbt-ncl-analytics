@@ -177,7 +177,7 @@ with src as (
               or upper(trim(ethnicity)) like 'ANY OTHER%'
             then 'S'
         end                                                     as eth_letter_code
-    from {{ source('sdl', 'MHCORL') }}
+    from {{ref('raw_sdl_mhcorl')}}
     where coalesce(financial_year, '') not in ('Financial Year', '')
        or financial_year is null
 ),

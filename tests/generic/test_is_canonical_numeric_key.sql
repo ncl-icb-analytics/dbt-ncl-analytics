@@ -18,5 +18,6 @@
       and (
           try_to_number({{ column_name }}::varchar) is null
           or {{ column_name }}::varchar <> try_to_number({{ column_name }}::varchar)::varchar
+          or try_to_number({{ column_name }}::varchar) not between 0 and 4294967295
       )
 {% endtest %}
