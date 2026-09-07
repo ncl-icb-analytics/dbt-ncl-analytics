@@ -74,6 +74,8 @@ It compares the previous files with the generated files and lists renamed,
 removed or moved models, their source identities and affected literal `ref()`
 calls in staging SQL and YAML. A folder move with the same model name preserves
 the `ref()` name, but may change the model's configuration.
+If that name is reused for a different source, the warning lists both source
+identities and the staging refs to review instead of calling it a move.
 
 A rename is identified only when the `source()` name and table name are unchanged.
 A changed source or table name is reported as a removal, not a guessed replacement.

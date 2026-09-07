@@ -68,13 +68,21 @@ def warn_raw_model_changes(before, after, project_dir):
         same_name = [path for path in after if Path(path).stem == name]
         replacements = [path for path, identity in after.items()
                         if source is not None and identity == source]
-        if same_name:
+        reused_name = same_name and (source is None or any(after[path] != source for path in same_name))
+        if reused_name:
+            print(f'  Reused name: {old_path} -> {", ".join(same_name)} '
+                  '(source identity changed or unrecognised)')
+            print(f'    Previous source: {".".join(source) if source else "unrecognised"}')
+            for path in same_name:
+                identity = after[path]
+                print(f'    New source: {".".join(identity) if identity else "unrecognised"} ({path})')
+        elif same_name:
             print(f'  Moved: {old_path} -> {", ".join(same_name)} (ref name unchanged)')
         elif replacements:
             print(f'  Renamed: {old_path} -> {", ".join(replacements)}')
         else:
             print(f'  Removed: {old_path} (no generated model with the same source() identity)')
-        if source:
+        if source and not reused_name:
             print(f'    Source: {source[0]}.{source[1]}')
         if references[name]:
             status = 'Review staging refs' if same_name else 'Broken staging refs'

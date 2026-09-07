@@ -114,6 +114,23 @@ class RawModelChangeWarningTest(unittest.TestCase):
         self.assertIn('Renamed: models/raw/commissioning/raw_sample_items.sql -> '
                       'models/raw/shared/raw_manual_items.sql', output)
 
+    def test_reused_model_name_in_another_domain_reports_changed_source(self):
+        (self.staging / 'stg_items.sql').write_text(
+            "{{ ref('raw_sample_items') }}", encoding='utf-8',
+        )
+        self.source['name'] = 'replacement'
+        self.mapping['source_name'] = 'replacement'
+        self.mapping['domain'] = 'shared'
+        self.write_inputs()
+        output = self.generate()
+        self.assertIn('Reused name: models/raw/commissioning/raw_sample_items.sql -> '
+                      'models/raw/shared/raw_sample_items.sql', output)
+        self.assertIn('Previous source: sample.ITEMS', output)
+        self.assertIn('New source: replacement.ITEMS', output)
+        self.assertIn('Review staging refs:\n      models/staging/stg_items.sql:1', output)
+        self.assertNotIn('Moved:', output)
+        self.assertNotIn('Broken staging refs:', output)
+
     def test_default_domain_and_prefix_are_unchanged(self):
         self.mapping = {'source_name': 'sample'}
         self.write_inputs()
