@@ -8,7 +8,7 @@ Tirzepatide cohort status fact table (person-level, PowerBI-ready).
 
 Combines the eligibility population (int_tirzepatide_eligible_population) with
 current GLP-1 prescribing (int_glp1_medications_all) and demographic / practice
-context, so practices can identify patients eligible for tirzepatide and see
+context, so practices can identify candidates for assessment and see
 whether they are already on a GLP-1 (and for which likely indication).
 
 Grain: one row per currently-registered, living OBES2 member.
@@ -98,6 +98,7 @@ SELECT
             THEN 'Cohort 1 (BMI >= 40/37.5)'
         WHEN elig.is_eligible_cohort_2
             THEN 'Cohort 2 (BMI 35-<40/32.5-<37.5)'
+        ELSE 'BMI assessment needed'
     END AS cohort,
 
     -- BMI
@@ -125,7 +126,7 @@ SELECT
     glp1.latest_glp1_order_date,
     glp1.glp1_orders_12m,
 
-    -- Actionable = eligible but not currently on any GLP-1
+    -- Includes candidates needing BMI assessment before a cohort can be assigned.
     NOT COALESCE(glp1.is_currently_treated_glp1, FALSE) AS is_actionable,
 
     -- Metadata

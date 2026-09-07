@@ -57,8 +57,10 @@ future-recorded BMI evidence is excluded from this programme selection.
 
 `BMI35_COD` establishes a BMI of at least 35 without supplying a measurement.
 It does not establish whether the higher Cohort 1 threshold was met.
-The current implementation defaults these records to Cohort 2. This assignment
-is provisional and requires a BMI assessment to establish the actual cohort.
+Candidates without numeric evidence establishing either BMI band remain in the
+population with `cohort` and `bmi_category` set to `BMI assessment needed` and
+both cohort flags false. They remain candidates for review through
+`is_actionable` when they have no recent GLP-1 order.
 `bmi_category` contains the historical ethnicity-adjusted rollout labels; it is
 not a measured WHO obesity classification.
 

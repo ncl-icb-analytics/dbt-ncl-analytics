@@ -6,9 +6,10 @@ models:
       qualifying BMI evidence in the preceding 12 months and at least four of
       the five OBES2 comorbidities. The most recent qualifying BMI assigns the
       rollout cohort: Cohort 1 is BMI at least 40, or 37.5 with the lower
-      ethnicity threshold; other OBES2 members are Cohort 2. A code-only
-      BMI35_COD record is assigned to Cohort 2 because it does not establish
-      the higher threshold. These are candidates for clinical assessment,
+      ethnicity threshold; Cohort 2 is BMI 35 to below 40, or 32.5 to below
+      37.5 with the lower ethnicity threshold. Evidence without a numeric BMI
+      establishing either band is labelled BMI assessment needed, with both
+      cohort flags false. These are candidates for clinical assessment,
       not confirmed prescribing eligibility. The hypertension flag does not
       confirm a need for blood pressure treatment; the sleep apnoea flag does
       not confirm sleep-clinic assessment or an indication for CPAP or equivalent.
@@ -45,7 +46,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['Obese Class II', 'Obese Class III']
+                values: ['Obese Class II', 'Obese Class III', 'BMI assessment needed']
       - name: has_lower_bmi_threshold_ethnicity
         description: Whether the latest QOF ethnicity evidence qualifies for lower BMI thresholds
       - name: has_unresolved_hypertension
@@ -69,7 +70,7 @@ models:
       - name: bmi_meets_cohort_1
         description: Whether the most recent qualifying BMI meets the Cohort 1 threshold
       - name: bmi_meets_cohort_2
-        description: Whether the person is an OBES2 member below the Cohort 1 threshold
+        description: Whether numeric BMI establishes the ethnicity-adjusted Cohort 2 band; false when measurement is missing
       - name: is_eligible_cohort_1
         description: Whether the person is assigned to Cohort 1
       - name: is_eligible_cohort_2

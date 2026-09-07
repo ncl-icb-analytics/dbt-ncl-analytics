@@ -6,8 +6,8 @@
 }}
 
 /*
-Current tirzepatide rollout population derived from the QOF v51 OBES2 register.
-The most recent qualifying OBES2 BMI evidence assigns the rollout cohort.
+One row per living, currently registered adult candidate in QOF v51 OBES2.
+The most recent qualifying BMI evidence within 12 months supplies the cohort.
 */
 
 WITH obesity2 AS (
@@ -74,7 +74,18 @@ cohorted AS (
                 ELSE 40
             END,
             FALSE
-        ) AS bmi_meets_cohort_1
+        ) AS bmi_meets_cohort_1,
+        COALESCE(
+            bmi.latest_bmi_value >= CASE
+                WHEN obes.has_lower_bmi_threshold_ethnicity THEN 32.5
+                ELSE 35
+            END
+            AND bmi.latest_bmi_value < CASE
+                WHEN obes.has_lower_bmi_threshold_ethnicity THEN 37.5
+                ELSE 40
+            END,
+            FALSE
+        ) AS bmi_meets_cohort_2
     FROM obesity2 AS obes
     INNER JOIN qualifying_bmi_evidence AS bmi
         ON obes.person_id = bmi.person_id
@@ -95,7 +106,8 @@ SELECT
     latest_bmi_is_bmi_35_code,
     CASE
         WHEN bmi_meets_cohort_1 THEN 'Obese Class III'
-        ELSE 'Obese Class II'
+        WHEN bmi_meets_cohort_2 THEN 'Obese Class II'
+        ELSE 'BMI assessment needed'
     END AS bmi_category,
     has_lower_bmi_threshold_ethnicity,
     has_unresolved_hypertension,
@@ -105,7 +117,7 @@ SELECT
     has_unresolved_type2_diabetes,
     qualifying_comorbidity_count,
     bmi_meets_cohort_1,
-    NOT bmi_meets_cohort_1 AS bmi_meets_cohort_2,
+    bmi_meets_cohort_2,
     bmi_meets_cohort_1 AS is_eligible_cohort_1,
-    NOT bmi_meets_cohort_1 AS is_eligible_cohort_2
+    bmi_meets_cohort_2 AS is_eligible_cohort_2
 FROM cohorted

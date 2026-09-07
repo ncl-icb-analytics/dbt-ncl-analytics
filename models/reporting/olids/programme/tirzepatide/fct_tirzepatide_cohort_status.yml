@@ -10,8 +10,11 @@ models:
 
       Candidate selection and comorbidities come from the QOF v51 OBES2 register. Grain:
       one row per currently registered, living candidate. Cohort 1 is BMI
-      >= 40, or >= 37.5 with the lower ethnicity threshold; remaining OBES2
-      members are Cohort 2. is_actionable flags candidates without a GLP-1 order
+      >= 40, or >= 37.5 with the lower ethnicity threshold. Cohort 2 is BMI 35
+      to below 40, or 32.5 to below 37.5 with the lower ethnicity threshold.
+      Candidates whose numeric BMI cannot establish either band remain in the
+      population labelled BMI assessment needed, with both cohort flags false.
+      is_actionable flags candidates without a GLP-1 order
       in six months. It does not establish prescribing suitability or confirm
       programme requirements for hypertension treatment and sleep apnoea assessment.
       This is a current candidate population, not a treatment follow-up register.
@@ -55,11 +58,11 @@ models:
       - name: imd_quintile_19
         description: 'IMD 2019 deprivation quintile'
       - name: is_eligible_cohort_1
-        description: 'OBES2 member assigned to Cohort 1 by the higher ethnicity-adjusted BMI threshold'
+        description: 'Numeric BMI establishes the Cohort 1 band; false when measurement is missing, and prescribing suitability still needs assessment'
       - name: is_eligible_cohort_2
-        description: 'OBES2 member assigned to Cohort 2 below the higher BMI threshold'
+        description: 'Numeric BMI establishes the Cohort 2 band; false when measurement is missing, and prescribing suitability still needs assessment'
       - name: cohort
-        description: 'Cohort label (Cohort 1 or Cohort 2)'
+        description: 'Cohort 1, Cohort 2 or BMI assessment needed when numeric evidence cannot establish either band'
       - name: latest_bmi_value
         description: 'Numeric value from the most recent qualifying OBES2 BMI evidence, when supplied'
       - name: latest_bmi_date
