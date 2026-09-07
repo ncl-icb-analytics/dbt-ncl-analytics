@@ -23,7 +23,10 @@ models:
       - name: spell_admission_patient_classification
       - name: spell_discharge_date
       - name: spell_discharge_time
+      - name: spell_open_spell_indicator
       - name: spell_discharge_length_of_hospital_stay
+      - name: spell_commissioning_tariff_calculation_pbr_length_of_stay_unadjusted_days
+      - name: spell_commissioning_tariff_calculation_pbr_length_of_stay_excess_bed_days
       - name: spell_commissioning_service_agreement_provider
       - name: spell_commissioning_grouping_core_hrg
       - name: spell_clinical_coding_grouper_derived_primary_diagnosis

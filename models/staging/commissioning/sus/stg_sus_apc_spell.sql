@@ -25,8 +25,11 @@ select core.primarykey_id
     , core.spell_admission_time::time as spell_admission_time
     , core.spell_discharge_date::date as spell_discharge_date
     , core.spell_discharge_time::time as spell_discharge_time
+    , core.spell_open_spell_indicator
     , core.spell_discharge_length_of_hospital_stay
+    , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_unadjusted_days
     , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_critical_care_days as spell_length_of_stay_critical_care_days
+    , core.spell_commissioning_tariff_calculation_pbr_length_of_stay_excess_bed_days
     , core.spell_discharge_destination
     , core.spell_discharge_method
 
