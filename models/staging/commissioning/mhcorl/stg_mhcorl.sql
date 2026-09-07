@@ -178,6 +178,7 @@ prep as (
                                                 as provider_code,
         upper(trim(coalesce(commissioner_code, ccg)))
                                                 as commissioner_code,
+        nullif(trim(commissioner_name), '')     as commissioner_name,
         nullif(trim(site_code), '')             as site_code,
 
         -- Patient identifiers (pseudonymised). SK_PATIENT_ID_NHS_NUMBER is the
@@ -334,7 +335,7 @@ select
     dlp_flex_or_freeze, dlp_commissioner_code, dlp_baseline_financial_month,
 
     -- Dataset and organisation
-    dv_dataset, provider_code, commissioner_code, site_code,
+    dv_dataset, provider_code, commissioner_code, commissioner_name, site_code,
 
     -- Patient
     local_patient_id, sk_patient_id, sk_patient_id_local_hash, dv_year_of_birth,

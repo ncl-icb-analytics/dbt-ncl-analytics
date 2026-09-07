@@ -131,6 +131,8 @@ models:
           - not_null
       - name: commissioner_code
         description: As supplied. Row-level commissioner code (COMMISSIONER_CODE, else the CCG column the liaison layouts use). Mostly 3-character CCG / sub-ICB codes.
+      - name: commissioner_name
+        description: As supplied. Commissioner name for commissioner_code. RRP00 only; empty for the other providers.
       - name: site_code
         description: As supplied. Treatment site code (RKL00, RNK00, RAT00 only).
 
