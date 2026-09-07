@@ -1,14 +1,21 @@
 models:
   - name: int_tirzepatide_eligible_population
     description: >
-      Current tirzepatide rollout population drawn from the QOF v51 OBES2
+      Current tirzepatide candidate population drawn from the QOF v51 OBES2
       register. One row represents a living adult with a current registration,
       qualifying BMI evidence in the preceding 12 months and at least four of
       the five OBES2 comorbidities. The most recent qualifying BMI assigns the
       rollout cohort: Cohort 1 is BMI at least 40, or 37.5 with the lower
       ethnicity threshold; other OBES2 members are Cohort 2. A code-only
       BMI35_COD record is assigned to Cohort 2 because it does not establish
-      the higher threshold.
+      the higher threshold. These are candidates for clinical assessment,
+      not confirmed prescribing eligibility. The hypertension flag does not
+      confirm a need for blood pressure treatment; the sleep apnoea flag does
+      not confirm sleep-clinic assessment or an indication for CPAP or equivalent.
+      BMI evidence is the latest qualifying record, not necessarily the latest
+      BMI overall. This current population does not retain everyone who qualified
+      before treatment. See docs/model_documentation/tirzepatide.md for the
+      national specifications and remaining assessment requirements.
     config:
       meta:
         owner:
@@ -34,7 +41,7 @@ models:
       - name: latest_bmi_is_bmi_35_code
         description: Whether the most recent qualifying BMI evidence is from BMI35_COD
       - name: bmi_category
-        description: Ethnicity-adjusted rollout band, Obese Class II or Obese Class III
+        description: Historical labels for the ethnicity-adjusted rollout band, not a measured WHO obesity classification
         data_tests:
           - accepted_values:
               arguments:
