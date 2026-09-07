@@ -90,7 +90,7 @@ combined_data AS (
             ELSE FALSE 
         END AS is_eligible,
         COALESCE(e.campaign_category, 'Not Eligible') AS campaign_category,
-        COALESCE(e.risk_group, 'Vaccinated Despite Ineligibility') AS risk_group,
+        e.risk_group,
         e.subcohort,
         e.eligibility_reason,
         e.rule_type,
