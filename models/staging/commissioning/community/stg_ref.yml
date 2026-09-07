@@ -16,7 +16,9 @@ models:
 
       Provider codes use clean_organisation_id: codes found in organisation
       type 41 retain their full value; other codes use their first three
-      characters. Null provider codes remain null.
+      characters. The macro passes a null input through unchanged, but the
+      fallback to meta_provider_code means a null provider code is not
+      expected, so provider_code is tested not_null.
     config:
       meta:
         owner:
