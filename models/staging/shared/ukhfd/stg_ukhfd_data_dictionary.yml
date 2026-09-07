@@ -346,3 +346,58 @@ models:
         description: Published code description.
       - name: source_effective_from_at
         description: Timestamp from which the UKHFD definition revision applies.
+  - name: stg_ukhfd_data_dictionary_destination_of_discharge
+    description: >-
+      UKHFD discharge destination definitions. One row per code and definition
+      revision. Retains all revisions and retired codes without filtering.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_discharge_destination_legacy
+    description: >-
+      UKHFD legacy discharge destination definitions. One row per code and definition
+      revision. Retains all revisions and retired codes without filtering.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_method_of_discharge
+    description: >-
+      UKHFD discharge method definitions. One row per code and definition
+      revision. Retains all revisions and retired codes without filtering.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns
+
+  - name: stg_ukhfd_data_dictionary_discharge_method_legacy
+    description: >-
+      UKHFD legacy discharge method definitions. One row per code and definition
+      revision. Retains all revisions and retired codes without filtering.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code, source_effective_from_at]
+    columns: *code_set_columns

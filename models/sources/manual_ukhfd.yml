@@ -497,6 +497,14 @@ sources:
         description: MHSDS observation coding scheme definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
 
+      - name: method_of_discharge
+        identifier: '"dim_Method_Of_Discharge_SCD"'
+        description: Discharge method definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: discharge_method_legacy
+        identifier: '"dim_Discharge_Method_SCD"'
+        description: Legacy discharge method definitions, including retired codes.
+        columns: *ukhfd_data_dictionary_columns
   - name: ukhfd_other
     database: '"UKHFD"'
     schema: '"Other"'
