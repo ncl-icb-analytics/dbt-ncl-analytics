@@ -90,7 +90,7 @@ models:
       - name: lipid_type
         description: LDL cholesterol or Non-HDL cholesterol; null if no result is recorded in the period.
       - name: latest_lipid_value
-        description: Selected candidate conversion in mmol/L, without rounding. Check is_latest_lipid_review_required. Null for missing numeric values or unsupported or missing units, and when no result is recorded.
+        description: Selected candidate conversion in mmol/L, without rounding. Check is_latest_lipid_review_required. Null for missing numeric values or unsupported units, and when no result is recorded. A result with no recorded unit is kept as mmol/L and flagged for review.
       - name: latest_lipid_recorded_value
         description: Numeric value received from OLIDS before our conversion. Null for a missing numeric value or no recent observation. Not guaranteed to be the original laboratory value.
       - name: source_result_unit_display
@@ -118,7 +118,7 @@ models:
       - name: is_lipid_recorded_in_last_12m
         description: Whether an LDL or non-HDL observation exists in the inclusive measurement period, including invalid results.
       - name: is_latest_lipid_valid
-        description: Whether the selected result has a recognised unit and a positive finite value. False when no result exists.
+        description: Whether the selected result has a recognised or absent unit and a positive finite value. False when no result exists.
       - name: is_in_numerator
         description: Whether the last recorded result in the period is valid and at or below its inclusive target.
       - name: indicator_status
