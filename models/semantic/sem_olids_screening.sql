@@ -38,7 +38,7 @@ TABLES(
 
     breast AS {{ ref('fct_breast_screening_status') }}
         PRIMARY KEY (person_id)
-        COMMENT = 'Breast screening status, female 50-71 cohort, 3-year interval',
+        COMMENT = 'Breast screening status, female 50-70 cohort, 3-year interval',
 
     cervical AS {{ ref('fct_cervical_screening_status') }}
         PRIMARY KEY (person_id)
