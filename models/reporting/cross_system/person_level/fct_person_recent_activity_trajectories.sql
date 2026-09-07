@@ -5,10 +5,10 @@
 
 
 /*
-Patient trajectory data processing for CLTCS
+Patient trajectory data processing for sparklines for current residents or registrants according to PDS
 
 Clinical Purpose:
-- Showing activity changes over time for patients with complex needs
+- Showing activity changes over time
 
 Testing:
 - Actual table will use full array of datasets and include measurement observations
@@ -20,12 +20,23 @@ with date_spine as(
     FROM TABLE(GENERATOR(ROWCOUNT => 18))
     order by activity_month
 ),
-inclusion_list as(
-    select distinct patient_id
-    from {{ ref('cltcs_patient_list')}}
+
+base_population as(
+    select cast(sk_patient_id as varchar) as sk_patient_id
+    from {{ ref('dim_person_demographics_basic')}}
+    where (flag_current_resident = true or flag_current_registered = true) -- current
+    and date_of_death is null -- living
+    and sk_patient_id is not null -- valid person
+    and sk_patient_id != '1'
 ), 
+
+inclusion_list as(
+    select distinct sk_patient_id
+    from base_population
+), 
+ 
 activity as(
-    select sk_patient_id as patient_id
+    select cast(sk_patient_id as varchar) as sk_patient_id
     , activity_month
     , ae_encounters
     , ip_encounters
@@ -37,7 +48,7 @@ activity as(
         and (select max(activity_month) from date_spine)
 )
 
-select il.patient_id
+select il.sk_patient_id
     ,ARRAY_AGG(COALESCE(a.ae_encounters,0)) within group (order by ds.activity_month) as ae_encounters_sl
     ,ARRAY_AGG(COALESCE(a.ip_encounters,0)) within group (order by ds.activity_month) as ip_encounters_sl
     ,ARRAY_AGG(COALESCE(a.op_encounters,0)) within group (order by ds.activity_month) as op_encounters_sl
@@ -45,6 +56,6 @@ select il.patient_id
 from inclusion_list il
 cross join date_spine ds
 left join activity a 
-    on il.patient_id = a.patient_id and ds.activity_month = a.activity_month
-group by il.patient_id
+    on il.sk_patient_id = a.sk_patient_id and ds.activity_month = a.activity_month
+group by il.sk_patient_id
 

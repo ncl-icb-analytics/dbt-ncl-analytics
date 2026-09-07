@@ -62,6 +62,9 @@ SELECT
         WHEN cf.campaign_id = 'COVID Autumn 2026' THEN 8
         WHEN cf.campaign_id = 'COVID Spring 2027' THEN 9
         END AS campaign_sort,
+    CASE 
+    WHEN cf.campaign_id in ('Flu 2026-27','COVID Autumn 2026','COVID Spring 2027') THEN 'Current'
+    ELSE 'Previous' END AS campaign_status,
     cf.programme_type,
     cf.campaign_year,
     cf.campaign_season,
@@ -86,18 +89,17 @@ SELECT
    cf.risk_group,
    cf.subcohort,
    -- Clinical risk group flags for dashboard filtering, any age, per campaign
-   COALESCE(f.has_asthma, 0) AS has_asthma,
-   COALESCE(f.has_asplenia, 0) AS has_asplenia,
-   COALESCE(f.has_chd, 0) AS has_chd,
-   COALESCE(f.has_ckd, 0) AS has_ckd,
-   COALESCE(f.has_cld, 0) AS has_cld,
-   COALESCE(f.has_cnd, 0) AS has_cnd,
-   COALESCE(f.has_crd, 0) AS has_crd,
-   COALESCE(f.has_diabetes, 0) AS has_diabetes,
-   COALESCE(f.is_immunosuppressed, 0) AS is_immunosuppressed,
-   COALESCE(f.has_ld, 0) AS has_ld,
-   COALESCE(f.has_smi, 0) AS has_smi,
-   --COALESCE(f.in_clinical_risk_group, 0) AS in_clinical_risk_group
+   COALESCE(f.has_asthma = 1, FALSE) AS has_asthma,
+   COALESCE(f.has_asplenia = 1, FALSE) AS has_asplenia,
+   COALESCE(f.has_chd = 1, FALSE) AS has_chd,
+   COALESCE(f.has_ckd = 1, FALSE) AS has_ckd,
+   COALESCE(f.has_cld = 1, FALSE) AS has_cld,
+   COALESCE(f.has_cnd = 1, FALSE) AS has_cnd,
+   COALESCE(f.has_crd = 1, FALSE) AS has_crd,
+   COALESCE(f.has_diabetes = 1, FALSE) AS has_diabetes,
+   COALESCE(f.is_immunosuppressed = 1, FALSE) AS is_immunosuppressed,
+   COALESCE(f.has_ld = 1, FALSE) AS has_ld,
+   COALESCE(f.has_smi = 1, FALSE) AS has_smi,
    COALESCE(f.in_clinical_risk_group = 1, FALSE) AS in_clinical_risk_group
 
 FROM {{ ref('fct_covid_flu_uptake') }} cf

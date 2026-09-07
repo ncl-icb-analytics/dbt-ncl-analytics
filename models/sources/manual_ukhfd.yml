@@ -292,22 +292,6 @@ sources:
         identifier: '"dim_Consultation_Mechanism_SCD"'
         description: Consultation mechanism code definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
-      - name: destination_of_discharge
-        identifier: '"dim_Destination_Of_Discharge_SCD"'
-        description: Discharge destination definitions and their UKHFD history.
-        columns: *ukhfd_data_dictionary_columns
-      - name: discharge_destination_legacy
-        identifier: '"dim_Discharge_Destination_SCD"'
-        description: Legacy discharge destination definitions, including retired codes.
-        columns: *ukhfd_data_dictionary_columns
-      - name: method_of_discharge
-        identifier: '"dim_Method_Of_Discharge_SCD"'
-        description: Discharge method definitions and their UKHFD history.
-        columns: *ukhfd_data_dictionary_columns
-      - name: discharge_method_legacy
-        identifier: '"dim_Discharge_Method_SCD"'
-        description: Legacy discharge method definitions, including retired codes.
-        columns: *ukhfd_data_dictionary_columns
       - name: mhsds_source_of_referral
         identifier: '"dim_Source_Of_Referral_For_Mental_Health_Services_Data_Set_SCD"'
         description: MHSDS source-of-referral code definitions and their UKHFD history.
@@ -456,6 +440,14 @@ sources:
         identifier: '"dim_Discharge_Method_SCD"'
         description: Discharge method definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: destination_of_discharge
+        identifier: '"dim_Destination_Of_Discharge_SCD"'
+        description: Discharge destination definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: discharge_destination_legacy
+        identifier: '"dim_Discharge_Destination_SCD"'
+        description: Retired discharge destination definitions used by historical MHSDS records.
+        columns: *ukhfd_data_dictionary_columns
       - name: ward_intended_sex_of_patients
         identifier: '"dim_Ward_Intended_Sex_Of_Patients_SCD"'
         description: Ward intended sex definitions and their UKHFD history.
@@ -480,7 +472,39 @@ sources:
         identifier: '"dim_Locked_Ward_Indicator_SCD"'
         description: Locked ward indicator definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: mhsds_care_professional_staff_group
+        identifier: '"dim_Care_Professional_Staff_Group_For_Mental_Health_SCD"'
+        description: Mental health care professional staff group definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: main_specialty_code
+        identifier: '"dim_Main_Specialty_Code_SCD"'
+        description: Main specialty code definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: professional_registration_body_code
+        identifier: '"dim_Professional_Registration_Body_Code_SCD"'
+        description: Professional registration body definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: care_professional_job_role_code
+        identifier: '"dim_Job_Role_Code_SCD"'
+        description: Care professional job role definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mhsds_finding_scheme_in_use
+        identifier: '"dim_Finding_Scheme_In_Use_SCD"'
+        description: MHSDS finding coding scheme definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: mhsds_observation_scheme_in_use
+        identifier: '"dim_Observation_Scheme_In_Use_SCD"'
+        description: MHSDS observation coding scheme definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
 
+      - name: method_of_discharge
+        identifier: '"dim_Method_Of_Discharge_SCD"'
+        description: Discharge method definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: discharge_method_legacy
+        identifier: '"dim_Discharge_Method_SCD"'
+        description: Legacy discharge method definitions, including retired codes.
+        columns: *ukhfd_data_dictionary_columns
   - name: ukhfd_other
     database: '"UKHFD"'
     schema: '"Other"'
