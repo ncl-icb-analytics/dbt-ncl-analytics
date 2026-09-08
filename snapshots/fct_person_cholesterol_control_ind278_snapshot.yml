@@ -3,7 +3,8 @@ snapshots:
     relation: ref('fct_person_cholesterol_control_ind278_snapshot_input')
     description: >
       SCD2 history of NICE IND278 cholesterol control per person: qualifying CVD registers,
-      current practice, the selected LDL or non-HDL result and the indicator outcome. Supports
+      current practice, the selected LDL or non-HDL result with its provenance flags, and
+      the indicator outcome. Supports
       indicator trends and as-at reads for cohort matching. Sources the thin
       fct_person_cholesterol_control_ind278_snapshot_input view rather than the measure
       directly, because the measure's CURRENT_DATE()-derived reporting_date and

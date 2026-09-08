@@ -2,8 +2,8 @@ models:
   - name: fct_person_cholesterol_control_ind278_snapshot_input
     description: >
       Thin snapshot-input projection of fct_person_cholesterol_control_ind278: person,
-      current practice, qualifying CVD registers, the selected LDL or non-HDL result and the
-      IND278 outcome. Excludes reporting_date and measurement_period_start, which advance on
+      current practice, qualifying CVD registers, the selected LDL or non-HDL result with
+      its provenance flags, and the IND278 outcome. Excludes reporting_date and measurement_period_start, which advance on
       every build, so the SCD2 snapshot versions only on genuine changes. Feeds
       fct_person_cholesterol_control_ind278_snapshot.
     config:
@@ -32,6 +32,12 @@ models:
         description: LDL cholesterol or Non-HDL cholesterol; null when no result falls in the window.
       - name: latest_lipid_value
         description: Selected result in mmol/L, without rounding.
+      - name: unit_status
+        description: Unit interpretation of the selected result; null when no result falls in the window.
+      - name: plausibility_status
+        description: Validity of the selected result against the shared lipid ranges; null when no result falls in the window.
+      - name: is_latest_lipid_review_required
+        description: Whether the selected result carries a unit or plausibility concern, so as-at reads can compare with and without flagged results.
       - name: is_lipid_recorded_in_last_12m
         description: Whether an LDL or non-HDL observation exists in the 12-month window at the build.
       - name: is_latest_lipid_valid

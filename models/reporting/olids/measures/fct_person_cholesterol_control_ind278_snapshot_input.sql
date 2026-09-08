@@ -23,6 +23,9 @@ select
     , latest_lipid_date
     , lipid_type
     , latest_lipid_value
+    , unit_status
+    , plausibility_status
+    , is_latest_lipid_review_required
     , is_lipid_recorded_in_last_12m
     , is_latest_lipid_valid
     , is_in_numerator
