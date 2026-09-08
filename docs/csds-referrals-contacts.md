@@ -139,7 +139,12 @@ identifier would multiply rows.
 Permanent tests cover model grains, latest reporting-period selection, complete
 fact populations including unknown attendance, and date/time precision. The
 aggregate analyses in `analyses/community/csds_referral_contact_*` retain the
-source, selection and output profiling queries for future deliveries.
+source, selection and output profiling queries for future deliveries. All three
+profiles were compiled and executed against DEV. Singular tests return only the
+keys and context needed for diagnosis inside Snowflake; their results must not
+be exported into public logs or issues. Reconciliation checks individual keys
+and attendance values, so balanced losses and additions cannot hide behind equal
+row counts.
 
 Targeted DEV builds passed for accepted histories, latest staging, references,
 the two facts and existing currency, encounter and patient-summary models.
