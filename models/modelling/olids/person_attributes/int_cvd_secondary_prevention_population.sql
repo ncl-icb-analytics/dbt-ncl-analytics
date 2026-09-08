@@ -1,14 +1,15 @@
 {{ config(materialized='table', cluster_by=['person_id']) }}
 
 /*
-People with established cardiovascular disease for secondary-prevention measures:
-on the CHD, stroke/TIA or PAD QOF register with a diagnosis dated on or before the
-build date. Familial hypercholesterolaemia and haemorrhagic stroke history are
-exposed as flags so each measure applies its own exclusions. No registration,
-living or test-patient filter; consumers join dim_person_active_patients.
+Shared denominator for NICE secondary-prevention indicators (IND230, IND278 and
+related): people on the CHD, stroke/TIA or PAD QOF register with a diagnosis dated
+on or before the build date, as the NICE specifications define cardiovascular
+disease. Familial hypercholesterolaemia and haemorrhagic stroke history are flags
+so each measure applies its own exclusions. No registration, living or test-patient
+filter; consumers join dim_person_active_patients.
 
-Undated FH and haemorrhagic stroke records count as history. Records whose original
-date is after the build date do not.
+CURRENT_DATE() is fixed at this table's build. Build a consuming measure together
+with this model so both use the same date.
 */
 
 WITH cvd_registers AS (

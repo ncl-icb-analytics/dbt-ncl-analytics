@@ -2,9 +2,10 @@ models:
   - name: int_cvd_secondary_prevention_population
     description: >
       People with established cardiovascular disease, the shared denominator for
-      secondary-prevention measures such as NICE IND230 and IND278. One row per
+      NICE secondary-prevention indicators such as IND278 and IND230. One row per
       person on the CHD, stroke/TIA or PAD QOF register whose earliest register
-      diagnosis is on or before the build date. Includes inactive and deceased
+      diagnosis is on or before the build date, the registers the NICE
+      specifications name for cardiovascular disease. Includes inactive and deceased
       people; consumers join dim_person_active_patients for a registered, living
       population.
 

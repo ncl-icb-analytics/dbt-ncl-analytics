@@ -39,8 +39,7 @@ WITH base_orders AS (
     FROM (
         {{ get_medication_orders(bnf_code='0212') }}
     )
-    WHERE bnf_section = '0212'
-        AND order_date BETWEEN '1990-01-01' AND CURRENT_DATE()
+    WHERE order_date BETWEEN '1990-01-01' AND CURRENT_DATE()
 ),
 
 classified AS (
