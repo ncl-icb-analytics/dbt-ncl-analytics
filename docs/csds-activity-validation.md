@@ -122,7 +122,9 @@ each coding row, with further patient and dictionary joins. Its MAIN_DATA output
 therefore has a different grain from the CYP202 activity fact. Matching its
 row count would not establish activity completeness; reconciliation of coded
 items belongs with the clinical-record models. The new source-occurrence fact
-reconciles directly to accepted CYP202 records.
+reconciles directly to accepted CYP202 records. Both source-reconciliation tests
+compare individual expected and actual logical keys, reporting missing and
+unexpected keys even when their row counts balance.
 
 The reusable aggregate-only analysis
 [`csds_activity_source_profile.sql`](../analyses/community/csds_activity_source_profile.sql)
