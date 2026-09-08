@@ -1,35 +1,7 @@
 {{ config(materialized='table', cluster_by=['person_id']) }}
 
 -- NICE IND278: https://www.nice.org.uk/indicators/ind278
-WITH cvd_registers AS (
-    SELECT person_id, 'CHD' AS condition
-    FROM {{ ref('fct_person_chd_register') }}
-    WHERE is_on_register AND earliest_diagnosis_date::DATE <= CURRENT_DATE()
-
-    UNION ALL
-
-    SELECT person_id, 'Stroke/TIA' AS condition
-    FROM {{ ref('fct_person_stroke_tia_register') }}
-    WHERE is_on_register AND earliest_diagnosis_date::DATE <= CURRENT_DATE()
-
-    UNION ALL
-
-    SELECT person_id, 'PAD' AS condition
-    FROM {{ ref('fct_person_pad_register') }}
-    WHERE is_on_register AND earliest_diagnosis_date::DATE <= CURRENT_DATE()
-),
-
-cvd_people AS (
-    SELECT
-        person_id,
-        BOOLOR_AGG(condition = 'CHD') AS has_chd,
-        BOOLOR_AGG(condition = 'Stroke/TIA') AS has_stroke_tia,
-        BOOLOR_AGG(condition = 'PAD') AS has_pad
-    FROM cvd_registers
-    GROUP BY person_id
-),
-
-eligible_people AS (
+WITH eligible_people AS (
     SELECT
         cvd.person_id,
         active.current_practice_code,
@@ -37,25 +9,12 @@ eligible_people AS (
         cvd.has_chd,
         cvd.has_stroke_tia,
         cvd.has_pad
-    FROM cvd_people cvd
+    FROM {{ ref('int_cvd_secondary_prevention_population') }} cvd
     INNER JOIN {{ ref('dim_person_active_patients') }} active
         ON cvd.person_id = active.person_id
     -- Both exclusions apply to the whole person, even with overlapping CVD diagnoses.
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM {{ ref('int_familial_hypercholesterolaemia_diagnoses_all') }} fh
-        WHERE fh.person_id = cvd.person_id
-            AND fh.is_diagnosis_code
-            AND (fh.clinical_effective_date_raw IS NULL
-                OR fh.clinical_effective_date_raw::DATE <= CURRENT_DATE())
-    )
-        AND NOT EXISTS (
-            SELECT 1
-            FROM {{ ref('int_haemorrhagic_stroke_diagnoses_all') }} stroke
-            WHERE stroke.person_id = cvd.person_id
-                AND (stroke.clinical_effective_date_raw IS NULL
-                    OR stroke.clinical_effective_date_raw::DATE <= CURRENT_DATE())
-        )
+    WHERE NOT cvd.has_familial_hypercholesterolaemia
+        AND NOT cvd.has_haemorrhagic_stroke
 ),
 
 lipid_results AS (

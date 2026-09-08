@@ -63,9 +63,9 @@ TABLES(
         COMMENT = 'Practice details for the prescribing practice',
 
     -- Pre-defined medication category models (each filtered to specific drug class)
-    statins AS {{ ref('int_statin_medications_all') }}
+    statins AS {{ ref('int_lipid_lowering_medications_all') }}
         PRIMARY KEY (medication_order_id)
-        COMMENT = 'Statin orders (BNF 2.12) with intensity classification: HIGH_INTENSITY (atorvastatin, rosuvastatin), MODERATE_INTENSITY (simvastatin, pravastatin, fluvastatin), COMBINATION (statin+ezetimibe)',
+        COMMENT = 'Lipid-regulating orders (BNF 2.12) with lipid_lowering_class and, for statins, intensity: HIGH_INTENSITY (atorvastatin, rosuvastatin), MODERATE_INTENSITY (simvastatin, pravastatin, fluvastatin), COMBINATION (statin combinations)',
 
     antihypertensives AS {{ ref('int_antihypertensive_medications_all') }}
         PRIMARY KEY (medication_order_id)
@@ -233,9 +233,10 @@ DIMENSIONS(
     demographics.imd_decile_25 AS imd_decile_25 COMMENT = 'IMD 2025 decile (1=most deprived, 10=least). NULL if LSOA not mapped.',
     demographics.imd_quintile_25 AS imd_quintile_25 COMMENT = 'IMD 2025 quintile (1 - Most Deprived to 5 - Least Deprived, Unknown)',
 
-    -- Statin classification (only populated for statin orders)
-    statins.statin_intensity AS statin_intensity COMMENT = 'Statin intensity (HIGH_INTENSITY, MODERATE_INTENSITY, COMBINATION, OTHER_STATIN). Only for statin orders.',
-    statins.is_combination_therapy AS is_combination_therapy COMMENT = 'Statin + ezetimibe combination. Only for statin orders.',
+    -- Lipid-regulating classification (only populated for BNF 2.12 orders)
+    statins.lipid_lowering_class AS lipid_lowering_class COMMENT = 'Lipid-regulating product class (STATIN, STATIN_COMBINATION, EZETIMIBE, BEMPEDOIC_ACID, PCSK9_INHIBITOR, INCLISIRAN, FIBRATE, BILE_ACID_SEQUESTRANT, NICOTINIC_ACID, OMEGA_3, OTHER). Only for BNF 2.12 orders.',
+    statins.statin_intensity AS statin_intensity COMMENT = 'Statin intensity (HIGH_INTENSITY, MODERATE_INTENSITY, COMBINATION, OTHER_STATIN). Null for non-statin products.',
+    statins.is_combination_therapy AS is_combination_therapy COMMENT = 'Fixed-dose lipid combination product. Only for BNF 2.12 orders.',
 
     -- Anticoagulant classification (only populated for anticoagulant orders)
     anticoagulants.anticoagulant_type AS anticoagulant_type COMMENT = 'Anticoagulant type (DOAC, VKA, Other). Only for anticoagulant orders.',
@@ -279,8 +280,8 @@ METRICS(
     rx.acute_order_count AS COUNT(CASE WHEN rx.issue_type = 'Acute' THEN rx.medication_order_id END) COMMENT = 'Acute (one-off) prescription orders',
 
     -- Category counts (non-null when order is in that category)
-    statins.statin_order_count AS COUNT(statins.medication_order_id) COMMENT = 'Statin orders',
-    statins.statin_patient_count AS COUNT(DISTINCT statins.person_id) COMMENT = 'Patients with statin orders',
+    statins.statin_order_count AS COUNT(statins.medication_order_id) COMMENT = 'Lipid-regulating orders (BNF 2.12)',
+    statins.statin_patient_count AS COUNT(DISTINCT statins.person_id) COMMENT = 'Patients with lipid-regulating orders',
     antihypertensives.antihypertensive_order_count AS COUNT(antihypertensives.medication_order_id) COMMENT = 'Antihypertensive orders',
     antihypertensives.antihypertensive_patient_count AS COUNT(DISTINCT antihypertensives.person_id) COMMENT = 'Patients with antihypertensive orders',
     anticoagulants.anticoagulant_order_count AS COUNT(anticoagulants.medication_order_id) COMMENT = 'Anticoagulant orders',
