@@ -266,7 +266,7 @@ models:
     description: >
       NICE IND239 to IND246 blood pressure status in a common interface. One row
       per person and indicator on the current reporting date. Feeds
-      fct_person_indicator_status. Indicator-specific
+      fct_person_nice_indicator_status. Indicator-specific
       views remain the source of each population and threshold definition.
       Personalised care adjustments are not applied. Secondary-use consumers
       must join DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out

@@ -1,5 +1,5 @@
 models:
-  - name: fct_person_indicator_status
+  - name: fct_person_nice_indicator_status
     description: >
       Person-level status for the NICE indicator measures in OLIDS_MEASURES that
       emit the shared contract, in one long-form table. One row per person and

@@ -28,7 +28,7 @@ models:
       maximum tolerated therapy and inappropriate treatment are not applied.
       Secondary-use consumers must join DIM_PERSON_SECONDARY_USE_ALLOWED to apply
       National Data Opt-Out and Type 1 opt-out filtering. Feeds
-      fct_person_indicator_status.
+      fct_person_nice_indicator_status.
     config:
       meta:
         owner:
