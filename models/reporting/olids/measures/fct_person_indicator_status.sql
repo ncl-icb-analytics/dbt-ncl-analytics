@@ -1,8 +1,8 @@
-{{ config(materialized='table', cluster_by=['indicator_id']) }}
+{{ config(materialized='table') }}
 
 /*
-Person-level status for every NICE indicator measure in OLIDS_MEASURES, in one
-long-form contract. One row per person and indicator on the current reporting
+Person-level status for the NICE indicator measures in OLIDS_MEASURES that emit
+the shared contract, in one long-form table. One row per person and indicator on the current reporting
 date. Each family union or single-indicator measure keeps its own detail
 columns; this model carries only the shared set.
 

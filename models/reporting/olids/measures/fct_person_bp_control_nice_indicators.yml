@@ -286,6 +286,12 @@ models:
         description: Person in the indicator denominator
       - name: indicator_id
         description: NICE indicator identifier
+      - name: indicator_status
+        description: ACHIEVED, NOT_RECORDED_IN_PERIOD or ABOVE_TARGET
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ACHIEVED', 'NOT_RECORDED_IN_PERIOD', 'ABOVE_TARGET']
       - name: indicator_name
         description: Published NICE indicator name
       - name: reporting_date

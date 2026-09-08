@@ -1,9 +1,9 @@
 models:
   - name: fct_person_indicator_status
     description: >
-      Person-level status for every NICE indicator measure in OLIDS_MEASURES in
-      one long-form contract. One row per person and indicator on the current
-      reporting date, for currently registered, living, non-test people in each
+      Person-level status for the NICE indicator measures in OLIDS_MEASURES that
+      emit the shared contract, in one long-form table. One row per person and
+      indicator on the current reporting date, for currently registered, living, non-test people in each
       indicator's population. Carries only the shared columns; the family unions
       and single-indicator measures hold indicator-specific detail such as
       readings, thresholds and provenance. Join def_indicator on indicator_id
@@ -13,7 +13,9 @@ models:
       opt-out filtering.
 
       New measures feed this model by emitting the shared columns and being
-      added to its model list.
+      added to its model list; a measure missing from the list is not detected
+      by tests. Count-based measures such as the diabetes care processes are
+      outside this contract.
     config:
       meta:
         owner:
