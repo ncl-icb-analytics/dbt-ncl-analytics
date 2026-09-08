@@ -18,8 +18,9 @@ models:
 
       Recorded values, unit provenance and review flags accompany the selected
       candidate conversion. Review flags identify uncertainty and do not change
-      validity or achievement. Consumers can compare results with and without
-      flagged observations; these local review ranges are not clinical exclusions.
+      validity or achievement. Validity itself uses the shared lipid ranges, so an
+      out-of-range result is unassessable rather than counted. Consumers can compare
+      results with and without flagged observations.
 
       This is an unadjusted local NICE measure, not a QOF achievement calculation.
       Personalised care adjustments for declined tests or treatment, non-attendance,
@@ -100,7 +101,7 @@ models:
       - name: conversion_factor
         description: Multiplier applied to the recorded value. Null when units cannot be converted or no recent observation exists.
       - name: plausibility_status
-        description: Screening status for the selected result using the shared observation review ranges. Null when no recent observation exists.
+        description: Validity status of the selected result against the shared lipid ranges. Within valid range means the result is assessable. Null when no recent observation exists.
       - name: is_latest_lipid_review_required
         description: >
           Whether the selected result has a unit conversion, conflicting unit metadata,
