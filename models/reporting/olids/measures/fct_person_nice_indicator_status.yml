@@ -32,13 +32,9 @@ models:
         data_tests:
           - not_null
       - name: indicator_id
-        description: NICE indicator identifier, matching def_indicator.
+        description: NICE indicator identifier, matching def_indicator. tests/nice_indicator_status_ids_defined.sql checks every id has a definition.
         data_tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('def_indicator')
-                field: indicator_id
       - name: indicator_name
         description: Published NICE indicator name.
       - name: reporting_date
