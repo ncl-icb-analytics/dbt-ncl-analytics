@@ -1,7 +1,7 @@
 {{ config(materialized='table', cluster_by=['person_id', 'clinical_effective_date']) }}
 
 WITH measurements AS (
-    {{ get_lipid_observations('CHOL2_COD', 'cholesterol_value') }}
+    {{ get_lipid_observations('TCHOLHDL_COD', 'cholesterol_hdl_ratio', ratio=true) }}
 )
 
 SELECT
@@ -10,10 +10,9 @@ SELECT
     clinical_effective_date,
     clinical_effective_date_raw,
     date_recorded,
-    cholesterol_value,
+    cholesterol_hdl_ratio,
     result_unit_display,
     recorded_value,
-    converted_value_mmol_l,
     source_result_unit_code,
     source_result_unit_display,
     mapped_result_unit_code,
@@ -31,11 +30,5 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    plausibility_status = 'Within valid range' AS is_valid_cholesterol,
-    CASE
-        WHEN NOT is_valid_cholesterol THEN 'Invalid'
-        WHEN cholesterol_value < 5 THEN 'Desirable'
-        WHEN cholesterol_value < 6.2 THEN 'Borderline High'
-        ELSE 'High'
-    END AS cholesterol_category
+    plausibility_status = 'Within valid range' AS is_valid_cholesterol_hdl_ratio
 FROM measurements

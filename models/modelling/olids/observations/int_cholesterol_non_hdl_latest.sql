@@ -1,7 +1,10 @@
-{{ config(materialized='table', cluster_by=['person_id', 'clinical_effective_date']) }}
+{{ config(materialized='table', cluster_by=['person_id']) }}
 
-WITH measurements AS (
-    {{ get_lipid_observations('CHOL2_COD', 'cholesterol_value') }}
+WITH results AS (
+    SELECT
+        *,
+        MAX(clinical_effective_date) OVER (PARTITION BY person_id) AS most_recent_result_date
+    FROM {{ ref('int_cholesterol_non_hdl_all') }}
 )
 
 SELECT
@@ -31,11 +34,14 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    plausibility_status = 'Within valid range' AS is_valid_cholesterol,
-    CASE
-        WHEN NOT is_valid_cholesterol THEN 'Invalid'
-        WHEN cholesterol_value < 5 THEN 'Desirable'
-        WHEN cholesterol_value < 6.2 THEN 'Borderline High'
-        ELSE 'High'
-    END AS cholesterol_category
-FROM measurements
+    is_valid_cholesterol,
+    cholesterol_category,
+    most_recent_result_date,
+    -- The person's most recent result was invalid, so this row is an older valid result.
+    most_recent_result_date > clinical_effective_date AS has_later_unassessable_result
+FROM results
+WHERE is_valid_cholesterol
+QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY person_id
+    ORDER BY clinical_effective_date DESC, id DESC
+) = 1

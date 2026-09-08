@@ -1,67 +1,26 @@
 models:
-  - name: int_cholesterol_latest
-    description: 'Total cholesterol for all people, including inactive and deceased people. One row per
-      person with a valid recorded result. Validity is filtered before ranking by clinical effective date
-      descending, then observation ID descending for ties. People without valid results are absent. When a later
-      result exists that is not valid, the row is the most recent valid one and has_later_unassessable_result
-      is true. Valid
-      means 0.5 to 20 mmol/L inclusive. Concentrations retain source precision after unit conversion;
-      values are not rounded before comparison. The existing descriptive bands are retained: below 5 desirable,
-      5 to below 6.2 borderline high, and 6.2 or above high. These are not NICE treatment targets.'
+  - name: int_cholesterol_hdl_all
+    description: HDL cholesterol for all people, including inactive and deceased people. One row per observation
+      in the PCD HDLCCHOL_COD cluster. Missing or future original clinical dates are excluded. Invalid
+      values and unsupported units remain available for audit. Valid means 0.1 to 5 mmol/L inclusive. Concentrations retain source precision after unit conversion; values are not
+      rounded before comparison. Numeric bands support the HEART UK reference levels above 1.0 mmol/L
+      for men and above 1.2 for women. No sex is inferred from the observation, and higher HDL is not
+      necessarily protective.
     config:
       meta:
         owner:
           name: EddieDavison92
         clinical_source: https://www.heartuk.org.uk/cholesterol/understanding-your-cholesterol-test-results-
         code_source: PCD
-        indicator:
-          id: CHOLESTEROL_LATEST
-          type: PATHOLOGY
-          category: LABORATORY_RESULT
-          clinical_domain: Cardiometabolic
-          name_short: Latest Cholesterol
-          description_short: Most recent total cholesterol measurement for cardiovascular risk assessment
-          description_long: Latest valid total cholesterol in mmol/L for all people. Descriptive bands
-            are below 5, 5 to below 6.2, and 6.2 or above. These bands do not define NICE primary or secondary
-            prevention treatment targets.
-          is_qof: false
-          source_column: cholesterol_value
-          usage_contexts:
-            - LABORATORY_MONITORING
-          code_clusters:
-            - cluster_id: CHOL2_COD
-              category: INCLUSION
-          thresholds:
-            - population_group: ALL
-              threshold_type: DESIRABLE
-              threshold_value: '5'
-              threshold_operator: BELOW
-              threshold_unit: mmol/L
-              description: Total cholesterol below 5 mmol/L
-              sort_order: 1
-            - population_group: ALL
-              threshold_type: BORDERLINE_HIGH
-              threshold_value: '6.2'
-              threshold_operator: BELOW
-              threshold_unit: mmol/L
-              description: Legacy descriptive band from 5 to below 6.2 mmol/L
-              sort_order: 2
-            - population_group: ALL
-              threshold_type: HIGH
-              threshold_value: '6.2'
-              threshold_operator: AT_OR_ABOVE
-              threshold_unit: mmol/L
-              description: Legacy descriptive band at or above 6.2 mmol/L
-              sort_order: 3
     columns:
       - name: id
         description: Source observation identifier. Used to break ties deterministically; it does not
           imply clinical priority.
-      - name: person_id
-        description: Person identifier. No active-registration or age restriction is applied.
         data_tests:
           - unique
           - not_null
+      - name: person_id
+        description: Person identifier. No active-registration or age restriction is applied.
       - name: clinical_effective_date
         description: Observation date after the shared OLIDS correction for events dated after their recording
           date.
@@ -93,7 +52,7 @@ models:
         description: True when populated source and mapped unit labels disagree after recognised aliases are normalised. Unknown labels are treated as absent. Does not identify which unit is correct.
       - name: plausibility_status
         description: >
-          Validity check after conversion against the inclusive range of 0.5 to 20 mmol/L. Within valid range
+          Validity check after conversion against the inclusive range of 0.1 to 5 mmol/L. Within valid range
           is the validity rule. Other values name why the result is invalid: unit cannot be converted,
           missing numeric result, non-positive or non-finite, below or above the range. Rare genuine
           results can lie outside the range and are excluded.
@@ -121,7 +80,7 @@ models:
       - name: concept_display
         description: Recorded mapped clinical concept label.
       - name: source_cluster_id
-        description: 'Authoritative PCD observation cluster: CHOL2_COD.'
+        description: 'Authoritative PCD observation cluster: HDLCCHOL_COD.'
       - name: sampling_context
         description: Fasting, non-fasting or random only when specified in the PCD code description. Otherwise
           Not specified; no sampling status is inferred from the numeric value.
@@ -129,13 +88,10 @@ models:
         description: True when plausibility_status is Within valid range. False includes missing values,
           unsupported units and values outside the range.
       - name: cholesterol_category
-        description: 'The existing descriptive bands are retained: below 5 desirable, 5 to below 6.2 borderline
-          high, and 6.2 or above high. These are not NICE treatment targets.'
-      - name: most_recent_result_date
-        description: Clinical effective date of the person's most recent result of any validity. Equal to
-          clinical_effective_date unless a later result was invalid.
-      - name: has_later_unassessable_result
-        description: True when a result more recent than this row exists but failed validity, for example an
-          LDL that the laboratory could not calculate. The row is then an older valid result, not the person's
-          current state. Consumers assessing current control should treat these people as unassessable rather
-          than use the older value.
+        description: Numeric bands support the HEART UK reference levels above 1.0 mmol/L for men and
+          above 1.2 for women. No sex is inferred from the observation, and higher HDL is not necessarily
+          protective.
+    data_tests:
+      - cluster_ids_exist:
+          arguments:
+            cluster_ids: HDLCCHOL_COD
