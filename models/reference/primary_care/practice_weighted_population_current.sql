@@ -1,5 +1,5 @@
--- Practice need-weighted population for the allocation base year in force
--- today. One row per practice. Excludes projections by construction.
+-- Practice need-weighted population for the latest loaded allocation base
+-- year that has started. One row per practice. Never a future projection.
 select
     practice_code,
     financial_year,

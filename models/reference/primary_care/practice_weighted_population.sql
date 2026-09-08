@@ -1,7 +1,8 @@
 -- Practice need-weighted populations by allocation base year, from the NHS
 -- England revenue allocations practice-level workbooks via UKHFD. One row per
 -- practice and base year. All values are modelled for the base year, not
--- actual list counts; base years after today are projections. The headline
+-- actual list counts; base years after today are projections. Practice-years
+-- without a positive registered population are excluded. The headline
 -- is NHS England's Core Services weighted population; the service-specific
 -- populations are carried as separate columns.
 with metrics as (
@@ -56,8 +57,11 @@ flagged as (
     select
         *,
         financial_year_start > current_date() as is_projection,
-        financial_year_start = max(iff(financial_year_start <= current_date(), financial_year_start, null))
-            over (partition by practice_code) as is_current_base_year
+        coalesce(
+            financial_year_start = max(iff(financial_year_start <= current_date(), financial_year_start, null))
+                over (partition by practice_code),
+            false
+        ) as is_current_base_year
     from practice_year
     where registered_patients > 0
 )
