@@ -9,7 +9,7 @@ WITH indicator_population AS (
         profile.latest_risk_score,
         profile.latest_risk_score_date,
         profile.latest_risk_assessment_date,
-        LEAST(
+        LEAST_IGNORE_NULLS(
             CASE WHEN profile.earliest_hypertension_date >= DATEADD(month, -12, CURRENT_DATE())
                 THEN profile.earliest_hypertension_date END,
             CASE WHEN profile.earliest_type2_diabetes_date >= DATEADD(month, -12, CURRENT_DATE())
