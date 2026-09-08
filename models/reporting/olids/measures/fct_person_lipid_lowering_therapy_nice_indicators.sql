@@ -5,7 +5,11 @@
     'fct_person_lipid_lowering_therapy_ind230',
     'fct_person_lipid_lowering_therapy_ind231',
     'fct_person_lipid_lowering_therapy_ind276',
-    'fct_person_lipid_lowering_therapy_ind277'
+    'fct_person_lipid_lowering_therapy_ind277',
+    'fct_person_lipid_lowering_therapy_ind229',
+    'fct_person_lipid_lowering_therapy_ind274',
+    'fct_person_lipid_lowering_therapy_ind275',
+    'fct_person_lipid_lowering_therapy_ind287'
 ] %}
 
 {% for indicator_model in indicator_models %}
