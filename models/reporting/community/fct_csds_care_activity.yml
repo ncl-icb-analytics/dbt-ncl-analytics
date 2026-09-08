@@ -1,0 +1,133 @@
+version: 2
+models:
+- name: fct_csds_care_activity
+  description: One accepted CSDS CYP202 activity occurrence per submission and activity identifier. Preserves
+    all source activities, including unbridged people and unmatched parent identifiers. Contact context
+    comes from the same submission, never from an unrelated latest occurrence. Activities are child detail
+    and do not emit separate healthcare events. Delivery timestamps are not clinical activity dates. Native
+    clinical codes, schemes, values and units remain together. This activity model does not infer clinical
+    code mappings.
+  config:
+    meta:
+      owner:
+        name: Emily Baldwin
+  columns:
+  - name: source_record_id
+    description: Surrogate key of submission and activity identifier.
+    data_tests:
+    - unique
+    - not_null
+  - name: source_dataset
+    description: CSDS.
+  - name: source_row_id
+    description: Identifier of the delivered source row. Changes when another submission occurrence is
+      selected.
+  - name: unique_care_activity_identifier
+    description: Supplied provider-qualified activity identifier. Reused across contacts, people and periods
+      in the loaded feed; not a global event key.
+  - name: care_activity_identifier
+    description: Local activity identifier as supplied by the provider.
+  - name: unique_care_contact_identifier
+    description: Supplied provider-qualified contact identifier. Use submission context to locate the
+      historical parent.
+  - name: care_contact_identifier
+    description: Local contact identifier as supplied by the provider.
+  - name: unique_service_request_identifier
+    description: Supplied provider-qualified service request identifier.
+  - name: contact_source_record_id
+    description: Key used by the latest contact fact for the parent referral/contact pair. Use contact_source_row_id
+      and submission for the historical occurrence.
+  - name: contact_source_row_id
+    description: Delivered CYP201 row identifier for the same-submission parent contact.
+  - name: referral_source_record_id
+    description: Service request key used by the latest referral fact. The selected latest referral may
+      have a different person or submission.
+  - name: person_id
+    description: CSDS person identifier supplied on this row. It is not replaced by the parent person.
+  - name: sk_patient_id
+    description: Pseudonymised cross-system patient key from the CSDS bridge; null when unavailable.
+  - name: care_contact_date
+    description: Date from the same-submission parent contact. This is contact context, not an independently
+      recorded activity date.
+  - name: care_contact_time
+    description: Time from the same-submission parent contact; null when absent.
+  - name: care_contact_at
+    description: Parent contact date and supplied time. Date-only values use midnight and must be read
+      with care_contact_time_precision.
+  - name: care_contact_time_precision
+    description: timestamp when the parent contact supplies date and time; date when only date exists;
+      null when no parent date exists.
+  - name: activity_location_type_code
+    description: Location code from the same-submission parent contact.
+  - name: activity_location_type_name
+    description: Latest available dictionary description for the corresponding supplied code; null for
+      missing or unmatched codes. Not a point-in-time clinical interpretation.
+  - name: activity_type_code
+    description: Supplied activity type code. Unmatched values remain visible.
+  - name: activity_type_name
+    description: Latest available dictionary description for the corresponding supplied code; null for
+      missing or unmatched codes. Not a point-in-time clinical interpretation.
+  - name: clinical_contact_duration_minutes
+    description: Supplied clinical contact duration of the activity in minutes, excluding administrative
+      time.
+  - name: care_professional_local_identifier
+    description: Supplied local identifier of the lead care professional. Several professionals do not
+      create extra activity rows.
+  - name: unique_care_professional_id_local
+    description: Source-derived provider-qualified lead care professional identifier; null when absent.
+  - name: procedure_scheme_in_use_community_care
+    description: Original procedure coding-system code. The duplicate older source alias is omitted after
+      equality validation.
+  - name: procedure_scheme_name
+    description: Latest available dictionary description for the corresponding supplied code; null for
+      missing or unmatched codes. Not a point-in-time clinical interpretation.
+  - name: coded_procedure_clinical_terminology
+    description: Original procedure code interpreted using procedure_scheme_in_use_community_care. Null
+      means not supplied.
+  - name: finding_scheme_in_use_community_care
+    description: Original finding coding-system code. The duplicate older source alias is omitted after
+      equality validation.
+  - name: finding_scheme_name
+    description: Latest available dictionary description for the corresponding supplied code; null for
+      missing or unmatched codes. Not a point-in-time clinical interpretation.
+  - name: coded_finding_coded_clinical_entry
+    description: Original finding code interpreted using finding_scheme_in_use_community_care. Null means
+      not supplied.
+  - name: observation_scheme_in_use_community_care
+    description: Original observation coding-system code. The duplicate older source alias is omitted
+      after equality validation.
+  - name: observation_scheme_name
+    description: Latest available dictionary description for the corresponding supplied code; null for
+      missing or unmatched codes. Not a point-in-time clinical interpretation.
+  - name: coded_observation_clinical_terminology
+    description: Original observation code interpreted using observation_scheme_in_use_community_care.
+      Null means not supplied.
+  - name: observation_value
+    description: Supplied value on this activity observation, kept with its code and unit. Null means
+      no supplied value.
+  - name: ucum_unit_of_measurement
+    description: Supplied UCUM unit for the observation value; null does not imply a unit.
+  - name: is_contact_linked
+    description: Whether exactly one parent contact was found in the same submission; grain tests guard
+      join multiplication.
+  - name: is_contact_person_consistent
+    description: Whether the source activity and same-submission contact persons agree; null when either
+      person or parent is absent.
+  - name: provider_organisation_code
+    description: Supplied provider organisation code.
+  - name: unique_submission_id
+    description: Accepted submission identifier. Combine with the activity identifier to locate a submitted
+      occurrence.
+  - name: reporting_period_start_date
+    description: First date of the source reporting period; delivery context, not clinical event time.
+  - name: reporting_period_end_date
+    description: Last date of the source reporting period; delivery context, not clinical event time.
+  - name: source_file_received_at
+    description: Date and time the submission portal received the file; not the time of care.
+  - name: csds_version
+    description: Dataset version from the submission header.
+  - name: file_type
+    description: Supplied submission file type.
+  - name: age_at_contact
+    description: Supplied age in years from the same-submission parent contact. Null when absent; no age
+      is calculated from a latest patient snapshot.

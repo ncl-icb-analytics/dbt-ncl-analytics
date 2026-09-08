@@ -521,6 +521,22 @@ sources:
         identifier: '"dim_Care_Professional_Staff_Group_For_Community_Care_SCD"'
         description: National csds referring staff group definitions and their UKHFD history.
         columns: *ukhfd_data_dictionary_columns
+      - name: procedure_scheme_in_use
+        identifier: '"dim_Procedure_Scheme_In_Use_SCD"'
+        description: National procedure scheme in use definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_community_care_activity_type
+        identifier: '"dim_Community_Care_Activity_Type_SCD"'
+        description: National csds community care activity type definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_community_care_activity_type_legacy
+        identifier: '"dim_Community_Care_Activity_Type_Code_SCD"'
+        description: National csds community care activity type legacy definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_referral_closure_reason_legacy
+        identifier: '"dim_Referral_Closure_Reason_For_Community_Care_SCD"'
+        description: National csds referral closure reason legacy definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
   - name: ukhfd_other
     database: '"UKHFD"'
     schema: '"Other"'
