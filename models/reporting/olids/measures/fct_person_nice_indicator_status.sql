@@ -12,7 +12,10 @@ To add a measure, give it the shared columns and append it to the list below.
 {% set indicator_models = [
     'fct_person_bp_control_nice_indicators',
     'fct_person_lipid_lowering_therapy_nice_indicators',
-    'fct_person_cholesterol_control_ind278'
+    'fct_person_cholesterol_control_ind278',
+    'fct_person_diabetes_nice_indicators',
+    'fct_person_antithrombotic_therapy_nice_indicators',
+    'fct_person_ckd_albumin_testing_ind144'
 ] %}
 
 {% for indicator_model in indicator_models %}
