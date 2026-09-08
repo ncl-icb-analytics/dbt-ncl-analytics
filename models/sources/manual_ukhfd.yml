@@ -509,6 +509,18 @@ sources:
         identifier: '"dim_Discharge_Method_SCD"'
         description: Legacy discharge method definitions, including retired codes.
         columns: *ukhfd_data_dictionary_columns
+      - name: priority_type
+        identifier: '"dim_Priority_Type_SCD"'
+        description: National priority type definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_reason_for_referral
+        identifier: '"dim_Reason_For_Referral_To_Community_Care_SCD"'
+        description: National csds reason for referral definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
+      - name: csds_referring_staff_group
+        identifier: '"dim_Care_Professional_Staff_Group_For_Community_Care_SCD"'
+        description: National csds referring staff group definitions and their UKHFD history.
+        columns: *ukhfd_data_dictionary_columns
   - name: ukhfd_other
     database: '"UKHFD"'
     schema: '"Other"'
