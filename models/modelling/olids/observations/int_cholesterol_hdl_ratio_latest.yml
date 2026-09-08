@@ -2,9 +2,10 @@ models:
   - name: int_cholesterol_hdl_ratio_latest
     description: Total cholesterol to HDL ratio for all people, including inactive and deceased people.
       One row per person with a valid recorded result. Validity is filtered before ranking by clinical
-      effective date descending, then observation ID descending for ties. People without valid results
-      are absent. Valid means a positive finite ratio. Blank units and explicit unknown-unit markers are inferred from the PCD ratio observable;
-      incompatible recorded units are invalid. Dimensionless total cholesterol divided by HDL as recorded.
+      effective date descending, then observation ID descending for ties. People without valid results are absent. When a later
+      result exists that is not valid, the row is the most recent valid one and has_later_unassessable_result
+      is true. Valid means a ratio of 1 to 20 inclusive. The observable is dimensionless, so blank, unknown and
+      mislabelled units are all read as a ratio, and mislabelled units are flagged for review. Dimensionless total cholesterol divided by HDL as recorded.
       The model does not calculate a ratio from separately dated results or assign a universal treatment
       target.
     config:
@@ -46,21 +47,21 @@ models:
       - name: conversion_unit_basis
         description: Whether the calculation selected the mapped unit, source unit or no recorded unit. An unknown-unit placeholder in the mapped field falls through to the source unit. Missing ratio units are inferred from the PCD observable; missing concentration units are assumed to be mmol/L.
       - name: conversion_factor
-        description: Multiplier applied to recorded_value. One for recognised standard units, results with no recorded unit, and inferred dimensionless ratios. Null when the unit cannot be converted.
+        description: Multiplier applied to recorded_value. One for recognised standard units, missing or mislabelled units read as the standard unit, and inferred dimensionless ratios. Null when the unit cannot be converted.
       - name: is_unit_metadata_conflict
         description: True when populated source and mapped unit labels disagree after recognised aliases are normalised. Unknown labels are treated as absent. Does not identify which unit is correct.
       - name: plausibility_status
         description: >
-          Screening result after conversion using an inclusive local review range of 1 to 50.
-          These exploratory limits are not clinical exclusion thresholds. Rare genuine results
-          can lie outside them. Existing validity rules and row selection are unchanged.
+          Validity check after conversion against the inclusive range of 1 to 20. Within valid range
+          is the validity rule. Other values name why the result is invalid: unit cannot be converted,
+          missing numeric result, non-positive or non-finite, below or above the range. Rare genuine
+          results can lie outside the range and are excluded.
       - name: is_lipid_review_required
         description: >
-          True for conflicting unit metadata, every non-standard unit conversion, missing or unsupported units, missing
-          or non-positive or non-finite values, or values outside the local review range.
-          False means no issue detected by these checks, not verified accuracy. Inferred
-          dimensionless ratio units do not alone trigger review. Does not change validity,
-          clinical categories or latest-valid selection.
+          True for conflicting unit metadata, every non-standard unit conversion, missing, mislabelled or
+          unsupported units, or any invalid result. False means no issue detected by these checks, not
+          verified accuracy. Inferred dimensionless ratio units do not alone trigger review. Does not
+          change validity, clinical categories or latest-valid selection.
       - name: original_result_value
         description: Compatibility alias of recorded_value, the unchanged numeric value received from OLIDS.
       - name: original_result_unit_code
@@ -70,8 +71,9 @@ models:
         description: Legacy combined unit field. Mapped unit label where supplied, otherwise the source unit concept label. Null if
           neither is available.
       - name: unit_status
-        description: Whether the unit was recorded in standard form, converted, missing or unsupported.
-          Blank ratio units and explicit unknown-unit markers are inferred from the observable.
+        description: Recorded standard unit, Inferred from ratio observable or Mislabelled standard unit. The
+          observable is dimensionless, so any other recorded label is ignored, read as a ratio and
+          flagged for review.
       - name: concept_code
         description: Recorded mapped clinical concept code matched to the PCD cluster.
       - name: concept_display
@@ -82,5 +84,13 @@ models:
         description: Fasting, non-fasting or random only when specified in the PCD code description. Otherwise
           Not specified; no sampling status is inferred from the numeric value.
       - name: is_valid_cholesterol_hdl_ratio
-        description: Whether the result satisfies the documented validity rule. False includes missing
-          values and unsupported units.
+        description: True when plausibility_status is Within valid range. False includes missing values,
+          unsupported units and values outside the range.
+      - name: most_recent_result_date
+        description: Clinical effective date of the person's most recent result of any validity. Equal to
+          clinical_effective_date unless a later result was invalid.
+      - name: has_later_unassessable_result
+        description: True when a result more recent than this row exists but failed validity, for example an
+          LDL that the laboratory could not calculate. The row is then an older valid result, not the person's
+          current state. Consumers assessing current control should treat these people as unassessable rather
+          than use the older value.

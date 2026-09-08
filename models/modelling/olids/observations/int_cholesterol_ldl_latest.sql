@@ -1,5 +1,12 @@
 {{ config(materialized='table', cluster_by=['person_id']) }}
 
+WITH results AS (
+    SELECT
+        *,
+        MAX(clinical_effective_date) OVER (PARTITION BY person_id) AS most_recent_result_date
+    FROM {{ ref('int_cholesterol_ldl_all') }}
+)
+
 SELECT
     id,
     person_id,
@@ -29,8 +36,11 @@ SELECT
     sampling_context,
     is_valid_cholesterol,
     cholesterol_category,
-    ldl_cvd_target_met
-FROM {{ ref('int_cholesterol_ldl_all') }}
+    ldl_cvd_target_met,
+    most_recent_result_date,
+    -- The person's most recent result was invalid, so this row is an older valid result.
+    most_recent_result_date > clinical_effective_date AS has_later_unassessable_result
+FROM results
 WHERE is_valid_cholesterol
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY person_id

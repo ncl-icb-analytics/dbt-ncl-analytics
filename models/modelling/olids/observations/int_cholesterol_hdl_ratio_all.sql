@@ -30,5 +30,5 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    COALESCE(cholesterol_hdl_ratio > 0 AND cholesterol_hdl_ratio < 'inf'::FLOAT, FALSE) AS is_valid_cholesterol_hdl_ratio
+    plausibility_status = 'Within valid range' AS is_valid_cholesterol_hdl_ratio
 FROM measurements

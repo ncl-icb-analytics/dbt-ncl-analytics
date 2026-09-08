@@ -63,8 +63,9 @@ SELECT
     ROUND(100.0 * COUNT_IF(is_lipid_review_required) / COUNT(*), 3) AS review_pct,
     ROUND(100.0 * COUNT_IF(unit_status IN ('Missing unit', 'Unsupported unit')) / COUNT(*), 3) AS unconvertible_pct,
     ROUND(100.0 * COUNT_IF(unit_status = 'Converted') / COUNT(*), 3) AS non_standard_conversion_pct,
+    ROUND(100.0 * COUNT_IF(unit_status = 'Mislabelled standard unit') / COUNT(*), 3) AS mislabelled_unit_pct,
     ROUND(100.0 * COUNT_IF(is_unit_metadata_conflict) / COUNT(*), 3) AS conflicting_unit_metadata_pct,
-    ROUND(100.0 * COUNT_IF(plausibility_status NOT IN ('Within review range', 'Unit cannot be converted')) / COUNT(*), 3) AS numeric_review_pct
+    ROUND(100.0 * COUNT_IF(plausibility_status NOT IN ('Within valid range', 'Unit cannot be converted')) / COUNT(*), 3) AS numeric_review_pct
 FROM populations
 GROUP BY population, analyte
 HAVING COUNT(DISTINCT person_id) >= 100

@@ -31,7 +31,7 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    COALESCE(cholesterol_value > 0 AND cholesterol_value < 'inf'::FLOAT, FALSE) AS is_valid_cholesterol,
+    plausibility_status = 'Within valid range' AS is_valid_cholesterol,
     CASE
         WHEN NOT is_valid_cholesterol THEN 'Invalid'
         WHEN cholesterol_value < 3 THEN 'Below general reference limit'

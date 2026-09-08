@@ -33,7 +33,7 @@ models:
         description: Recorded unit label before standardisation, including source concept fallback.
 
       - name: unit_status
-        description: Whether the original unit was standard, converted, missing or unsupported.
+        description: Whether the original unit was standard, converted, missing, mislabelled or unsupported.
 
       - name: concept_code
         description: Concept code for cholesterol measurement

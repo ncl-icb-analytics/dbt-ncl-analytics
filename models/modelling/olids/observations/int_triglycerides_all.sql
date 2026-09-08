@@ -31,7 +31,7 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    COALESCE(triglycerides_value > 0 AND triglycerides_value < 'inf'::FLOAT, FALSE) AS is_valid_triglycerides,
+    plausibility_status = 'Within valid range' AS is_valid_triglycerides,
     CASE
         WHEN NOT is_valid_triglycerides THEN 'Invalid'
         WHEN triglycerides_value < 1.7 THEN 'Below 1.7'

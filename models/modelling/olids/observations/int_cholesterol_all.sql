@@ -31,7 +31,7 @@ SELECT
     concept_display,
     source_cluster_id,
     sampling_context,
-    COALESCE(cholesterol_value BETWEEN 0.5 AND 20, FALSE) AS is_valid_cholesterol,
+    plausibility_status = 'Within valid range' AS is_valid_cholesterol,
     CASE
         WHEN NOT is_valid_cholesterol THEN 'Invalid'
         WHEN cholesterol_value < 5 THEN 'Desirable'
