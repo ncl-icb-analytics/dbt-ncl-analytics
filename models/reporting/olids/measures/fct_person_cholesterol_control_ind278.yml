@@ -3,8 +3,9 @@ models:
     description: >
       NICE IND278 cholesterol control before personalised care adjustments.
       One row per currently registered, living, non-test person on the CHD,
-      stroke/TIA or PAD register, assessed on the build date. Register diagnoses
-      must start on or before that date. Any recorded FH diagnosis or history
+      stroke/TIA or PAD register, assessed on the build date. The register
+      population and exclusion flags come from int_cvd_secondary_prevention_population,
+      where register diagnoses must start on or before that date. Any recorded FH diagnosis or history
       of haemorrhagic stroke excludes the whole person, including overlapping
       CVD conditions. Undated exclusion diagnoses count; future original dates do not.
 
