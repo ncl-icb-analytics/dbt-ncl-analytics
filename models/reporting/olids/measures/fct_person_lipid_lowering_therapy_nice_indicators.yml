@@ -62,7 +62,7 @@ models:
       - name: is_in_numerator
         description: Whether a counted lipid-lowering order falls in the six-month window
       - name: indicator_status
-        description: ACHIEVED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
+        description: ACHIEVED, NOT_TREATED_IN_PERIOD or NEVER_TREATED
 
   - name: fct_person_lipid_lowering_therapy_ind231
     description: >
@@ -159,7 +159,7 @@ models:
       NICE IND230, IND231, IND276 and IND277 lipid-lowering therapy status in a
       common interface. One row per person and indicator on the current reporting
       date. Indicator-specific views remain the source of each population
-      definition. Personalised care adjustments are not applied. Secondary-use
+      definition. Feeds fct_person_indicator_status. Personalised care adjustments are not applied. Secondary-use
       consumers must join DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data
       Opt-Out and Type 1 opt-out filtering.
     config:
@@ -182,11 +182,11 @@ models:
               arguments:
                 values: ['IND230', 'IND231', 'IND276', 'IND277']
       - name: indicator_status
-        description: ACHIEVED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
+        description: ACHIEVED, NOT_TREATED_IN_PERIOD or NEVER_TREATED
         data_tests:
           - accepted_values:
               arguments:
-                values: ['ACHIEVED', 'NOT_TREATED_IN_LAST_6M', 'NEVER_TREATED']
+                values: ['ACHIEVED', 'NOT_TREATED_IN_PERIOD', 'NEVER_TREATED']
 
   - name: fct_person_lipid_lowering_therapy_nice_indicators_snapshot_input
     description: >

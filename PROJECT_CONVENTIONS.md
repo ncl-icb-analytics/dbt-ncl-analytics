@@ -220,6 +220,31 @@ it.
   coding systems, maps and code-set definitions such as SNOMED CT, ICD-10,
   OPCS-4, dm+d and BNF.
 
+## Person-level indicator measures
+
+Person-level NICE and similar indicator measures live in
+`models/reporting/olids/measures/` and share one contract so they roll up into
+`fct_person_indicator_status`. A measure is one row per person in the
+indicator's denominator, restricted to currently registered, living, non-test
+people through `dim_person_active_patients`, assessed on the build date. It
+emits these columns first: `person_id`, `indicator_id`, `indicator_name`,
+`reporting_date`, `measurement_period_start`, `age`, `current_practice_code`,
+`current_practice_name`, `is_in_denominator`, `is_in_numerator` and
+`indicator_status`. Indicator-specific readings, thresholds and provenance
+follow.
+
+`indicator_status` is `ACHIEVED` when the person is in the numerator and
+otherwise one upper-snake reason token from the shared list in
+`fct_person_indicator_status.yml`. Add a token there before using a new one.
+Apply the measurement window inside the measure from the all-results model,
+select the last recorded result within the window, and do not replace an
+invalid latest result with an older valid one. Name models
+`fct_person_<subject>_<condition>_indNNN` with a `meta.indicator` block, group a
+family in a `_nice_indicators` union that keeps the family's detail columns, and
+add the family union or single measure to the list in
+`fct_person_indicator_status`. Snapshot the family union through a thin
+`_snapshot_input` view that drops the build-date columns.
+
 ## Performance
 
 Performance depends on the data processed by each operation, not the length of

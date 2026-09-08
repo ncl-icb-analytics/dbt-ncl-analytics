@@ -56,7 +56,7 @@ DIMENSIONS(
     indicators.is_bp_recorded_in_last_12m AS is_bp_recorded_in_last_12m COMMENT = 'Latest BP is within the shared 12-month recommended interval',
     indicators.is_latest_bp_within_indicator_target AS is_latest_bp_within_indicator_target COMMENT = 'Latest BP is below both indicator thresholds, regardless of recording date',
     indicators.is_in_numerator AS is_in_numerator COMMENT = 'Recent BP is below both published indicator thresholds',
-    indicators.indicator_status AS indicator_status WITH SYNONYMS = ('achievement status', 'care gap reason') COMMENT = 'ACHIEVED, BP_NOT_RECORDED_IN_LAST_12M, or BP_ABOVE_TARGET',
+    indicators.indicator_status AS indicator_status WITH SYNONYMS = ('achievement status', 'care gap reason') COMMENT = 'ACHIEVED, NOT_RECORDED_IN_PERIOD, or ABOVE_TARGET',
 
     -- Demographics
     demographics.gender AS gender COMMENT = 'Patient gender',
@@ -92,8 +92,8 @@ METRICS(
     indicators.denominator_count AS COUNT(DISTINCT CASE WHEN indicators.is_in_denominator THEN indicators.person_id END) COMMENT = 'People in the selected indicator denominator before personalised care adjustments',
     indicators.numerator_count AS COUNT(DISTINCT CASE WHEN indicators.is_in_numerator THEN indicators.person_id END) COMMENT = 'People achieving the selected indicator',
     indicators.care_gap_count AS COUNT(DISTINCT CASE WHEN indicators.is_in_denominator AND NOT indicators.is_in_numerator THEN indicators.person_id END) COMMENT = 'People not achieving the selected indicator before personalised care adjustments',
-    indicators.bp_not_recorded_count AS COUNT(DISTINCT CASE WHEN indicators.indicator_status = 'BP_NOT_RECORDED_IN_LAST_12M' THEN indicators.person_id END) COMMENT = 'People without a BP in the preceding 12 months',
-    indicators.bp_above_target_count AS COUNT(DISTINCT CASE WHEN indicators.indicator_status = 'BP_ABOVE_TARGET' THEN indicators.person_id END) COMMENT = 'People with a recent BP above the indicator target',
+    indicators.bp_not_recorded_count AS COUNT(DISTINCT CASE WHEN indicators.indicator_status = 'NOT_RECORDED_IN_PERIOD' THEN indicators.person_id END) COMMENT = 'People without a BP in the preceding 12 months',
+    indicators.bp_above_target_count AS COUNT(DISTINCT CASE WHEN indicators.indicator_status = 'ABOVE_TARGET' THEN indicators.person_id END) COMMENT = 'People with a recent BP above the indicator target',
     indicators.achievement_rate AS COUNT(DISTINCT CASE WHEN indicators.is_in_numerator THEN indicators.person_id END) / NULLIF(COUNT(DISTINCT CASE WHEN indicators.is_in_denominator THEN indicators.person_id END), 0) COMMENT = 'Unadjusted indicator achievement rate from 0 to 1'
 )
 
