@@ -13,11 +13,7 @@ WITH indicator_population AS (
         AND profile.has_diabetes
         AND NOT profile.has_cvd
         AND COALESCE(profile.latest_frailty_severity, 'None') NOT IN ('Moderate', 'Severe')
-        AND NOT (
-            profile.has_type2_diabetes
-            AND profile.latest_risk_score < 10
-            AND profile.latest_risk_score_date >= DATEADD(month, -36, CURRENT_DATE())
-        )
+        AND NOT COALESCE(profile.has_type2_diabetes AND profile.min_risk_score_36m < 10, FALSE)
 ),
 
 assessed AS (

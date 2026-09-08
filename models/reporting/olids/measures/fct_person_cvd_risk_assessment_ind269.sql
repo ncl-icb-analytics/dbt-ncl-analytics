@@ -30,8 +30,9 @@ assessed AS (
         population.latest_risk_score,
         population.latest_risk_score_date,
         population.latest_risk_assessment_date,
+        -- NICE counts a recorded risk score, so scored QRISK results only
         COALESCE(
-            population.latest_risk_assessment_date >= DATEADD(month, -60, CURRENT_DATE()),
+            population.latest_risk_score_date >= DATEADD(month, -60, CURRENT_DATE()),
             FALSE
         ) AS is_in_numerator
     FROM indicator_population AS population

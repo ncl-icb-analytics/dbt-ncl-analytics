@@ -21,6 +21,7 @@ WITH latest_score AS (
         qrisk_type AS latest_risk_score_type
     FROM {{ ref('int_qrisk_all') }}
     WHERE is_valid_qrisk
+        AND clinical_effective_date <= CURRENT_DATE()
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY person_id ORDER BY clinical_effective_date DESC, id DESC
     ) = 1
@@ -29,23 +30,22 @@ WITH latest_score AS (
 score_history AS (
     SELECT
         person_id,
-        MAX(qrisk_score) AS max_risk_score_ever
+        MAX(qrisk_score) AS max_risk_score_ever,
+        MAX(CASE WHEN clinical_effective_date::DATE >= DATEADD(month, -12, CURRENT_DATE())
+            THEN qrisk_score END) AS max_risk_score_12m,
+        MIN(CASE WHEN clinical_effective_date::DATE >= DATEADD(month, -36, CURRENT_DATE())
+            THEN qrisk_score END) AS min_risk_score_36m
     FROM {{ ref('int_qrisk_all') }}
     WHERE is_valid_qrisk
+        AND clinical_effective_date <= CURRENT_DATE()
     GROUP BY person_id
 ),
 
 assessment_history AS (
     SELECT
         person_id,
-        MAX(assessment_date) AS latest_risk_assessment_date
-    FROM (
-        SELECT person_id, clinical_effective_date::DATE AS assessment_date
-        FROM {{ ref('int_cvd_risk_assessment_all') }}
-        UNION ALL
-        SELECT person_id, clinical_effective_date::DATE
-        FROM {{ ref('int_qrisk_all') }}
-    )
+        MAX(clinical_effective_date::DATE) AS latest_risk_assessment_date
+    FROM {{ ref('int_cvd_risk_assessment_all') }}
     GROUP BY person_id
 )
 
@@ -55,6 +55,8 @@ SELECT
     score.latest_risk_score_date,
     score.latest_risk_score_type,
     history.max_risk_score_ever,
+    history.max_risk_score_12m,
+    history.min_risk_score_36m,
     assessment.latest_risk_assessment_date,
     COALESCE(
         cvd.has_chd OR cvd.has_pad

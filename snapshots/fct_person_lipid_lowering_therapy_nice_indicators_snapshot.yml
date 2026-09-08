@@ -2,8 +2,7 @@ snapshots:
   - name: fct_person_lipid_lowering_therapy_nice_indicators_snapshot
     relation: ref('fct_person_lipid_lowering_therapy_nice_indicators_snapshot_input')
     description: >
-      SCD2 history of the NICE lipid-lowering therapy indicators (IND230, IND231,
-      IND276, IND277) per person and indicator: current practice, the latest
+      SCD2 history of the NICE lipid-lowering therapy indicators (IND230, IND231, IND276, IND277, IND229, IND274, IND275, IND287) per person and indicator: current practice, the latest
       counted order and the indicator outcome. Sources the thin snapshot-input
       view rather than the union directly, because the union's CURRENT_DATE()
       derived reporting columns change every run. check_cols: all over the thin

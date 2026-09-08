@@ -28,6 +28,10 @@ models:
         description: QRISK, QRISK2 or QRISK3 for the latest score.
       - name: max_risk_score_ever
         description: Highest valid QRISK score ever recorded in percent.
+      - name: max_risk_score_12m
+        description: Highest valid QRISK score in the 12 months to the build date; null if none.
+      - name: min_risk_score_36m
+        description: Lowest valid QRISK score in the 36 months to the build date; null if none.
       - name: latest_risk_assessment_date
         description: Date of the latest CVD risk assessment record, scored or not.
       - name: has_cvd

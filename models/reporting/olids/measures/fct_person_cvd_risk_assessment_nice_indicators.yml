@@ -231,6 +231,8 @@ models:
         description: Latest valid QRISK score in percent; null if none
       - name: latest_risk_assessment_date
         description: Date of the latest CVD risk assessment record
+      - name: new_diagnosis_date
+        description: Earlier qualifying diagnosis date for IND161; null for other indicators
 
   - name: fct_person_cvd_risk_assessment_nice_indicators_snapshot_input
     description: >

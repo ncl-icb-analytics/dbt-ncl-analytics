@@ -22,6 +22,7 @@ SELECT
     latest_risk_score,
     latest_risk_score_date,
     latest_risk_assessment_date,
+    {% if indicator_model == 'fct_person_cvd_risk_assessment_ind161' %}new_diagnosis_date{% else %}NULL AS new_diagnosis_date{% endif %},
     is_in_denominator,
     is_in_numerator,
     indicator_status

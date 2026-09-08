@@ -41,15 +41,9 @@ assessed AS (
         population.new_diagnosis_date,
         EXISTS (
             SELECT 1
-            FROM (
-                SELECT person_id, clinical_effective_date::DATE AS assessment_date
-                FROM {{ ref('int_cvd_risk_assessment_all') }}
-                UNION ALL
-                SELECT person_id, clinical_effective_date::DATE
-                FROM {{ ref('int_qrisk_all') }}
-            ) AS assessment
+            FROM {{ ref('int_cvd_risk_assessment_all') }} AS assessment
             WHERE assessment.person_id = population.person_id
-                AND assessment.assessment_date
+                AND assessment.clinical_effective_date::DATE
                     BETWEEN DATEADD(month, -3, population.new_diagnosis_date)
                     AND DATEADD(month, 3, population.new_diagnosis_date)
         ) AS is_in_numerator
