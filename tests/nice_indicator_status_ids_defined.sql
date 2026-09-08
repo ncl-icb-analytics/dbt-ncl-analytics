@@ -2,11 +2,11 @@
 -- the project. Checked against the model metadata at compile time rather than
 -- def_indicator, because merge-queue builds defer that table to production,
 -- where it lags behind newly added indicators until the next full build.
-{%- set metadata = extract_indicator_metadata() -%}
-{%- set defined_ids = [] -%}
-{%- for ind in metadata.indicators -%}
-    {%- do defined_ids.append(ind.indicator_id) -%}
-{%- endfor -%}
+{% set metadata = extract_indicator_metadata() %}
+{% set defined_ids = [] %}
+{% for ind in metadata.indicators %}
+    {% do defined_ids.append(ind.indicator_id) %}
+{% endfor %}
 
 SELECT
     indicator_id,
