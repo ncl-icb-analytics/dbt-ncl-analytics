@@ -4,8 +4,8 @@
 Shared denominator for NICE secondary-prevention indicators (IND230, IND278 and
 related): people on the CHD, stroke/TIA or PAD QOF register with a diagnosis dated
 on or before the build date, as the NICE specifications define cardiovascular
-disease. Familial hypercholesterolaemia and haemorrhagic stroke history are flags
-so each measure applies its own exclusions. No registration, living or test-patient
+disease. Familial hypercholesterolaemia and haemorrhagic stroke history (from
+int_haemorrhagic_stroke_history) are flags so each measure applies its own exclusions. No registration, living or test-patient
 filter; consumers join dim_person_active_patients.
 
 CURRENT_DATE() is fixed at this table's build. Build a consuming measure together
@@ -54,10 +54,8 @@ fh_history AS (
 ),
 
 haemorrhagic_stroke_history AS (
-    SELECT DISTINCT person_id
-    FROM {{ ref('int_haemorrhagic_stroke_diagnoses_all') }}
-    WHERE clinical_effective_date_raw IS NULL
-        OR clinical_effective_date_raw::DATE <= CURRENT_DATE()
+    SELECT person_id
+    FROM {{ ref('int_haemorrhagic_stroke_history') }}
 )
 
 SELECT
