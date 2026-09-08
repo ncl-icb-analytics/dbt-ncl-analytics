@@ -4,13 +4,16 @@
 Latest lipid-lowering therapy order per person, for "currently treated" measures.
 
 Counted classes are statins (alone or in combination), ezetimibe, bempedoic acid,
-PCSK9 inhibitors, inclisiran, fibrates and bile acid sequestrants: the statin and
-non-statin therapies NICE NG238 recognises for lipid lowering. Nicotinic acid,
-omega-3 products and other section 2.12 items are not counted; NG238 advises
-against them for cardiovascular prevention.
+PCSK9 inhibitors, inclisiran, fibrates and bile acid sequestrants: products whose
+purpose is to lower LDL or non-HDL cholesterol, matching the NICE indicator wording
+"a statin or non-statin lipid-lowering therapy". Nicotinic acid and omega-3 products
+mainly act on triglycerides and are not counted, nor are other section 2.12 items
+such as ispaghula husk. NG238 does not recommend fibrates or sequestrants for CVD
+prevention, but a person prescribed one is still on lipid-lowering therapy.
 
-Consumers apply their own window to latest_order_date, such as the NICE
-six-month rule for current treatment.
+Consumers apply their own window to latest_order_date. The NICE indicators use six
+calendar months before the reporting date; the build-time is_recent_6m flag on the
+orders model is a 180-day convenience and is not used here.
 */
 
 WITH counted_orders AS (

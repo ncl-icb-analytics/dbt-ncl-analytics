@@ -7,7 +7,7 @@ WITH indicator_population AS (
         cvd.person_id,
         age.age
     FROM {{ ref('int_cvd_secondary_prevention_population') }} AS cvd
-    INNER JOIN {{ ref('dim_person_age') }} AS age
+    LEFT JOIN {{ ref('dim_person_age') }} AS age
         ON cvd.person_id = age.person_id
     WHERE NOT cvd.has_haemorrhagic_stroke
 ),
@@ -38,7 +38,7 @@ SELECT
     'IND230' AS indicator_id,
     'Cardiovascular disease prevention: secondary prevention with lipid lowering therapies' AS indicator_name,
     CURRENT_DATE() AS reporting_date,
-    DATEADD(month, -6, CURRENT_DATE()) AS treatment_period_start,
+    DATEADD(month, -6, CURRENT_DATE()) AS measurement_period_start,
     age,
     'Cardiovascular disease' AS condition_name,
     current_practice_code,
@@ -50,7 +50,7 @@ SELECT
     TRUE AS is_in_denominator,
     is_in_numerator,
     CASE
-        WHEN is_in_numerator THEN 'TREATED'
+        WHEN is_in_numerator THEN 'ACHIEVED'
         WHEN latest_lipid_lowering_order_date IS NOT NULL THEN 'NOT_TREATED_IN_LAST_6M'
         ELSE 'NEVER_TREATED'
     END AS indicator_status

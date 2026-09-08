@@ -4,7 +4,7 @@
 Thin snapshot-input projection of fct_person_lipid_lowering_therapy_nice_indicators
 for SCD2 snapshotting at person and indicator grain.
 
-Drops reporting_date and treatment_period_start, which advance on every build and
+Drops reporting_date and measurement_period_start, which advance on every build and
 would version every row daily. A version opens on a new order, a practice move or
 an order ageing out of the six-month window.
 

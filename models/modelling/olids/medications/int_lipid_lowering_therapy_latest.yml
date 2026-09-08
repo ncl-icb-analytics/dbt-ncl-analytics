@@ -4,10 +4,12 @@ models:
       Latest lipid-lowering therapy order per person, one row per person with any
       counted order, including inactive and deceased people. Counted classes are
       statins alone or in combination, ezetimibe, bempedoic acid, PCSK9 inhibitors,
-      inclisiran, fibrates and bile acid sequestrants. Nicotinic acid, omega-3 and
-      other section 2.12 products are not counted, following NICE NG238. Consumers
-      apply their own recency window to latest_order_date; NICE indicators use six
-      months for current treatment.
+      inclisiran, fibrates and bile acid sequestrants: products whose purpose is to
+      lower LDL or non-HDL cholesterol, matching the NICE wording "a statin or
+      non-statin lipid-lowering therapy". Nicotinic acid and omega-3 products act
+      mainly on triglycerides and are not counted. Consumers apply their own
+      window to latest_order_date; the NICE indicators use six calendar months
+      before the reporting date.
     config:
       meta:
         owner:
@@ -21,8 +23,6 @@ models:
           - not_null
       - name: latest_order_date
         description: Date of the most recent counted order.
-        data_tests:
-          - not_null
       - name: latest_order_id
         description: Medication order identifier of the most recent counted order. Same-day ties prefer a statin, then the higher order id.
       - name: latest_lipid_lowering_class

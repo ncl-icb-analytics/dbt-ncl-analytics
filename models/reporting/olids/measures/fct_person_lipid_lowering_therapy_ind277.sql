@@ -7,7 +7,7 @@ WITH indicator_population AS (
         diabetes.person_id,
         age.age
     FROM {{ ref('fct_person_diabetes_register') }} AS diabetes
-    INNER JOIN {{ ref('dim_person_age') }} AS age
+    LEFT JOIN {{ ref('dim_person_age') }} AS age
         ON diabetes.person_id = age.person_id
     LEFT JOIN {{ ref('int_haemorrhagic_stroke_history') }} AS haemorrhagic
         ON diabetes.person_id = haemorrhagic.person_id
@@ -43,7 +43,7 @@ SELECT
     'IND277' AS indicator_id,
     'Diabetes: T1DM and lipid-lowering therapies' AS indicator_name,
     CURRENT_DATE() AS reporting_date,
-    DATEADD(month, -6, CURRENT_DATE()) AS treatment_period_start,
+    DATEADD(month, -6, CURRENT_DATE()) AS measurement_period_start,
     age,
     'Type 1 diabetes' AS condition_name,
     current_practice_code,
@@ -55,7 +55,7 @@ SELECT
     TRUE AS is_in_denominator,
     is_in_numerator,
     CASE
-        WHEN is_in_numerator THEN 'TREATED'
+        WHEN is_in_numerator THEN 'ACHIEVED'
         WHEN latest_lipid_lowering_order_date IS NOT NULL THEN 'NOT_TREATED_IN_LAST_6M'
         ELSE 'NEVER_TREATED'
     END AS indicator_status

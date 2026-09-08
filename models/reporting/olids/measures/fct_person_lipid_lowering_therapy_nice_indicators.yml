@@ -39,8 +39,8 @@ models:
         description: Published NICE indicator name
       - name: reporting_date
         description: Build date used for eligibility and the treatment window
-      - name: treatment_period_start
-        description: Inclusive start of the six-month treatment window
+      - name: measurement_period_start
+        description: Inclusive start of the six-month treatment window, six calendar months before the reporting date
       - name: age
         description: Age in years on the reporting date
       - name: condition_name
@@ -62,7 +62,7 @@ models:
       - name: is_in_numerator
         description: Whether a counted lipid-lowering order falls in the six-month window
       - name: indicator_status
-        description: TREATED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
+        description: ACHIEVED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
 
   - name: fct_person_lipid_lowering_therapy_ind231
     description: >
@@ -128,7 +128,8 @@ models:
       NICE IND277 lipid-lowering therapy in type 1 diabetes. One row per currently
       registered, living, non-test person on the diabetes register whose
       register type is Type 1, aged over 40 on the build date, without a history
-      of haemorrhagic stroke. The numerator requires a counted lipid-lowering
+      of haemorrhagic stroke. Register type follows the diabetes register's
+      precedence rule, so a person coded with both types counts as Type 1. The numerator requires a counted lipid-lowering
       order in the six months up to the reporting date. Personalised care
       adjustments are not applied. Secondary-use consumers must join
       DIM_PERSON_SECONDARY_USE_ALLOWED to apply National Data Opt-Out and Type 1
@@ -181,17 +182,17 @@ models:
               arguments:
                 values: ['IND230', 'IND231', 'IND276', 'IND277']
       - name: indicator_status
-        description: TREATED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
+        description: ACHIEVED, NOT_TREATED_IN_LAST_6M or NEVER_TREATED
         data_tests:
           - accepted_values:
               arguments:
-                values: ['TREATED', 'NOT_TREATED_IN_LAST_6M', 'NEVER_TREATED']
+                values: ['ACHIEVED', 'NOT_TREATED_IN_LAST_6M', 'NEVER_TREATED']
 
   - name: fct_person_lipid_lowering_therapy_nice_indicators_snapshot_input
     description: >
       Thin snapshot-input projection of the lipid-lowering therapy indicator
       union: person, indicator, current practice, latest counted order and
-      outcome. Excludes reporting_date and treatment_period_start, which advance
+      outcome. Excludes reporting_date and measurement_period_start, which advance
       on every build, so the SCD2 snapshot versions only on genuine changes. Feeds
       fct_person_lipid_lowering_therapy_nice_indicators_snapshot.
     config:

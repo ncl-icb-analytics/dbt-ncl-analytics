@@ -1,4 +1,4 @@
-{{ config(materialized='table', cluster_by=['person_id']) }}
+{{ config(materialized='table') }}
 
 -- Common long-form interface for the NICE lipid-lowering therapy indicator views.
 {% set indicator_models = [
@@ -14,7 +14,7 @@ SELECT
     indicator_id,
     indicator_name,
     reporting_date,
-    treatment_period_start,
+    measurement_period_start,
     age,
     condition_name,
     current_practice_code,

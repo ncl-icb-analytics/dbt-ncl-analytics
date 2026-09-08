@@ -4,8 +4,8 @@ models:
       People with any recorded history of haemorrhagic stroke from the PCD cluster
       HSTRK_COD, one row per person including inactive and deceased people. Undated
       records count as history; records with an original date after the build date
-      do not. Shared exclusion for secondary-prevention measures where bleeding risk
-      may outweigh vascular benefit.
+      do not. Shared exclusion for secondary-prevention measures where bleeding
+      risk may outweigh vascular benefit.
     config:
       meta:
         owner:

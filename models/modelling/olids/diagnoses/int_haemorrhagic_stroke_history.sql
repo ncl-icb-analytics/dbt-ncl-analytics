@@ -3,8 +3,7 @@
 /*
 People with any recorded history of haemorrhagic stroke (PCD HSTRK_COD), one row
 per person. Undated records count as history. Records whose original date is after
-the build date do not. Shared exclusion for lipid-lowering and antithrombotic
-secondary-prevention measures.
+the build date do not. Shared exclusion for secondary-prevention measures.
 */
 
 SELECT
