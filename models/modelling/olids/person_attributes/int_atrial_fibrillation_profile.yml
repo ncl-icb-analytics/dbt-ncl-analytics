@@ -1,0 +1,49 @@
+models:
+  - name: int_atrial_fibrillation_profile
+    description: >
+      Per-person atrial fibrillation profile for the NICE AF indicators. One row
+      per person on the QOF AF register, including inactive and deceased people.
+      Holds the latest CHA2DS2-VASc and CHADS2 scores and the highest score ever,
+      the latest oral anticoagulant, DOAC and VKA order dates, anticoagulant
+      contraindication and declined records, DOAC exceptions (contraindicated,
+      declined, not indicated, valvular AF, antiphospholipid syndrome) and the
+      latest anticoagulant review. Consumers apply their own windows and join
+      dim_person_active_patients.
+    config:
+      meta:
+        owner:
+          name: EddieDavison92
+    columns:
+      - name: person_id
+        description: Person on the AF register.
+        data_tests:
+          - unique
+          - not_null
+      - name: earliest_af_diagnosis_date
+        description: Earliest AF diagnosis date from the register.
+      - name: latest_chadsvasc_score
+        description: Latest CHA2DS2-VASc score; null if none or the latest has no valid value.
+      - name: latest_chadsvasc_date
+        description: Date of the latest CHA2DS2-VASc assessment.
+      - name: latest_chads2_score
+        description: Latest CHADS2 score; null if none or the latest has no valid value.
+      - name: latest_chads2_date
+        description: Date of the latest CHADS2 assessment.
+      - name: max_stroke_risk_score_ever
+        description: Highest valid CHA2DS2-VASc or CHADS2 score ever recorded.
+      - name: latest_anticoagulant_order_date
+        description: Date of the most recent oral anticoagulant order; null if never.
+      - name: latest_anticoagulant_type
+        description: DOAC or VKA for the most recent oral anticoagulant order.
+      - name: latest_doac_order_date
+        description: Date of the most recent DOAC order; null if never.
+      - name: latest_vka_order_date
+        description: Date of the most recent vitamin K antagonist order; null if never.
+      - name: has_anticoagulant_contraindication
+        description: Any persisting oral anticoagulant contraindication, allergy, adverse reaction or intolerance recorded.
+      - name: latest_anticoagulant_declined_date
+        description: Date of the latest anticoagulant declined record; null if none.
+      - name: has_doac_exception
+        description: Any record that a DOAC is contraindicated, declined or not indicated, or of valvular AF or antiphospholipid syndrome.
+      - name: latest_anticoagulant_review_date
+        description: Date of the latest anticoagulant medication review; null if none.
