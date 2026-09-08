@@ -35,7 +35,7 @@ models:
             risk management. Supports  QOF reporting and identifies patients requiring
             intensified management.
           is_qof: false
-          source_column: "triple_target_achieved"
+          source_column: "all_three_targets_met"
           usage_contexts:
             - "DIABETES_CARE_MONITORING"
           code_clusters:

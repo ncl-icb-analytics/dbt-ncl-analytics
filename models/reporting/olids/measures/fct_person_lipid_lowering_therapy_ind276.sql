@@ -54,7 +54,7 @@ SELECT
     is_in_numerator,
     CASE
         WHEN is_in_numerator THEN 'ACHIEVED'
-        WHEN latest_lipid_lowering_order_date IS NOT NULL THEN 'NOT_TREATED_IN_LAST_6M'
+        WHEN latest_lipid_lowering_order_date IS NOT NULL THEN 'NOT_TREATED_IN_PERIOD'
         ELSE 'NEVER_TREATED'
     END AS indicator_status
 FROM assessed

@@ -6,12 +6,15 @@ WITH eligible_people AS (
         cvd.person_id,
         active.current_practice_code,
         active.current_practice_name,
+        age.age,
         cvd.has_chd,
         cvd.has_stroke_tia,
         cvd.has_pad
     FROM {{ ref('int_cvd_secondary_prevention_population') }} cvd
     INNER JOIN {{ ref('dim_person_active_patients') }} active
         ON cvd.person_id = active.person_id
+    LEFT JOIN {{ ref('dim_person_age') }} age
+        ON cvd.person_id = age.person_id
     -- Both exclusions apply to the whole person, even with overlapping CVD diagnoses.
     WHERE NOT cvd.has_familial_hypercholesterolaemia
         AND NOT cvd.has_haemorrhagic_stroke
@@ -80,6 +83,7 @@ SELECT
     'Cardiovascular disease prevention: cholesterol treatment target (secondary prevention)' AS indicator_name,
     CURRENT_DATE() AS reporting_date,
     DATEADD(month, -12, CURRENT_DATE()) AS measurement_period_start,
+    eligible.age,
     eligible.current_practice_code,
     eligible.current_practice_name,
     eligible.has_chd,
@@ -104,10 +108,10 @@ SELECT
     COALESCE(result.is_valid_cholesterol
         AND result.cholesterol_value <= result.indicator_threshold, FALSE) AS is_in_numerator,
     CASE
-        WHEN result.observation_id IS NULL THEN 'No lipid result in the preceding 12 months'
-        WHEN NOT result.is_valid_cholesterol THEN 'Latest lipid result cannot be assessed'
-        WHEN result.cholesterol_value <= result.indicator_threshold THEN 'Achieved'
-        ELSE 'Latest lipid result above target'
+        WHEN result.observation_id IS NULL THEN 'NOT_RECORDED_IN_PERIOD'
+        WHEN NOT result.is_valid_cholesterol THEN 'NOT_ASSESSABLE'
+        WHEN result.cholesterol_value <= result.indicator_threshold THEN 'ACHIEVED'
+        ELSE 'ABOVE_TARGET'
     END AS indicator_status
 FROM eligible_people eligible
 LEFT JOIN last_recorded_result result ON eligible.person_id = result.person_id

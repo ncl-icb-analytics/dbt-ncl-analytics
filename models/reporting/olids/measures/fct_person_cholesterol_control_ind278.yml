@@ -27,7 +27,8 @@ models:
       Personalised care adjustments for declined tests or treatment, non-attendance,
       maximum tolerated therapy and inappropriate treatment are not applied.
       Secondary-use consumers must join DIM_PERSON_SECONDARY_USE_ALLOWED to apply
-      National Data Opt-Out and Type 1 opt-out filtering.
+      National Data Opt-Out and Type 1 opt-out filtering. Feeds
+      fct_person_nice_indicator_status.
     config:
       meta:
         owner:
@@ -75,6 +76,8 @@ models:
         description: Build date used for eligibility and the measurement period.
       - name: measurement_period_start
         description: Inclusive start date, 12 calendar months before the reporting date.
+      - name: age
+        description: Age in years on the reporting date; null when no birth date is recorded.
       - name: current_practice_code
         description: ODS code of the selected current registration practice.
       - name: current_practice_name
@@ -124,4 +127,8 @@ models:
       - name: is_in_numerator
         description: Whether the last recorded result in the period is valid and at or below its inclusive target.
       - name: indicator_status
-        description: Achievement label distinguishing no recent result, an unassessable result, a result above target and achievement.
+        description: ACHIEVED, ABOVE_TARGET, NOT_ASSESSABLE (latest result invalid) or NOT_RECORDED_IN_PERIOD.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['ACHIEVED', 'ABOVE_TARGET', 'NOT_ASSESSABLE', 'NOT_RECORDED_IN_PERIOD']
