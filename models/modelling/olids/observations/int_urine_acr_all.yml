@@ -1,24 +1,24 @@
 models:
   - name: int_urine_acr_all
     description: >
-      Urine albumin testing observations, one row per observation for any person,
-      from the PCD cluster NDAALB_COD used by the National Diabetes Audit urine
-      albumin care process. Rows are kept without a numeric result so a recorded
-      test can be counted. albumin_test_type separates ACR, PCR, urine albumin
-      concentration, timed albumin excretion and albuminuria findings. ACR values
-      in mg/mmol and their categories are populated only for ACR observations
-      with a result between 0 and 9999.99; other results remain in
-      original_result_value. Previously used the local UACR_TESTING cluster and
-      dropped observations without a result.
+      Urine albumin testing observations, one row per observation, from the PCD
+      cluster NDAALB_COD used by the National Diabetes Audit urine albumin care
+      process. Rows are kept without a numeric result so a recorded test can be
+      counted. albumin_test_type separates ACR, PCR, urine albumin concentration,
+      timed albumin excretion and albuminuria findings; two cluster members that
+      are not albumin tests are OTHER. ACR values in mg/mmol and their categories
+      are populated only for ACR observations with a result between 0 and
+      9999.99; other results remain in original_result_value.
     config:
       meta:
         owner:
           name: EddieDavison92
         clinical_source: https://digital.nhs.uk/data-and-information/publications/statistical/national-diabetes-audit
-    tests:
+    data_tests:
       - cluster_ids_exist:
           arguments:
             cluster_ids: NDAALB_COD
+            source: PCD
     columns:
       - name: id
         description: Observation identifier.
@@ -38,7 +38,6 @@ models:
       - name: albumin_test_type
         description: ACR, PCR, URINE_ALBUMIN, TIMED_ALBUMIN, ALBUMINURIA_FINDING or OTHER, by concept code.
         data_tests:
-          - not_null
           - accepted_values:
               arguments:
                 values: ['ACR', 'PCR', 'URINE_ALBUMIN', 'TIMED_ALBUMIN', 'ALBUMINURIA_FINDING', 'OTHER']
@@ -53,7 +52,7 @@ models:
       - name: acr_value
         description: ACR in mg/mmol. Null for non-ACR observations, missing results and results outside 0 to 9999.99.
       - name: is_valid_acr
-        description: Whether acr_value is populated.
+        description: Whether acr_value is populated. Kept for existing consumers; it carries no meaning beyond acr_value being non-null.
       - name: acr_category
         description: Normal, mildly, moderately or severely increased by ACR band; Invalid for an ACR result outside range; null otherwise.
       - name: is_acr_elevated

@@ -5,19 +5,16 @@
 }}
 
 /*
-All urine albumin testing observations from the PCD cluster NDAALB_COD, the
-National Diabetes Audit urine albumin care-process code set. One row per
-observation, kept whether or not a numeric result was recorded, so consumers can
-count a recorded test as well as read a value.
+Urine albumin testing observations from the PCD cluster NDAALB_COD, kept with or
+without a numeric result. albumin_test_type splits the cluster by concept code;
+acr_value and its categories apply to ACR observations only.
 
-albumin_test_type splits the cluster: ACR (albumin:creatinine ratio, mg/mmol),
-PCR (protein:creatinine ratio), URINE_ALBUMIN (albumin or microalbumin
-concentration), TIMED_ALBUMIN (24-hour or timed excretion), ALBUMINURIA_FINDING
-(a diagnosis of albuminuria rather than a test) and OTHER.
-
-acr_value and its categories are populated only for ACR observations with a
-numeric result between 0 and 9999.99 mg/mmol. Other results stay in
-original_result_value.
+Deliberately OTHER: 252242007 nicotinic acid loading test and 30711000237105
+retinol-binding protein:creatinine ratio, which are in the cluster but are not
+albumin tests. Profile and panel codes (412902007, 994621000000103,
+194961000000101) are typed URINE_ALBUMIN because they record that albumin was
+measured. tests/urine_albumin_codes_classified.sql fails if a new cluster member
+lands in OTHER.
 */
 
 WITH base_observations AS (
