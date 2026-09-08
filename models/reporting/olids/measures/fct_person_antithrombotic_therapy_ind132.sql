@@ -2,6 +2,7 @@
 
 -- NICE IND132: https://www.nice.org.uk/indicators/ind132
 -- Antiplatelet or oral anticoagulant order in 12 months on the CHD register.
+-- NICE's contraindication exclusion is not applied; no shared contraindication cluster is modelled.
 WITH indicator_population AS (
     SELECT
         register.person_id,

@@ -58,7 +58,7 @@ models:
       - name: is_antiplatelet_in_period
         description: Whether an antiplatelet order falls in the measurement period
       - name: is_anticoagulant_in_period
-        description: Whether an oral anticoagulant order falls in the measurement period
+        description: Whether an oral anticoagulant order falls in the measurement period; always false for IND94, whose denominator excludes them
       - name: is_in_denominator
         description: Always true; every row is an eligible person before personalised care adjustments
       - name: is_in_numerator

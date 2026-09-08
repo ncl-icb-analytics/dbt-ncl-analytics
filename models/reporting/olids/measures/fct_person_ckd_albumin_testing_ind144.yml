@@ -18,7 +18,7 @@ models:
         indicator:
           id: "IND144"
           type: "MEASURE"
-          category: "CARDIOVASCULAR"
+          category: "KIDNEY"
           clinical_domain: "Cardiometabolic"
           name_short: "CKD albumin test"
           description_short: "Urine ACR or PCR recorded in the preceding 12 months for people on the CKD register"

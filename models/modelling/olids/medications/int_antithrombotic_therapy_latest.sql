@@ -23,21 +23,11 @@ anticoagulant AS (
     SELECT
         person_id,
         MAX(order_date) AS latest_anticoagulant_order_date,
-        COUNT(*) AS anticoagulant_order_count
+        COUNT(*) AS anticoagulant_order_count,
+        MAX_BY(anticoagulant_type, order_date) AS latest_anticoagulant_type
     FROM {{ ref('int_anticoagulant_medications_all') }}
     WHERE order_date BETWEEN '1990-01-01' AND CURRENT_DATE()
     GROUP BY person_id
-),
-
-latest_anticoagulant_order AS (
-    SELECT
-        person_id,
-        anticoagulant_type AS latest_anticoagulant_type
-    FROM {{ ref('int_anticoagulant_medications_all') }}
-    WHERE order_date BETWEEN '1990-01-01' AND CURRENT_DATE()
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY person_id ORDER BY order_date DESC, medication_order_id DESC
-    ) = 1
 )
 
 SELECT
@@ -46,7 +36,6 @@ SELECT
     ap.antiplatelet_order_count,
     ac.latest_anticoagulant_order_date,
     ac.anticoagulant_order_count,
-    lao.latest_anticoagulant_type
+    ac.latest_anticoagulant_type
 FROM antiplatelet ap
 FULL OUTER JOIN anticoagulant ac ON ap.person_id = ac.person_id
-LEFT JOIN latest_anticoagulant_order lao ON COALESCE(ap.person_id, ac.person_id) = lao.person_id

@@ -20,7 +20,7 @@ models:
         indicator:
           id: "IND179"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes HbA1c 58, no moderate or severe frailty"
           description_short: "Last HbA1c in the preceding 12 months at or below 58 mmol/mol for people with diabetes without moderate or severe frailty"
@@ -95,7 +95,7 @@ models:
         indicator:
           id: "IND180"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes HbA1c 75, moderate or severe frailty"
           description_short: "Last HbA1c in the preceding 12 months at or below 75 mmol/mol for people with diabetes and moderate or severe frailty"
@@ -167,7 +167,7 @@ models:
         indicator:
           id: "IND249"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes BP control, no moderate or severe frailty"
           description_short: "Diabetes BP target achieved in the preceding 12 months for people aged 17 to 79 without moderate or severe frailty"
@@ -201,8 +201,10 @@ models:
         description: Name of the current registration practice
       - name: latest_frailty_severity
         description: Latest coded frailty severity from the frailty register; null when none recorded
+      - name: latest_bp_date
+        description: Date of the latest valid paired blood pressure reading, regardless of period; null when none is recorded
       - name: latest_record_date
-        description: Date of the latest valid paired blood pressure reading; null when none is recorded
+        description: Date of the latest reading when it falls in the period; null otherwise
       - name: latest_systolic_value
         description: Latest systolic blood pressure in mmHg
       - name: latest_diastolic_value
@@ -244,7 +246,7 @@ models:
         indicator:
           id: "IND111"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes ACR test"
           description_short: "Urine ACR recorded in the preceding 15 months for people with diabetes"
@@ -300,7 +302,7 @@ models:
         indicator:
           id: "IND137"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes retinal screening"
           description_short: "Retinal screening recorded in the preceding 12 months for people with diabetes"
@@ -329,7 +331,7 @@ models:
         indicator:
           id: "IND160"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Diabetes foot examination"
           description_short: "Foot examination of both feet recorded in the preceding 12 months for people with diabetes"
@@ -357,7 +359,7 @@ models:
         indicator:
           id: "IND172"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "NDH annual HbA1c or FPG"
           description_short: "HbA1c or fasting plasma glucose recorded in the preceding 12 months for people with non-diabetic hyperglycaemia"
@@ -386,7 +388,7 @@ models:
         indicator:
           id: "IND173"
           type: "MEASURE"
-          category: "DIABETES"
+          category: "DIABETES_QUALITY"
           clinical_domain: "Cardiometabolic"
           name_short: "Gestational diabetes HbA1c"
           description_short: "HbA1c recorded in the preceding 12 months for women with gestational diabetes diagnosed in that period"
@@ -429,6 +431,16 @@ models:
                 values: ['ACHIEVED', 'ABOVE_TARGET', 'NOT_ASSESSABLE', 'NOT_RECORDED_IN_PERIOD']
       - name: latest_record_date
         description: Date of the latest qualifying record for the indicator; null when none in the period
+      - name: latest_hba1c_value
+        description: Last recorded HbA1c in mmol/mol for IND179 and IND180; null for other indicators
+      - name: hba1c_threshold
+        description: Inclusive HbA1c threshold in mmol/mol for IND179 and IND180; null for other indicators
+      - name: latest_systolic_value
+        description: Latest systolic BP in mmHg for IND249; null for other indicators
+      - name: latest_diastolic_value
+        description: Latest diastolic BP in mmHg for IND249; null for other indicators
+      - name: latest_frailty_severity
+        description: Latest coded frailty severity for IND179, IND180 and IND249; null for other indicators
   - name: fct_person_diabetes_nice_indicators_snapshot_input
     description: >
       Thin snapshot-input projection of fct_person_diabetes_nice_indicators:
@@ -463,3 +475,11 @@ models:
         description: Outcome label at the build.
       - name: latest_record_date
         description: Date of the latest qualifying record; null when none in the period.
+      - name: latest_hba1c_value
+        description: Last recorded HbA1c for the HbA1c indicators.
+      - name: latest_systolic_value
+        description: Latest systolic BP for IND249.
+      - name: latest_diastolic_value
+        description: Latest diastolic BP for IND249.
+      - name: latest_frailty_severity
+        description: Latest coded frailty severity for the frailty-split indicators.

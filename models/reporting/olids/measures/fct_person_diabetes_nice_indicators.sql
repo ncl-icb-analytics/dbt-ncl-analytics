@@ -24,6 +24,25 @@ SELECT
     current_practice_code,
     current_practice_name,
     latest_record_date,
+    {% if indicator_model in ['fct_person_diabetes_hba1c_ind179', 'fct_person_diabetes_hba1c_ind180'] %}
+    latest_hba1c_value,
+    indicator_threshold AS hba1c_threshold,
+    NULL AS latest_systolic_value,
+    NULL AS latest_diastolic_value,
+    latest_frailty_severity,
+    {% elif indicator_model == 'fct_person_diabetes_bp_ind249' %}
+    NULL AS latest_hba1c_value,
+    NULL AS hba1c_threshold,
+    latest_systolic_value,
+    latest_diastolic_value,
+    latest_frailty_severity,
+    {% else %}
+    NULL AS latest_hba1c_value,
+    NULL AS hba1c_threshold,
+    NULL AS latest_systolic_value,
+    NULL AS latest_diastolic_value,
+    NULL AS latest_frailty_severity,
+    {% endif %}
     is_in_denominator,
     is_in_numerator,
     indicator_status

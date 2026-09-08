@@ -14,6 +14,10 @@ select
     , indicator_id
     , current_practice_code
     , latest_record_date
+    , latest_hba1c_value
+    , latest_systolic_value
+    , latest_diastolic_value
+    , latest_frailty_severity
     , is_in_numerator
     , indicator_status
 from {{ ref('fct_person_diabetes_nice_indicators') }}

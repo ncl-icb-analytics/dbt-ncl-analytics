@@ -56,7 +56,7 @@ assessed AS (
         active.current_practice_name,
         population.latest_frailty_severity,
         hba.observation_id AS latest_hba1c_observation_id,
-        hba.clinical_effective_date AS latest_hba1c_date,
+        hba.clinical_effective_date::DATE AS latest_hba1c_date,
         hba.hba1c_ifcc AS latest_hba1c_value,
         COALESCE(hba.is_valid_hba1c, FALSE) AS is_latest_hba1c_valid,
         75 AS indicator_threshold

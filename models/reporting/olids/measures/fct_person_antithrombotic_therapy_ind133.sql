@@ -1,8 +1,15 @@
 {{ config(materialized='view') }}
 
 -- NICE IND133: https://www.nice.org.uk/indicators/ind133
--- Antiplatelet or oral anticoagulant order in 12 months on the stroke/TIA register without haemorrhagic stroke history.
-WITH indicator_population AS (
+-- Antiplatelet or oral anticoagulant order in 12 months on the stroke/TIA register. People with haemorrhagic
+-- stroke history stay in only through a TIA diagnosis.
+WITH tia_history AS (
+    SELECT DISTINCT person_id
+    FROM {{ ref('int_stroke_tia_diagnoses_all') }}
+    WHERE is_tia_diagnosis_code
+),
+
+indicator_population AS (
     SELECT
         register.person_id,
         age.age
@@ -11,8 +18,11 @@ WITH indicator_population AS (
         ON register.person_id = age.person_id
     LEFT JOIN {{ ref('int_haemorrhagic_stroke_history') }} AS haemorrhagic
         ON register.person_id = haemorrhagic.person_id
+    LEFT JOIN tia_history AS tia
+        ON register.person_id = tia.person_id
+    -- NICE denominator: stroke shown to be non-haemorrhagic, or a history of TIA
     WHERE register.is_on_register
-        AND haemorrhagic.person_id IS NULL
+        AND (haemorrhagic.person_id IS NULL OR tia.person_id IS NOT NULL)
 ),
 
 assessed AS (
