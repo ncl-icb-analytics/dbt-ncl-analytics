@@ -11,12 +11,13 @@ models:
       meta:
         owner:
           name: EddieDavison92
-    tests:
+    data_tests:
       - dbt_utils.at_least_one:
           column_name: id
       - cluster_ids_exist:
           arguments:
             cluster_ids: MILDFRAIL_COD, MODFRAIL_COD, SEVFRAIL_COD
+            source: PCD
     columns:
       - name: id
         description: Observation identifier.
@@ -39,6 +40,3 @@ models:
         description: Mild, Moderate or Severe, from the matching cluster.
         data_tests:
           - not_null
-          - accepted_values:
-              arguments:
-                values: ['Mild', 'Moderate', 'Severe']

@@ -9,7 +9,8 @@ Frailty register from coded frailty severity.
 
 Business logic:
 - Any code in the PCD clusters MILDFRAIL_COD, MODFRAIL_COD or SEVFRAIL_COD = on register
-- latest_frailty_severity is the severity of the most recent coded finding
+- latest_frailty_severity is the severity of the most recent coded finding;
+  the more severe code wins when two are recorded on the same date
 - No resolved codes: frailty fluctuates but does not resolve
 - No age restriction
 
@@ -27,8 +28,11 @@ WITH latest_severity AS (
             person_id,
             frailty_severity,
             ROW_NUMBER() OVER (
-                PARTITION BY person_id 
-                ORDER BY clinical_effective_date DESC, ID DESC
+                PARTITION BY person_id
+                ORDER BY
+                    clinical_effective_date DESC,
+                    CASE frailty_severity WHEN 'Severe' THEN 3 WHEN 'Moderate' THEN 2 ELSE 1 END DESC,
+                    ID DESC
             ) AS rn
         FROM {{ ref('int_frailty_diagnoses_all') }}
         WHERE is_diagnosis_code = TRUE
@@ -52,7 +56,7 @@ frailty_diagnoses AS (
             END
         ) AS latest_diagnosis_date,
 
-        -- Register logic: active diagnosis required
+        -- True for every person here; retained for consumers of the column
         COALESCE(MAX(
             CASE
                 WHEN is_diagnosis_code THEN clinical_effective_date

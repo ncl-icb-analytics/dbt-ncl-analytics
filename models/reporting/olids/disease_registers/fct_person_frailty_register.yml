@@ -4,10 +4,12 @@ models:
       Frailty register from coded frailty severity. One row per person with any
       code in the PCD clusters MILDFRAIL_COD, MODFRAIL_COD or SEVFRAIL_COD, which
       cover the graded frailty findings and Clinical Frailty Scale levels 4 to 8.
-      latest_frailty_severity is the severity of the most recent coded finding, so
-      NICE and QOF measures that split on moderate or severe frailty can read it
-      directly. Frailty has no resolved codes and no age restriction is applied.
-      Calculated frailty scores such as eFI2 are separate models.
+      latest_frailty_severity is the severity of the most recent coded finding,
+      with the more severe code winning a same-day tie, so GMS contract and NICE
+      measures that split on moderate or severe frailty can read it directly.
+      Frailty has no resolved codes. No age restriction is applied beyond a
+      recorded birth date. Calculated frailty scores such as eFI2 are separate
+      models.
 
     tests:
       - dbt_utils.at_least_one:
@@ -49,8 +51,12 @@ models:
         tests:
           - unique
           - not_null
+      - name: age
+        description: Age in years at the build date.
+      - name: is_on_register
+        description: Always true; every row is a person with a coded frailty severity.
       - name: latest_frailty_severity
-        description: Severity of the most recent coded frailty finding. Ties on date break by observation ID descending.
+        description: Severity of the most recent coded frailty finding. On the same date the more severe code wins, then the higher observation ID.
         data_tests:
           - not_null
           - accepted_values:
@@ -66,3 +72,9 @@ models:
         description: Count of moderate frailty codes ever recorded.
       - name: severe_frailty_count
         description: Count of severe frailty codes ever recorded.
+      - name: total_frailty_diagnoses
+        description: Count of coded frailty severity observations ever recorded.
+      - name: all_frailty_concept_codes
+        description: Distinct SNOMED codes recorded, for traceability.
+      - name: all_frailty_concept_displays
+        description: Descriptions of the distinct codes recorded.
