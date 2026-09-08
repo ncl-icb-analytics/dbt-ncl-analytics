@@ -30,6 +30,20 @@ select
     publisher_organisation_code,
     lds_transform_datetime,
 
+    -- Recorded terminology remains available without a current concept lookup.
+    source_code,
+    source_display,
+    source_system,
+    target_system,
+    referral_request_priority_source_code,
+    referral_request_priority_source_display,
+    referral_request_type_source_code,
+    referral_request_type_source_display,
+    referral_request_specialty_source_code,
+    referral_request_specialty_source_display,
+    date_precision_source_code,
+    date_precision_source_display,
+
     -- Metadata
     lds_is_deleted,
     lds_source_record_id
