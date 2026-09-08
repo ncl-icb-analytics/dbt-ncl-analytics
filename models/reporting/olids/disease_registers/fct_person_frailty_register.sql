@@ -5,26 +5,16 @@
 }}
 
 /*
-**Frailty Register - Clinical Quality Measures**
+Frailty register from coded frailty severity.
 
-Simple Register
+Business logic:
+- Any code in the PCD clusters MILDFRAIL_COD, MODFRAIL_COD or SEVFRAIL_COD = on register
+- latest_frailty_severity is the severity of the most recent coded finding
+- No resolved codes: frailty fluctuates but does not resolve
+- No age restriction
 
-Business Logic:
-- Presence of frailty diagnosis (FRAILTY_DX) = on register
-- Tracks latest frailty severity (mild, moderate, severe)
-
-Note:
-- There are no resolved codes for frailty (condition can fluctuate but doesn't "resolve")
-- No specific age restrictions, though frailty is more common in elderly populations
-- Latest severity assessment takes precedence for stratification
-
-Clinical Context:
-Used for frailty quality measures including:
-- Comprehensive geriatric assessment planning
-- Falls prevention and management
-- Medication review and deprescribing
-- Care coordination and support services
-- Risk stratification for healthcare interventions
+Calculated frailty scores (eFI, eFI2, Rockwood) are not used here; see
+int_efi_latest, fct_person_efi2 and int_rockwood_latest.
 */
 
 WITH latest_severity AS (
