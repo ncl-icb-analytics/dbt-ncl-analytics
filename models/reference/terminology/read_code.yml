@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: read_code
+    description: >-
+      One exact-case Read v2 or CTV3 dictionary code or unambiguous alternative.
+      Uses explicit dictionary membership flags. An exact code takes precedence
+      over another record's alternative; ambiguous alternatives remain unresolved.
+      Terms and SNOMED mappings come from Dictionary.dbo.ReadCodes.
+    config:
+      meta:
+        owner:
+          name: Eddie Davison
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [coding_system, code]
+    columns:
+      - name: coding_system
+        description: read_v2 or ctv3, from the dictionary membership flag.
+      - name: code
+        description: Case-sensitive match code. Dots and letter case remain significant.
+      - name: dictionary_read_code
+        description: Original dictionary code supplying the term and any mapping.
+      - name: term
+        description: Dictionary term for the original code.
+      - name: match_type
+        description: exact_code or dictionary_alternative, recording how the submitted code matches.
+      - name: snomed_ct_code
+        description: Positive dictionary-supplied SNOMED mapping; null for non-positive placeholders.
