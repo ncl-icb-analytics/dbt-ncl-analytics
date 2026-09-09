@@ -155,3 +155,63 @@ expired optional platform-credential warnings did not prevent Snowflake builds.
 
 Builds use the tracked `dev` target and existing shared DEV layers. No task
 schema or target override was added; `dbt_project.yml` is unchanged.
+
+## Analyst interface and data profile, 9 September 2026
+
+The facts keep their original populations and keys: 15,325,459 referrals and
+61,490,763 contacts. Reporting identifiers now use `referral_id`, `contact_id`,
+`local_referral_id`, `local_contact_id`, `team_id`, `local_team_id` and
+`submission_id`. Staging retains the source field names. `source_record_id`
+remains the standard key for the cross-source models. Contact `referral_id`
+joins the referral fact's `source_record_id`; the duplicate parent-key alias
+has been removed.
+
+Organisation codes now have names beside them. The shared `organisation`
+reference exposes 430,189 codes with their latest available names: 340,689 from
+UKHFD ODS API and 89,500 Dictionary fallbacks for codes absent from ODS. It
+retains closed organisations and historical codes. The reference also states
+the name source and definition timestamp. These are current definitions of
+historical codes, not names as they stood on the event date.
+
+Every referral and contact provider is labelled. All source ICB and sub-ICB
+codes match the reference. Some supplied codes still have no authoritative
+match:
+
+| Field | Records with a code but no name |
+|---|---:|
+| Referral referring organisation | 162,172 |
+| Referral submitted commissioner | 92,008 |
+| Contact submitted commissioner | 32,356 |
+| Contact site | 12,207,891 |
+| Source of referral | 9,928 |
+| Primary referral reason | 17,563 |
+| Referring staff group | 99,289 |
+| Contact attendance | 111,640 |
+| Contact subject | 44,577 |
+| Group therapy | 11,406 |
+
+The later `source_attendance_status_code` now has its own name column, with
+109,098 populated codes unmatched. `group_therapy_code` and `group_therapy_name`
+make clear that the source indicator is a category, not a derived boolean.
+The source commissioner derivation reason remains without a verified label
+mapping. Codes are preserved when a label is unavailable.
+
+The audit checked all historical codes and latest definitions in the shared
+categorical references. It found no lost codes, duplicate current keys, blank
+labels or stale selections. Arbitrary code padding and case changes are not
+used to turn unrecognised values into recognised categories.
+
+No fact column is wholly empty and no non-null string is blank. Source-quality
+counts include seven negative ages across the two facts, three referral ages
+above 120, 325 contacts longer than 1,440 minutes, 50,755 discharge letters
+dated before discharge and 65,015 contacts before the submitted earliest
+clinically appropriate date. These observations do not establish exclusion
+rules. The facts preserve supplied values for source-quality review. No
+discharge precedes its referral date.
+
+The new organisation dependency build passed five models and ten tests. The
+two facts and seven tests passed, including exact source-key reconciliation,
+time precision and a regression for organisation names, the later attendance
+label and latest-referral link flags. The retained quality-profile analysis
+was compiled and executed against DEV. Existing staging and currency rules
+are unchanged by this profiling pass.
