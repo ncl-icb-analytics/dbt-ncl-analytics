@@ -7,6 +7,9 @@ with source_codes as (
     select upper(trim(organisation_code))
     from {{ ref('stg_dictionary_dbo_organisation') }}
     where nullif(trim(organisation_code), '') is not null
+    union
+    select organisation_code
+    from {{ ref('stg_ukhfd_ods_closed_organisation') }}
 )
 select source_codes.organisation_code
 from source_codes

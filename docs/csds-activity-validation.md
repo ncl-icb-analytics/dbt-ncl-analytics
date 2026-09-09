@@ -132,7 +132,6 @@ rechecks source grains, parent linkage, unknown identities, supplied age and
 terminology coverage from the accepted staging and reporting interfaces.
 Compile it with the established DEV target; no patient rows are returned.
 
-
 ## Analyst interface review, 9 September 2026
 
 Reporting uses `activity_id`, `contact_id`, `referral_id`, `team_id` and
@@ -186,7 +185,6 @@ activity, service, scheme and reason codes retain null names. The reusable
 aggregate profile now includes source outliers, clinical and organisation label
 coverage, and latest-parent differences.
 
-
 The post-change DEV build passed all four selected models and 15 tests,
 including both individual-key reconciliations and the new submitted/latest
 parent flag test. The activity fact built in 68 seconds and the service fact
@@ -205,3 +203,78 @@ The updated committed aggregate profile compiled and executed successfully.
 `dbt ls` found no additional reporting consumers on this branch; the stacked
 clinical-record PR owns its dependent rebuild. The existing activity selector
 and summary models are unaffected by these reporting aliases and label joins.
+
+## Deeper unit investigation
+
+Of the 2,161,676 unresolved units, 1,268,303 are numeric-only values from
+provider RYX. Of these, 1,268,300 are the zero token and none is UCUM unity
+(`1`). The legacy `REPORTING.MAIN_DATA.CSDS_CARE_CONTACT_ACTIVITY` table has no
+unit output. `DATA_LAKE.CSDS_SIMPLE.tblCare_Activity_Coding` retains the same unit
+on all 1,255,304 matching coded observations, with no changed or ambiguous units.
+The other 12,999 source occurrences have no observation code. The DATA_LAKE
+views directly expose the upstream shared database; their DDL adds no unit
+translation. Upstream DDL cannot be retrieved from the shared database.
+
+Joining numeric values to Dictionary surrogate unit IDs would assign an
+unknown/N/A label to at least 1,267,430 records. That coincidence does not establish
+a foreign-key relationship or a physical unit. No independent conversion was
+found in accessible view/procedure definitions or relevant DDL from the previous
+90 days. The original source unit remains visible and no numeric decoding is proposed.
+
+Case-folded matching offers 553,066 potential additional labels, but UCUM
+case-sensitive and case-insensitive representations are distinct. Generic
+upper-casing would not be a safe unit resolver. See
+[UCUM sections 3, 27 and 28](https://ucum.org/ucum).
+
+The approved CSDS-specific fallback uses only the historical measurement contexts
+published in the [ETOS v1.6.10 workbook](https://digital.nhs.uk/binaries/content/assets/website-assets/data-and-information/datasets/community-services/csds_etos_v1.6.10_final.xlsx).
+Change Control entries 395, 399 and 401 record changes dated 8 September 2022,
+version 1.6.3. Their pre-amendment notes state "UCUM UNIT OF MEASUREMENT (case
+insensitive)" and define these spellings:
+
+| Measurement concept | Historical field | Accepted spellings, ignoring case | Canonical unit |
+|---|---|---|---|
+| Weight, SNOMED CT 27113001 | C202D48 | kg, kilograms | kg |
+| Height, SNOMED CT 50373000 | C202D47 | cm; m | cm; m respectively |
+| BMI, SNOMED CT 60621009 | C201D49 | kg/m2, kg/m² | kg/m2 |
+
+These notes were moved out of the ETOS derivations. Current derived-field rows
+say the logic is determined internally. The fallback therefore labels historical
+spellings with provenance `CSDS ETOS historical unit alias`; it does not claim to implement
+the current NHS derivation algorithm. It neither calculates BMI nor converts or
+validates observation values. Canonical descriptions and physical quantities
+come from the existing unit reference.
+
+A source SNOMED code must match the named measurement concept. Read v2 and CTV3
+codes qualify only through a positive Dictionary SNOMED mapping. Existing exact
+unit matches win. The applied fallback adds 171,507 labels: 83,494 native SNOMED weight
+observations, 10,103 native SNOMED BMI observations and 77,910 Read observations
+mapped to BMI. The first case-fold estimate missed 10,124 observations using
+the explicitly documented superscript spelling `kg/m²`, because the existing
+reference lacked that spelling. The six-rule source comparison confirms all
+additional labels fall within the approved measurement contexts.
+Synthetic checks cover measurement restrictions, unknown context, the numeric
+placeholder and exact-match precedence.
+
+The retained read-only Snowflake script
+[`profile_csds_unit_gaps.sql`](../scripts/snowflake/profile_csds_unit_gaps.sql)
+rechecks numeric placeholders, case-fold candidates, the CSDS_SIMPLE comparison
+and hypothetical Dictionary-key matches. Measurement categories in the hypothetical key comparison require the
+submitted SNOMED coding scheme.
+
+
+The approved alias reference and activity fact built successfully in DEV,
+with two models and 12 tests passing. The activity build took 85 seconds.
+All 55,189,449 activity occurrences remain. An exact source comparison found
+zero changes to procedure, finding and observation codes, their supplied schemes,
+observation values or original unit fields. The aggregate fingerprint of every
+pre-existing field other than the three unit-label fields also remained unchanged.
+
+All 3,000,170 existing unit labels retain their names, symbols and provenance.
+The fallback adds 171,507 names with match type `csds_etos_alias` and definition
+source `CSDS ETOS historical unit alias`. Unit-name coverage is now 3,171,677 of
+5,161,846 supplied units; 1,990,169 remain unresolved. The original numeric
+placeholders remain unresolved. Independent review found no blocking issue in
+scheme routing, exact-match precedence or the historical source interpretation.
+The updated aggregate profile compiled and executed successfully, including
+separate counts for existing reference matches and historical aliases.

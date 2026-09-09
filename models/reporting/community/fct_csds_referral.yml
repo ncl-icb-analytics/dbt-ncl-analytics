@@ -66,8 +66,8 @@ models:
     description: Submitted referring organisation code. Unmatched values remain visible.
   - name: referring_organisation_name
     description: Latest organisation name from the shared organisation reference, including closed organisations.
-      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
-      is unmatched.
+      UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed-organisation archive
+      for codes absent from both. Null when the code is unmatched.
   - name: referring_professional_staff_group_code
     description: Submitted referring professional staff group code. Unmatched values remain visible.
   - name: discharge_letter_issued_date
@@ -77,28 +77,28 @@ models:
     description: Provider organisation code supplied by CSDS.
   - name: provider_organisation_name
     description: Latest organisation name from the shared organisation reference, including closed organisations.
-      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
-      is unmatched.
+      UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed-organisation archive
+      for codes absent from both. Null when the code is unmatched.
   - name: submitted_commissioner_code
     description: Commissioner supplied with this source record.
   - name: submitted_commissioner_name
     description: Latest organisation name from the shared organisation reference, including closed organisations.
-      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
-      is unmatched.
+      UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed-organisation archive
+      for codes absent from both. Null when the code is unmatched.
   - name: source_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
   - name: source_icb_commissioner_name
     description: Latest organisation name from the shared organisation reference, including closed organisations.
-      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
-      is unmatched.
+      UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed-organisation archive
+      for codes absent from both. Null when the code is unmatched.
   - name: source_sub_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
   - name: source_sub_icb_commissioner_name
     description: Latest organisation name from the shared organisation reference, including closed organisations.
-      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
-      is unmatched.
+      UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed-organisation archive
+      for codes absent from both. Null when the code is unmatched.
   - name: source_commissioner_derivation_reason
     description: Source-supplied reason for derived commissioner attribution. Retained without a verified
       code-to-label mapping; no local attribution rule or current-footprint remapping is applied.
