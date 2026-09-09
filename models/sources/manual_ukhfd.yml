@@ -594,3 +594,59 @@ sources:
             quote: true
           - name: Effective_To
             quote: true
+  - name: ukhfd_ods_api
+    database: '"UKHFD"'
+    schema: '"ODS_API"'
+    description: Organisation Data Service API register and its UKHFD definition history.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
+    tables:
+      - name: organisation
+        identifier: '"dim_Organisation_SCD"'
+        description: Full ODS organisation and site register, including historical definitions
+          and closed organisations.
+        columns:
+          - name: register_id
+            quote: true
+          - name: Name
+            quote: true
+          - name: OrgId_Root
+            quote: true
+          - name: OrgId_assigningAuthorityName
+            quote: true
+          - name: OrgId_extension
+            quote: true
+          - name: OrgRecordClass
+            quote: true
+          - name: Status
+            quote: true
+          - name: AddrLn1
+            quote: true
+          - name: AddrLn2
+            quote: true
+          - name: AddrLn3
+            quote: true
+          - name: Town
+            quote: true
+          - name: County
+            quote: true
+          - name: PostCode
+            quote: true
+          - name: Country
+            quote: true
+          - name: UPRN
+            quote: true
+          - name: In_Source_Data
+            quote: true
+          - name: LastChangeDate
+            quote: true
+          - name: Is_Latest
+            quote: true
+          - name: Effective_From
+            quote: true
+          - name: Effective_To
+            quote: true
+          - name: Char_8_ASCII_Index
+            quote: true
