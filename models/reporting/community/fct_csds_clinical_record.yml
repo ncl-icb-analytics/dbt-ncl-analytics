@@ -108,12 +108,12 @@ models:
   - name: provider_organisation_code
     description: Organisation submitting the clinical record.
   - name: provider_organisation_name
-    description: Latest shared name for the submitting provider. UKHFD ODS API takes precedence, with Dictionary fallback.
+    description: Latest shared name for the submitting provider. UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed archive for codes absent from both.
   - name: immunisation_responsible_organisation_code
     description: Recorded organisation responsible for administering an immunisation. Null for other clinical
       types.
   - name: immunisation_responsible_organisation_name
-    description: Latest shared name for the recorded immunisation organisation. UKHFD ODS API takes precedence, with Dictionary fallback.
+    description: Latest shared name for the recorded immunisation organisation. UKHFD ODS API takes precedence, then Dictionary, then the UKHFD closed archive for codes absent from both.
   - name: person_id
     description: National CSDS person identifier retained on the source occurrence. Different populated
       identities are not merged.
