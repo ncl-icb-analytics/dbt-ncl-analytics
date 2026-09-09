@@ -68,3 +68,31 @@ from {{ ref('fct_csds_clinical_record') }} as f
 left join {{ ref('csds_assessment_scale') }} as s on trim(f.clinical_code) = s.concept_code
 where f.assessment_response_status = 'response_unmatched'
 group by f.clinical_record_type, unmatched_reason;
+
+-- Reconcile historical aliases without returning submitted codes or unit tokens.
+select
+    case alias_unit.source_data_item
+        when 'C202D48' then 'weight'
+        when 'C202D47' then 'height'
+        when 'C201D49' then 'BMI'
+    end as measurement
+    , f.clinical_code_system
+    , count(*) as alias_labels
+    , count_if(upper(trim(f.unit_of_measurement_code)) = 'KG/M' || chr(178)) as superscript_bmi_aliases
+from {{ ref('fct_csds_clinical_record') }} as f
+inner join {{ ref('csds_observation_unit_alias') }} as alias_unit
+    on upper(trim(f.unit_of_measurement_code)) = alias_unit.source_unit_upper
+    and case when f.clinical_code_system = 'SNOMED CT' then trim(f.clinical_code)
+        else f.dictionary_snomed_code end = alias_unit.snomed_code
+where f.unit_of_measurement_match_type = 'csds_etos_alias'
+group by measurement, f.clinical_code_system;
+
+select
+    count(*) as exact_reference_matches
+    , count_if(f.unit_of_measurement_description is distinct from u.description
+        or f.unit_of_measurement_symbol is distinct from u.unit_symbol
+        or f.unit_of_measurement_match_type is distinct from u.match_type
+        or f.unit_of_measurement_definition_source is distinct from u.definition_source) as changed_exact_labels
+from {{ ref('fct_csds_clinical_record') }} as f
+inner join {{ ref('clinical_unit_of_measurement') }} as u
+    on trim(f.unit_of_measurement_code) = u.code;

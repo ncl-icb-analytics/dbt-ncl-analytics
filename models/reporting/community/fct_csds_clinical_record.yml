@@ -97,14 +97,17 @@ models:
     description: Recorded observation unit code. Assessment scores do not acquire an invented unit.
   - name: unit_of_measurement_description
     description: Exact-case unit label from UKHFD UCUM or a recognised warehouse dictionary symbol or
-      alias.
+      alias. CYP202 observations may also use the historical CSDS spelling for a matching weight,
+      height or BMI concept, after an exact reference match fails.
   - name: unit_of_measurement_symbol
     description: Reference symbol for the recorded unit. No value conversion is applied.
   - name: unit_of_measurement_match_type
-    description: ucum_code, dictionary_symbol or known_alias. A dictionary or alias match is not proof
-      of UCUM conformance.
+    description: ucum_code, dictionary_symbol, known_alias or csds_etos_alias. The latter requires a
+      matching native SNOMED observation or positive scheme-qualified Read mapping. A dictionary or
+      alias match is not proof of UCUM conformance or current submission validity.
   - name: unit_of_measurement_definition_source
-    description: UKHFD UCUM or the shared warehouse dictionary supplying the exact-case unit label.
+    description: UKHFD UCUM, the shared warehouse dictionary or CSDS ETOS historical unit alias.
+      Historical spelling provenance is separate from the canonical unit definition in the shared reference.
   - name: provider_organisation_code
     description: Organisation submitting the clinical record.
   - name: provider_organisation_name

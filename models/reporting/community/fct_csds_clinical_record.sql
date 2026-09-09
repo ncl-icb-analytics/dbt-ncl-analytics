@@ -34,10 +34,11 @@ with labelled as (
                 then 'reference_not_available'
             else 'code_or_expression_unmatched'
         end as clinical_label_status
-        , unit.description as unit_of_measurement_description
-        , unit.unit_symbol as unit_of_measurement_symbol
-        , unit.match_type as unit_of_measurement_match_type
-        , unit.definition_source as unit_of_measurement_definition_source
+        , coalesce(unit.description, unit_alias.description) as unit_of_measurement_description
+        , coalesce(unit.unit_symbol, unit_alias.unit_symbol) as unit_of_measurement_symbol
+        , coalesce(unit.match_type, iff(unit_alias.snomed_code is not null, 'csds_etos_alias', null))
+            as unit_of_measurement_match_type
+        , coalesce(unit.definition_source, unit_alias.definition_source) as unit_of_measurement_definition_source
         , scale.assessment_tool_name
         , scale.specification_version as assessment_definition_version
         , response.response_description as clinical_value_description
@@ -97,6 +98,13 @@ with labelled as (
         on read_code.snomed_ct_code::varchar = mapped_snomed.snomed_code
     left join {{ ref('clinical_unit_of_measurement') }} as unit
         on trim(r.unit_of_measurement_code) = unit.code
+    left join {{ ref('csds_observation_unit_alias') }} as unit_alias
+        on unit.code is null
+        and r.source_table = 'CYP202' and r.clinical_record_type = 'observation'
+        and r.coding_scheme_kind = 'observation'
+        and upper(trim(r.unit_of_measurement_code)) = unit_alias.source_unit_upper
+        and case when trim(r.coding_scheme_code) = '03' then trim(r.clinical_code)
+            else read_code.snomed_ct_code end = unit_alias.snomed_code
     left join {{ ref('csds_assessment_scale') }} as scale
         on r.clinical_record_type in ('referral_assessment', 'activity_assessment')
         and trim(r.clinical_code) = scale.concept_code

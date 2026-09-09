@@ -320,3 +320,40 @@ available creation SQL. Resolving this population needs the upstream delivery
 owner to establish how the v1.0 procedure field was populated. No clinical
 meaning has been inferred from numeric shape, internal dictionary identifiers
 or same-day records.
+
+## Approved historical observation-unit fallback
+
+The clinical fact reuses `csds_observation_unit_alias` for the approved historical
+weight, height and BMI spellings. It applies only to CYP202 observations after
+an exact shared unit-reference match fails. The observation must carry the named
+SNOMED measurement concept, either directly under the SNOMED observation scheme
+or through a positive, scheme-qualified Dictionary Read mapping. Immunisations,
+assessments, procedures and findings cannot receive this fallback.
+
+The resulting match type is `csds_etos_alias`, with definition source
+`CSDS ETOS historical unit alias`. Submitted clinical codes, descriptions, units
+and values remain unchanged. These labels describe historical spellings; they
+do not assert current submission validity, derive measurements or convert values.
+The shared reference retains the ETOS data item, change date and canonical unit
+definition source. A clinical regression test checks context and exact-match
+precedence, then reconciles observation units and values with the activity fact.
+
+The approved fallback added 171,507 clinical unit labels: 83,494 weight and
+88,013 BMI observations. This brings unit coverage to 3,171,677 of 5,157,054
+populated units, leaving 1,985,377 unresolved. The first estimate of 161,383
+missed 10,124 BMI units written with a superscript 2. The retained profile uses
+`chr(178)` for that spelling to avoid command-line encoding differences. All
+3,000,170 prior exact-reference labels and their provenance remain unchanged.
+
+The final clinical build passed the fact and all nine selected tests in
+59 seconds; the fact built in 40 seconds. The new test found no context,
+precedence or activity-unit disagreement. There are still 37,606,281 unique
+clinical records, 30,200,514 clinical descriptions, 940,526 interpreted assessment
+scores and 396 unavailable clinical times. An aggregate fingerprint of record
+identities, clinical codes and descriptions, submitted units and values,
+clinical timestamps and precision, and assessment scores and statuses was
+unchanged before and after the build.
+
+The final full-stack compile passed with 6,904 nodes including hooks: 2,070
+models, 4,713 tests, 28 snapshots, 40 seeds and 48 analyses. Existing optional
+credential and unused-configuration warnings remain unrelated to this change.
