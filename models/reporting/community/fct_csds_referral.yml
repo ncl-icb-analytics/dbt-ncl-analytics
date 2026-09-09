@@ -16,10 +16,11 @@ models:
     - not_null
   - name: source_dataset
     description: CSDS.
-  - name: unique_service_request_identifier
-    description: Source unique service request identifier.
-  - name: service_request_identifier
-    description: Source service request identifier.
+  - name: referral_id
+    description: Provider-qualified referral identifier. The same value is exposed as source_record_id
+      on the referral fact.
+  - name: local_referral_id
+    description: Referral identifier assigned locally by the provider.
   - name: source_row_id
     description: Identifier of the selected submitted row; changes when a replacement source row is selected.
   - name: person_id
@@ -63,6 +64,10 @@ models:
       definitions. Null when the supplied code is unmatched.
   - name: referring_organisation_code
     description: Submitted referring organisation code. Unmatched values remain visible.
+  - name: referring_organisation_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: referring_professional_staff_group_code
     description: Submitted referring professional staff group code. Unmatched values remain visible.
   - name: discharge_letter_issued_date
@@ -70,19 +75,35 @@ models:
       from receipt time.
   - name: provider_organisation_code
     description: Provider organisation code supplied by CSDS.
+  - name: provider_organisation_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: submitted_commissioner_code
     description: Commissioner supplied with this source record.
+  - name: submitted_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
+  - name: source_icb_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_sub_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
+  - name: source_sub_icb_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_commissioner_derivation_reason
-    description: Source-derived commissioner field. No local attribution fallback or current-footprint
-      remapping is applied.
-  - name: unique_submission_id
-    description: Source unique submission id.
+    description: Source-supplied reason for derived commissioner attribution. Retained without a verified
+      code-to-label mapping; no local attribution rule or current-footprint remapping is applied.
+  - name: submission_id
+    description: Identifier of the accepted submission containing the selected source row.
   - name: reporting_period_start_date
     description: Source reporting period start date. Retained as supplied with date precision; not inferred
       from receipt time.

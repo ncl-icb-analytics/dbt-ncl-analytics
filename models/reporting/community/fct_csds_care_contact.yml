@@ -17,15 +17,14 @@ models:
     - not_null
   - name: source_dataset
     description: CSDS.
-  - name: referral_source_record_id
-    description: Recorded referral key for joining fct_csds_referral.source_record_id. A matching key
-      alone does not establish person agreement.
-  - name: unique_service_request_identifier
-    description: Source unique service request identifier.
-  - name: unique_care_contact_identifier
-    description: Source unique care contact identifier.
-  - name: care_contact_identifier
-    description: Source care contact identifier.
+  - name: referral_id
+    description: Provider-qualified referral identifier. The same value is exposed as source_record_id
+      on the referral fact.
+  - name: contact_id
+    description: Provider-qualified contact identifier. Use referral_id with this identifier; a contact
+      identifier alone is reused across referrals.
+  - name: local_contact_id
+    description: Contact identifier assigned locally by the provider.
   - name: source_row_id
     description: Identifier of the selected submitted row; changes when a replacement source row is selected.
   - name: age_at_contact
@@ -55,6 +54,9 @@ models:
   - name: source_attendance_status_code
     description: Later source attendance_status field, retained separately. Earlier submissions often
       leave this null even when the submitted attendance code is populated.
+  - name: source_attendance_status_name
+    description: Latest UKHFD attendance description for the later source attendance_status field, including
+      retired codes. Null for absent or unmatched codes.
   - name: consultation_mechanism_code
     description: Submitted community consultation mechanism. The legacy medium is retained separately
       without guessing a cross-version mapping.
@@ -72,17 +74,21 @@ models:
     description: Recorded clinical contact duration in minutes, excluding administration and travel.
   - name: site_code
     description: Submitted site code. Unmatched values remain visible.
-  - name: unique_care_professional_team_local_identifier
-    description: Source unique care professional team local identifier.
-  - name: care_professional_team_local_identifier
-    description: Source care professional team local identifier.
+  - name: site_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
+  - name: team_id
+    description: Provider-qualified care professional team identifier.
+  - name: local_team_id
+    description: Care professional team identifier assigned locally by the provider.
   - name: administrative_category_code
     description: Submitted administrative category code. Unmatched values remain visible.
   - name: consultation_type_code
     description: Submitted consultation type code. Unmatched values remain visible.
   - name: care_contact_subject_code
     description: Submitted care contact subject code. Unmatched values remain visible.
-  - name: group_therapy_indicator
+  - name: group_therapy_code
     description: Submitted group therapy code; null is unknown.
   - name: cancellation_date
     description: Source cancellation date. Retained as supplied with date precision; not inferred from
@@ -107,19 +113,35 @@ models:
       or missing person identifier.
   - name: provider_organisation_code
     description: Provider organisation code supplied by CSDS.
+  - name: provider_organisation_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: submitted_commissioner_code
     description: Commissioner supplied with this source record.
+  - name: submitted_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
+  - name: source_icb_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_sub_icb_commissioner_code
     description: Source-derived commissioner field. No local attribution fallback or current-footprint
       remapping is applied.
+  - name: source_sub_icb_commissioner_name
+    description: Latest organisation name from the shared organisation reference, including closed organisations.
+      UKHFD ODS API takes precedence; Dictionary supplies codes absent from UKHFD. Null when the code
+      is unmatched.
   - name: source_commissioner_derivation_reason
-    description: Source-derived commissioner field. No local attribution fallback or current-footprint
-      remapping is applied.
-  - name: unique_submission_id
-    description: Source unique submission id.
+    description: Source-supplied reason for derived commissioner attribution. Retained without a verified
+      code-to-label mapping; no local attribution rule or current-footprint remapping is applied.
+  - name: submission_id
+    description: Identifier of the accepted submission containing the selected source row.
   - name: reporting_period_start_date
     description: Source reporting period start date. Retained as supplied with date precision; not inferred
       from receipt time.
@@ -148,6 +170,6 @@ models:
   - name: legacy_consultation_medium_name
     description: Newest authoritative reference description of the accompanying code, including retired
       definitions. Null when the supplied code is unmatched.
-  - name: group_therapy_indicator_name
+  - name: group_therapy_name
     description: Newest authoritative reference description of the accompanying code, including retired
       definitions. Null when the supplied code is unmatched.
