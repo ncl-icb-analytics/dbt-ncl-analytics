@@ -86,8 +86,8 @@ seed, so the CSDS reference has its own source and published domains. The
 generator carries concept and precision through continuation rows. It preserves
 the workbook row and collection start date.
 
-ASQ-3 rows represent dimension totals, with a published range of 0–60 and one
-decimal place. ASQ:SE publishes integer totals of 0–465. EQ-5D-5L response 9
+ASQ-3 rows represent dimension totals, with a published range of 0 to 60 and one
+decimal place. ASQ:SE publishes integer totals of 0 to 465. EQ-5D-5L response 9
 means "Missing value" for its five dimensions, while Clinical Frailty Scale
 response 9 means "Terminally ill". Non-score interpretation belongs to the
 concept and response pair. No numeric range is inferred for the EQ-5D index
@@ -216,7 +216,7 @@ shared latest UKHFD ODS definition, with Dictionary fallback for absent codes.
 The largest code gap is historical Read-v2 immunisation delivery. Of 985,817
 retained Read-v2 immunisations, 974,621 have unlabelled numeric codes. Those
 unlabelled numeric values span 973,198 distinct tokens and occur only in retained
-reporting years 2017�2020. The source values do not equal the recorded person,
+reporting years 2017 to 2020. The source values do not equal the recorded person,
 local patient, source row or record-number identifiers. The raw interface selects
 the correctly named immunisation-procedure field. This unusual cardinality needs
 delivery-source investigation; a larger terminology dictionary alone does not
@@ -257,3 +257,66 @@ agreements, no disagreements and 36,798,335 unavailable comparisons. No missing
 person identifier receives a known activity-consistency result. The 396 missing
 clinical times remain absent. Full-stack compilation also passed with 6,888
 nodes, including hooks.
+
+## Legacy immunisation investigation
+
+The follow-up investigation on 9 September 2026 found no justified code
+replacement for the 974,621 unlabelled numeric Read-v2 immunisations. All are
+submitted under CSDS version 1.0, with retained reporting periods between
+1 October 2017 and 30 June 2020. Their 973,198 distinct tokens remain unchanged.
+The [retained Snowflake diagnostics](../scripts/snowflake/profile_csds_legacy_immunisation.sql)
+return aggregate results only and require the existing DEV clinical fact and
+legacy source views. They do not create or alter warehouse objects.
+
+The [CSDS ETOS v1.6.10](https://digital.nhs.uk/binaries/content/assets/website-assets/data-and-information/datasets/community-services/csds_etos_v1.6.10_final.xlsx)
+defines C501020 as a clinical terminology code, with format checks specific to
+the declared procedure scheme. The relevant rule was updated in v1.6.2, so it
+does not establish the delivery rules applied to these v1.0 submissions.
+C501D37 includes the clinical code alongside person, provider and administration
+date in the successor definition. Matching only person, provider and date loses
+that distinction and cannot establish which vaccination a replacement describes.
+
+The active CYP501 view passes the shared source through without changing its
+columns. Its declared column order agrees with the shared table metadata, and
+the raw model selects the correctly named immunisation-procedure field. The
+source code does not equal the row's recorded patient, local patient, source row,
+submission or record-number identifiers. This does not establish whether the
+unusual values originated in a provider submission or an upstream transformation.
+Snowflake does not expose the producer's table DDL through this shared database.
+
+The deprecated national CYP501 source contains 829,572 rows and 821,889 distinct
+source identifiers. Its mapped and master SNOMED code and term fields are all
+null. The deprecated BSP source is empty. Comparing the unresolved current
+records with the national legacy source gave these results:
+
+| Comparison | Result |
+| --- | ---: |
+| Same source identifier and provider | 0 records |
+| Person present in the legacy source | 419,861 records |
+| Same person, provider and administration date | 91,476 records |
+| One legacy code at that broad person/provider/date combination | 89,037 records |
+| Matching submission, local patient or record-number identifier among the broad matches | 0 rows for each check |
+
+The 89,037 single-code candidates contain only 24 legacy tokens. None has a
+scheme-qualified Read label or a complete Read-code/term-code migration match.
+Neither the terminology nor the occurrence evidence supports copying these
+codes into the current records. More than one vaccination can occur on a day.
+
+`REPORTING.MAIN_DATA` contains CSDS referral, contact and contact-activity tables,
+with no separate immunisation table. The supplied contact-activity SQL reads
+`Simple.tblCare_Activity_Coding` and joins its code directly to a preferred
+SNOMED description without checking the submitted coding scheme. That lookup
+does not establish that a Read-coded immunisation is a SNOMED concept and should
+not be copied into this fact.
+
+A search of successful CYP501-related creation statements in the available
+365-day query history found another author's `Simple.tblPatient` creation query
+on 7 May 2026. Its immunisation section groups and counts the same submitted
+code, scheme and administration date. It supplies no alternate code, mapping or
+repair. The local deployment SQL also contains no CYP501-specific repair.
+
+These checks rule out a usable mapping in the inspected legacy objects and
+available creation SQL. Resolving this population needs the upstream delivery
+owner to establish how the v1.0 procedure field was populated. No clinical
+meaning has been inferred from numeric shape, internal dictionary identifiers
+or same-day records.
