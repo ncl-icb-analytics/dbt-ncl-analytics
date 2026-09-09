@@ -739,3 +739,51 @@ sources:
             quote: true
           - name: Char_8_ASCII_Index
             quote: true
+
+  - name: ukhfd_read_codes
+    database: '"UKHFD"'
+    schema: '"Read_Codes"'
+    description: Historical national Read code terminology definitions.
+    config:
+      meta:
+        domain: shared
+        raw_prefix: raw_ukhfd
+    tables:
+    - name: read_v2_terms
+      identifier: '"dim_KV2_SCD"'
+      description: Read v2 term definitions, including historical revisions
+      columns:
+      - name: Term_Key
+        quote: true
+      - name: Uniquifier
+        quote: true
+      - name: Term_30
+        quote: true
+      - name: Term_60
+        quote: true
+      - name: Term_198
+        quote: true
+      - name: Term_Code
+        quote: true
+      - name: Language_Code
+        quote: true
+      - name: Read_Code
+        quote: true
+      - name: Status_Flag
+        quote: true
+      - name: Source_File_Name
+        quote: true
+      - name: Unique_Column
+        quote: true
+      - name: In_Source_Data
+        quote: true
+      - name: Import_Date
+        quote: true
+      - name: Created_Date
+        quote: true
+      - name: Is_Latest
+        quote: true
+      - name: Effective_From
+        quote: true
+      - name: Effective_To
+        quote: true

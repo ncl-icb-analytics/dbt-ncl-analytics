@@ -22,9 +22,21 @@ with memberships as (
     from candidates
     qualify priority = min(priority) over (partition by coding_system, code)
 )
-select coding_system, code, dictionary_read_code, term, match_type,
-    -- Non-positive dictionary values indicate no usable SNOMED mapping.
-    iff(try_to_number(snomed_ct_code) > 0, snomed_ct_code::varchar, null) as snomed_ct_code
-from preferred
--- Ambiguous alternatives remain unresolved rather than selecting an arbitrary term.
-qualify count(*) over (partition by coding_system, code) = 1
+, dictionary as (
+    select coding_system, code, dictionary_read_code, term, match_type,
+        -- Non-positive dictionary values indicate no usable SNOMED mapping.
+        iff(try_to_number(snomed_ct_code) > 0, snomed_ct_code::varchar, null) as snomed_ct_code
+    from preferred
+    -- Ambiguous alternatives remain unresolved rather than selecting an arbitrary term.
+    qualify count(*) over (partition by coding_system, code) = 1
+)
+select coding_system, code, dictionary_read_code, term, match_type, snomed_ct_code,
+    'Dictionary.dbo.ReadCodes' as definition_source
+from dictionary
+union all
+select 'read_v2', h.code, null::varchar, h.term, 'read_v2_term_code', null::varchar,
+    'UKHFD Read v2 term history'
+from {{ ref('stg_ukhfd_read_v2_term') }} as h
+where not exists (
+    select 1 from dictionary d where d.coding_system = 'read_v2' and d.code = h.code
+)

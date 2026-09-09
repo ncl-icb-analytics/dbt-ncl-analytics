@@ -278,3 +278,41 @@ placeholders remain unresolved. Independent review found no blocking issue in
 scheme routing, exact-match precedence or the historical source interpretation.
 The updated aggregate profile compiled and executed successfully, including
 separate counts for existing reference matches and historical aliases.
+
+
+## Historical Read v2 term labels
+
+The shared `read_code` reference now retains exact seven-character Read v2
+term codes from UKHFD `Read_Codes.dim_KV2_SCD`. The five-character Read code
+and two-character term code remain case-sensitive text, including dots,
+leading zeroes and letter suffixes. The latest definition is selected across
+full source history without excluding retired terms or absent delivery rows.
+Term_198 takes precedence over Term_60 and Term_30 where populated.
+
+[NHS Digital's CodeableConcept guidance, section 2.6.1.2](https://github.com/nhsconnect/gpconnect/blob/3027e354fc146623e7bd561700ebc750bb839189/pages/accessrecord_structured/GuidanceOnCodeableConcept.pdf)
+explains that the seven-character representation identifies a specific term.
+Alternative terms are not always synonyms of the five-character concept.
+The fallback therefore supplies only the exact historical term, with no
+inherited or inferred SNOMED mapping. Section 2.6.1.3 distinguishes CTV3 term
+identifiers, which are not accepted as standalone concept codes here.
+
+Existing Dictionary matches retain precedence, terms and mappings. New rows
+have match type `read_v2_term_code` and definition source
+`UKHFD Read v2 term history`. The activity fact exposes the definition source
+for each procedure, finding and observation name. Historical term availability
+does not establish current clinical validity.
+
+
+The source contains 268,410 rows and 174,921 distinct full term codes.
+Repeated revision keys had no conflicting term text. Every full historical code
+is present in staging and the shared reference. The fallback adds 174,921 Read v2
+term labels and no SNOMED mappings. All 267,606 existing Read v2 and 372,113
+CTV3 Dictionary matches retain their original fields, confirmed by matching
+aggregate fingerprints before and after the change.
+
+The targeted DEV build passed four models and 14 tests, including original
+Dictionary meaning, historical term preservation and activity source grains.
+All 55,189,449 activity rows and their existing procedure, finding and observation
+names remain unchanged. Every populated activity clinical name has a definition
+source, and no absent name receives one. The clinical-record PR validates the
+additional immunisation labels that use these full term codes.

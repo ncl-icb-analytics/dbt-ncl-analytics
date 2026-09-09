@@ -162,3 +162,12 @@ models:
   - name: observation_unit_match_type
     description: Exact reference match type or csds_etos_alias for a historical context-qualified spelling.
       Null when unmatched. Source unit and observation value are unchanged.
+  - name: procedure_name_definition_source
+    description: Reference supplying procedure_name, including UKHFD historical Read v2 term definitions.
+      Null when no name resolves; a label does not itself establish a SNOMED mapping.
+  - name: finding_name_definition_source
+    description: Reference supplying finding_name, including UKHFD historical Read v2 term definitions.
+      Null when no name resolves; a label does not itself establish a SNOMED mapping.
+  - name: observation_name_definition_source
+    description: Reference supplying observation_name, including UKHFD historical Read v2 term definitions.
+      Null when no name resolves; a label does not itself establish a SNOMED mapping.
