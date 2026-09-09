@@ -222,8 +222,8 @@ the correctly named immunisation-procedure field. This unusual cardinality needs
 delivery-source investigation; a larger terminology dictionary alone does not
 explain or repair it. Records and their unmatched status remain intact.
 
-Full UKHFD SNOMED concept and description history adds no matches for the
-remaining records submitted as SNOMED CT. Read gaps have no case-only matches,
+Full UKHFD SNOMED description history adds no concept-identifier matches for
+the remaining records submitted as SNOMED CT. Read gaps have no case-only matches,
 and source clinical codes contain no outer padding. Some unlabelled CTV3 tokens
 occur in UKHFD migration maps, but a mapped target description is not the original
 Read term. This change does not relabel a submitted scheme or treat a migration
@@ -315,9 +315,11 @@ on 7 May 2026. Its immunisation section groups and counts the same submitted
 code, scheme and administration date. It supplies no alternate code, mapping or
 repair. The local deployment SQL also contains no CYP501-specific repair.
 
-These checks rule out a usable mapping in the inspected legacy objects and
-available creation SQL. Resolving this population needs the upstream delivery
-owner to establish how the v1.0 procedure field was populated. No clinical
+These checks found no usable replacement in the inspected legacy objects or
+available creation SQL. The later full Read-term history check below identifies
+18 exact seven-character term labels. Explaining the remaining numeric values
+needs the upstream delivery owner to establish how the v1.0 procedure field was
+populated. No clinical
 meaning has been inferred from numeric shape, internal dictionary identifiers
 or same-day records.
 
@@ -357,3 +359,58 @@ unchanged before and after the build.
 The final full-stack compile passed with 6,904 nodes including hooks: 2,070
 models, 4,713 tests, 28 snapshots, 40 seeds and 48 analyses. Existing optional
 credential and unused-configuration warnings remain unrelated to this change.
+
+
+## Historical clinical labels
+
+Retirement does not remove a code's historical meaning. Shared references must
+retain historical codes with their latest available definition. SNOMED's
+[concept permanence rule](https://docs.snomed.org/snomed-ct-specifications/snomed-ct-release-file-specification/release-types-packages-and-files/3.1-common-features-of-all-release-files/3.1.4-meaning-of-the-active-field)
+explicitly preserves inactive concepts and their readable descriptions. The
+current staging model retains 312,564 inactive SNOMED concepts; it has no
+active-only filter. The Read reference likewise has no retirement filter.
+
+The [historical-label diagnostics](../scripts/snowflake/profile_csds_historical_labels.sql)
+compare unresolved submitted codes with every available UKHFD revision, without
+filtering status, `Is_Latest` or `In_Source_Data`. UKHFD contains 157,236 distinct
+Read v2 concept codes, 332,112 CTV3 concept codes and their term histories. No
+additional unresolved record matches a concept label within its declared Read
+system. This finding concerns these unmatched values, not the validity of Read
+coding in historical records.
+
+The full Read v2 term archive does identify 18 exact seven-character labels in
+the numeric immunisation population. [NHS Digital's terminology guidance,
+page 11](https://github.com/nhsconnect/gpconnect/blob/3027e354fc146623e7bd561700ebc750bb839189/pages/accessrecord_structured/GuidanceOnCodeableConcept.pdf)
+defines this representation as the five-character Read code followed by its
+two-character term code. The CSDS ETOS Clinical Terminology Validations sheet
+accepts five- or seven-character Read values. The shared reference now uses the
+latest available UKHFD term for each full code, including historical codes,
+after existing Dictionary matches. It exposes `UKHFD Read v2 term history`
+provenance. These terms do not inherit a five-character code's SNOMED mapping:
+the NHS guidance warns that alternative Read terms are not always synonyms.
+A literal terminology label does not establish that an immunisation was coded
+appropriately.
+
+Two larger apparent sources of labels do not justify changing the output:
+
+- Dictionary entries without Read system membership cover 5,106,887 unlabelled
+  CTV3 records and 912 Read v2 records. Every matching term is a `Read Code:`
+  prefix followed by the submitted code. These are placeholders, not labels.
+- Separate UKHFD CTV3 term identifiers match 1,176,619 records. The NHS guidance
+  states that a CTV3 term identifier identifies text and needs its concept code
+  to establish clinical meaning. Some have multiple historical concept links;
+  others have none. They remain investigation candidates, not clinical labels.
+
+The [NHS England Terminology Server](https://digital.nhs.uk/services/terminology-server)
+also holds Read 4-byte, Read v2 and CTV3 releases from 2009 to 2018. Its historical
+coverage is a further source for reconciliation; no unresolved source tokens
+were sent to that external service during this investigation.
+
+
+The historical-term build passed the clinical fact and all nine selected tests
+in 51 seconds. It added 18 labels, bringing clinical description coverage to
+30,200,532 records and leaving 974,603 numeric Read v2 immunisations unlabelled.
+All 37,606,281 record keys remain unique. Aggregate fingerprints confirm that
+existing labels and mappings, submitted codes and values, units, clinical times
+and assessment results are unchanged. None of the new term labels receives a
+SNOMED mapping. Full-stack compilation passed all 6,912 nodes.

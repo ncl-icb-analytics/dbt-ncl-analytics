@@ -21,7 +21,7 @@ with labelled as (
         , coalesce(snomed.preferred_term, icd.description, read_code.term) as clinical_description
         , case when snomed.snomed_code is not null then 'Dictionary.SNOMED.Concept'
             when icd.code is not null then 'Dictionary.dbo.Diagnosis'
-            when read_code.code is not null then 'Dictionary.dbo.ReadCodes' end as clinical_label_source
+            when read_code.code is not null then read_code.definition_source end as clinical_label_source
         , read_code.match_type as read_code_match_type
         , read_code.snomed_ct_code::varchar as dictionary_snomed_code
         , mapped_snomed.preferred_term as dictionary_snomed_description
