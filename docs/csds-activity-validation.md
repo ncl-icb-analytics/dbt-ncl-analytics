@@ -132,7 +132,6 @@ rechecks source grains, parent linkage, unknown identities, supplied age and
 terminology coverage from the accepted staging and reporting interfaces.
 Compile it with the established DEV target; no patient rows are returned.
 
-
 ## Analyst interface review, 9 September 2026
 
 Reporting uses `activity_id`, `contact_id`, `referral_id`, `team_id` and
@@ -186,7 +185,6 @@ activity, service, scheme and reason codes retain null names. The reusable
 aggregate profile now includes source outliers, clinical and organisation label
 coverage, and latest-parent differences.
 
-
 The post-change DEV build passed all four selected models and 15 tests,
 including both individual-key reconciliations and the new submitted/latest
 parent flag test. The activity fact built in 68 seconds and the service fact
@@ -205,3 +203,59 @@ The updated committed aggregate profile compiled and executed successfully.
 `dbt ls` found no additional reporting consumers on this branch; the stacked
 clinical-record PR owns its dependent rebuild. The existing activity selector
 and summary models are unaffected by these reporting aliases and label joins.
+
+## Deeper unit investigation
+
+Of the 2,161,676 unresolved units, 1,268,303 are numeric-only values from
+provider RYX. Of these, 1,268,300 are the zero token and none is UCUM unity
+(`1`). The legacy `REPORTING.MAIN_DATA.CSDS_CARE_CONTACT_ACTIVITY` table has no
+unit output. `DATA_LAKE.CSDS_SIMPLE.tblCare_Activity_Coding` retains the same unit
+on all 1,255,304 matching coded observations, with no changed or ambiguous units.
+The other 12,999 source occurrences have no observation code. The DATA_LAKE
+views directly expose the upstream shared database; their DDL adds no unit
+translation. Upstream DDL cannot be retrieved from the shared database.
+
+Joining numeric values to Dictionary surrogate unit IDs would assign an
+unknown/N/A label to at least 1,267,430 records. That coincidence does not establish
+a foreign-key relationship or a physical unit. No independent conversion was
+found in accessible view/procedure definitions or relevant DDL from the previous
+90 days. The original source unit remains visible and no numeric decoding is proposed.
+
+Case-folded matching offers 553,066 potential additional labels, but UCUM
+case-sensitive and case-insensitive representations are distinct. Generic
+upper-casing would not be a safe unit resolver. See
+[UCUM sections 3, 27 and 28](https://ucum.org/ucum).
+
+The proposed CSDS-specific fallback uses only the historical measurement contexts
+published in the [ETOS v1.6.10 workbook](https://digital.nhs.uk/binaries/content/assets/website-assets/data-and-information/datasets/community-services/csds_etos_v1.6.10_final.xlsx).
+Change Control entries 395, 399 and 401 record changes dated 8 September 2022,
+version 1.6.3. Their pre-amendment notes state "UCUM UNIT OF MEASUREMENT (case
+insensitive)" and define these spellings:
+
+| Measurement concept | Historical field | Accepted spellings, ignoring case | Canonical unit |
+|---|---|---|---|
+| Weight, SNOMED CT 27113001 | C202D48 | kg, kilograms | kg |
+| Height, SNOMED CT 50373000 | C202D47 | cm; m | cm; m respectively |
+| BMI, SNOMED CT 60621009 | C201D49 | kg/m2, kg/m² | kg/m2 |
+
+These notes were moved out of the ETOS derivations. Current derived-field rows
+say the logic is determined internally. The fallback therefore labels historical
+spellings with provenance `CSDS ETOS historical unit alias`; it does not claim to implement
+the current NHS derivation algorithm. It neither calculates BMI nor converts or
+validates observation values. Canonical descriptions and physical quantities
+come from the existing unit reference.
+
+A source SNOMED code must match the named measurement concept. Read v2 and CTV3
+codes qualify only through a positive Dictionary SNOMED mapping. Existing exact
+unit matches win. The proposed fallback covers 83,494 native SNOMED weight
+observations and 77,889 Read observations mapped to BMI, a total of 161,383
+additional labels. It does not apply to the other case-fold candidates.
+Synthetic checks cover measurement restrictions, unknown context, the numeric
+placeholder and exact-match precedence. This proposal awaits the user's decision
+before warehouse application.
+
+The retained read-only Snowflake script
+[`profile_csds_unit_gaps.sql`](../scripts/snowflake/profile_csds_unit_gaps.sql)
+rechecks numeric placeholders, case-fold candidates, the CSDS_SIMPLE comparison
+and hypothetical Dictionary-key matches. Measurement categories in the hypothetical key comparison require the
+submitted SNOMED coding scheme.

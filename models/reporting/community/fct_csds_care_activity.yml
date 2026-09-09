@@ -145,7 +145,7 @@ models:
     description: Authoritative reference used to label the unit; null when unmatched.
   - name: provider_organisation_name
     description: Latest available provider name, preferring UKHFD ODS API and retaining closed organisations.
-      Dictionary supplies names for codes absent from UKHFD.
+      Dictionary supplies names absent from the API; the UKHFD closed archive supplies codes absent from both.
   - name: procedure_name
     description: Authoritative description matched using the supplied procedure code and coding scheme.
       SNOMED CT and Read dictionaries supply terms. Null means the code
