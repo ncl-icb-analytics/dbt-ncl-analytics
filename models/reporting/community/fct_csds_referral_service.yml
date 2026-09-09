@@ -84,7 +84,8 @@ models:
       when the parent or either person is absent.
   - name: is_referral_occurrence_consistent
     description: Whether the latest referral is the exact same delivered source row as the historical
-      parent; null when either occurrence is absent.
+      parent; null when either occurrence is absent. False can mean a legitimate newer
+      parent revision; it does not itself indicate a source error.
   - name: provider_organisation_name
     description: Latest available provider name, preferring UKHFD ODS API and retaining closed organisations.
       Dictionary supplies names for codes absent from UKHFD.

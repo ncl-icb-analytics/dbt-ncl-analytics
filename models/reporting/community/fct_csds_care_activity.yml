@@ -133,7 +133,8 @@ models:
       when the parent or either person is absent.
   - name: is_contact_occurrence_consistent
     description: Whether the latest contact is the exact same delivered source row as the historical parent;
-      null when either occurrence is absent.
+      null when either occurrence is absent. False can mean a legitimate newer
+      parent revision; it does not itself indicate a source error.
   - name: observation_unit_name
     description: Readable unit description from the shared clinical unit reference; null for absent or
       unmatched source units.
