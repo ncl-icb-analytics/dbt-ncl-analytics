@@ -146,7 +146,8 @@ are not included because their submission-level linkage needs separate source wo
 Flags beginning `is_submitted_` describe the source parent from the same
 submission. The shorter `is_contact_` and `is_referral_` flags describe the
 latest reporting parent. Person agreement stays null when either person is
-unknown. Occurrence agreement checks the exact delivered parent row. Dates,
+unknown. Occurrence agreement checks the exact delivered parent row. A false value can
+mean a legitimate newer parent revision, not a source error. Dates,
 age and patient identity continue to come from the submitted context.
 
 The aggregate review found 1,210 activities whose latest contact is a different
@@ -184,3 +185,23 @@ row, but is not applied as a general coding rule. The remaining unsupported
 activity, service, scheme and reason codes retain null names. The reusable
 aggregate profile now includes source outliers, clinical and organisation label
 coverage, and latest-parent differences.
+
+
+The post-change DEV build passed all four selected models and 15 tests,
+including both individual-key reconciliations and the new submitted/latest
+parent flag test. The activity fact built in 68 seconds and the service fact
+in 25 seconds. All 85 documented output columns were profiled again: none was
+wholly empty and none contained blank strings. Row counts, supplied fields,
+source outliers and categorical coverage matched the pre-change baseline.
+Both provider-name columns are populated on every row.
+
+| Clinical item | Supplied code | Matched name | Unmatched name |
+|---|---:|---:|---:|
+| Procedure | 9,373,770 | 8,962,366 | 411,404 |
+| Finding | 8,923,846 | 7,935,370 | 988,476 |
+| Observation | 15,273,412 | 11,691,692 | 3,581,720 |
+
+The updated committed aggregate profile compiled and executed successfully.
+`dbt ls` found no additional reporting consumers on this branch; the stacked
+clinical-record PR owns its dependent rebuild. The existing activity selector
+and summary models are unaffected by these reporting aliases and label joins.
