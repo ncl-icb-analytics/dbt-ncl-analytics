@@ -32,7 +32,7 @@ select
     , i.accepted_source_record_count as accepted_source_record_count
     , null::boolean as is_care_activity_linked
     , null::boolean as is_care_activity_person_consistent
-    , null::boolean as is_care_contact_person_consistent
+    , null::boolean as is_submitted_contact_person_consistent
 from {{ ref('int_csds_coded_immunisation') }} as i
 
 union all
@@ -71,7 +71,7 @@ select
     , 1::number as accepted_source_record_count
     , null::boolean as is_care_activity_linked
     , null::boolean as is_care_activity_person_consistent
-    , null::boolean as is_care_contact_person_consistent
+    , null::boolean as is_submitted_contact_person_consistent
 from {{ ref('stg_csds_referral_assessment') }} as r
 
 union all
@@ -85,13 +85,13 @@ select
     , r.organisation_code_provider as provider_organisation_code
     , null::varchar as local_patient_id
     , null::varchar as immunisation_responsible_organisation_code
-    , a.unique_service_request_identifier as referral_source_record_id
+    , a.referral_id as referral_source_record_id
     , {{ dbt_utils.generate_surrogate_key(['r.unique_submission_id', 'r.unique_care_activity_identifier']) }} as care_activity_source_record_id
     , r.unique_care_activity_identifier as unique_care_activity_identifier
-    , a.unique_care_contact_identifier as unique_care_contact_identifier
-    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_contact_person_consistent, a.care_contact_at, null) as clinical_at
-    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
-    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_contact_person_consistent, 'same_submission_care_activity_contact', null) as clinical_time_basis
+    , a.contact_id as unique_care_contact_identifier
+    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_submitted_contact_person_consistent, a.care_contact_at, null) as clinical_at
+    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_submitted_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
+    , iff(a.source_record_id is not null and r.person_id is not null and r.person_id = a.person_id and a.is_submitted_contact_person_consistent, 'same_submission_care_activity_contact', null) as clinical_time_basis
     , null::date as source_clinical_date
     , r.dmic_observation_date::date as source_derived_date
     , 'fixed_snomed' as coding_scheme_kind
@@ -110,11 +110,11 @@ select
     , 1::number as accepted_source_record_count
     , a.source_record_id is not null as is_care_activity_linked
     , iff(a.source_record_id is null or r.person_id is null or a.person_id is null, null, r.person_id = a.person_id) as is_care_activity_person_consistent
-    , a.is_contact_person_consistent as is_care_contact_person_consistent
+    , a.is_submitted_contact_person_consistent as is_submitted_contact_person_consistent
 from {{ ref('stg_csds_activity_assessment') }} as r
 left join {{ ref('fct_csds_care_activity') }} as a
-    on r.unique_submission_id = a.unique_submission_id
-    and r.unique_care_activity_identifier = a.unique_care_activity_identifier
+    on r.unique_submission_id = a.submission_id
+    and r.unique_care_activity_identifier = a.activity_id
     and r.organisation_code_provider = a.provider_organisation_code
 
 union all
@@ -128,21 +128,21 @@ select
     , a.provider_organisation_code as provider_organisation_code
     , null::varchar as local_patient_id
     , null::varchar as immunisation_responsible_organisation_code
-    , a.unique_service_request_identifier as referral_source_record_id
+    , a.referral_id as referral_source_record_id
     , a.source_record_id as care_activity_source_record_id
-    , a.unique_care_activity_identifier as unique_care_activity_identifier
-    , a.unique_care_contact_identifier as unique_care_contact_identifier
-    , iff(a.is_contact_person_consistent, a.care_contact_at, null) as clinical_at
-    , iff(a.is_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
-    , iff(a.is_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
+    , a.activity_id as unique_care_activity_identifier
+    , a.contact_id as unique_care_contact_identifier
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_at, null) as clinical_at
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
+    , iff(a.is_submitted_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
     , null::date as source_clinical_date
     , null::date as source_derived_date
     , 'procedure' as coding_scheme_kind
-    , a.procedure_scheme_in_use_community_care as coding_scheme_code
-    , a.coded_procedure_clinical_terminology as clinical_code
+    , a.procedure_scheme_code as coding_scheme_code
+    , a.procedure_code as clinical_code
     , null::varchar as clinical_value
     , null::varchar as unit_of_measurement_code
-    , a.unique_submission_id as unique_submission_id
+    , a.submission_id as unique_submission_id
     , a.reporting_period_start_date as reporting_period_start_date
     , a.reporting_period_end_date as reporting_period_end_date
     , a.source_file_received_at as source_file_received_at
@@ -152,10 +152,10 @@ select
     , a.reporting_period_end_date::date as last_reported_period_end_date
     , 1::number as accepted_source_record_count
     , true as is_care_activity_linked
-    , true as is_care_activity_person_consistent
-    , a.is_contact_person_consistent as is_care_contact_person_consistent
+    , iff(a.person_id is null, null, true) as is_care_activity_person_consistent
+    , a.is_submitted_contact_person_consistent as is_submitted_contact_person_consistent
 from {{ ref('fct_csds_care_activity') }} as a
-where a.coded_procedure_clinical_terminology is not null
+where a.procedure_code is not null
 
 union all
 
@@ -168,21 +168,21 @@ select
     , a.provider_organisation_code as provider_organisation_code
     , null::varchar as local_patient_id
     , null::varchar as immunisation_responsible_organisation_code
-    , a.unique_service_request_identifier as referral_source_record_id
+    , a.referral_id as referral_source_record_id
     , a.source_record_id as care_activity_source_record_id
-    , a.unique_care_activity_identifier as unique_care_activity_identifier
-    , a.unique_care_contact_identifier as unique_care_contact_identifier
-    , iff(a.is_contact_person_consistent, a.care_contact_at, null) as clinical_at
-    , iff(a.is_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
-    , iff(a.is_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
+    , a.activity_id as unique_care_activity_identifier
+    , a.contact_id as unique_care_contact_identifier
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_at, null) as clinical_at
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
+    , iff(a.is_submitted_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
     , null::date as source_clinical_date
     , null::date as source_derived_date
     , 'finding' as coding_scheme_kind
-    , a.finding_scheme_in_use_community_care as coding_scheme_code
-    , a.coded_finding_coded_clinical_entry as clinical_code
+    , a.finding_scheme_code as coding_scheme_code
+    , a.finding_code as clinical_code
     , null::varchar as clinical_value
     , null::varchar as unit_of_measurement_code
-    , a.unique_submission_id as unique_submission_id
+    , a.submission_id as unique_submission_id
     , a.reporting_period_start_date as reporting_period_start_date
     , a.reporting_period_end_date as reporting_period_end_date
     , a.source_file_received_at as source_file_received_at
@@ -192,10 +192,10 @@ select
     , a.reporting_period_end_date::date as last_reported_period_end_date
     , 1::number as accepted_source_record_count
     , true as is_care_activity_linked
-    , true as is_care_activity_person_consistent
-    , a.is_contact_person_consistent as is_care_contact_person_consistent
+    , iff(a.person_id is null, null, true) as is_care_activity_person_consistent
+    , a.is_submitted_contact_person_consistent as is_submitted_contact_person_consistent
 from {{ ref('fct_csds_care_activity') }} as a
-where a.coded_finding_coded_clinical_entry is not null
+where a.finding_code is not null
 
 union all
 
@@ -208,21 +208,21 @@ select
     , a.provider_organisation_code as provider_organisation_code
     , null::varchar as local_patient_id
     , null::varchar as immunisation_responsible_organisation_code
-    , a.unique_service_request_identifier as referral_source_record_id
+    , a.referral_id as referral_source_record_id
     , a.source_record_id as care_activity_source_record_id
-    , a.unique_care_activity_identifier as unique_care_activity_identifier
-    , a.unique_care_contact_identifier as unique_care_contact_identifier
-    , iff(a.is_contact_person_consistent, a.care_contact_at, null) as clinical_at
-    , iff(a.is_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
-    , iff(a.is_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
+    , a.activity_id as unique_care_activity_identifier
+    , a.contact_id as unique_care_contact_identifier
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_at, null) as clinical_at
+    , iff(a.is_submitted_contact_person_consistent, a.care_contact_time_precision, null) as clinical_time_precision
+    , iff(a.is_submitted_contact_person_consistent, 'same_submission_care_contact', null) as clinical_time_basis
     , null::date as source_clinical_date
     , null::date as source_derived_date
     , 'observation' as coding_scheme_kind
-    , a.observation_scheme_in_use_community_care as coding_scheme_code
-    , a.coded_observation_clinical_terminology as clinical_code
+    , a.observation_scheme_code as coding_scheme_code
+    , a.observation_code as clinical_code
     , a.observation_value::varchar as clinical_value
-    , a.ucum_unit_of_measurement as unit_of_measurement_code
-    , a.unique_submission_id as unique_submission_id
+    , a.observation_unit_code as unit_of_measurement_code
+    , a.submission_id as unique_submission_id
     , a.reporting_period_start_date as reporting_period_start_date
     , a.reporting_period_end_date as reporting_period_end_date
     , a.source_file_received_at as source_file_received_at
@@ -232,7 +232,7 @@ select
     , a.reporting_period_end_date::date as last_reported_period_end_date
     , 1::number as accepted_source_record_count
     , true as is_care_activity_linked
-    , true as is_care_activity_person_consistent
-    , a.is_contact_person_consistent as is_care_contact_person_consistent
+    , iff(a.person_id is null, null, true) as is_care_activity_person_consistent
+    , a.is_submitted_contact_person_consistent as is_submitted_contact_person_consistent
 from {{ ref('fct_csds_care_activity') }} as a
-where a.coded_observation_clinical_terminology is not null or a.observation_value is not null
+where a.observation_code is not null or a.observation_value is not null

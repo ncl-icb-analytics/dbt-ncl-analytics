@@ -10,15 +10,15 @@ with expected as (
     union all
     select 'procedure', source_row_id::varchar
     from {{ ref('fct_csds_care_activity') }}
-    where coded_procedure_clinical_terminology is not null
+    where procedure_code is not null
     union all
     select 'finding', source_row_id::varchar
     from {{ ref('fct_csds_care_activity') }}
-    where coded_finding_coded_clinical_entry is not null
+    where finding_code is not null
     union all
     select 'observation', source_row_id::varchar
     from {{ ref('fct_csds_care_activity') }}
-    where coded_observation_clinical_terminology is not null or observation_value is not null
+    where observation_code is not null or observation_value is not null
 )
 select coalesce(e.clinical_record_type, a.clinical_record_type) as clinical_record_type,
     e.source_row_id as expected_source_row_id, a.source_row_id as actual_source_row_id,

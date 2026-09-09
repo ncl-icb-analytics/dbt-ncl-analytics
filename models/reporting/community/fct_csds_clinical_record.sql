@@ -1,18 +1,23 @@
-with organisations as (
-    select organisation_code, organisation_name
-    from {{ ref('stg_dictionary_dbo_organisation') }}
-    qualify row_number() over (
-        partition by upper(organisation_code)
-        order by coalesce(last_updated, first_created) desc, organisation_name
-    ) = 1
-)
-
-, labelled as (
+with labelled as (
     select
         r.*
         , b.sk_patient_id
         , iff(r.coding_scheme_kind = 'fixed_snomed', 'SNOMED CT', scheme.description)
-            as coding_scheme_description
+            as coding_scheme_name
+        , case
+            when r.coding_scheme_kind = 'fixed_snomed'
+                or (r.coding_scheme_kind = 'procedure' and trim(r.coding_scheme_code) = '06')
+                or (r.coding_scheme_kind = 'finding' and trim(r.coding_scheme_code) = '04')
+                or (r.coding_scheme_kind = 'observation' and trim(r.coding_scheme_code) = '03') then 'SNOMED CT'
+            when (r.coding_scheme_kind = 'procedure' and trim(r.coding_scheme_code) = '04')
+                or (r.coding_scheme_kind = 'finding' and trim(r.coding_scheme_code) = '02')
+                or (r.coding_scheme_kind = 'observation' and trim(r.coding_scheme_code) = '01') then 'Read v2'
+            when (r.coding_scheme_kind = 'procedure' and trim(r.coding_scheme_code) = '05')
+                or (r.coding_scheme_kind = 'finding' and trim(r.coding_scheme_code) = '03')
+                or (r.coding_scheme_kind = 'observation' and trim(r.coding_scheme_code) = '02') then 'CTV3'
+            when r.coding_scheme_kind = 'finding' and trim(r.coding_scheme_code) = '01' then 'ICD-10'
+            else scheme.description
+        end as clinical_code_system
         , coalesce(snomed.preferred_term, icd.description, read_code.term) as clinical_description
         , case when snomed.snomed_code is not null then 'Dictionary.SNOMED.Concept'
             when icd.code is not null then 'Dictionary.dbo.Diagnosis'
@@ -123,9 +128,9 @@ select
     , read_code_match_type
     , dictionary_snomed_code
     , dictionary_snomed_description
-    , coding_scheme_kind
+    , clinical_code_system
     , coding_scheme_code
-    , coding_scheme_description
+    , coding_scheme_name
     , clinical_label_status
     , clinical_at
     , clinical_at::date as clinical_date
@@ -154,16 +159,16 @@ select
     , responsible.organisation_name as immunisation_responsible_organisation_name
     , person_id
     , local_patient_id
-    , referral_source_record_id
+    , referral_source_record_id as referral_id
     , care_activity_source_record_id
-    , unique_care_activity_identifier
-    , unique_care_contact_identifier
+    , unique_care_activity_identifier as activity_id
+    , unique_care_contact_identifier as contact_id
     , is_care_activity_linked
     , is_care_activity_person_consistent
-    , is_care_contact_person_consistent
+    , is_submitted_contact_person_consistent
     , source_clinical_date
     , source_derived_date
-    , coalesce(source_derived_date <> clinical_at::date, false) as is_source_derived_date_inconsistent
+    , source_derived_date <> clinical_at::date as is_source_derived_date_inconsistent
     , clinical_at::date > reporting_period_end_date as is_clinical_date_after_reporting_period
     , iff(clinical_record_type = 'referral_assessment',
         clinical_at::date < reporting_period_start_date, null) as is_assessment_before_reporting_period
@@ -176,11 +181,12 @@ select
     , source_table
     , originating_source_record_id
     , source_row_id
-    , unique_submission_id
+    , unique_submission_id as submission_id
     , source_file_received_at
     , csds_version
     , file_type
 from labelled
-left join organisations as provider on upper(labelled.provider_organisation_code) = upper(provider.organisation_code)
-left join organisations as responsible
-    on upper(labelled.immunisation_responsible_organisation_code) = upper(responsible.organisation_code)
+left join {{ ref('organisation') }} as provider
+    on upper(trim(labelled.provider_organisation_code)) = provider.organisation_code
+left join {{ ref('organisation') }} as responsible
+    on upper(trim(labelled.immunisation_responsible_organisation_code)) = responsible.organisation_code

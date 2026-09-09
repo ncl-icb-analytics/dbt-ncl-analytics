@@ -33,13 +33,14 @@ models:
   - name: clinical_description
     description: Submitted-code label from shared SNOMED CT, ICD-10 or scheme-qualified Read dictionaries, including explicit dictionary alternatives.
       It is not replaced by the mapped SNOMED label.
-  - name: coding_scheme_kind
-    description: procedure, finding, observation or fixed_snomed. Scheme numbers are interpreted within
-      this kind.
+  - name: clinical_code_system
+    description: SNOMED CT, Read v2, CTV3 or ICD-10 for the supported resolvers; other recognised
+      schemes retain their authoritative UKHFD name. Established by the submitted field-specific scheme
+      or assessment specification, never code shape. Null for an unrecognised or absent scheme.
   - name: coding_scheme_code
     description: Submitted community-care scheme. Procedure 06, finding 04 and observation 03 mean SNOMED
       CT. Null for assessments where SNOMED CT is fixed by specification.
-  - name: coding_scheme_description
+  - name: coding_scheme_name
     description: UKHFD scheme label, or specification-fixed SNOMED CT. A dictionary label does not establish
       version-specific submission validity.
   - name: clinical_label_status
@@ -107,28 +108,28 @@ models:
   - name: provider_organisation_code
     description: Organisation submitting the clinical record.
   - name: provider_organisation_name
-    description: Latest available organisation dictionary name for the submitting provider.
+    description: Latest shared name for the submitting provider. UKHFD ODS API takes precedence, with Dictionary fallback.
   - name: immunisation_responsible_organisation_code
     description: Recorded organisation responsible for administering an immunisation. Null for other clinical
       types.
   - name: immunisation_responsible_organisation_name
-    description: Latest available organisation dictionary name for the recorded immunisation organisation.
+    description: Latest shared name for the recorded immunisation organisation. UKHFD ODS API takes precedence, with Dictionary fallback.
   - name: person_id
     description: National CSDS person identifier retained on the source occurrence. Different populated
       identities are not merged.
   - name: local_patient_id
     description: Retained CYP501 provider-local patient identifier. Use with provider_organisation_code;
       it is not a national patient identifier.
-  - name: referral_source_record_id
-    description: Provider-qualified referral key, directly recorded for referral assessments and obtained
-      through the same-submission activity parent for activity components.
+  - name: referral_id
+    description: Provider-qualified referral ID, joining fct_csds_referral.source_record_id. Directly recorded
+      for referral assessments and obtained through the same-submission activity parent for activity components.
   - name: care_activity_source_record_id
     description: Submission and activity occurrence key for fct_csds_care_activity. Retained for activity
       assessments even when the parent is absent.
-  - name: unique_care_activity_identifier
-    description: Provider-qualified activity identifier from the source. Join with unique_submission_id
+  - name: activity_id
+    description: Provider-qualified activity identifier from the source. Join with submission_id
       to the accepted activity occurrence.
-  - name: unique_care_contact_identifier
+  - name: contact_id
     description: Provider-qualified contact identifier from the same-submission parent activity; null
       without an activity parent.
   - name: is_care_activity_linked
@@ -137,7 +138,7 @@ models:
   - name: is_care_activity_person_consistent
     description: True or false only when both assessment and linked activity have populated person IDs.
       Null when a person ID or parent is absent. Components of the activity itself are true.
-  - name: is_care_contact_person_consistent
+  - name: is_submitted_contact_person_consistent
     description: Activity-to-contact person consistency from the same accepted submission. Null when either
       identity or the parent is absent.
   - name: source_clinical_date
@@ -172,7 +173,7 @@ models:
       activity key repeats across its populated components.
   - name: source_row_id
     description: Source table row identifier on the retained accepted occurrence.
-  - name: unique_submission_id
+  - name: submission_id
     description: Accepted submission containing the retained source occurrence.
   - name: source_file_received_at
     description: Time the retained source file was received.
@@ -187,8 +188,8 @@ models:
       precision, excluding known non-score responses. Null otherwise. Compare the same observable and
       scoring method; this does not derive questionnaire totals.
   - name: is_source_derived_date_inconsistent
-    description: True when populated warehouse-derived date and inherited contact date disagree. False
-      when comparison is unavailable.
+    description: True when populated warehouse-derived date and inherited contact date disagree. Null
+      when either date is unavailable.
   - name: is_assessment_before_reporting_period
     description: Whether a referral-assessment completion date precedes its reporting period. Null outside
       referral assessments or without a usable date.

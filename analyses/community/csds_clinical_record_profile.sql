@@ -11,7 +11,7 @@ select
     , count_if(is_source_derived_date_inconsistent) as derived_date_disagreements
     , count_if(is_care_activity_linked = false) as missing_activity_parents
     , count_if(is_care_activity_person_consistent = false) as activity_person_disagreements
-    , count_if(is_care_contact_person_consistent = false) as contact_person_disagreements
+    , count_if(is_submitted_contact_person_consistent = false) as submitted_contact_person_disagreements
     , count_if(is_clinical_date_after_reporting_period) as dates_after_reporting_period
     , count_if(is_assessment_before_reporting_period) as assessments_before_reporting_period
     , count_if(is_assessment_code_in_activity_component) as assessment_codes_in_components
@@ -23,12 +23,48 @@ from {{ ref('fct_csds_clinical_record') }}
 where assessment_response_status is not null
 group by clinical_record_type, assessment_response_status;
 
-select coding_scheme_kind, clinical_label_status, count(*) as record_count
+select clinical_code_system, clinical_label_status, count(*) as record_count
 from {{ ref('fct_csds_clinical_record') }}
-group by coding_scheme_kind, clinical_label_status;
+group by clinical_code_system, clinical_label_status;
 
 select unit_of_measurement_match_type, count(*) as observation_count,
     count_if(unit_of_measurement_code is null) as missing_unit
 from {{ ref('fct_csds_clinical_record') }}
 where clinical_record_type = 'observation'
 group by unit_of_measurement_match_type;
+
+
+-- Code tokens remain inside Snowflake; only format and coverage aggregates leave it.
+select clinical_record_type, clinical_code_system,
+    count(*) as record_count,
+    count_if(clinical_code is not null and clinical_description is null) as unlabelled_codes,
+    count_if(clinical_code <> trim(clinical_code)) as padded_codes,
+    count_if(clinical_description is null and regexp_like(clinical_code, '[0-9]+'))
+        as unlabelled_numeric_codes
+from {{ ref('fct_csds_clinical_record') }}
+group by clinical_record_type, clinical_code_system;
+
+select year(reporting_period_end_date) as reporting_year,
+    count(*) as immunisation_count,
+    count_if(clinical_description is null and regexp_like(clinical_code, '[0-9]+'))
+        as unlabelled_numeric_codes
+from {{ ref('fct_csds_clinical_record') }}
+where clinical_record_type = 'immunisation' and clinical_code_system = 'Read v2'
+group by reporting_year;
+
+select f.clinical_record_type,
+    case
+        when f.clinical_value_numeric is null then 'not_numeric_or_out_of_range'
+        when s.numeric_range_count = 1 and f.clinical_value_numeric not between
+            s.minimum_numeric_value and s.maximum_numeric_value then 'outside_published_range'
+        when s.numeric_range_count = 1
+            and f.clinical_value_numeric <> round(f.clinical_value_numeric, s.decimal_places)
+            then 'outside_published_precision'
+        when s.numeric_range_count = 0 then 'enumeration_or_unpublished_range_unmatched'
+        else 'other_unmatched'
+    end as unmatched_reason,
+    count(*) as record_count
+from {{ ref('fct_csds_clinical_record') }} as f
+left join {{ ref('csds_assessment_scale') }} as s on trim(f.clinical_code) = s.concept_code
+where f.assessment_response_status = 'response_unmatched'
+group by f.clinical_record_type, unmatched_reason;

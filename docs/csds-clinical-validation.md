@@ -188,3 +188,56 @@ These counts describe the accepted source population at validation time. They
 are not fixed data-volume assertions. The legacy contact-activity extract joins
 a separate coded-item table and other sources; its row count is not the grain
 of either the care-activity fact or this clinical fact.
+
+
+## Follow-up profiling on 9 September 2026
+
+Profiling covered all 65 original reporting columns. Every column had populated
+values and none contained blank strings. The historical date and time checks
+found no dates before 1900, future dates, dates after the reporting period or
+conflicts between stored time and declared precision. No new date cutoff was
+introduced. Code lookups had no duplicate organisation, Read or SNOMED keys.
+
+The analyst interface now uses `submission_id`, `referral_id`, `activity_id` and `contact_id`.
+`clinical_code_system` gives a consistent SNOMED CT, Read v2, CTV3 or ICD-10 name.
+The field-specific submitted scheme code and authoritative `coding_scheme_name`
+remain separate. Clinical time uses the submitted contact relationship even
+when a later contact revision changes the current parent.
+`is_submitted_contact_person_consistent` names that historical comparison
+explicitly. Activity components with a missing person ID return null for person
+consistency with their originating activity, rather than asserting agreement.
+This corrects 386 prior true flags: 172 procedures, 140 findings and 74 observations.
+
+The derived-date comparison previously returned false when comparison was
+unavailable for 36,798,335 records. It now returns null without both dates.
+A false result means the two populated dates agree. Organisation names use the
+shared latest UKHFD ODS definition, with Dictionary fallback for absent codes.
+
+The largest code gap is historical Read-v2 immunisation delivery. Of 985,817
+retained Read-v2 immunisations, 974,621 have unlabelled numeric codes. Those
+unlabelled numeric values span 973,198 distinct tokens and occur only in retained
+reporting years 2017–2020. The source values do not equal the recorded person,
+local patient, source row or record-number identifiers. The raw interface selects
+the correctly named immunisation-procedure field. This unusual cardinality needs
+delivery-source investigation; a larger terminology dictionary alone does not
+explain or repair it. Records and their unmatched status remain intact.
+
+Full UKHFD SNOMED concept and description history adds no matches for the
+remaining records submitted as SNOMED CT. Read gaps have no case-only matches,
+and source clinical codes contain no outer padding. Some unlabelled CTV3 tokens
+occur in UKHFD migration maps, but a mapped target description is not the original
+Read term. This change does not relabel a submitted scheme or treat a migration
+map as an equivalent source description.
+
+The 2,156,884 unresolved observation-unit records use 200 distinct tokens. Four
+numeric tokens account for 1,267,074 records; none matches UKHFD UCUM ConceptID
+or the SNOMED concept dictionary. Matching internal dictionary IDs does not
+establish source meaning. Another 553,066 records would match after changing
+case, but UCUM is case-sensitive. No unresolved token matches a historical UCUM
+code or alias omitted by the latest reference. Units remain unchanged until an
+authoritative equivalent is available.
+
+The 102 unmatched assessment responses split into 85 outside the published
+range, one further response outside the permitted precision, six non-numeric or
+outside the numeric representation, and ten unmatched enumerations or values
+without a published range. None receives an interpreted assessment score.
