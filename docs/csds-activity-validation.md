@@ -64,8 +64,8 @@ Procedure, finding and observation scheme aliases with and without the
 activity-type aliases also agree everywhere. New interfaces retain one supplied
 field for each meaning. All supplied mapped/master clinical codes and preferred
 terms are empty in this feed, so these columns are omitted. Original codes,
-coding schemes, observation value and unit remain available. The clinical-record
-models provide long-form clinical terminology without widening parent facts.
+coding schemes, observation value and unit remain available. The activity fact pairs these codes with scheme-qualified clinical names.
+The clinical-record models also provide these items at a long-form clinical grain.
 
 Dictionary joins retain unmatched codes and use the latest available labels.
 They do not claim that current labels describe the meaning at every historical
@@ -131,3 +131,56 @@ The reusable aggregate-only analysis
 rechecks source grains, parent linkage, unknown identities, supplied age and
 terminology coverage from the accepted staging and reporting interfaces.
 Compile it with the established DEV target; no patient rows are returned.
+
+
+## Analyst interface review, 9 September 2026
+
+Reporting uses `activity_id`, `contact_id`, `referral_id`, `team_id` and
+`submission_id`. Local provider identifiers have a `local_` prefix. Staging
+retains source field names. Each fact retains its own `source_record_id` for the
+common adapter interface. `referral_id` joins directly to the referral fact's
+`source_record_id`; `contact_source_record_id` is the distinct hashed contact key.
+Lead professional identifiers are labelled explicitly. CYP901 staffing fields
+are not included because their submission-level linkage needs separate source work.
+
+Flags beginning `is_submitted_` describe the source parent from the same
+submission. The shorter `is_contact_` and `is_referral_` flags describe the
+latest reporting parent. Person agreement stays null when either person is
+unknown. Occurrence agreement checks the exact delivered parent row. Dates,
+age and patient identity continue to come from the submitted context.
+
+The aggregate review found 1,210 activities whose latest contact is a different
+source occurrence with a different date. There were no conflicts between
+populated activity and latest-contact person identifiers, and 396 were unknown.
+For service relationships, 3,137,089 latest referral occurrences differ,
+16,414 latest-parent person identifiers conflict and 275 are unknown. These
+rows remain available. Analysts can select the appropriate flags rather than
+mistaking historical parent agreement for agreement with the latest fact.
+A permanent regression test checks both sets of flags against their named parents.
+
+All provider codes matched the latest UKHFD ODS API names in this snapshot.
+The shared organisation reference retains closed and historical organisations
+and uses Dictionary names for codes absent from UKHFD. Clinical names use the
+supplied scheme to distinguish SNOMED CT, Read v2, CTV3 and ICD-10. Supplied
+codes and observation values are preserved when no label exists.
+
+Of 5,161,846 supplied observation units, 3,000,170 matched the existing unit
+reference and 2,161,676 did not. Numeric-only source units account for
+1,268,303 occurrences. No authoritative meaning was established for these
+values, so their labels remain null. The unit name, symbol and definition
+source make the available mappings visible.
+
+The review profiled every reporting column for nulls and blanks. No supplied
+string fields contained blanks and no output column was wholly empty.
+There were 318 activity durations above 1,440 minutes, no negative durations,
+and three negative supplied contact ages. No activity contact dates were
+outside their reporting periods. Service closure dates exceeded the reporting
+period in 33,621 rows and rejection dates in 8,615 rows. These are source
+quality findings, not authorised corrections or exclusions.
+
+Trimming, changing case and checking all available historical codebook rows
+recovered no missing categorical labels. Padding would recover one service
+row, but is not applied as a general coding rule. The remaining unsupported
+activity, service, scheme and reason codes retain null names. The reusable
+aggregate profile now includes source outliers, clinical and organisation label
+coverage, and latest-parent differences.
