@@ -37,3 +37,14 @@ from dictionary
 where not exists (
     select 1 from ods where ods.organisation_code = dictionary.organisation_code
 )
+union all
+-- The closed archive retains older codes absent from both maintained registers.
+select organisation_code, organisation_name,
+    'UKHFD ODS closed archive' as name_source, source_effective_from_at
+from {{ ref('stg_ukhfd_ods_closed_organisation') }} as archive
+where not exists (
+    select 1 from ods where ods.organisation_code = archive.organisation_code
+)
+and not exists (
+    select 1 from dictionary where dictionary.organisation_code = archive.organisation_code
+)
