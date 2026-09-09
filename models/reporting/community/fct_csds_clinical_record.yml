@@ -137,7 +137,8 @@ models:
       relationship applies.
   - name: is_care_activity_person_consistent
     description: True or false only when both assessment and linked activity have populated person IDs.
-      Null when a person ID or parent is absent. Components of the activity itself are true.
+      Null when a person ID or parent is absent. Activity components are true when their source person ID
+      is populated; otherwise null.
   - name: is_submitted_contact_person_consistent
     description: Activity-to-contact person consistency from the same accepted submission. Null when either
       identity or the parent is absent.

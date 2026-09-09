@@ -137,7 +137,7 @@ The checked-in `analyses/community/csds_clinical_record_profile.sql` supplies
 aggregate coverage, parent, time, response and label checks.
 
 
-## Final shared-DEV evidence
+## Initial shared-DEV evidence on 8 September 2026
 
 The final model build passed six models and 16 selected tests. It rebuilt the
 clinical fact in 21 seconds. A subsequent run passed all eight singular tests
@@ -241,3 +241,19 @@ The 102 unmatched assessment responses split into 85 outside the published
 range, one further response outside the permitted precision, six non-numeric or
 outside the numeric representation, and ten unmatched enumerations or values
 without a published range. None receives an interpreted assessment score.
+
+
+The follow-up build passed both changed clinical models and all nine selected
+tests in 66 seconds; the clinical fact built in 22 seconds. A fresh profile
+confirmed the same 37,606,281 unique records, 30,200,514 clinical descriptions,
+940,526 interpreted scores and 3,000,170 unit labels. All 65 reporting columns
+have populated values and no blank strings. All provider names now come from
+UKHFD ODS API; responsible-organisation coverage remains 2,454,889 records.
+
+There are 36,978,580 named clinical code systems. The remaining 627,701 records
+are observations without a submitted scheme. No SNOMED, Read or ICD label is
+assigned under a different established system. The date comparison has 807,946
+agreements, no disagreements and 36,798,335 unavailable comparisons. No missing
+person identifier receives a known activity-consistency result. The 396 missing
+clinical times remain absent. Full-stack compilation also passed with 6,888
+nodes, including hooks.
