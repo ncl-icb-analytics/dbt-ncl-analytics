@@ -43,6 +43,8 @@ with team_delivery_keys as (
         'activity_unmatched_procedure', count_if(nullif(trim(procedure_code), '') is not null and procedure_name is null),
         'activity_unmatched_finding', count_if(nullif(trim(finding_code), '') is not null and finding_name is null),
         'activity_unmatched_observation', count_if(nullif(trim(observation_code), '') is not null and observation_name is null),
+        'activity_historical_unit_alias', count_if(observation_unit_match_type = 'csds_etos_alias'),
+        'activity_existing_unit_reference', count_if(observation_unit_name is not null and observation_unit_match_type <> 'csds_etos_alias'),
         'activity_unmatched_observation_unit', count_if(nullif(trim(observation_unit_code), '') is not null and observation_unit_name is null),
         'activity_supplied_contact_age', count(age_at_contact),
         'activity_unmatched_type', count_if(nullif(trim(activity_type_code), '') is not null and activity_type_name is null),

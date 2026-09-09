@@ -136,13 +136,14 @@ models:
       null when either occurrence is absent. False can mean a legitimate newer
       parent revision; it does not itself indicate a source error.
   - name: observation_unit_name
-    description: Readable unit description from the shared clinical unit reference; null for absent or
-      unmatched source units.
+    description: Readable unit description from the shared reference, with a historical CSDS alias fallback
+      restricted to the named weight, height or BMI concept. Null for absent or unmatched units.
   - name: observation_unit_symbol
     description: Matched canonical symbol. Original source unit remains in observation_unit_code; values
       are not converted.
   - name: observation_unit_definition_source
-    description: Authoritative reference used to label the unit; null when unmatched.
+    description: Reference used to label the unit, including CSDS ETOS historical unit alias for context-qualified
+      historical spellings. Null when unmatched; not proof of current submission validity.
   - name: provider_organisation_name
     description: Latest available provider name, preferring UKHFD ODS API and retaining closed organisations.
       Dictionary supplies names absent from the API; the UKHFD closed archive supplies codes absent from both.
@@ -158,3 +159,6 @@ models:
     description: Authoritative description matched using the supplied observation code and coding scheme.
       SNOMED CT and Read dictionaries supply terms. Null means the code
       is absent or no supported authoritative match exists. Original code remains unchanged.
+  - name: observation_unit_match_type
+    description: Exact reference match type or csds_etos_alias for a historical context-qualified spelling.
+      Null when unmatched. Source unit and observation value are unchanged.

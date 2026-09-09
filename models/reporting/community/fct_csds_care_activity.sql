@@ -47,9 +47,10 @@ select
     , coalesce(observation_snomed.preferred_term, observation_read.term) as observation_name
     , a.observation_value
     , a.ucum_unit_of_measurement as observation_unit_code
-    , unit.description as observation_unit_name
-    , unit.unit_symbol as observation_unit_symbol
-    , unit.definition_source as observation_unit_definition_source
+    , coalesce(unit.description, unit_alias.description) as observation_unit_name
+    , coalesce(unit.unit_symbol, unit_alias.unit_symbol) as observation_unit_symbol
+    , coalesce(unit.definition_source, unit_alias.definition_source) as observation_unit_definition_source
+    , coalesce(unit.match_type, iff(unit_alias.snomed_code is not null, 'csds_etos_alias', null)) as observation_unit_match_type
     , c.cyp201_unique_id is not null as is_submitted_contact_linked
     , case when c.cyp201_unique_id is null or a.person_id is null or c.person_id is null then null
         else a.person_id = c.person_id end as is_submitted_contact_person_consistent
@@ -111,3 +112,9 @@ left join {{ ref('read_code') }} as observation_read
 left join {{ ref('stg_dictionary_dbo_diagnosis') }} as finding_icd
     on {{ clean_icd10_code('upper(trim(a.coded_finding_coded_clinical_entry))') }} = upper(finding_icd.code)
     and trim(a.finding_scheme_in_use_community_care) = '01'
+left join {{ ref('csds_observation_unit_alias') }} as unit_alias
+    on unit.code is null
+    and upper(trim(a.ucum_unit_of_measurement)) = unit_alias.source_unit_upper
+    and case when trim(a.observation_scheme_in_use_community_care) = '03'
+        then trim(a.coded_observation_clinical_terminology)
+        else observation_read.snomed_ct_code end = unit_alias.snomed_code

@@ -226,7 +226,7 @@ case-sensitive and case-insensitive representations are distinct. Generic
 upper-casing would not be a safe unit resolver. See
 [UCUM sections 3, 27 and 28](https://ucum.org/ucum).
 
-The proposed CSDS-specific fallback uses only the historical measurement contexts
+The approved CSDS-specific fallback uses only the historical measurement contexts
 published in the [ETOS v1.6.10 workbook](https://digital.nhs.uk/binaries/content/assets/website-assets/data-and-information/datasets/community-services/csds_etos_v1.6.10_final.xlsx).
 Change Control entries 395, 399 and 401 record changes dated 8 September 2022,
 version 1.6.3. Their pre-amendment notes state "UCUM UNIT OF MEASUREMENT (case
@@ -247,15 +247,34 @@ come from the existing unit reference.
 
 A source SNOMED code must match the named measurement concept. Read v2 and CTV3
 codes qualify only through a positive Dictionary SNOMED mapping. Existing exact
-unit matches win. The proposed fallback covers 83,494 native SNOMED weight
-observations and 77,889 Read observations mapped to BMI, a total of 161,383
-additional labels. It does not apply to the other case-fold candidates.
+unit matches win. The applied fallback adds 171,507 labels: 83,494 native SNOMED weight
+observations, 10,103 native SNOMED BMI observations and 77,910 Read observations
+mapped to BMI. The first case-fold estimate missed 10,124 observations using
+the explicitly documented superscript spelling `kg/m²`, because the existing
+reference lacked that spelling. The six-rule source comparison confirms all
+additional labels fall within the approved measurement contexts.
 Synthetic checks cover measurement restrictions, unknown context, the numeric
-placeholder and exact-match precedence. This proposal awaits the user's decision
-before warehouse application.
+placeholder and exact-match precedence.
 
 The retained read-only Snowflake script
 [`profile_csds_unit_gaps.sql`](../scripts/snowflake/profile_csds_unit_gaps.sql)
 rechecks numeric placeholders, case-fold candidates, the CSDS_SIMPLE comparison
 and hypothetical Dictionary-key matches. Measurement categories in the hypothetical key comparison require the
 submitted SNOMED coding scheme.
+
+
+The approved alias reference and activity fact built successfully in DEV,
+with two models and 12 tests passing. The activity build took 85 seconds.
+All 55,189,449 activity occurrences remain. An exact source comparison found
+zero changes to procedure, finding and observation codes, their supplied schemes,
+observation values or original unit fields. The aggregate fingerprint of every
+pre-existing field other than the three unit-label fields also remained unchanged.
+
+All 3,000,170 existing unit labels retain their names, symbols and provenance.
+The fallback adds 171,507 names with match type `csds_etos_alias` and definition
+source `CSDS ETOS historical unit alias`. Unit-name coverage is now 3,171,677 of
+5,161,846 supplied units; 1,990,169 remain unresolved. The original numeric
+placeholders remain unresolved. Independent review found no blocking issue in
+scheme routing, exact-match precedence or the historical source interpretation.
+The updated aggregate profile compiled and executed successfully, including
+separate counts for existing reference matches and historical aliases.
